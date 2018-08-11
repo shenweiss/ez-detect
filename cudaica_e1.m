@@ -85,7 +85,7 @@
 function [error_flag,wts,sph,tmpint] = cudaica(data,var2,var3,var4,var5,var6,var7,var8,var9,var10,var11,var12,var13,var14,var15,var16,var17,var18,var19,var20,var21,var22,var23,var24,var25)
 
 if ~isdeployed
-    addpath /home/mgatti/hfo_engine_1
+    addpath /home/tomas-pastore/hfo_engine_1
 end
 
 if nargin < 1 | nargin > 25
@@ -96,7 +96,7 @@ if nargin < 1 | nargin > 25
 end
 if size(data,3) > 1, data = reshape(data, size(data,1), size(data,2)*size(data,3) ); end;
 
-SC  =  ['/home/mgatti/hfo_engine_1/binica.sc'];           
+SC  =  ['/home/tomas-pastore/hfo_engine_1/binica.sc'];           
 if ~exist('SC')
   fprintf('cudaica(): You need to update your icadefs file to include CUDAICABINARY and SC.\n')
   return
@@ -108,12 +108,12 @@ else
 	%SC = which(SC);
 	fprintf('cudaica: using source file ''%s''\n',  SC)
 end
-CUDAICABINARY='/home/mgatti/hfo_engine_1/cudaica'
+CUDAICABINARY='/home/tomas-pastore/hfo_engine_1/cudaica'
 if exist(CUDAICABINARY) ~= 2
   fprintf('cudaica(): ica binary ''%s'' is not in your Matlab path, check\n', CUDAICABINARY);
   return
 else
-	CUDAICABINARYdir = '/home/mgatti/hfo_engine_1'
+	CUDAICABINARYdir = '/home/tomas-pastore/hfo_engine_1'
 	if ~isempty(CUDAICABINARYdir)
 		fprintf('cudaica(): using binary ica file ''%s''\n', CUDAICABINARYdir);
 	else
@@ -201,10 +201,10 @@ end
 % make sure no such script file already exists in the pwd
 %
 scriptfile = ['cudaica' tmpint '.sc'];
-scriptfile =  ['/home/mgatti/hfo_engine_1' '/' scriptfile];
+scriptfile =  ['/home/tomas-pastore/hfo_engine_1' '/' scriptfile];
 tmpint = int2str(round(rand*10000));
 scriptfile = ['cudaica' tmpint '.sc'];
-scriptfile =  ['/home/mgatti/hfo_engine_1' '/' scriptfile];
+scriptfile =  ['/home/tomas-pastore/hfo_engine_1' '/' scriptfile];
 fprintf('scriptfile = %s\n',scriptfile);
 
 nchans = 0;
@@ -216,7 +216,7 @@ if ~ischar(data) % data variable given
   end
   nchans = size(data,1);
   nframes = size(data,2);
-  tmpdata = ['/home/mgatti/hfo_engine_1' '/' 'cudaica' tmpint '.fdt'];
+  tmpdata = ['/home/tomas-pastore/hfo_engine_1' '/' 'cudaica' tmpint '.fdt'];
   if strcmpi(computer, 'MAC')
       floatwrite(data,tmpdata,'ieee-be');
   else
@@ -254,15 +254,15 @@ for x=1:length(flags)
      args{x} = datafile;
   elseif strcmp(flags{x},'WeightsOutFile')
      weightsfile = ['cudaica' tmpint '.wts'];
-     weightsfile =  ['/home/mgatti/hfo_engine_1' '/' weightsfile];
+     weightsfile =  ['/home/tomas-pastore/hfo_engine_1' '/' weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'WeightsTempFile')
      weightsfile = ['cudaicatmp' tmpint '.wts'];
-     weightsfile =  ['/home/mgatti/hfo_engine_1' '/' weightsfile];
+     weightsfile =  ['/home/tomas-pastore/hfo_engine_1' '/' weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'SphereFile')
      spherefile = ['cudaica' tmpint '.sph'];
-     spherefile =  ['/home/mgatti/hfo_engine_1' '/' spherefile];
+     spherefile =  ['/home/tomas-pastore/hfo_engine_1' '/' spherefile];
      args{x} = spherefile;
   elseif strcmp(flags{x},'chans')
      args{x} = int2str(nchans);
@@ -282,7 +282,7 @@ for x=1:length(flags)
 end
 if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
      if exist('wtsin') == 1 % variable
-       winfn = ['/home/mgatti/hfo_engine_1/' tmpint '.inwts'];
+       winfn = ['/home/tomas-pastore/hfo_engine_1/' tmpint '.inwts'];
        if strcmpi(computer, 'MAC')
            floatwrite(wtsin,winfn,'ieee-be');
        else
@@ -292,7 +292,7 @@ if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
        weightsinfile = winfn; % weights in file name
      elseif exist(wtsin) == 2 % file
        weightsinfile = wtsin;
-       weightsinfile =  ['/home/mgatti/hfo_engine_1' '/' weightsinfile];
+       weightsinfile =  ['/home/tomas-pastore/hfo_engine_1' '/' weightsinfile];
      else
        fprintf('cudaica(): weightsin file|variable not found.\n');
        return
@@ -308,7 +308,7 @@ if ~exist(scriptfile)
 end
 
 fprintf('\ncudaica(): ica script file %s data %s pwd %s.\n',...
-                                   scriptfile, datafile, '/home/mgatti/hfo_engine_1/');
+                                   scriptfile, datafile, '/home/tomas-pastore/hfo_engine_1/');
 %
 % %%%%%%%%%%%%%%%%%%%%%% run binary ica %%%%%%%%%%%%%%%%%%%%%%%%%
 %

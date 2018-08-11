@@ -603,13 +603,13 @@ if ~isempty(eeg_bp)
     file_id=metadata.file_id(1:(file_id_size-4));
     
     % Clear the temporary .mat files
-    system(['rm -f /home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_a_' file_block '.mat']);
-    system(['rm -f /home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_b_' file_block '.mat']);
-    system(['rm -f /home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_c_' file_block '.mat']);
-    system(['rm -f /home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_d_' file_block '.mat']);
-    system(['rm -f /home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_e_' file_block '.mat']);
-    system(['rm -f /home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_f_' file_block '.mat']);
-    system(['rm -f /home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_g_' file_block '.mat']);
+    system(['rm -f /home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_a_' file_block '.mat']);
+    system(['rm -f /home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_b_' file_block '.mat']);
+    system(['rm -f /home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_c_' file_block '.mat']);
+    system(['rm -f /home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_d_' file_block '.mat']);
+    system(['rm -f /home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_e_' file_block '.mat']);
+    system(['rm -f /home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_f_' file_block '.mat']);
+    system(['rm -f /home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_g_' file_block '.mat']);
     
     % The next step is to write the TRC file blocks
     num_trc_blocks=ceil(numel(metadata.bp_chanlist)/32);
@@ -623,8 +623,8 @@ if ~isempty(eeg_bp)
             eeg=[];
             eeg.eeg_data=TRC.data(1:max_trc_channels,:);
             eeg.chanlist=TRC.chanlist(1:max_trc_channels);
-            save(['/home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_a_' file_block '.mat'],'eeg');
-            system_command=['/home/mgatti/hfo_engine_1/executable/mat2trc32_bp2k_a' ' ' file_id ' ' file_block ' &'];
+            save(['/home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_a_' file_block '.mat'],'eeg');
+            system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_bp2k_a' ' ' file_id ' ' file_block ' &'];
             system(system_command);
             fprintf('writing .TRC file #1 in background \r');
         end;
@@ -637,8 +637,8 @@ if ~isempty(eeg_bp)
             eeg=[];
             eeg.eeg_data=TRC.data(33:max_trc_channels,:);
             eeg.chanlist=TRC.chanlist(33:max_trc_channels);
-            save(['/home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_b_' file_block '.mat'],'eeg');
-            system_command=['/home/mgatti/hfo_engine_1/executable/mat2trc32_bp2k_b' ' ' file_id ' ' file_block ' &'];
+            save(['/home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_b_' file_block '.mat'],'eeg');
+            system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_bp2k_b' ' ' file_id ' ' file_block ' &'];
             system(system_command);
             fprintf('writing .TRC file #2 in background \r');
         end;
@@ -651,8 +651,8 @@ if ~isempty(eeg_bp)
             eeg=[];
             eeg.eeg_data=TRC.data(65:max_trc_channels,:);
             eeg.chanlist=TRC.chanlist(65:max_trc_channels);
-            save(['/home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_c_' file_block '.mat'],'eeg');
-            system_command=['/home/mgatti/hfo_engine_1/executable/mat2trc32_bp2k_c' ' ' file_id ' ' file_block ' &'];
+            save(['/home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_c_' file_block '.mat'],'eeg');
+            system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_bp2k_c' ' ' file_id ' ' file_block ' &'];
             system(system_command);
             fprintf('writing .TRC file #3 in background \r');
         end;
@@ -665,8 +665,8 @@ if ~isempty(eeg_bp)
             eeg=[];
             eeg.eeg_data=TRC.data(97:max_trc_channels,:);
             eeg.chanlist=TRC.chanlist(97:max_trc_channels);
-            save(['/home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_d_' file_block '.mat'],'eeg');
-            system_command=['/home/mgatti/hfo_engine_1/executable/mat2trc32_bp2k_d' ' ' file_id ' ' file_block ' &'];
+            save(['/home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_d_' file_block '.mat'],'eeg');
+            system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_bp2k_d' ' ' file_id ' ' file_block ' &'];
             system(system_command);
             fprintf('writing .TRC file #4 in background \r');
         end;
@@ -679,8 +679,8 @@ if ~isempty(eeg_bp)
             eeg=[];
             eeg.eeg_data=TRC.data(129:max_trc_channels,:);
             eeg.chanlist=TRC.chanlist(129:max_trc_channels);
-            save(['/home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_e_' file_block '.mat'],'eeg');
-            system_command=['/home/mgatti/hfo_engine_1/executable/mat2trc32_bp2k_e' ' ' file_id ' ' file_block ' &'];
+            save(['/home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_e_' file_block '.mat'],'eeg');
+            system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_bp2k_e' ' ' file_id ' ' file_block ' &'];
             system(system_command);
             fprintf('writing .TRC file #5 in background \r');
         end;
@@ -693,8 +693,8 @@ if ~isempty(eeg_bp)
             eeg=[];
             eeg.eeg_data=TRC.data(161:max_trc_channels,:);
             eeg.chanlist=TRC.chanlist(161:max_trc_channels);
-            save(['/home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_f_' file_block '.mat'],'eeg');
-            system_command=['/home/mgatti/hfo_engine_1/executable/mat2trc32_bp2k_f' ' ' file_id ' ' file_block ' &'];
+            save(['/home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_f_' file_block '.mat'],'eeg');
+            system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_bp2k_f' ' ' file_id ' ' file_block ' &'];
             system(system_command);
             fprintf('writing .TRC file #6 in background \r');
         end;
@@ -707,8 +707,8 @@ if ~isempty(eeg_bp)
             eeg=[];
             eeg.eeg_data=TRC.data(193:max_trc_channels,:);
             eeg.chanlist=TRC.chanlist(193:max_trc_channels);
-            save(['/home/mgatti/hfo_engine_1/bp_temp_trc/eeg_2k_g_' file_block '.mat'],'eeg');
-            system_command=['/home/mgatti/hfo_engine_1/executable/mat2trc32_bp2k_g' ' ' file_id ' ' file_block ' &'];
+            save(['/home/tomas-pastore/hfo_engine_1/bp_temp_trc/eeg_2k_g_' file_block '.mat'],'eeg');
+            system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_bp2k_g' ' ' file_id ' ' file_block ' &'];
             system(system_command);
             fprintf('writing .TRC file #7 in background \r');
         end;
@@ -740,7 +740,7 @@ if ~isempty(eeg_bp)
     DSP_data_bp.total_fripple=total_fripple;
     DSP_data_bp.fripple_clip=fripple_clip;
     filename1=['dsp_' file_id '_bp_' file_block '.mat'];
-    filename1=strcat('/home/mgatti/hfo_engine_1/ez_top_in/',filename1);
+    filename1=strcat('/home/tomas-pastore/hfo_engine_1/ez_top_in/',filename1);
     save('-v7.3',filename1,'DSP_data_bp');
 else
     DSP_data_bp=[];

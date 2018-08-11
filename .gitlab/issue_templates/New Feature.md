@@ -1,5 +1,6 @@
 Summary
 
-(Summarize the feature needed encountered concisely)
+(Summarize the new feature needed concisely)
 
 /label ~feature
+/assign @tpastore

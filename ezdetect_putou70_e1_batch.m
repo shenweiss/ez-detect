@@ -242,7 +242,7 @@ function [eeg_data, metadata, chanlist] = computeEEGSegment(file_id,i,samplingra
         clear p q x temp2
     end
 
-    contest_path='/home/mgatti/hfo_engine_1/matfiles/' % for research only
+    contest_path='/home/tomas-pastore/hfo_engine_1/matfiles/' % for research only
     fname=fn(1:(numel(fn)-4)); %
     fname_int=num2str(i); %
     fname=[fname fname_int '.mat']; %

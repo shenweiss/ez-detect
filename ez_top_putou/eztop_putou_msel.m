@@ -469,7 +469,7 @@ end
 %     %%% IF ALL LISTS ARE EMPTY CREATE EMPTY STRUCTURES
     
 disp('File Complete: Ripples and Fast Ripples Processed');
-output_fname=['/home/mgatti/ez_detect/putou/ez_top_putou/MSEL_ez_top_out/' output_fname];
+output_fname=['/home/tomas-pastore/ez_detect/putou/ez_top_putou/MSEL_ez_top_out/' output_fname];
 save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS');
 toc
 

@@ -5,7 +5,7 @@ Summary
 
 Steps to reproduce
 
-(How one can reproduce the issue - this is very important)
+(How one can reproduce the issue - this is very important. Provide any possible detail including O.S.)
 
 
 What is the current bug behavior?
