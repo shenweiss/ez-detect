@@ -162,7 +162,7 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
 
         disp('Saving dsp_m output');
         filename = ['dsp_m_output_' metadata.file_block '.mat']
-        saveMonopolarData(filename, DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag);
+        saveMonopolarData(['/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/' filename], DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag);
         disp('Saved dsp_m output');
     else
         hfo_ai=zeros(numel(gather(ez_tall_bp(1,:))),1)';
@@ -174,10 +174,10 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
         [DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks] = ez_detect_dsp_bp_putou70_e1(ez_tall_bp, hfo_ai, fr_ai, metadata);
         disp('Finished dsp_bp');
         
-        disp('Saved dsp_m output');
-        filename = ['dsp_bp_output_' metadata.file_block '.mat']
-        saveBipolarData(filename, DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
         disp('Saving dsp_m output');
+        filename = ['dsp_bp_output_' metadata.file_block '.mat']
+        saveBipolarData(['/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/' filename], DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
+        disp('Saved dsp_m output');
     end
 
 end
