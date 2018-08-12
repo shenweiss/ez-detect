@@ -1,0 +1,392 @@
+
+##Jumped the first call to times_testing since .mat were created ok
+
+
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Dataset: '449_correct.edf'
+Paths to be used:
+Matlab path: /home/tomas-pastore/matlab/bin/matlab
+Project source: /home/tomas-pastore/ez-detect
+Saving outputs directory: /home/tomas-pastore/ez-detect/hfo_engine_1
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 4 workers.
+Generating Wavelet Array...
+Downsampling...
+Interpolating...
+TF-Plot Analysis...
+Spikes Complete
+Generating Wavelets...
+Performing Convolutions...
+Topographical Analysis...
+Fast Ripple Complete
+Performing Convolutions...
+Ripple Reflex Complete
+File Complete: Ripples and Fast Ripples Processed
+Elapsed time is 36.208199 seconds.
+initializing annotation files
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+eeg_checkset warning: number of column in signal array (41) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (150001) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=150001); xmax corrected
+pop_eegfiltnew() - performing 551 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 3 Hz
+pop_eegfiltnew() - passband edge(s): [12 16] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [10.5 17.5] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+pop_eegfiltnew() - performing 735 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2.25 Hz
+pop_eegfiltnew() - passband edge(s): [9 12] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [7.875 13.125] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+pop_eegfiltnew() - performing 827 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2 Hz
+pop_eegfiltnew() - passband edge(s): [2 4] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [1 5] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+pop_eegfiltnew() - performing 16501 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 0.1 Hz
+pop_eegfiltnew() - passband edge(s): [0.1 2] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [0.05 2.05] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:27=                  -  10%, ETE 00:15=                 \  15%, ETE 00:11=                |  20%, ETE 00:10=               /  25%, ETE 00:08=              -  30%, ETE 00:07=             \  35%, ETE 00:06=            |  40%, ETE 00:06=           /  45%, ETE 00:05=          -  50%, ETE 00:05=         \  55%, ETE 00:04=        |  60%, ETE 00:04=       /  65%, ETE 00:03=      -  70%, ETE 00:03=     \  75%, ETE 00:02=    |  80%, ETE 00:02=   /  85%, ETE 00:02=  -  90%, ETE 00:01==| 100%, ETE 00:00
+pop_eegfiltnew() - performing 827 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2 Hz
+pop_eegfiltnew() - passband edge(s): [4 30] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [3 31] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+hilbert done 
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+epochs test done 
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+
+event_finish_pdelay =
+
+        5047
+
+
+event_finish_pdelay =
+
+       20024
+
+
+event_finish_pdelay =
+
+       43318
+
+
+event_finish_pdelay =
+
+       46661
+
+
+event_finish_pdelay =
+
+       51467
+
+
+event_finish_pdelay =
+
+       65942
+
+
+event_finish_pdelay =
+
+       71899
+
+
+event_finish_pdelay =
+
+       72245
+
+
+event_finish_pdelay =
+
+       99953
+
+
+event_finish_pdelay =
+
+      128169
+
+
+event_finish_pdelay =
+
+      131321
+
+
+event_finish_pdelay =
+
+      144222
+
+
+event_finish_pdelay =
+
+      145229
+
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 4 workers.
+
+fname_var =
+
+    '_bp_'
+
+File Complete: Ripples and Fast Ripples Processed
+Elapsed time is 24.475582 seconds.
+initializing annotation files
+fname_var =
+
+    '_bp_'
+
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+eeg_checkset warning: number of column in signal array (6) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (150001) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=150001); xmax corrected
+pop_eegfiltnew() - performing 551 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 3 Hz
+pop_eegfiltnew() - passband edge(s): [12 16] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [10.5 17.5] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+pop_eegfiltnew() - performing 735 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2.25 Hz
+pop_eegfiltnew() - passband edge(s): [9 12] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [7.875 13.125] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+pop_eegfiltnew() - performing 827 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2 Hz
+pop_eegfiltnew() - passband edge(s): [2 4] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [1 5] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+pop_eegfiltnew() - performing 16501 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 0.1 Hz
+pop_eegfiltnew() - passband edge(s): [0.1 2] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [0.05 2.05] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:13=                  -  10%, ETE 00:07=                 \  15%, ETE 00:06=                |  20%, ETE 00:05=               /  25%, ETE 00:04=              -  30%, ETE 00:04=             \  35%, ETE 00:03=            |  40%, ETE 00:03=           /  45%, ETE 00:03=          -  50%, ETE 00:03=         \  55%, ETE 00:02=        |  60%, ETE 00:02=       /  65%, ETE 00:02=      -  70%, ETE 00:02=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01==| 100%, ETE 00:00
+pop_eegfiltnew() - performing 827 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2 Hz
+pop_eegfiltnew() - passband edge(s): [4 30] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [3 31] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |                    |   0%=                   /   5%, ETE 00:01=                  -  10%, ETE 00:01=                 \  15%, ETE 00:01=                |  20%, ETE 00:01=               /  25%, ETE 00:01=              -  30%, ETE 00:01=             \  35%, ETE 00:01=            |  40%, ETE 00:01=           /  45%, ETE 00:01=          -  50%, ETE 00:01=         \  55%, ETE 00:01=        |  60%, ETE 00:01=       /  65%, ETE 00:01=      -  70%, ETE 00:01=     \  75%, ETE 00:01=    |  80%, ETE 00:01=   /  85%, ETE 00:01=  -  90%, ETE 00:01= \  95%, ETE 00:01=| 100%, ETE 00:00
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+hilbert done 
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+epochs test done 
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Dataset: '449_correct.edf'
+Output:
+Total time: 172 (seconds)
