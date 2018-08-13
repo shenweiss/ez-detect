@@ -31,7 +31,9 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
     % v7 : 1) added nnetwork to find bad channels, 2) added nnetwork to find
     % bad channels on the basis of captured ripple events. 3) added nnetwork to
     % find bad channels on the basis of captured fripple events.
-
+    
+    setGlobalPaths(); %Just because it is used with a new matlab session. To be improved...
+    
     disp(file_name_in);
     fn=file_name_in; % for research purposes only
     file_id=file_name_in;
@@ -69,7 +71,7 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
         end
     end
 
-    disp('Running EZ_Detect v7.0 Putou \r')
+    disp('Running EZ_Detect v7.0 Putou')
     % Read EDF file
     [header, signalHeader, eeg_edf] = ez_edfload_putou02(file_name_in); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
     eeg_edf_tall=tall(eeg_edf);
@@ -79,7 +81,7 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
         starttime_ini=starttime_ini*samplingrate;
     end
     disp(strcat('Sampling rate: ', int2str(round(samplingrate)),'Hz'));
-    disp('EDF file loaded \r')
+    disp('EDF file loaded')
 
     % Create file blocks and run EZ_detect
     if stoptime_ini==0 % default condition
@@ -149,6 +151,11 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
 end
 
 function processBatchs(eeg_data,chanlist,metadata,montage)
+    
+    setGlobalPaths(); %creo que es necesario porque los parfor crean nuevos contextos. 
+    %si pones sólo global MATFILES_PATH se imprime vacio abajo.
+    disp(['SAVING DSP.M DIRECTORY:' MATFILES_PATH])
+    
     ez_tall=tall(eeg_data);
     clear eeg_data;
     [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_putou70_e1(ez_tall, chanlist, metadata, montage);
@@ -162,7 +169,7 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
 
         disp('Saving dsp_m output');
         filename = ['dsp_m_output_' metadata.file_block '.mat']
-        saveMonopolarData(['/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/' filename], DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag);
+        saveMonopolarData([MATFILES_PATH filename], DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag);
         disp('Saved dsp_m output');
     else
         hfo_ai=zeros(numel(gather(ez_tall_bp(1,:))),1)';
@@ -176,21 +183,22 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
         
         disp('Saving dsp_m output');
         filename = ['dsp_bp_output_' metadata.file_block '.mat']
-        saveBipolarData(['/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/' filename], DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
+        saveBipolarData([MATFILES_PATH filename], DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
         disp('Saved dsp_m output');
     end
 
 end
 
-function saveMonopolarData(filename, DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag)
-    save(filename, 'DSP_data_m', 'ez_tall_m','ez_tall_bp', 'hfo_ai', 'fr_ai', 'ez_tall_hfo_m', 'ez_tall_fr_m', 'metadata', 'num_trc_blocks', 'error_flag','-v7.3');
+function saveMonopolarData(file_path, DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag)
+    save(file_path, 'DSP_data_m', 'ez_tall_m','ez_tall_bp', 'hfo_ai', 'fr_ai', 'ez_tall_hfo_m', 'ez_tall_fr_m', 'metadata', 'num_trc_blocks', 'error_flag','-v7.3');
 end
 
-function saveBipolarData(filename, DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks)
-    save(filename, 'DSP_data_bp', 'ez_tall_bp', 'ez_tall_hfo_bp', 'ez_tall_fr_bp', 'metadata', 'num_trc_blocks','-v7.3');
+function saveBipolarData(file_path, DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks)
+    save(file_path, 'DSP_data_bp', 'ez_tall_bp', 'ez_tall_hfo_bp', 'ez_tall_fr_bp', 'metadata', 'num_trc_blocks','-v7.3');
 end
 
 function [eeg_data, metadata, chanlist] = computeEEGSegment(file_id,i,samplingrate,cycle_time,starttime_ini,stoptime_ini,end_time,eeg_edf_tall,signalHeader,chan_swap,fn)
+    global MATFILES_PATH;
     metadata=[];
     metadata.file_id=file_id;
     metadata.file_block=num2str(i);
@@ -242,7 +250,7 @@ function [eeg_data, metadata, chanlist] = computeEEGSegment(file_id,i,samplingra
         clear p q x temp2
     end
 
-    contest_path='/home/tomas-pastore/hfo_engine_1/matfiles/' % for research only
+    contest_path= MATFILES_PATH; % for research only
     fname=fn(1:(numel(fn)-4)); %
     fname_int=num2str(i); %
     fname=[fname fname_int '.mat']; %

@@ -5,6 +5,7 @@ function ezpac_putou_e1(ez_tall,ez_hfo,ez_fr,output_fname,metadata,montage)
 % This work is protected by US patent applications US20150099962A1,
 % UC-2016-158-2-PCT, US provisional #62429461
 
+global EZ_PAC_OUT_PATH;
 load(output_fname)
 
 if montage == 0
@@ -16,7 +17,7 @@ end;
 file_id_size=numel(metadata.file_id);
 file_id=metadata.file_id(1:(file_id_size-4));
 
-new_output_fname = ['/home/tomas-pastore/hfo_engine_1/ez_pac_out/' 'ezPac_' file_id fname_var metadata.file_block '.mat'];
+new_output_fname = [EZ_PAC_OUT_PATH file_id fname_var metadata.file_block '.mat'];
 
 hfo=gather(ez_hfo);
 hfo_amp=[];

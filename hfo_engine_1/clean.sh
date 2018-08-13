@@ -1,5 +1,5 @@
 rm -f ./matfiles/*
-rm -f ./mp_temp_trc/*
+rm -f ./*_temp_trc/*
 rm -f ./nbm2/*
 rm -f ./TRC_out/*
 rm -f ./ez_top_out/*

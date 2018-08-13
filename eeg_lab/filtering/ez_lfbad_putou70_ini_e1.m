@@ -1,5 +1,6 @@
 function [ez_tall_m, ez_tall_bp, metadata, montage] = ez_lfbad_putou70_ini_batch(ez_tall, chanlist, metadata, file_id);
 
+global MONTAGES_PATH;
 file_block=metadata.file_block;
 
 %Initialize output data structures
@@ -11,7 +12,7 @@ eeg_data=gather(ez_tall);
 file_id_size=numel(file_id);
 file_id=file_id(1:(file_id_size-4));
 file_name=strcat(file_id, '_montage');
-file_name=['/home/tomas-pastore/hfo_engine_1/montages/' file_name];
+file_name=[MONTAGES_PATH file_name];
 load(file_name,'montage');
 t.Data=montage;
 

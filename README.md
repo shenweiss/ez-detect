@@ -1,5 +1,7 @@
 ezdetect_putou70_e1_batch Executable
 
+If it it's the first run in this computer please check misc_code/setGlobalPaths.m
+
 1. Prerequisites for Deployment 
 
 Verify that version 9.3 (R2017b) of the MATLAB Runtime is installed.   

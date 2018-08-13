@@ -66,8 +66,6 @@
 % (at your option) any later version.
 %
 % This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
@@ -78,14 +76,21 @@
 % 09/08/00 Added tmpint to script, weights and sphere files to avoid
 %          conflicts when multiple cudaica sessions run in the same pwd -sm
 % 10/07/00 Fixed bug in reading wts when 'pca' ncomps < nchans -sm
-% 07/18/01 replaced var ICA with CUDAICABINARY to try to avoid Matlab6 bug -sm
+% 07/18/01 replaced var ICA with CUDAICA_BINARY_PATH to try to avoid Matlab6 bug -sm
 % 11/06/01 add absolute path of files (lines 157-170 & 198) -ad
 % 01-25-02 reformated help & license, added links -ad 
  
 function [error_flag,wts,sph,tmpint] = cudaica(data,var2,var3,var4,var5,var6,var7,var8,var9,var10,var11,var12,var13,var14,var15,var16,var17,var18,var19,var20,var21,var22,var23,var24,var25)
 
+disp('ENTERING CUDAICA.M')
+
+global HFO_ENGINE_PATH;
+global BINICA_SC_PATH;
+global CUDAICA_BINARY_PATH;
+global CUDAICA_BINARY_DIR_PATH;
+
 if ~isdeployed
-    addpath /home/tomas-pastore/hfo_engine_1
+    addpath(HFO_ENGINE_PATH);
 end
 
 if nargin < 1 | nargin > 25
@@ -96,33 +101,27 @@ if nargin < 1 | nargin > 25
 end
 if size(data,3) > 1, data = reshape(data, size(data,1), size(data,2)*size(data,3) ); end;
 
-SC  =  ['/home/tomas-pastore/hfo_engine_1/binica.sc'];           
-if ~exist('SC')
-  fprintf('cudaica(): You need to update your icadefs file to include CUDAICABINARY and SC.\n')
+if ~exist(BINICA_SC_PATH)
+  fprintf("cudaica(): You need to update your icadefs file to include CUDAICA_BINARY_PATH and SC.\n")
   return
 end;
-if exist(SC) ~= 2
-  fprintf('cudaica(): No ica source file ''%s'' is in your Matlab path, check...\n', SC);
+if exist(BINICA_SC_PATH) ~= 2
+  fprintf("cudaica(): No ica source file '%s' is in your Matlab path, check...\n", BINICA_SC_PATH);
   return
 else
-	%SC = which(SC);
-	fprintf('cudaica: using source file ''%s''\n',  SC)
-end
-CUDAICABINARY='/home/tomas-pastore/hfo_engine_1/cudaica'
-if exist(CUDAICABINARY) ~= 2
-  fprintf('cudaica(): ica binary ''%s'' is not in your Matlab path, check\n', CUDAICABINARY);
-  return
-else
-	CUDAICABINARYdir = '/home/tomas-pastore/hfo_engine_1'
-	if ~isempty(CUDAICABINARYdir)
-		fprintf('cudaica(): using binary ica file ''%s''\n', CUDAICABINARYdir);
-	else
-		fprintf('cudaica(): using binary ica file ''\?/%s''\n', CUDAICABINARY);
-	end;
+	%BINICA_SC_PATH = which(BINICA_SC_PATH);
+	fprintf("cudaica: using source file '%s' \n",  BINICA_SC_PATH)
 end
 
-fprintf('%s', SC) 
-[flags,args] = read_sc(SC); % read flags and args in master SC file
+if exist(CUDAICA_BINARY_PATH) ~= 2
+  fprintf("cudaica(): ica binary '%s' is not in your Matlab path, check\n", CUDAICA_BINARY_PATH);
+  return
+else
+	fprintf("cudaica(): using binary ica file '%s' \n", CUDAICA_BINARY_PATH);
+end
+
+%fprintf('%s \n', BINICA_SC_PATH) 
+[flags,args] = read_sc(BINICA_SC_PATH); % read flags and args in master SC file
 
 %
 % substitute the flags/args pairs in the .sc file
@@ -200,11 +199,11 @@ end
 % select random integer 1-10000 to index the cudaica data files
 % make sure no such script file already exists in the pwd
 %
-scriptfile = ['cudaica' tmpint '.sc'];
-scriptfile =  ['/home/tomas-pastore/hfo_engine_1' '/' scriptfile];
+%scriptfile = ['cudaica' tmpint '.sc'];
+%scriptfile =  [HFO_ENGINE_PATH scriptfile];
 tmpint = int2str(round(rand*10000));
 scriptfile = ['cudaica' tmpint '.sc'];
-scriptfile =  ['/home/tomas-pastore/hfo_engine_1' '/' scriptfile];
+scriptfile =  [HFO_ENGINE_PATH scriptfile];
 fprintf('scriptfile = %s\n',scriptfile);
 
 nchans = 0;
@@ -216,7 +215,7 @@ if ~ischar(data) % data variable given
   end
   nchans = size(data,1);
   nframes = size(data,2);
-  tmpdata = ['/home/tomas-pastore/hfo_engine_1' '/' 'cudaica' tmpint '.fdt'];
+  tmpdata = [HFO_ENGINE_PATH 'cudaica' tmpint '.fdt'];
   if strcmpi(computer, 'MAC')
       floatwrite(data,tmpdata,'ieee-be');
   else
@@ -254,15 +253,15 @@ for x=1:length(flags)
      args{x} = datafile;
   elseif strcmp(flags{x},'WeightsOutFile')
      weightsfile = ['cudaica' tmpint '.wts'];
-     weightsfile =  ['/home/tomas-pastore/hfo_engine_1' '/' weightsfile];
+     weightsfile =  [HFO_ENGINE_PATH weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'WeightsTempFile')
      weightsfile = ['cudaicatmp' tmpint '.wts'];
-     weightsfile =  ['/home/tomas-pastore/hfo_engine_1' '/' weightsfile];
+     weightsfile =  [HFO_ENGINE_PATH weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'SphereFile')
      spherefile = ['cudaica' tmpint '.sph'];
-     spherefile =  ['/home/tomas-pastore/hfo_engine_1' '/' spherefile];
+     spherefile =  [HFO_ENGINE_PATH spherefile];
      args{x} = spherefile;
   elseif strcmp(flags{x},'chans')
      args{x} = int2str(nchans);
@@ -274,7 +273,7 @@ end
 %
 % write the new .sc file
 %
-syscommand=['chmod +rwx ', scriptfile];
+syscommand=['chmod +rwx ' scriptfile];
 system(syscommand)
 fid = fopen(fullfile(scriptfile),'w+');
 for x=1:length(flags)
@@ -282,7 +281,9 @@ for x=1:length(flags)
 end
 if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
      if exist('wtsin') == 1 % variable
-       winfn = ['/home/tomas-pastore/hfo_engine_1/' tmpint '.inwts'];
+       disp('cudaica line 291 tmpint class:')
+       disp(class(tmpint) )
+       winfn = [HFO_ENGINE_PATH tmpint '.inwts'];
        if strcmpi(computer, 'MAC')
            floatwrite(wtsin,winfn,'ieee-be');
        else
@@ -292,7 +293,7 @@ if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
        weightsinfile = winfn; % weights in file name
      elseif exist(wtsin) == 2 % file
        weightsinfile = wtsin;
-       weightsinfile =  ['/home/tomas-pastore/hfo_engine_1' '/' weightsinfile];
+       weightsinfile =  [HFO_ENGINE_PATH weightsinfile];
      else
        fprintf('cudaica(): weightsin file|variable not found.\n');
        return
@@ -308,7 +309,7 @@ if ~exist(scriptfile)
 end
 
 fprintf('\ncudaica(): ica script file %s data %s pwd %s.\n',...
-                                   scriptfile, datafile, '/home/tomas-pastore/hfo_engine_1/');
+        scriptfile, datafile, HFO_ENGINE_PATH);
 %
 % %%%%%%%%%%%%%%%%%%%%%% run binary ica %%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -316,7 +317,7 @@ fprintf('\ncudaica(): ica script file %s data %s pwd %s.\n',...
    if exist('ncomps')
         fprintf('   Finding %d components.\n',ncomps);
    end
-   eval_call = ['!' CUDAICABINARY ' -f ' scriptfile]
+   eval_call = ['! ' CUDAICA_BINARY_PATH ' -f ' scriptfile]
    evalc(eval_call);
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -330,19 +331,21 @@ if ~exist('ncomps')
 end
 
 if exist(weightsfile, 'file') == 2
-if strcmpi(computer, 'MAC')
-    wts = floatread(weightsfile,[ncomps Inf],'ieee-be',0);
-    sph = floatread(spherefile,[nchans Inf],'ieee-be',0);
+  
+  if strcmpi(computer, 'MAC')
+      wts = floatread(weightsfile,[ncomps Inf],'ieee-be',0);
+      sph = floatread(spherefile,[nchans Inf],'ieee-be',0);
+  else
+      wts = floatread(weightsfile,[ncomps Inf],[],0);
+      sph = floatread(spherefile,[nchans Inf],[],0);
+  end   
+  error_flag=0;
+
 else
-    wts = floatread(weightsfile,[ncomps Inf],[],0);
-    sph = floatread(spherefile,[nchans Inf],[],0);
-end;    
-error_flag=0;
-else
-error_flag=1;
-wts=[];
-sph=[];
-end;
+  error_flag=1;
+  wts=[];
+  sph=[];
+end
 
 if isempty(wts)
    fprintf('\ncudaica(): weight matrix not read.\n')

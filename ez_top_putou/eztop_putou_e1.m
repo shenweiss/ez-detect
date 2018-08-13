@@ -1,5 +1,9 @@
 function [output_fname] = eztop_putou_e1(fileData,metadata,montage);
 
+global EZ_TOP_OUT_PATH; 
+
+disp(['MONTAGE!!: ' num2str(montage)])
+
 if montage == 0
     fname_var='_mp_';
 else
@@ -15,7 +19,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
     if sum(fileData.total_fripple) < 15000 % exit function if memory overload
         
         %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        clearvars -except fileData vname_var output_fname metadata
+        clearvars -except -regexp PATH$ fileData vname_var output_fname metadata
         tic
         % Load Clips
         eegSetR = fileData.ripple_clip;
@@ -227,7 +231,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % OUTPUT STRUCTURE ASSEMBLY
-        clearvars -except N ResultsR ResultsfR SpikesR SpikesfR catR catfR cetR cetRsh cetfR cetfRsh ctimeR ctimefR eegListR eegListfR eegSet* fileData indR indfR output_fname metadata
+        clearvars -except -regexp PATH$ N ResultsR ResultsfR SpikesR SpikesfR catR catfR cetR cetRsh cetfR cetfRsh ctimeR ctimefR eegListR eegListfR eegSet* fileData indR indfR output_fname metadata
         
         % Output Structures: Ripple Detections
         
@@ -496,7 +500,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         %     %%% IF ALL LISTS ARE EMPTY CREATE EMPTY STRUCTURES
         
         disp('File Complete: Ripples and Fast Ripples Processed');
-        output_fname=['/home/tomas-pastore/hfo_engine_1/ez_top_out/' output_fname];
+        output_fname=[EZ_TOP_OUT_PATH output_fname];
         save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata');
         toc
         
@@ -546,7 +550,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         Total_RonO=[];
         Total_TRonS=[];
         disp('File Complete: Ripples and Fast Ripples Processed');
-        output_fname=['/home/tomas-pastore/hfo_engine_1/ez_top_out/' output_fname];
+        output_fname=[EZ_TOP_OUT_PATH output_fname];
         save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata');
     end;
     
@@ -596,7 +600,7 @@ else
     Total_RonO=[];
     Total_TRonS=[];
     disp('File Complete: Ripples and Fast Ripples Processed');
-    output_fname=['/home/tomas-pastore/hfo_engine_1/ez_top_out/' output_fname];
+    output_fname=[EZ_TOP_OUT_PATH output_fname];
     save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata');
 end;
 
