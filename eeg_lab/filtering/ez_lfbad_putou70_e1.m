@@ -5,7 +5,7 @@ metadata.bp_chanlist={''};
 metadata.m_chanlist={''};
 t.Data=montage; % save montage for other file blocks
 
-fprintf('impedence check\r')
+fprintf('Impedence check\r')
 sixty_cycle=[];
 eeg_data=gather(ez_tall);
 for j=1:numel(eeg_data(:,1))
@@ -76,7 +76,7 @@ if isempty(eeg_mp)
 end;
 
 %% New section to find bad channels
-fprintf('running neural network to find bad electrode recording sites \r');
+fprintf('Running neural network to find bad electrode recording sites \r');
 nnetworkin=zeros(numel(eeg_bp.eeg_data(:,1)),11);
 [R,P,RL,RU] = corrcoef(eeg_bp.eeg_data');
 CC=abs(R);
@@ -106,7 +106,7 @@ end
     logf3 = log10(f(f >= 16 & f<=500));
 
     for chan = 1:numel(eeg_bp.eeg_data(:,1))
-        chan
+        %chan
         % GENERATE LINEAR FITS FOR LOGLOG POWERSPECTRUM FOR REQUISIT BANDS
         mdl0 = fitlm(logf,logpxx(chan,:));
         mdl1 = fitlm(logf1, logpxx1(chan,:));
@@ -121,7 +121,7 @@ end
 % End of new code
 
 %% Running neural network
-     [Y] = badchannel_nn(nnetworkin)
+     [Y] = badchannel_nn(nnetworkin);
      [a,b]= find(Y>0.32);
 % end of section
 

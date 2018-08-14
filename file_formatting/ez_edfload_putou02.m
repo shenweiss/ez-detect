@@ -363,7 +363,7 @@ if nargout >=3
     header.srate=srate;
     
     for s = 1:num_signals
-        disp(strcat('Built:_',int2str(s),'_tall data channels.'));
+        %fprintf('Built: %i of %i tall data channels.', s, num_signals);
         % Get signal location
         signalRowWidth = signalSamplesPerRecord(s);
         signalRowStart = signalLocPerRow(s)+1;
@@ -397,6 +397,8 @@ if nargout >=3
             signalCell(s,:) = value;
         end;
     end;
+    fprintf('Built: %i of %i tall data channels.\n', s, num_signals);
+
 end;
 
 % End Signal Load Section

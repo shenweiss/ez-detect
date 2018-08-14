@@ -1,6 +1,17 @@
-ezdetect_putou70_e1_batch Executable
 
-If it it's the first run in this computer please check misc_code/setGlobalPaths.m
+Usage: TODO mainProcessing.sh is for now the main script, ez_detect_batch is the main executable, followed by processDSPMonopolar/BipolarOutput
+
+Presetting:
+
+ 1)If it it's the first run in this computer please check misc_code/setGlobalPaths.m
+
+Conventions for the code:
+
+  Formats:
+      Filename && Function name: Dash separated names. Example: ez_detect_batch
+      Local Function name: If you define local functions within a files, use CamelCase. Example: processBatch
+      Local Variables: Descriptive names. CamelCase. Example: numberOfCycles
+      Global Variables: Dash separated UPPERCASE. Example: PROJECT_PATH
 
 1. Prerequisites for Deployment 
 

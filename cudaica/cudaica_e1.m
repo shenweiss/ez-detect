@@ -425,7 +425,7 @@ function [flags,args] = read_sc(master_sc)
 flags = [];
 args  = [];
 fid = fopen(fullfile(master_sc),'r');
-fprintf(master_sc)
+fprintf(master_sc);
 if fid < 0
   fprintf('\ncudaica(): Master .sc file %s not read!\n',master_sc)
      return
