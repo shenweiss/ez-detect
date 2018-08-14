@@ -1,0 +1,3736 @@
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 4
+Dataset: '449_correct.edf'
+Clean hfo_engine afterwards:  ''
+Paths to be used:
+Matlab path: /home/tomas-pastore/matlab/bin/matlab
+Project source: /home/tomas-pastore/ez-detect
+Saving outputs directory: /home/tomas-pastore/ez-detect/hfo_engine_1
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch (line 35)
+  In times_testing (line 3)] 
+449_correct.edf
+\r
+
+start_iterations =
+
+     1
+
+Running EZ_Detect v7.0 Putou
+Built:_1_tall data channels.
+Built:_2_tall data channels.
+Built:_3_tall data channels.
+Built:_4_tall data channels.
+Built:_5_tall data channels.
+Built:_6_tall data channels.
+Built:_7_tall data channels.
+Built:_8_tall data channels.
+Built:_9_tall data channels.
+Built:_10_tall data channels.
+Built:_11_tall data channels.
+Built:_12_tall data channels.
+Built:_13_tall data channels.
+Built:_14_tall data channels.
+Built:_15_tall data channels.
+Built:_16_tall data channels.
+Built:_17_tall data channels.
+Built:_18_tall data channels.
+Built:_19_tall data channels.
+Built:_20_tall data channels.
+Built:_21_tall data channels.
+Built:_22_tall data channels.
+Built:_23_tall data channels.
+Built:_24_tall data channels.
+Built:_25_tall data channels.
+Built:_26_tall data channels.
+Built:_27_tall data channels.
+Built:_28_tall data channels.
+Built:_29_tall data channels.
+Built:_30_tall data channels.
+Built:_31_tall data channels.
+Built:_32_tall data channels.
+Built:_33_tall data channels.
+Built:_34_tall data channels.
+Built:_35_tall data channels.
+Built:_36_tall data channels.
+Built:_37_tall data channels.
+Built:_38_tall data channels.
+Built:_39_tall data channels.
+Built:_40_tall data channels.
+Built:_41_tall data channels.
+Built:_42_tall data channels.
+Built:_43_tall data channels.
+Built:_44_tall data channels.
+Built:_45_tall data channels.
+Built:_46_tall data channels.
+Built:_47_tall data channels.
+Built:_48_tall data channels.
+Built:_49_tall data channels.
+Built:_50_tall data channels.
+Built:_51_tall data channels.
+Built:_52_tall data channels.
+Built:_53_tall data channels.
+Built:_54_tall data channels.
+Built:_55_tall data channels.
+Built:_56_tall data channels.
+Built:_57_tall data channels.
+Built:_58_tall data channels.
+Built:_59_tall data channels.
+Built:_60_tall data channels.
+Built:_61_tall data channels.
+Built:_62_tall data channels.
+Built:_63_tall data channels.
+Built:_64_tall data channels.
+Built:_65_tall data channels.
+Built:_66_tall data channels.
+Built:_67_tall data channels.
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 4 workers.
+Sampling rate:2000Hz
+EDF file loaded
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+     1     1
+
+       file_id: '449_correct.edf'
+    file_block: '1'
+
+          67      600001
+
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+     1     1
+
+       file_id: '449_correct.edf'
+    file_block: '2'
+
+          67      600001
+
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+     1     1
+
+       file_id: '449_correct.edf'
+    file_block: '3'
+
+          67      600001
+
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+     1     1
+
+       file_id: '449_correct.edf'
+    file_block: '4'
+
+          67      600001
+
+Finished eeg_data processing
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 2 sec
+impedence checksaving data as unipolar and bipolar montages running neural network to find bad electrode recording sites 
+chan =
+
+     1
+
+
+chan =
+
+     2
+
+
+chan =
+
+     3
+
+
+chan =
+
+     4
+
+
+chan =
+
+     5
+
+
+chan =
+
+     6
+
+
+chan =
+
+     7
+
+
+chan =
+
+     8
+
+
+chan =
+
+     9
+
+
+chan =
+
+    10
+
+
+chan =
+
+    11
+
+
+chan =
+
+    12
+
+
+chan =
+
+    13
+
+
+chan =
+
+    14
+
+
+chan =
+
+    15
+
+
+chan =
+
+    16
+
+
+chan =
+
+    17
+
+
+chan =
+
+    18
+
+
+chan =
+
+    19
+
+
+chan =
+
+    20
+
+
+chan =
+
+    21
+
+
+chan =
+
+    22
+
+
+chan =
+
+    23
+
+
+chan =
+
+    24
+
+
+chan =
+
+    25
+
+
+chan =
+
+    26
+
+
+chan =
+
+    27
+
+
+chan =
+
+    28
+
+
+chan =
+
+    29
+
+
+chan =
+
+    30
+
+
+chan =
+
+    31
+
+
+chan =
+
+    32
+
+
+chan =
+
+    33
+
+
+chan =
+
+    34
+
+
+chan =
+
+    35
+
+
+chan =
+
+    36
+
+
+chan =
+
+    37
+
+
+chan =
+
+    38
+
+
+chan =
+
+    39
+
+
+chan =
+
+    40
+
+
+chan =
+
+    41
+
+
+chan =
+
+    42
+
+
+chan =
+
+    43
+
+
+chan =
+
+    44
+
+
+chan =
+
+    45
+
+
+chan =
+
+    46
+
+
+chan =
+
+    47
+
+
+chan =
+
+    48
+
+
+chan =
+
+    49
+
+
+chan =
+
+    50
+
+
+chan =
+
+    51
+
+
+chan =
+
+    52
+
+
+chan =
+
+    53
+
+
+chan =
+
+    54
+
+
+chan =
+
+    55
+
+
+chan =
+
+    56
+
+
+chan =
+
+    57
+
+
+Y =
+
+    0.0258
+    0.0166
+    0.0244
+    0.0236
+    0.0107
+    0.0174
+    0.0444
+    0.0318
+    0.0276
+    0.0116
+    0.0164
+    0.2645
+    0.0283
+    0.0159
+    0.0215
+    0.0207
+    0.0088
+    0.0121
+    0.0106
+    0.0335
+    0.0248
+    0.0380
+    0.0793
+    0.1053
+    0.0145
+    0.0198
+    0.0081
+    0.0092
+    0.0172
+    0.0215
+    0.0057
+    0.0100
+    0.0173
+    0.0315
+    0.0441
+    0.0061
+    0.0301
+    0.0062
+    0.0057
+    0.0110
+    0.0075
+    0.0077
+    0.0141
+    0.0148
+    0.0105
+    0.0168
+    0.0269
+    0.0045
+    0.0107
+    0.0158
+    0.0113
+    0.0053
+    0.0037
+    0.0055
+    0.0061
+    0.0052
+    0.0124
+
+     1
+
+     1
+
+     1
+
+     1
+
+Setting global paths...
+Warning: The value of local variables may have been changed to match the globals.  Future versions of MATLAB will require that you declare a variable to be global before you use that variable.
+> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch>processBatchs (line 155)
+  In parallel_function>make_general_channel/channel_general (line 914)
+  In remoteParallelFunction (line 38)
+SAVING DSP.M DIRECTORY:/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/
+impedence checkEvaluating tall expression using the Local MATLAB Session:
+Setting global paths...
+Warning: The value of local variables may have been changed to match the globals.  Future versions of MATLAB will require that you declare a variable to be global before you use that variable.
+> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch>processBatchs (line 155)
+  In parallel_function>make_general_channel/channel_general (line 914)
+  In remoteParallelFunction (line 38)
+SAVING DSP.M DIRECTORY:/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/
+impedence checkEvaluating tall expression using the Local MATLAB Session:
+Setting global paths...
+Warning: The value of local variables may have been changed to match the globals.  Future versions of MATLAB will require that you declare a variable to be global before you use that variable.
+> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch>processBatchs (line 155)
+  In parallel_function>make_general_channel/channel_general (line 914)
+  In remoteParallelFunction (line 38)
+SAVING DSP.M DIRECTORY:/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/
+impedence checkEvaluating tall expression using the Local MATLAB Session:
+Setting global paths...
+Warning: The value of local variables may have been changed to match the globals.  Future versions of MATLAB will require that you declare a variable to be global before you use that variable.
+> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch>processBatchs (line 155)
+  In parallel_function>make_general_channel/channel_general (line 914)
+  In remoteParallelFunction (line 38)
+SAVING DSP.M DIRECTORY:/home/tomas-pastore/ez-detect/hfo_engine_1/matfiles/
+impedence checkEvaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+
+Evaluation completed in 0 sec
+
+Evaluation completed in 0 sec
+
+Evaluation completed in 0 sec
+running neural network to find bad electrode recording sites 
+chan =
+
+     1
+
+
+chan =
+
+     2
+
+running neural network to find bad electrode recording sites 
+chan =
+
+     1
+
+
+chan =
+
+     3
+
+
+chan =
+
+     4
+
+
+chan =
+
+     5
+
+
+chan =
+
+     6
+
+
+chan =
+
+     7
+
+
+chan =
+
+     8
+
+
+chan =
+
+     9
+
+
+chan =
+
+    10
+
+
+chan =
+
+    11
+
+
+chan =
+
+    12
+
+
+chan =
+
+    13
+
+
+chan =
+
+    14
+
+running neural network to find bad electrode recording sites 
+chan =
+
+     1
+
+
+chan =
+
+    15
+
+
+chan =
+
+    16
+
+
+chan =
+
+    17
+
+
+chan =
+
+    18
+
+
+chan =
+
+    19
+
+
+chan =
+
+    20
+
+
+chan =
+
+    21
+
+
+chan =
+
+    22
+
+
+chan =
+
+    23
+
+
+chan =
+
+    24
+
+
+chan =
+
+    25
+
+
+chan =
+
+    26
+
+
+chan =
+
+    27
+
+
+chan =
+
+    28
+
+
+chan =
+
+    29
+
+
+chan =
+
+    30
+
+
+chan =
+
+    31
+
+
+chan =
+
+     2
+
+
+chan =
+
+    32
+
+
+chan =
+
+    33
+
+
+chan =
+
+    34
+
+
+chan =
+
+    35
+
+
+chan =
+
+    36
+
+
+chan =
+
+    37
+
+
+chan =
+
+    38
+
+
+chan =
+
+    39
+
+
+chan =
+
+    40
+
+
+chan =
+
+    41
+
+
+chan =
+
+    42
+
+
+chan =
+
+    43
+
+
+chan =
+
+    44
+
+
+chan =
+
+    45
+
+
+chan =
+
+    46
+
+
+chan =
+
+    47
+
+
+chan =
+
+    48
+
+
+chan =
+
+    49
+
+
+chan =
+
+    50
+
+
+chan =
+
+     2
+
+running neural network to find bad electrode recording sites 
+chan =
+
+     1
+
+
+chan =
+
+     3
+
+
+chan =
+
+     4
+
+
+chan =
+
+     5
+
+
+chan =
+
+     6
+
+
+chan =
+
+     7
+
+
+chan =
+
+     8
+
+
+chan =
+
+     9
+
+
+chan =
+
+    10
+
+
+chan =
+
+    11
+
+
+chan =
+
+    12
+
+
+chan =
+
+    13
+
+
+chan =
+
+    14
+
+
+chan =
+
+    15
+
+
+chan =
+
+    16
+
+
+chan =
+
+    17
+
+
+chan =
+
+    18
+
+
+chan =
+
+    51
+
+
+chan =
+
+    52
+
+
+chan =
+
+    53
+
+
+chan =
+
+    54
+
+
+chan =
+
+    55
+
+
+chan =
+
+    56
+
+
+chan =
+
+    57
+
+
+Y =
+
+    0.0258
+    0.0166
+    0.0244
+    0.0236
+    0.0107
+    0.0174
+    0.0444
+    0.0318
+    0.0276
+    0.0116
+    0.0164
+    0.2645
+    0.0283
+    0.0159
+    0.0215
+    0.0207
+    0.0088
+    0.0121
+    0.0106
+    0.0335
+    0.0248
+    0.0380
+    0.0793
+    0.1053
+    0.0145
+    0.0198
+    0.0081
+    0.0092
+    0.0172
+    0.0215
+    0.0057
+    0.0100
+    0.0173
+    0.0315
+    0.0441
+    0.0061
+    0.0301
+    0.0062
+    0.0057
+    0.0110
+    0.0075
+    0.0077
+    0.0141
+    0.0148
+    0.0105
+    0.0168
+    0.0269
+    0.0045
+    0.0107
+    0.0158
+    0.0113
+    0.0053
+    0.0037
+    0.0055
+    0.0061
+    0.0052
+    0.0124
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Starting dsp_m
+Evaluating tall expression using the Local MATLAB Session:
+
+chan =
+
+     3
+
+
+chan =
+
+     4
+
+
+chan =
+
+     5
+
+
+chan =
+
+     6
+
+
+chan =
+
+     7
+
+
+chan =
+
+     8
+
+
+chan =
+
+     9
+
+
+chan =
+
+    10
+
+
+chan =
+
+    11
+
+
+chan =
+
+    12
+
+
+chan =
+
+    13
+
+
+chan =
+
+    14
+
+
+chan =
+
+    15
+
+
+chan =
+
+    16
+
+
+chan =
+
+    17
+
+
+chan =
+
+    18
+
+
+chan =
+
+    19
+
+
+chan =
+
+     2
+
+
+chan =
+
+    19
+
+
+chan =
+
+    20
+
+
+chan =
+
+    21
+
+
+chan =
+
+    22
+
+
+chan =
+
+    23
+
+
+chan =
+
+    24
+
+
+chan =
+
+    25
+
+
+chan =
+
+    26
+
+
+chan =
+
+    27
+
+
+chan =
+
+    28
+
+
+chan =
+
+    29
+
+
+chan =
+
+    30
+
+
+chan =
+
+    31
+
+
+chan =
+
+    32
+
+
+chan =
+
+    33
+
+
+chan =
+
+    34
+
+
+chan =
+
+    35
+
+
+Evaluation completed in 0 sec
+Filtered:_1_of_62_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+
+chan =
+
+    20
+
+
+chan =
+
+    21
+
+
+chan =
+
+    22
+
+
+chan =
+
+    23
+
+
+chan =
+
+    24
+
+
+chan =
+
+    25
+
+
+chan =
+
+    26
+
+
+chan =
+
+    27
+
+
+chan =
+
+    28
+
+
+chan =
+
+    29
+
+
+chan =
+
+    30
+
+
+chan =
+
+    31
+
+
+chan =
+
+    32
+
+
+chan =
+
+    33
+
+
+chan =
+
+    34
+
+
+chan =
+
+    35
+
+
+chan =
+
+    36
+
+
+chan =
+
+    37
+
+
+chan =
+
+    38
+
+
+chan =
+
+    39
+
+
+chan =
+
+    40
+
+
+chan =
+
+    41
+
+
+chan =
+
+     3
+
+
+chan =
+
+     4
+
+
+chan =
+
+     5
+
+
+chan =
+
+     6
+
+
+chan =
+
+     7
+
+
+chan =
+
+     8
+
+
+chan =
+
+     9
+
+
+chan =
+
+    10
+
+
+chan =
+
+    11
+
+
+chan =
+
+    12
+
+
+chan =
+
+    13
+
+
+chan =
+
+    14
+
+
+chan =
+
+    15
+
+
+chan =
+
+    16
+
+
+chan =
+
+    17
+
+
+chan =
+
+    18
+
+
+chan =
+
+    36
+
+
+chan =
+
+    37
+
+
+chan =
+
+    38
+
+
+chan =
+
+    39
+
+
+chan =
+
+    40
+
+
+chan =
+
+    41
+
+
+chan =
+
+    42
+
+
+chan =
+
+    43
+
+
+chan =
+
+    44
+
+
+chan =
+
+    45
+
+
+chan =
+
+    46
+
+
+chan =
+
+    47
+
+
+chan =
+
+    48
+
+
+chan =
+
+    49
+
+
+chan =
+
+    50
+
+
+chan =
+
+    51
+
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+
+chan =
+
+    42
+
+
+chan =
+
+    43
+
+
+chan =
+
+    44
+
+
+chan =
+
+    45
+
+
+chan =
+
+    46
+
+
+chan =
+
+    47
+
+
+chan =
+
+    48
+
+
+chan =
+
+    49
+
+
+chan =
+
+    50
+
+
+chan =
+
+    51
+
+
+chan =
+
+    52
+
+
+chan =
+
+    53
+
+
+chan =
+
+    54
+
+
+chan =
+
+    55
+
+
+chan =
+
+    56
+
+
+chan =
+
+    57
+
+
+Y =
+
+    0.0308
+    0.0269
+    0.0211
+    0.0217
+    0.0083
+    0.0157
+    0.0211
+    0.0355
+    0.0396
+    0.1145
+    0.0591
+    0.5093
+    0.0292
+    0.0156
+    0.0162
+    0.0159
+    0.0168
+    0.0164
+    0.0136
+    0.0249
+    0.0188
+    0.0224
+    0.0817
+    0.0870
+    0.0159
+    0.0099
+    0.0072
+    0.0058
+    0.0105
+    0.0122
+    0.0056
+    0.0064
+    0.0135
+    0.0268
+    0.0572
+    0.0047
+    0.0322
+    0.0088
+    0.0090
+    0.0178
+    0.0098
+    0.0097
+    0.0072
+    0.0071
+    0.0067
+    0.0111
+    0.0190
+    0.0049
+    0.0063
+    0.0171
+    0.0110
+    0.0049
+    0.0037
+    0.0065
+    0.0041
+    0.0067
+    0.0089
+
+Evaluating tall expression using the Local MATLAB Session:
+
+chan =
+
+    19
+
+
+chan =
+
+    20
+
+
+chan =
+
+    21
+
+
+chan =
+
+    22
+
+
+chan =
+
+    23
+
+
+chan =
+
+    24
+
+
+chan =
+
+    25
+
+
+chan =
+
+    26
+
+
+chan =
+
+    27
+
+
+chan =
+
+    28
+
+
+chan =
+
+    29
+
+
+chan =
+
+    30
+
+
+chan =
+
+    31
+
+
+chan =
+
+    32
+
+
+chan =
+
+    33
+
+
+chan =
+
+    34
+
+
+chan =
+
+    35
+
+
+chan =
+
+    36
+
+
+chan =
+
+    37
+
+
+chan =
+
+    38
+
+
+chan =
+
+    39
+
+
+chan =
+
+    40
+
+
+chan =
+
+    41
+
+
+chan =
+
+    52
+
+
+chan =
+
+    53
+
+
+chan =
+
+    54
+
+
+chan =
+
+    55
+
+
+chan =
+
+    56
+
+
+chan =
+
+    57
+
+
+Y =
+
+    0.0322
+    0.0175
+    0.0195
+    0.0220
+    0.0068
+    0.0188
+    0.0285
+    0.0279
+    0.0266
+    0.0380
+    0.0430
+    0.2524
+    0.0374
+    0.0152
+    0.0248
+    0.0244
+    0.0096
+    0.0112
+    0.0170
+    0.0252
+    0.0131
+    0.0498
+    0.0784
+    0.0866
+    0.0173
+    0.0220
+    0.0078
+    0.0088
+    0.0144
+    0.0180
+    0.0064
+    0.0072
+    0.0303
+    0.0466
+    0.0350
+    0.0034
+    0.0417
+    0.0054
+    0.0099
+    0.0187
+    0.0076
+    0.0059
+    0.0090
+    0.0098
+    0.0071
+    0.0121
+    0.0228
+    0.0045
+    0.0084
+    0.0248
+    0.0163
+    0.0052
+    0.0035
+    0.0054
+    0.0040
+    0.0051
+    0.0058
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Starting dsp_m
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+
+Evaluation completed in 0 sec
+Starting dsp_m
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_1_of_61_data.
+Filtered:_2_of_61_data.
+Filtered:_3_of_61_data.
+Filtered:_4_of_61_data.
+Filtered:_5_of_61_data.
+Filtered:_6_of_61_data.
+
+chan =
+
+    42
+
+
+chan =
+
+    43
+
+
+chan =
+
+    44
+
+
+chan =
+
+    45
+
+
+chan =
+
+    46
+
+
+chan =
+
+    47
+
+
+chan =
+
+    48
+
+
+chan =
+
+    49
+
+
+chan =
+
+    50
+
+
+chan =
+
+    51
+
+
+chan =
+
+    52
+
+
+chan =
+
+    53
+
+
+chan =
+
+    54
+
+
+chan =
+
+    55
+
+
+chan =
+
+    56
+
+
+chan =
+
+    57
+
+
+Y =
+
+    0.0287
+    0.0194
+    0.0193
+    0.0219
+    0.0120
+    0.0224
+    0.0362
+    0.0268
+    0.0320
+    0.1102
+    0.0313
+    0.2691
+    0.0271
+    0.0144
+    0.0186
+    0.0168
+    0.0108
+    0.0179
+    0.0097
+    0.0217
+    0.0222
+    0.0468
+    0.0800
+    0.3157
+    0.0210
+    0.0172
+    0.0089
+    0.0075
+    0.0161
+    0.0158
+    0.0055
+    0.0080
+    0.0164
+    0.0239
+    0.0534
+    0.0044
+    0.0263
+    0.0077
+    0.0077
+    0.0111
+    0.0104
+    0.0072
+    0.0061
+    0.0085
+    0.0089
+    0.0144
+    0.0297
+    0.0048
+    0.0138
+    0.0270
+    0.0115
+    0.0042
+    0.0043
+    0.0062
+    0.0058
+    0.0083
+    0.0080
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Starting dsp_m
+Evaluating tall expression using the Local MATLAB Session:
+Filtered:_1_of_62_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_7_of_61_data.
+Filtered:_8_of_61_data.
+Filtered:_9_of_61_data.
+Filtered:_10_of_61_data.
+Filtered:_11_of_61_data.
+Filtered:_12_of_61_data.
+Filtered:_13_of_61_data.
+Filtered:_14_of_61_data.
+Filtered:_15_of_61_data.
+Filtered:_16_of_61_data.
+Filtered:_17_of_61_data.
+
+Evaluation completed in 0 sec
+Filtered:_1_of_62_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_18_of_61_data.
+Filtered:_19_of_61_data.
+Filtered:_20_of_61_data.
+Filtered:_21_of_61_data.
+Filtered:_22_of_61_data.
+Filtered:_23_of_61_data.
+Filtered:_24_of_61_data.
+Filtered:_25_of_61_data.
+Filtered:_26_of_61_data.
+Filtered:_27_of_61_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_28_of_61_data.
+Filtered:_29_of_61_data.
+Filtered:_30_of_61_data.
+Filtered:_31_of_61_data.
+Filtered:_32_of_61_data.
+Filtered:_33_of_61_data.
+Filtered:_34_of_61_data.
+Filtered:_35_of_61_data.
+Filtered:_36_of_61_data.
+Filtered:_37_of_61_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_38_of_61_data.
+Filtered:_39_of_61_data.
+Filtered:_40_of_61_data.
+Filtered:_41_of_61_data.
+Filtered:_42_of_61_data.
+Filtered:_43_of_61_data.
+Filtered:_44_of_61_data.
+Filtered:_45_of_61_data.
+Filtered:_46_of_61_data.
+Filtered:_47_of_61_data.
+Filtered:_48_of_61_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_49_of_61_data.
+Filtered:_50_of_61_data.
+Filtered:_51_of_61_data.
+Filtered:_52_of_61_data.
+Filtered:_53_of_61_data.
+Filtered:_54_of_61_data.
+Filtered:_55_of_61_data.
+Filtered:_56_of_61_data.
+Filtered:_57_of_61_data.
+Filtered:_58_of_61_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+removing excess HF artifact electrodes Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_1_of_62_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_59_of_61_data.
+Filtered:_60_of_61_data.
+Filtered:_61_of_61_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+removing excess HF artifact electrodes Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_1_of_61_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+removing excess HF artifact electrodes Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_1_of_62_data.
+Filtered:_2_of_61_data.
+Filtered:_3_of_61_data.
+Filtered:_4_of_61_data.
+Filtered:_5_of_61_data.
+Filtered:_6_of_61_data.
+Filtered:_7_of_61_data.
+Filtered:_8_of_61_data.
+Filtered:_9_of_61_data.
+Filtered:_10_of_61_data.
+Filtered:_11_of_61_data.
+Filtered:_12_of_61_data.
+Filtered:_13_of_61_data.
+Filtered:_14_of_61_data.
+Filtered:_15_of_61_data.
+Filtered:_16_of_61_data.
+Filtered:_17_of_61_data.
+Filtered:_18_of_61_data.
+Filtered:_19_of_61_data.
+Filtered:_20_of_61_data.
+Filtered:_21_of_61_data.
+Filtered:_22_of_61_data.
+Filtered:_23_of_61_data.
+Filtered:_24_of_61_data.
+Filtered:_25_of_61_data.
+Filtered:_26_of_61_data.
+Filtered:_27_of_61_data.
+Filtered:_28_of_61_data.
+Filtered:_29_of_61_data.
+Filtered:_30_of_61_data.
+Filtered:_31_of_61_data.
+Filtered:_32_of_61_data.
+Filtered:_33_of_61_data.
+Filtered:_34_of_61_data.
+Filtered:_35_of_61_data.
+Filtered:_36_of_61_data.
+Filtered:_37_of_61_data.
+Filtered:_38_of_61_data.
+Filtered:_39_of_61_data.
+Filtered:_40_of_61_data.
+Filtered:_41_of_61_data.
+Filtered:_42_of_61_data.
+Filtered:_43_of_61_data.
+Filtered:_44_of_61_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+removing excess HF artifact electrodes Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_1_of_62_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+
+M =
+
+    62
+
+Filtered:_45_of_61_data.
+Filtered:_46_of_61_data.
+Filtered:_47_of_61_data.
+Filtered:_48_of_61_data.
+Filtered:_49_of_61_data.
+Filtered:_50_of_61_data.
+Filtered:_51_of_61_data.
+Filtered:_52_of_61_data.
+Filtered:_53_of_61_data.
+Filtered:_54_of_61_data.
+Filtered:_55_of_61_data.
+Filtered:_56_of_61_data.
+Filtered:_57_of_61_data.
+Filtered:_58_of_61_data.
+Filtered:_59_of_61_data.
+Filtered:_60_of_61_data.
+Filtered:_61_of_61_data.
+
+M =
+
+    61
+
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+
+M =
+
+    62
+
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+
+M =
+
+    62
+
+
+N =
+
+        6086
+
+
+M =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+
+
+Q =
+
+    0.5000
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+
+N =
+
+        2321
+
+
+M =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     3
+     1
+     1
+     1
+     1
+     1
+     1
+     2
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     4
+     4
+     4
+     4
+     4
+     4
+     4
+     5
+     5
+     5
+     6
+     6
+     6
+     6
+     6
+     6
+     7
+     7
+     7
+     7
+     7
+     7
+
+
+Q =
+
+    0.6558
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+rebuilding monopolar and bipolar montages Filtered:_1_of_62_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+
+N =
+
+        3381
+
+
+M =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+
+
+Q =
+
+    0.5000
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+rebuilding monopolar and bipolar montages Filtered:_1_of_61_data.
+
+N =
+
+        2841
+
+
+M =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     2
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     4
+     4
+     4
+     4
+     4
+     4
+     4
+     5
+     5
+     5
+     6
+     6
+     6
+     6
+     6
+     6
+     7
+     7
+     7
+     7
+     7
+     7
+
+
+Q =
+
+    0.6550
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+rebuilding monopolar and bipolar montages Filtered:_1_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_2_of_61_data.
+Filtered:_3_of_61_data.
+Filtered:_4_of_61_data.
+Filtered:_5_of_61_data.
+Filtered:_6_of_61_data.
+Filtered:_7_of_61_data.
+Filtered:_8_of_61_data.
+Filtered:_9_of_61_data.
+Filtered:_10_of_61_data.
+Filtered:_11_of_61_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_12_of_61_data.
+Filtered:_13_of_61_data.
+Filtered:_14_of_61_data.
+Filtered:_15_of_61_data.
+Filtered:_16_of_61_data.
+Filtered:_17_of_61_data.
+Filtered:_18_of_61_data.
+Filtered:_19_of_61_data.
+Filtered:_20_of_61_data.
+Filtered:_21_of_61_data.
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+rebuilding monopolar and bipolar montages Filtered:_1_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_61_of_62_data.
+Filtered:_22_of_61_data.
+Filtered:_23_of_61_data.
+Filtered:_24_of_61_data.
+Filtered:_25_of_61_data.
+Filtered:_26_of_61_data.
+Filtered:_27_of_61_data.
+Filtered:_28_of_61_data.
+Filtered:_29_of_61_data.
+Filtered:_30_of_61_data.
+Filtered:_31_of_61_data.
+Filtered:_32_of_61_data.
+Filtered:_2_of_62_data.
+Filtered:_3_of_62_data.
+Filtered:_4_of_62_data.
+Filtered:_5_of_62_data.
+Filtered:_6_of_62_data.
+Filtered:_7_of_62_data.
+Filtered:_8_of_62_data.
+Filtered:_9_of_62_data.
+Filtered:_10_of_62_data.
+Filtered:_11_of_62_data.
+Filtered:_12_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_61_data.
+Filtered:_34_of_61_data.
+Filtered:_35_of_61_data.
+Filtered:_36_of_61_data.
+Filtered:_37_of_61_data.
+Filtered:_38_of_61_data.
+Filtered:_39_of_61_data.
+Filtered:_40_of_61_data.
+Filtered:_41_of_61_data.
+Filtered:_42_of_61_data.
+Filtered:_43_of_61_data.
+Filtered:_13_of_62_data.
+Filtered:_14_of_62_data.
+Filtered:_15_of_62_data.
+Filtered:_16_of_62_data.
+Filtered:_17_of_62_data.
+Filtered:_18_of_62_data.
+Filtered:_19_of_62_data.
+Filtered:_20_of_62_data.
+Filtered:_21_of_62_data.
+Filtered:_22_of_62_data.
+Filtered:_23_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_43_of_62_data.
+Filtered:_44_of_61_data.
+Filtered:_45_of_61_data.
+Filtered:_46_of_61_data.
+Filtered:_47_of_61_data.
+Filtered:_48_of_61_data.
+Filtered:_49_of_61_data.
+Filtered:_50_of_61_data.
+Filtered:_51_of_61_data.
+Filtered:_52_of_61_data.
+Filtered:_53_of_61_data.
+Filtered:_24_of_62_data.
+Filtered:_25_of_62_data.
+Filtered:_26_of_62_data.
+Filtered:_27_of_62_data.
+Filtered:_28_of_62_data.
+Filtered:_29_of_62_data.
+Filtered:_30_of_62_data.
+Filtered:_31_of_62_data.
+Filtered:_32_of_62_data.
+Filtered:_33_of_62_data.
+Filtered:_34_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_54_of_61_data.
+Filtered:_55_of_61_data.
+Filtered:_56_of_61_data.
+Filtered:_57_of_61_data.
+Filtered:_58_of_61_data.
+Filtered:_59_of_61_data.
+Filtered:_60_of_61_data.
+Filtered:_61_of_61_data.
+eeg_checkset warning: number of column in signal array (61) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600001) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600001); xmax corrected
+ENTERING CUDAICA.M
+Filtered:_35_of_62_data.
+Filtered:_36_of_62_data.
+Filtered:_37_of_62_data.
+Filtered:_38_of_62_data.
+Filtered:_39_of_62_data.
+Filtered:_40_of_62_data.
+Filtered:_41_of_62_data.
+Filtered:_42_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+eeg_checkset warning: number of column in signal array (62) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600001) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600001); xmax corrected
+ENTERING CUDAICA.M
+Filtered:_43_of_62_data.
+Filtered:_44_of_62_data.
+Filtered:_45_of_62_data.
+Filtered:_46_of_62_data.
+Filtered:_47_of_62_data.
+Filtered:_48_of_62_data.
+Filtered:_49_of_62_data.
+Filtered:_50_of_62_data.
+Filtered:_51_of_62_data.
+Filtered:_52_of_62_data.
+Filtered:_53_of_62_data.
+Filtered:_54_of_62_data.
+Filtered:_55_of_62_data.
+Filtered:_56_of_62_data.
+Filtered:_57_of_62_data.
+Filtered:_58_of_62_data.
+Filtered:_59_of_62_data.
+Filtered:_60_of_62_data.
+Filtered:_61_of_62_data.
+Filtered:_62_of_62_data.
+eeg_checkset warning: number of column in signal array (62) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600001) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600001); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica2732.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica2732.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica2732.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica2732.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica2732.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica2732.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica2732.sc'
+
+
+cudaica(): weight matrix not read.
+
+error_flag =
+
+     1
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 61
+              trials: 1
+                pnts: 600001
+               srate: 2000
+                xmin: 0
+                xmax: 300
+               times: []
+                data: [61×600001 double]
+              icaact: []
+             icawinv: []
+           icasphere: []
+          icaweights: []
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 61
+              trials: 1
+                pnts: 600001
+               srate: 2000
+                xmin: 0
+                xmax: 300
+               times: []
+                data: [61×600001 double]
+              icaact: []
+             icawinv: []
+           icasphere: []
+          icaweights: []
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+mods =
+
+    '2732'
+
+CUDAICA exploded moving channels to bipolar montage Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+rebuilding monopolar and bipolar montages Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Finished dsp_m
+Saving dsp_m output
+
+filename =
+
+    'dsp_m_output_3.mat'
+
+Saved dsp_m output
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Starting dsp_bp
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_1_of_52_data.
+Filtered:_2_of_52_data.
+Filtered:_3_of_52_data.
+Filtered:_4_of_52_data.
+Filtered:_5_of_52_data.
+Filtered:_6_of_52_data.
+Filtered:_7_of_52_data.
+Filtered:_8_of_52_data.
+Filtered:_9_of_52_data.
+Filtered:_10_of_52_data.
+Filtered:_11_of_52_data.
+Filtered:_12_of_52_data.
+Filtered:_13_of_52_data.
+Filtered:_14_of_52_data.
+Filtered:_15_of_52_data.
+Filtered:_16_of_52_data.
+Filtered:_17_of_52_data.
+Filtered:_18_of_52_data.
+Filtered:_19_of_52_data.
+Filtered:_20_of_52_data.
+Filtered:_21_of_52_data.
+Filtered:_22_of_52_data.
+Filtered:_23_of_52_data.
+Filtered:_24_of_52_data.
+Filtered:_25_of_52_data.
+Filtered:_26_of_52_data.
+Filtered:_27_of_52_data.
+Filtered:_28_of_52_data.
+Filtered:_29_of_52_data.
+Filtered:_30_of_52_data.
+Filtered:_31_of_52_data.
+Filtered:_32_of_52_data.
+Filtered:_33_of_52_data.
+Filtered:_34_of_52_data.
+Filtered:_35_of_52_data.
+Filtered:_36_of_52_data.
+Filtered:_37_of_52_data.
+Filtered:_38_of_52_data.
+Filtered:_39_of_52_data.
+Filtered:_40_of_52_data.
+Filtered:_41_of_52_data.
+Filtered:_42_of_52_data.
+Filtered:_43_of_52_data.
+Filtered:_44_of_52_data.
+Filtered:_45_of_52_data.
+Filtered:_46_of_52_data.
+Filtered:_47_of_52_data.
+Filtered:_48_of_52_data.
+Filtered:_49_of_52_data.
+Filtered:_50_of_52_data.
+Filtered:_51_of_52_data.
+Filtered:_52_of_52_data.
+Done calculating baseline stats Running Ripple Detection
+ans =
+
+    60
+
+
+ans =
+
+  119.9995
+
+
+ans =
+
+  179.9990
+
+
+ans =
+
+  239.9985
+
+
+ans =
+
+  299.9980
+
+detecting additional bad electrodes using neural network
+a =
+
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+
+
+b =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered:_1_of_32_data.
+Filtered:_2_of_32_data.
+Filtered:_3_of_32_data.
+Filtered:_4_of_32_data.
+Filtered:_5_of_32_data.
+Filtered:_6_of_32_data.
+Filtered:_7_of_32_data.
+Filtered:_8_of_32_data.
+Filtered:_9_of_32_data.
+Filtered:_10_of_32_data.
+Filtered:_11_of_32_data.
+Filtered:_12_of_32_data.
+Filtered:_13_of_32_data.
+Filtered:_14_of_32_data.
+Filtered:_15_of_32_data.
+Filtered:_16_of_32_data.
+Filtered:_17_of_32_data.
+Filtered:_18_of_32_data.
+Filtered:_19_of_32_data.
+Filtered:_20_of_32_data.
+Filtered:_21_of_32_data.
+Filtered:_22_of_32_data.
+Filtered:_23_of_32_data.
+Filtered:_24_of_32_data.
+Filtered:_25_of_32_data.
+Filtered:_26_of_32_data.
+Filtered:_27_of_32_data.
+Filtered:_28_of_32_data.
+Filtered:_29_of_32_data.
+Filtered:_30_of_32_data.
+Filtered:_31_of_32_data.
+Filtered:_32_of_32_data.
+Running Fast Ripple Detection 
+ans =
+
+    60
+
+
+ans =
+
+  119.9995
+
+
+ans =
+
+  179.9990
+
+
+ans =
+
+  239.9985
+
+
+ans =
+
+  299.9980
+
+detecting additional bad electrodes using neural networkEvaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+writing monopolar iEEG to trc format converting data to 2048 Hz sampling rate 
+p =
+
+   128
+
+
+q =
+
+   125
+
+writing .TRC file #1 in background Finished dsp_bp
+Saving dsp_m output
+
+filename =
+
+    'dsp_bp_output_3.mat'
+
+Saved dsp_m output
+Filtered:_62_of_62_data.
+eeg_checkset warning: number of column in signal array (62) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600001) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600001); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc'
+
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9921.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9921.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9921.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9921.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9921.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9921.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9921.sc'
+
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica4876.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica4876.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica4876.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica4876.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica4876.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica4876.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica4876.sc'
+
+
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Dataset: '449_correct.edf'
+Clean hfo_engine afterwards:  ''
+Paths to be used:
+Matlab path: /home/tomas-pastore/matlab/bin/matlab
+Project source: /home/tomas-pastore/ez-detect
+Saving outputs directory: /home/tomas-pastore/ez-detect/hfo_engine_1
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch (line 35)
+  In times_testing (line 3)] 
+449_correct.edf
+\r
+
+start_iterations =
+
+     1
+
+Running EZ_Detect v7.0 Putou
+Processing dsp monopolar outputs...
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In processDSPMonopolarOutput (line 3)] 
+Processing dsp bipolar outputs...
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In processDSPBipolarOutput (line 6)] 
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Dataset: '449_correct.edf'
+Clean hfo_engine afterwards:  ''
+Output:
+Total time: 37 (seconds)
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Dataset: '449_correct.edf'
+Clean hfo_engine afterwards:  ''
+Paths to be used:
+Matlab path: /home/tomas-pastore/matlab/bin/matlab
+Project source: /home/tomas-pastore/ez-detect
+Saving outputs directory: /home/tomas-pastore/ez-detect/hfo_engine_1
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch (line 35)
+  In times_testing (line 3)] 
+449_correct.edf
+\r
+
+start_iterations =
+
+     1
+
+Running EZ_Detect v7.0 Putou
+Built: 1 of 67 tall data channels.Built: 2 of 67 tall data channels.Built: 3 of 67 tall data channels.Built: 4 of 67 tall data channels.Built: 5 of 67 tall data channels.Built: 6 of 67 tall data channels.Built: 7 of 67 tall data channels.Built: 8 of 67 tall data channels.Built: 9 of 67 tall data channels.Built: 10 of 67 tall data channels.Built: 11 of 67 tall data channels.Built: 12 of 67 tall data channels.Built: 13 of 67 tall data channels.Built: 14 of 67 tall data channels.Built: 15 of 67 tall data channels.Built: 16 of 67 tall data channels.Built: 17 of 67 tall data channels.Built: 18 of 67 tall data channels.Built: 19 of 67 tall data channels.Built: 20 of 67 tall data channels.Built: 21 of 67 tall data channels.Built: 22 of 67 tall data channels.Built: 23 of 67 tall data channels.Built: 24 of 67 tall data channels.Built: 25 of 67 tall data channels.Built: 26 of 67 tall data channels.Built: 27 of 67 tall data channels.Built: 28 of 67 tall data channels.Built: 29 of 67 tall data channels.Built: 30 of 67 tall data channels.Built: 31 of 67 tall data channels.Built: 32 of 67 tall data channels.Built: 33 of 67 tall data channels.Built: 34 of 67 tall data channels.Built: 35 of 67 tall data channels.Built: 36 of 67 tall data channels.Built: 37 of 67 tall data channels.Built: 38 of 67 tall data channels.Built: 39 of 67 tall data channels.Built: 40 of 67 tall data channels.Built: 41 of 67 tall data channels.Built: 42 of 67 tall data channels.Built: 43 of 67 tall data channels.Built: 44 of 67 tall data channels.Built: 45 of 67 tall data channels.Built: 46 of 67 tall data channels.Built: 47 of 67 tall data channels.Built: 48 of 67 tall data channels.Built: 49 of 67 tall data channels.Built: 50 of 67 tall data channels.Built: 51 of 67 tall data channels.Built: 52 of 67 tall data channels.Built: 53 of 67 tall data channels.Built: 54 of 67 tall data channels.Built: 55 of 67 tall data channels.Built: 56 of 67 tall data channels.Built: 57 of 67 tall data channels.Built: 58 of 67 tall data channels.Built: 59 of 67 tall data channels.Built: 60 of 67 tall data channels.Built: 61 of 67 tall data channels.Built: 62 of 67 tall data channels.Built: 63 of 67 tall data channels.Built: 64 of 67 tall data channels.Built: 65 of 67 tall data channels.Built: 66 of 67 tall data channels.Built: 67 of 67 tall data channels.Starting parallel pool (parpool) using the 'local' profile ...
+Processing dsp monopolar outputs...
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In processDSPMonopolarOutput (line 3)] 
+Processing dsp bipolar outputs...
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In processDSPBipolarOutput (line 6)] 
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Dataset: '449_correct.edf'
+Clean hfo_engine afterwards:  ''
+Output:
+Total time: 78 (seconds)
+Input configuration:
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Dataset: '449_correct.edf'
+Clean hfo_engine afterwards:  ''
+Paths to be used:
+Matlab path: /home/tomas-pastore/matlab/bin/matlab
+Project source: /home/tomas-pastore/ez-detect
+Saving outputs directory: /home/tomas-pastore/ez-detect/hfo_engine_1
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In ezdetect_putou70_e1_batch (line 35)
+  In times_testing (line 3)] 
+449_correct.edf
+\r
+
+start_iterations =
+
+     1
+
+Running EZ_Detect v7.0 Putou
+Built: 1 of 67 tall data channels.Built: 2 of 67 tall data channels.Built: 3 of 67 tall data channels.Built: 4 of 67 tall data channels.Built: 5 of 67 tall data channels.Built: 6 of 67 tall data channels.Built: 7 of 67 tall data channels.Built: 8 of 67 tall data channels.Built: 9 of 67 tall data channels.Built: 10 of 67 tall data channels.Built: 11 of 67 tall data channels.Built: 12 of 67 tall data channels.Built: 13 of 67 tall data channels.Built: 14 of 67 tall data channels.Built: 15 of 67 tall data channels.Built: 16 of 67 tall data channels.Built: 17 of 67 tall data channels.Built: 18 of 67 tall data channels.Built: 19 of 67 tall data channels.Built: 20 of 67 tall data channels.Built: 21 of 67 tall data channels.Built: 22 of 67 tall data channels.Built: 23 of 67 tall data channels.Built: 24 of 67 tall data channels.Built: 25 of 67 tall data channels.Built: 26 of 67 tall data channels.Built: 27 of 67 tall data channels.Built: 28 of 67 tall data channels.Built: 29 of 67 tall data channels.Built: 30 of 67 tall data channels.Built: 31 of 67 tall data channels.Built: 32 of 67 tall data channels.Built: 33 of 67 tall data channels.Built: 34 of 67 tall data channels.Built: 35 of 67 tall data channels.Built: 36 of 67 tall data channels.Built: 37 of 67 tall data channels.Built: 38 of 67 tall data channels.Built: 39 of 67 tall data channels.Built: 40 of 67 tall data channels.Built: 41 of 67 tall data channels.Built: 42 of 67 tall data channels.Built: 43 of 67 tall data channels.Built: 44 of 67 tall data channels.Built: 45 of 67 tall data channels.Built: 46 of 67 tall data channels.Built: 47 of 67 tall data channels.Built: 48 of 67 tall data channels.Built: 49 of 67 tall data channels.Built: 50 of 67 tall data channels.Built: 51 of 67 tall data channels.Built: 52 of 67 tall data channels.Built: 53 of 67 tall data channels.Built: 54 of 67 tall data channels.Built: 55 of 67 tall data channels.Built: 56 of 67 tall data channels.Built: 57 of 67 tall data channels.Built: 58 of 67 tall data channels.Built: 59 of 67 tall data channels.Built: 60 of 67 tall data channels.Built: 61 of 67 tall data channels.Built: 62 of 67 tall data channels.Built: 63 of 67 tall data channels.Built: 64 of 67 tall data channels.Built: 65 of 67 tall data channels.Built: 66 of 67 tall data channels.Built: 67 of 67 tall data channels.Starting parallel pool (parpool) using the 'local' profile ...
+
+Processing dsp monopolar outputs...
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Setting global paths...
+[Warning: The value of local variables may have been changed to match the
+globals.  Future versions of MATLAB will require that you declare a variable to
+be global before you use that variable.] 
+[> In setGlobalPaths (line 55)
+  In processDSPMonopolarOutput (line 3)] 
