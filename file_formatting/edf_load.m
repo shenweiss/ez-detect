@@ -1,4 +1,4 @@
-function varargout = blockEdfLoad(varargin)
+function varargout = edf_load(varargin)
 % blockEdfLoad Load EDF with memory block reads.
 % Function inputs an EDF file text string and returns the header,
 % header and each of the signals.

@@ -1,14 +1,18 @@
 #!/bin/bash
 
-cycle_duration=$1
-batches_number=$2
-dataset="'$3'"
+dataset=$1
+cycle_duration=$2
+batches_number=$3
 clean_hfo_engine_afterwards="'$4'"
+dataset_path='~/EDFs/'$dataset
+dataset_path="'$dataset_path'"
+
 
 echo "Input configuration:"
+echo "Dataset:" $dataset
+echo "Dataset path: "$dataset_path
 echo "Cycle duration:" $cycle_duration "(seconds)"
 echo "Number of batches:" $batches_number
-echo "Dataset:" $dataset
 echo "Clean hfo_engine afterwards: " $clean_hfo_engine_afterwards
 
 matlab_path=~/matlab/bin/matlab
@@ -31,7 +35,7 @@ cd $tryAddPaths_path
 SECONDS=0 #timestamp
 
 #Instead of adding path for every session you can use savepath and then rmpath(genpath('$project_path'))
-$matlab_path -nodesktop -r "tryAddPaths('$project_path');times_testing($cycle_duration,$batches_number,$dataset);quit" &
+$matlab_path -nodesktop -r "tryAddPaths('$project_path');ez_detect_batch_profiling($dataset_path,$cycle_duration,$batches_number);quit" &
 
 wait
 
@@ -60,9 +64,10 @@ wait
 #fi
 
 echo "Input configuration:"
+echo "Dataset:" $dataset
+echo "Dataset path: "$dataset_path
 echo "Cycle duration:" $cycle_duration "(seconds)"
 echo "Number of batches:" $batches_number
-echo "Dataset:" $dataset
 echo "Clean hfo_engine afterwards: " $clean_hfo_engine_afterwards
 
 echo "Output:"

@@ -1,4 +1,6 @@
-rm -f ./matfiles/*
+rm -f ./matfiles/research/*
+rm -f ./matfiles/dsp_monopolar/*
+rm -f ./matfiles/dsp_bipolar/*
 rm -f ./*_temp_trc/*
 rm -f ./nbm2/*
 rm -f ./TRC_out/*
