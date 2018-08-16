@@ -35,25 +35,7 @@ cd $tryAddPaths_path
 SECONDS=0 #timestamp
 
 #Instead of adding path for every session you can use savepath and then rmpath(genpath('$project_path'))
-$matlab_path -nodesktop -r "tryAddPaths('$project_path');ez_detect_batch_profiling($dataset_path,$cycle_duration,$batches_number);quit" &
-
-wait
-
-echo "Processing dsp monopolar outputs..."
-
-for file in $hfo_engine_path/matfiles/dsp_m_output_*.mat
-do
-	$matlab_path -nodesktop -r "tryAddPaths('$project_path');processDSPMonopolarOutput('$file');quit" &
-done
-
-wait
-
-echo "Processing dsp bipolar outputs..."
-
-for file in $hfo_engine_path/matfiles/dsp_bp_output_*.mat
-do
-	$matlab_path -nodesktop -r "tryAddPaths('$project_path');processDSPBipolarOutput('$file');quit" &
-done
+$matlab_path -nodesktop -r "tryAddPaths('$project_path');ez_detect_profiling($dataset_path,$cycle_duration,$batches_number);quit" &
 
 wait
 

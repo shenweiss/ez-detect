@@ -10,7 +10,7 @@ Conventions for the code:
   Formats:
       Filename && Function name: Dash separated names. Example: ez_detect_batch
       Local Function name: If you define local functions within a files, use CamelCase. Example: processBatch
-      Local Variables: Descriptive names. CamelCase. Example: numberOfCycles
+      Local Variables: Descriptive names. Dash separated names. Example: start_time
       Global Variables: Dash separated UPPERCASE. Example: PROJECT_PATH
 
 1. Prerequisites for Deployment 

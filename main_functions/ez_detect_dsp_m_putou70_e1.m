@@ -13,15 +13,12 @@
 % Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
 % Philadelphia, PA USA.
 
-function [DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag] = ez_detect_dsp_m_putou_e1(ez_tall_m,ez_tall_bp,metadata);
+function [DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag] = ez_detect_dsp_m_putou_e1(ez_tall_m,ez_tall_bp,metadata,paths);
 
 % hf_bad uses the HFO band pass filtered EEG mutual information
 % adjacency matrix, and graph theory (community) during episodes of artifact to define dissimar
 % electrodes. The bipolar montage is calculated for the dissimilar
 % electrodes
-global MP_TEMP_TRC_PATH;
-global EXECUTABLE_PATH;
-global EZ_TOP_IN_PATH;
 
 file_block=metadata.file_block;
 
@@ -802,13 +799,13 @@ if error_flag==0 % error flag 1
         clear x temp2 temp
         
         % Clear the temporary .mat files
-        system(['rm -f ' MP_TEMP_TRC_PATH 'eeg_2k_a_' file_block '.mat']);
-        system(['rm -f ' MP_TEMP_TRC_PATH 'eeg_2k_b_' file_block '.mat']);
-        system(['rm -f ' MP_TEMP_TRC_PATH 'eeg_2k_c_' file_block '.mat']);
-        system(['rm -f ' MP_TEMP_TRC_PATH 'eeg_2k_d_' file_block '.mat']);
-        system(['rm -f ' MP_TEMP_TRC_PATH 'eeg_2k_e_' file_block '.mat']);
-        system(['rm -f ' MP_TEMP_TRC_PATH 'eeg_2k_f_' file_block '.mat']);
-        system(['rm -f ' MP_TEMP_TRC_PATH 'eeg_2k_g_' file_block '.mat']);
+        system(['rm -f ' paths.trc_tmp_monopolar 'eeg_2k_a_' file_block '.mat']);
+        system(['rm -f ' paths.trc_tmp_monopolar 'eeg_2k_b_' file_block '.mat']);
+        system(['rm -f ' paths.trc_tmp_monopolar 'eeg_2k_c_' file_block '.mat']);
+        system(['rm -f ' paths.trc_tmp_monopolar 'eeg_2k_d_' file_block '.mat']);
+        system(['rm -f ' paths.trc_tmp_monopolar 'eeg_2k_e_' file_block '.mat']);
+        system(['rm -f ' paths.trc_tmp_monopolar 'eeg_2k_f_' file_block '.mat']);
+        system(['rm -f ' paths.trc_tmp_monopolar 'eeg_2k_g_' file_block '.mat']);
         
         % corrects the file_id
         file_id_size=numel(metadata.file_id);
@@ -826,8 +823,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(1:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(1:max_trc_channels);
-                save([MP_TEMP_TRC_PATH 'eeg_2k_a_' file_block '.mat'],'eeg');
-                system_command=[EXECUTABLE_PATH 'mat2trc32_m2k_a' ' ' file_id ' ' file_block ' &'];
+                save([paths.trc_tmp_monopolar 'eeg_2k_a_' file_block '.mat'],'eeg');
+                system_command=[paths.executable 'mat2trc32_m2k_a' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #1 in background \r');
             end;
@@ -840,8 +837,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(33:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(33:max_trc_channels);
-                save([MP_TEMP_TRC_PATH 'eeg_2k_b_' file_block '.mat'],'eeg');
-                system_command=[EXECUTABLE_PATH 'c32_m2k_b' ' ' file_id ' ' file_block ' &'];
+                save([paths.trc_tmp_monopolar 'eeg_2k_b_' file_block '.mat'],'eeg');
+                system_command=[paths.executable 'mat2trc32_m2k_b' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #2 in background \r');
             end;
@@ -854,8 +851,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(65:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(65:max_trc_channels);
-                save([MP_TEMP_TRC_PATH 'eeg_2k_c_' file_block '.mat'],'eeg');
-                system_command=[EXECUTABLE_PATH 'c32_m2k_c' ' ' file_id ' ' file_block ' &'];
+                save([paths.trc_tmp_monopolar 'eeg_2k_c_' file_block '.mat'],'eeg');
+                system_command=[paths.executable 'mat2trc32_m2k_c' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #3 in background \r');
             end;
@@ -868,8 +865,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(97:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(97:max_trc_channels);
-                save([MP_TEMP_TRC_PATH 'eeg_2k_d_' file_block '.mat'],'eeg');
-                system_command=[EXECUTABLE_PATH 'c32_m2k_d' ' ' file_id ' ' file_block ' &'];
+                save([paths.trc_tmp_monopolar 'eeg_2k_d_' file_block '.mat'],'eeg');
+                system_command=[paths.executable 'mat2trc32_m2k_d' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #4 in background \r');
             end;
@@ -882,8 +879,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(129:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(129:max_trc_channels);
-                save([MP_TEMP_TRC_PATH 'eeg_2k_e_' file_block '.mat'],'eeg');
-                system_command=[EXECUTABLE_PATH 'c32_m2k_e' ' ' file_id ' ' file_block ' &'];
+                save([paths.trc_tmp_monopolar 'eeg_2k_e_' file_block '.mat'],'eeg');
+                system_command=[paths.executable 'mat2trc32_m2k_e' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #5 in background \r');
             end;
@@ -896,8 +893,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(161:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(161:max_trc_channels);
-                save([MP_TEMP_TRC_PATH 'eeg_2k_f_' file_block '.mat'],'eeg');
-                system_command=[EXECUTABLE_PATH 'c32_m2k_f' ' ' file_id ' ' file_block ' &'];
+                save([paths.trc_tmp_monopolar 'eeg_2k_f_' file_block '.mat'],'eeg');
+                system_command=[paths.executable 'mat2trc32_m2k_f' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #6 in background \r');
             end;
@@ -910,8 +907,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(193:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(193:max_trc_channels);
-                save([MP_TEMP_TRC_PATH 'eeg_2k_g_' file_block '.mat'],'eeg');
-                system_command=[EXECUTABLE_PATH 'mat2trc32_m2k_g' ' ' file_id ' ' file_block ' &'];
+                save([paths.trc_tmp_monopolar 'eeg_2k_g_' file_block '.mat'],'eeg');
+                system_command=[paths.executable 'mat2trc32_m2k_g' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #7 in background \r');
             end;
@@ -1566,7 +1563,7 @@ if error_flag==0 % error flag 1
             DSP_data_m.fripple_clip_abs_t=fripple_clip_abs_t;
             DSP_data_m.fripple_clip_event_t=fripple_clip_event_t;
             filename1=['dsp_' file_id '_m_' file_block '.mat'];
-            filename1=strcat(EZ_TOP_IN_PATH,filename1);
+            filename1=strcat(paths.ez_top_in,filename1);
             save('-v7.3',filename1,'DSP_data_m');
             
         else % error_flag 1 i.e. CUDAICA exploded ICA #1
@@ -1617,7 +1614,7 @@ if error_flag==0 % error flag 1
             file_id_size=numel(metadata.file_id);
             file_id=metadata.file_id(1:(file_id_size-4));
             filename1=['dsp_' file_id '_m_' file_block '.mat'];
-            filename1=strcat(EZ_TOP_IN_PATH,filename1);
+            filename1=strcat(paths.ez_top_in,filename1);
             save('-v7.3',filename1,'DSP_data_m');
             error_flag=1;
         end;
@@ -1669,7 +1666,7 @@ if error_flag==0 % error flag 1
         file_id_size=numel(metadata.file_id);
         file_id=metadata.file_id(1:(file_id_size-4));
         filename1=['dsp_' file_id '_m_' file_block '.mat'];
-        filename1=strcat(EZ_TOP_IN_PATH,filename1);
+        filename1=strcat(paths.ez_top_in,filename1);
         save('-v7.3',filename1,'DSP_data_m');
         error_flag=1;
     end;
@@ -1721,7 +1718,7 @@ else % error_flag 1 i.e. CUDAICA exploded ICA #3
     file_id_size=numel(metadata.file_id);
     file_id=metadata.file_id(1:(file_id_size-4));
     filename1=['dsp_' file_id '_m_' file_block '.mat'];
-    filename1=strcat(EZ_TOP_IN_PATH,filename1);
+    filename1=strcat(paths.ez_top_in,filename1);
     save('-v7.3',filename1,'DSP_data_m');
     error_flag=1;
 end;

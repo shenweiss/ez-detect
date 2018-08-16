@@ -1,16 +1,16 @@
 %{ 
+ Note: Now the main functions is called main() 
+ (You can call it with optional args and if you dont specify defaults are given) 
+ To call this function all arguments are required. main() handles that setting.
+ 
 
- Modifying variables include
- iteration start
- start time (sec) in the case that a file ends with artifact,
- end time,
- the channel swapping flag (1: yes 0: no)
- the case that channels were incorrectly assigned in the original EDF file
+ Input semantic:
+ 
+ The channel swapping flag (1: yes 0: no)
+ In case that channels were incorrectly assigned in the original EDF file
  as can be the case for intraop recordings, and the 4th variable is the swap_array that can be
  used to correct the channel assignments. 
-
- Usage as follows ex#2. ezdetect_putou_v2 start_time stop_time swap_flag swap_array.
-
+ 
  This work is protected by US patent applications US20150099962A1,
  UC-2016-158-2-PCT, US provisional #62429461
 
@@ -41,10 +41,10 @@
 
 %}
 
-function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, chan_swap, swap_array_file, saving_dirs)
+function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, swapping_data, paths)
     disp('Running EZ_Detect v7.0 Putou')
         
-    narginchk(7,7);
+    narginchk(6,6);
 
     [header, signal_header, eeg_edf] = edf_load(edf_dataset); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
     disp('EDF file loaded')
@@ -64,14 +64,14 @@ function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, chan_sw
         % if < 60 seconds.
 
     %check matlab scope for variables inside for statement.
-    segment_data = struct();
-    segment_data.filename = data_filename;
-    segment_data.file_pointers = file_pointers;
-    segment_data.sampling_rate = sampling_rate;
-    segment_data.signal_header = signal_header;
-    segment_data.block_index = 0;
-    segment_data.chan_swap = chan_swap;
-    segment_data.swap_array_file = swap_array_file;
+    segment_data = struct( ...
+        'filename', data_filename, ...
+        'file_pointers', file_pointers, ...
+        'sampling_rate', sampling_rate, ...
+        'signal_header', signal_header, ...
+        'block_index', 0, ...
+        'swapping_data', swapping_data ...
+    );
 
     eeg_datas = cell(blocks);
     for i=1:blocks
@@ -91,7 +91,7 @@ function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, chan_sw
     
     %disp('Are chanlist all the same?:')
     %disp(chanlist)
-    %saveResearchData(saving_dirs.research, blocks, metadata, eeg_data, chanlist, data_filename);
+    %saveResearchData(paths.research, blocks, metadata, eeg_data, chanlist, data_filename);
 
     %check this function
     [~, ~, ~, montage] = ez_lfbad_putou70_ini_e1(tall(eeg_datas{1}), chanlist, metadatas(1,:,:), [data_filename extention]);
@@ -99,7 +99,7 @@ function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, chan_sw
     parfor i=1:blocks
         gd=gpuDevice;
         disp(gd.Index);
-        processBatch(eeg_datas{i}, metadatas(i,:,:), chanlist, montage, saving_dirs);
+        processBatch(eeg_datas{i}, metadatas(i,:,:), chanlist, montage, paths);
         eeg_datas{i} = 0; %to release memory?
     end
 
@@ -167,13 +167,15 @@ function [eeg_data, metadata, chanlist] = computeEEGSegment(segment_data, eeg_ed
     
     number_of_channels = gather(numel(eeg_edf_tall(:,1)));
     chanlist = getChanlist(number_of_channels, segment_data.signal_header,...
-                           segment_data.chan_swap, segment_data.swap_array_file);
+                           segment_data.swapping_data);
     
     eeg_data = resampleData(segment_data.sampling_rate, 2000, number_of_channels, eeg_data);
 
 end
 
-function chanlist = getChanlist(number_of_channels, signal_header, chan_swap, swap_array_file)
+function chanlist = getChanlist(number_of_channels, signal_header, swapping_data)
+    swap_array_file = swapping_data.swap_array_file;
+    chan_swap = swapping_data.chan_swap;
     swap_array_file_given = ~strcmp(swap_array_file,'default');
     if swap_array_file_given
         load(swap_array_file);
@@ -215,9 +217,8 @@ function saveResearchData(contest_path, metadata, eeg_data, chanlist)
     clear metadata_i eeg_data_i chanlist_i;
 end
 
-function processBatch(eeg_data, metadata, chanlist, montage, saving_dirs)    
+function processBatch(eeg_data, metadata, chanlist, montage, paths)    
         
-    setGlobalPaths()%to be removed later
     ez_tall = tall(eeg_data);
     clear eeg_data;
     [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_putou70_e1(ez_tall, chanlist, metadata, montage);
@@ -229,12 +230,12 @@ function processBatch(eeg_data, metadata, chanlist, montage, saving_dirs)
         disp('Starting dsp_m');
         [DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ...
          ez_tall_fr_m, metadata, num_trc_blocks, error_flag] = ez_detect_dsp_m_putou70_e1(ez_tall_m, ...
-                                                                                         ez_tall_bp, metadata);
+                                                                                         ez_tall_bp, metadata, paths);
         disp('Finished dsp_m');
         %save([saving_path filename], '-struct', 'structName')
         disp('Saving dsp_m output');
         filename = ['dsp_m_output_' metadata.file_block '.mat']
-        saveMonopolarData([saving_dirs.dsp_monopolar filename], DSP_data_m, ez_tall_m, ...
+        saveMonopolarData([paths.dsp_monopolar_out filename], DSP_data_m, ez_tall_m, ...
                           ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ...
                           ez_tall_fr_m, metadata, num_trc_blocks, error_flag);
         disp('Saved dsp_m output');
@@ -247,12 +248,12 @@ function processBatch(eeg_data, metadata, chanlist, montage, saving_dirs)
         disp('Starting dsp_bp');
         [DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ....
         ez_tall_fr_bp, metadata, num_trc_blocks] = ez_detect_dsp_bp_putou70_e1(ez_tall_bp, hfo_ai, ...
-                                                                               fr_ai, metadata);
+                                                                               fr_ai, metadata, paths);
         disp('Finished dsp_bp');
         
         disp('Saving dsp_m output');
         filename = ['dsp_bp_output_' metadata.file_block '.mat']
-        saveBipolarData([saving_dirs.dsp_bipolar filename], DSP_data_bp, ez_tall_bp, ... 
+        saveBipolarData([paths.dsp_bipolar_out filename], DSP_data_bp, ez_tall_bp, ... 
                         ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
         disp('Saved dsp_m output');
     end
