@@ -1,5 +1,6 @@
-% cudaica() - Run stand-alone binary version of runica() from the
-%            Matlab command line. Saves time and memory relative
+ % cudaica() - Run stand-alone binary version of runica() from the
+%
+%             Matlab command line. Saves time and memory relative
 %            to runica().  If stored in a float file, data are not 
 %            read into Matlab, and so may be larger than Matlab
 %            can handle owing to memory limitations.
@@ -76,7 +77,7 @@
 % 09/08/00 Added tmpint to script, weights and sphere files to avoid
 %          conflicts when multiple cudaica sessions run in the same pwd -sm
 % 10/07/00 Fixed bug in reading wts when 'pca' ncomps < nchans -sm
-% 07/18/01 replaced var ICA with CUDAICA_BINARY_PATH to try to avoid Matlab6 bug -sm
+% 07/18/01 replaced var ICA with cudaica_bin to try to avoid Matlab6 bug -sm
 % 11/06/01 add absolute path of files (lines 157-170 & 198) -ad
 % 01-25-02 reformated help & license, added links -ad 
  
@@ -84,13 +85,13 @@ function [error_flag,wts,sph,tmpint] = cudaica(data,var2,var3,var4,var5,var6,var
 
 disp('ENTERING CUDAICA.M')
 
-global HFO_ENGINE_PATH;
-global BINICA_SC_PATH;
-global CUDAICA_BINARY_PATH;
-global CUDAICA_BINARY_DIR_PATH;
+%to be removed in future refactoring, once fixed the arguments...
+hfo_engine='/home/tomas-pastore/ez-detect/hfo_engine_1/';
+binica_sc='/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc';
+cudaica_bin='/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica';
 
 if ~isdeployed
-    addpath(HFO_ENGINE_PATH);
+    addpath(hfo_engine);
 end
 
 if nargin < 1 | nargin > 25
@@ -101,27 +102,27 @@ if nargin < 1 | nargin > 25
 end
 if size(data,3) > 1, data = reshape(data, size(data,1), size(data,2)*size(data,3) ); end;
 
-if ~exist(BINICA_SC_PATH)
-  fprintf("cudaica(): You need to update your icadefs file to include CUDAICA_BINARY_PATH and SC.\n")
+if ~exist(binica_sc)
+  fprintf("cudaica(): You need to update your icadefs file to include cudaica_bin and SC.\n")
   return
 end;
-if exist(BINICA_SC_PATH) ~= 2
-  fprintf("cudaica(): No ica source file '%s' is in your Matlab path, check...\n", BINICA_SC_PATH);
+if exist(binica_sc) ~= 2
+  fprintf("cudaica(): No ica source file '%s' is in your Matlab path, check...\n", binica_sc);
   return
 else
-	%BINICA_SC_PATH = which(BINICA_SC_PATH);
-	fprintf("cudaica: using source file '%s' \n",  BINICA_SC_PATH)
+	%binica_sc = which(binica_sc);
+	fprintf("cudaica: using source file '%s' \n",  binica_sc)
 end
 
-if exist(CUDAICA_BINARY_PATH) ~= 2
-  fprintf("cudaica(): ica binary '%s' is not in your Matlab path, check\n", CUDAICA_BINARY_PATH);
+if exist(cudaica_bin) ~= 2
+  fprintf("cudaica(): ica binary '%s' is not in your Matlab path, check\n", cudaica_bin);
   return
 else
-	fprintf("cudaica(): using binary ica file '%s' \n", CUDAICA_BINARY_PATH);
+	fprintf("cudaica(): using binary ica file '%s' \n", cudaica_bin);
 end
 
-%fprintf('%s \n', BINICA_SC_PATH) 
-[flags,args] = read_sc(BINICA_SC_PATH); % read flags and args in master SC file
+%fprintf('%s \n', binica_sc) 
+[flags,args] = read_sc(binica_sc); % read flags and args in master SC file
 
 %
 % substitute the flags/args pairs in the .sc file
@@ -200,10 +201,10 @@ end
 % make sure no such script file already exists in the pwd
 %
 %scriptfile = ['cudaica' tmpint '.sc'];
-%scriptfile =  [HFO_ENGINE_PATH scriptfile];
+%scriptfile =  [hfo_engine scriptfile];
 tmpint = int2str(round(rand*10000));
 scriptfile = ['cudaica' tmpint '.sc'];
-scriptfile =  [HFO_ENGINE_PATH scriptfile];
+scriptfile =  [hfo_engine scriptfile];
 fprintf('scriptfile = %s\n',scriptfile);
 
 nchans = 0;
@@ -215,7 +216,7 @@ if ~ischar(data) % data variable given
   end
   nchans = size(data,1);
   nframes = size(data,2);
-  tmpdata = [HFO_ENGINE_PATH 'cudaica' tmpint '.fdt'];
+  tmpdata = [hfo_engine 'cudaica' tmpint '.fdt'];
   if strcmpi(computer, 'MAC')
       floatwrite(data,tmpdata,'ieee-be');
   else
@@ -253,15 +254,15 @@ for x=1:length(flags)
      args{x} = datafile;
   elseif strcmp(flags{x},'WeightsOutFile')
      weightsfile = ['cudaica' tmpint '.wts'];
-     weightsfile =  [HFO_ENGINE_PATH weightsfile];
+     weightsfile =  [hfo_engine weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'WeightsTempFile')
      weightsfile = ['cudaicatmp' tmpint '.wts'];
-     weightsfile =  [HFO_ENGINE_PATH weightsfile];
+     weightsfile =  [hfo_engine weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'SphereFile')
      spherefile = ['cudaica' tmpint '.sph'];
-     spherefile =  [HFO_ENGINE_PATH spherefile];
+     spherefile =  [hfo_engine spherefile];
      args{x} = spherefile;
   elseif strcmp(flags{x},'chans')
      args{x} = int2str(nchans);
@@ -283,7 +284,7 @@ if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
      if exist('wtsin') == 1 % variable
        disp('cudaica line 291 tmpint class:')
        disp(class(tmpint) )
-       winfn = [HFO_ENGINE_PATH tmpint '.inwts'];
+       winfn = [hfo_engine tmpint '.inwts'];
        if strcmpi(computer, 'MAC')
            floatwrite(wtsin,winfn,'ieee-be');
        else
@@ -293,7 +294,7 @@ if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
        weightsinfile = winfn; % weights in file name
      elseif exist(wtsin) == 2 % file
        weightsinfile = wtsin;
-       weightsinfile =  [HFO_ENGINE_PATH weightsinfile];
+       weightsinfile =  [hfo_engine weightsinfile];
      else
        fprintf('cudaica(): weightsin file|variable not found.\n');
        return
@@ -309,7 +310,7 @@ if ~exist(scriptfile)
 end
 
 fprintf('\ncudaica(): ica script file %s data %s pwd %s.\n',...
-        scriptfile, datafile, HFO_ENGINE_PATH);
+        scriptfile, datafile, hfo_engine);
 %
 % %%%%%%%%%%%%%%%%%%%%%% run binary ica %%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -317,7 +318,7 @@ fprintf('\ncudaica(): ica script file %s data %s pwd %s.\n',...
    if exist('ncomps')
         fprintf('   Finding %d components.\n',ncomps);
    end
-   eval_call = ['! ' CUDAICA_BINARY_PATH ' -f ' scriptfile]
+   eval_call = ['! ' cudaica_bin ' -f ' scriptfile]
    evalc(eval_call);
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -425,7 +426,7 @@ function [flags,args] = read_sc(master_sc)
 flags = [];
 args  = [];
 fid = fopen(fullfile(master_sc),'r');
-fprintf(master_sc);
+fprintf(master_sc)
 if fid < 0
   fprintf('\ncudaica(): Master .sc file %s not read!\n',master_sc)
      return

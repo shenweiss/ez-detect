@@ -1,4 +1,4 @@
-function [hfo,ic1,EEG,error_flag]=ez_cudaica_fripple_putou_e2(eeg_data,samplingrate);
+function [hfo,ic1,EEG,error_flag]=ez_cudaica_fripple_putou_e2(eeg_data,samplingrate, paths);
 
 % This work is protected by US patent applications US20150099962A1,
 % UC-2016-158-2-PCT, US provisional #62429461

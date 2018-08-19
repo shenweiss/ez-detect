@@ -218,51 +218,45 @@ function saveResearchData(contest_path, metadata, eeg_data, chanlist)
 end
 
 function processBatch(eeg_data, metadata, chanlist, montage, paths)    
-        
     ez_tall = tall(eeg_data);
     clear eeg_data;
+    %refactor that function
     [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_putou70_e1(ez_tall, chanlist, metadata, montage);
     clear ez_tall;
-    metadata.montage=montage;
+    metadata.montage= montage;
 
+    %maybe they could be removed if we save inside dsp
+    createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths);
+    createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);  
+end
+
+function createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths)
     if ~isempty(gather(ez_tall_m))
         %Why monopolar takes and saves ez_tall_bp?
+        %If always will save, maybe should be inside dsp to avoid copies
         disp('Starting dsp_m');
-        [DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ...
-         ez_tall_fr_m, metadata, num_trc_blocks, error_flag] = ez_detect_dsp_m_putou70_e1(ez_tall_m, ...
-                                                                                         ez_tall_bp, metadata, paths);
+        dsp_monopolar_output = ez_detect_dsp_m_putou70_e1(ez_tall_m, ez_tall_bp, metadata, paths);
         disp('Finished dsp_m');
-        %save([saving_path filename], '-struct', 'structName')
+        
+        dsp_monopolar_filename = ['dsp_m_output_' metadata.file_block '.mat'];
         disp('Saving dsp_m output');
-        filename = ['dsp_m_output_' metadata.file_block '.mat']
-        saveMonopolarData([paths.dsp_monopolar_out filename], DSP_data_m, ez_tall_m, ...
-                          ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ...
-                          ez_tall_fr_m, metadata, num_trc_blocks, error_flag);
+        save([paths.dsp_monopolar_out dsp_monopolar_filename], '-struct', 'dsp_monopolar_output');
         disp('Saved dsp_m output');
     else
         hfo_ai = zeros(numel(gather(ez_tall_bp(1,:))),1)';
         fr_ai = hfo_ai;
     end
+end
 
+function createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths)
     if ~isempty(gather(ez_tall_bp))
         disp('Starting dsp_bp');
-        [DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ....
-        ez_tall_fr_bp, metadata, num_trc_blocks] = ez_detect_dsp_bp_putou70_e1(ez_tall_bp, hfo_ai, ...
-                                                                               fr_ai, metadata, paths);
+        dsp_bipolar_output = ez_detect_dsp_bp_putou70_e1(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);
         disp('Finished dsp_bp');
         
+        dsp_bipolar_filename = ['dsp_bp_output_' metadata.file_block '.mat'];
         disp('Saving dsp_m output');
-        filename = ['dsp_bp_output_' metadata.file_block '.mat']
-        saveBipolarData([paths.dsp_bipolar_out filename], DSP_data_bp, ez_tall_bp, ... 
-                        ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
+        save([paths.dsp_bipolar_out dsp_bipolar_filename], '-struct', 'dsp_bipolar_output');
         disp('Saved dsp_m output');
     end
-end
-
-function saveMonopolarData(file_path, DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag)
-    save(file_path, 'DSP_data_m', 'ez_tall_m','ez_tall_bp', 'hfo_ai', 'fr_ai', 'ez_tall_hfo_m', 'ez_tall_fr_m', 'metadata', 'num_trc_blocks', 'error_flag','-v7.3');
-end
-
-function saveBipolarData(file_path, DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks)
-    save(file_path, 'DSP_data_bp', 'ez_tall_bp', 'ez_tall_hfo_bp', 'ez_tall_fr_bp', 'metadata', 'num_trc_blocks','-v7.3');
 end

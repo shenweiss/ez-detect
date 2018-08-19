@@ -13,7 +13,7 @@
 % Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
 % Philadelphia, PA USA.
 
-function [DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag] = ez_detect_dsp_m_putou_e1(ez_tall_m,ez_tall_bp,metadata,paths);
+function dsp_monopolar_output = ez_detect_dsp_m_putou_e1(ez_tall_m,ez_tall_bp,metadata,paths);
 
 % hf_bad uses the HFO band pass filtered EEG mutual information
 % adjacency matrix, and graph theory (community) during episodes of artifact to define dissimar
@@ -120,7 +120,7 @@ clear f0 df N h eeg_notch eeg_temp eeg_mp eeg_bps
 % IC1 is also used to refine the artifact index on a millisecond time
 % scale.
 
-[hfo, ic1, EEG, error_flag]=ez_cudaica_ripple_putou_e1(eeg_data_no_notch,2000);
+[hfo, ic1, EEG, error_flag]=ez_cudaica_ripple_putou_e1(eeg_data_no_notch,2000, paths);
 if error_flag==0 % error flag 1
     ez_tall_hfo_m=tall(hfo);
     
@@ -499,7 +499,7 @@ if error_flag==0 % error flag 1
             metadata.m_chanlist(b)={'BUG'};
             
             % repeat ICA
-            [hfo, ic1, EEG, error_flag]=ez_cudaica_ripple_putou_e1(eeg_data_no_notch,2000);
+            [hfo, ic1, EEG, error_flag]=ez_cudaica_ripple_putou_e1(eeg_data_no_notch,2000, paths);
             if error_flag == 0
                 ez_tall_hfo_m=tall(hfo);
                 
@@ -1126,7 +1126,7 @@ if error_flag==0 % error flag 1
         clear a A_boolean ai_amp ai ai_extract_index amp amp_block ans artifact artindex b B_boolean c C C_boolean chan_block_str channel clip_end clip_start d D datablock delta_amp_peak duration_cutoff e Hpsd i ic1_block ic1_chan ic_prune ieeg_block j lambdahat lookup_val1 lookup_val12 lookup_val2 nfft ripple_concat ripple_ic_clip ripple_ic_clip_t ripple_time ripple_ics ripple_time_e ripple_time_s score_amp score_amp_ripple size_array smooth_length start start_ann step_search stop_ann temp_delta temp_time temp_zeros total_ripple_backup total_ripple_ic x zscore_amp zscore_amp_ripple zscore_block
         
         %% Calculate ICA for fast ripples (FR)
-        [fr, fr_ic1, EEG, error_flag]=ez_cudaica_fripple_putou_e1(eeg_data_no_notch,2000);
+        [fr, fr_ic1, EEG, error_flag]=ez_cudaica_fripple_putou_e1(eeg_data_no_notch,2000, paths);
         if error_flag==0
             ez_tall_fr_m=tall(fr);
             fprintf('compensating for overstripping fripple ica \r');
@@ -1724,3 +1724,16 @@ else % error_flag 1 i.e. CUDAICA exploded ICA #3
 end;
 
 
+%to be improved later
+dsp_monopolar_output = struct( ...
+    'DSP_data_m', DSP_data_m, ...
+    'ez_tall_m', ez_tall_m, ...
+    'ez_tall_bp', ez_tall_bp, ...
+    'hfo_ai', hfo_ai, ...
+    'fr_ai', fr_ai, ...
+    'ez_tall_hfo_m', ez_tall_hfo_m, ...
+    'ez_tall_fr_m', ez_tall_fr_m, ...
+    'metadata', metadata, ...
+    'num_trc_blocks', num_trc_blocks, ...
+    'error_flag', error_flag ...
+);
