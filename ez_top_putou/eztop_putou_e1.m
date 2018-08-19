@@ -15,7 +15,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
     if sum(fileData.total_fripple) < 15000 % exit function if memory overload
         
         %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        clearvars -except -regexp PATH$ fileData vname_var output_fname metadata
+        clearvars -except -regexp paths fileData vname_var output_fname metadata
         tic
         % Load Clips
         eegSetR = fileData.ripple_clip;
@@ -227,7 +227,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % OUTPUT STRUCTURE ASSEMBLY
-        clearvars -except -regexp PATH$ N ResultsR ResultsfR SpikesR SpikesfR catR catfR cetR cetRsh cetfR cetfRsh ctimeR ctimefR eegListR eegListfR eegSet* fileData indR indfR output_fname metadata
+        clearvars -except -regexp paths N ResultsR ResultsfR SpikesR SpikesfR catR catfR cetR cetRsh cetfR cetfRsh ctimeR ctimefR eegListR eegListfR eegSet* fileData indR indfR output_fname metadata
         
         % Output Structures: Ripple Detections
         

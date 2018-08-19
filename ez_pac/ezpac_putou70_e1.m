@@ -1,4 +1,4 @@
-function ezpac_putou_e1(ez_tall,ez_hfo,ez_fr,output_fname,metadata,montage,paths)
+function ezpac_putou_e1(ez_tall,ez_fr,ez_hfo,output_fname,metadata,montage,paths)
 % Written by Dr. Shennan Aibel Weiss and Dr. Inkyung Song TJU 2016-2017, Portions
 % of this code were written by Dr. Shennan Aibel Weiss at UCLA 2014-2016. 
 

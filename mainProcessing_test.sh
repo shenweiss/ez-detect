@@ -35,10 +35,11 @@ cd $tryAddPaths_path
 SECONDS=0 #timestamp
 
 #Instead of adding path for every session you can use savepath and then rmpath(genpath('$project_path'))
-$matlab_path -nodesktop -r "tryAddPaths('$project_path');ez_detect_profiling($dataset_path,$cycle_duration,$batches_number);quit" &
+$matlab_path -nodesktop -r "tryAddPaths('$project_path');ez_detect_test($dataset_path,$cycle_duration,$batches_number);quit" &
 
 wait
 
+#ver porque no anda
 #if [ $clean_hfo_engine_afterwards -eq '--clean' ]
 #then
 #	cd $hfo_engine_path
