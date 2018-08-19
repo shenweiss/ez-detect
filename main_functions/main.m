@@ -4,25 +4,26 @@
 %cd project_path && matlab_binary -r  "main(edf_dataset,start_time, stop_time, ...
 %%                                     cycle_time, chan_swap, swap_array_file)"
 
-%Backlog:
-%TODO: 
+%TO ASK
 %processBatch %Why monopolar takes and saves ez_tall_bp?  
 %ProcessBatch If always will save, maybe should be inside dsp to avoid copies
 %warnings , excepciones, error_codes?
 %saving dirs separo o no en bipolar / monopolar
-%remove repetead code for processMonopolar/Bipolar outputs
-%remove repetead code for processBatch in ez_detect_batch
 %refactor the other main functions, 
 %review if monopolar/bipolar could be generalized as 'method to use'
 %if so replace fields extentions such as _m _bp everywhere with a method_name field and remove 
 %method_labels argument since they will be the same
 
 
-%create error_flag for dsp_bipolar (lanzar warning y exc?)
+%TODO: 
+%Backlog:
+
+% refactor ez detect functions 
+%dsp bipolar refactoring = create error_flag for dsp_bipolar (lanzar warning y exc?)
 %remove conditional for error_flag in process_DSP_output
-%create an ezDetect class
-%use a parser later to optionally get monopolar/bipolar/trc
-%validate arguments
+%create an ezDetect class?
+%use a parser later to optionally get monopolar/bipolar/trc  FR
+%validate arguments 
 %optimize tall evaluations
 %optimize ram usage
 %introduce logging

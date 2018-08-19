@@ -223,14 +223,14 @@ function processBatch(eeg_data, metadata, chanlist, montage, paths)
     %refactor that function
     [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_putou70_e1(ez_tall, chanlist, metadata, montage);
     clear ez_tall;
-    metadata.montage= montage;
+    metadata.montage = montage;
 
     %maybe they could be removed if we save inside dsp
-    createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths);
+    [hfo_ai, fr_ai] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths);
     createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);  
 end
 
-function createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths)
+function [hfo_ai, fr_ai] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths)
     if ~isempty(gather(ez_tall_m))
         %Why monopolar takes and saves ez_tall_bp?
         %If always will save, maybe should be inside dsp to avoid copies
@@ -242,6 +242,8 @@ function createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths)
         disp('Saving dsp_m output');
         save([paths.dsp_monopolar_out dsp_monopolar_filename], '-struct', 'dsp_monopolar_output');
         disp('Saved dsp_m output');
+        hfo_ai = dsp_monopolar_output.hfo_ai;
+        fr_ai = dsp_monopolar_output.fr_ai;
     else
         hfo_ai = zeros(numel(gather(ez_tall_bp(1,:))),1)';
         fr_ai = hfo_ai;
