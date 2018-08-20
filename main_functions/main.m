@@ -13,7 +13,7 @@
 %review if monopolar/bipolar could be generalized as 'method to use'
 %if so replace fields extentions such as _m _bp everywhere with a method_name field and remove 
 %method_labels argument since they will be the same
-
+%lfbad && lfbad ini
 
 %TODO: 
 %Backlog:
@@ -24,10 +24,11 @@
 %create an ezDetect class?
 %use a parser later to optionally get monopolar/bipolar/trc  FR
 %validate arguments 
-%optimize tall evaluations
+%optimize tall evaluations, read about using tall.
 %optimize ram usage
 %introduce logging
 %just pass needed paths to branches instead of all the paths.
+%optimize metadata datastructure
 
 function main(edf_dataset,varargin)
     

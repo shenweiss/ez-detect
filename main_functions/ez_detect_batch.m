@@ -43,7 +43,6 @@
 
 function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, swapping_data, paths)
     disp('Running EZ_Detect v7.0 Putou')
-        
     narginchk(6,6);
 
     [header, signal_header, eeg_edf] = edf_load(edf_dataset); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
@@ -51,62 +50,52 @@ function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, swappin
     eeg_edf_tall=tall(eeg_edf);
     clear eeg_edf;
     
-    sampling_rate= double(header.srate);
-    %disp(['Sampling rate: ' int2str(round(sampling_rate)) 'Hz']);
-    file_size = gather(numel(eeg_edf_tall(1,:))); %To avoid copying the structure in timeToFilePointers.
-    file_pointers = getFilePointers(sampling_rate, start_time, stop_time, cycle_time, file_size);
     [data_path, data_filename, extention] = fileparts(edf_dataset); 
-    blocks = calculateBlocksAmount(file_pointers, sampling_rate);
+    sampling_rate = double(header.srate);
+    %disp(['Sampling rate: ' int2str(round(sampling_rate)) 'Hz']);
+    number_of_channels = gather(numel(eeg_edf_tall(:,1)));    
+    chanlist = getChanlist(number_of_channels, signal_header, swapping_data);
+    file_size = gather(numel(eeg_edf_tall(1,:))); 
+    file_pointers = getFilePointers(sampling_rate, start_time, stop_time, cycle_time, file_size);
     
-    %% I think this is not necesary now (Tomás P).
-    %cycles = ceil(cycles); % bug fix now it reads to end of file. 
-    % Note need to add patch that limits second cycle
-        % if < 60 seconds.
-
-    %check matlab scope for variables inside for statement.
-    segment_data = struct( ...
-        'filename', data_filename, ...
-        'file_pointers', file_pointers, ...
-        'sampling_rate', sampling_rate, ...
-        'signal_header', signal_header, ...
-        'block_index', 0, ...
-        'swapping_data', swapping_data ...
-    );
-
-    eeg_datas = cell(blocks);
-    for i=1:blocks
-        segment_data.block_index = i;
-        [eeg_data,metadata,chanlist] = computeEEGSegment(segment_data, eeg_edf_tall);
-         %disp(chanlist);
-        disp(size(metadata));
-        disp(metadata);
-        disp(size(eeg_data));
-        metadatas(i,:,:) = metadata;
-        eeg_datas{i} = eeg_data;
-
-        %log(chanlist, size(metadata), metadatam, size(eeg_data))
-    end
+    blocks = calculateBlocksAmount(file_pointers, sampling_rate);    
+    %Note need to add patch that limits second cycle if < 60 seconds. %ask what is this
+    [eeg_data, metadata] = computeEEGSegments(file_pointers, data_filename, sampling_rate, ...
+                                              number_of_channels, blocks, eeg_edf_tall);
     clear eeg_edf_tall;
     disp('Finished eeg_data processing');
-    
-    %disp('Are chanlist all the same?:')
-    %disp(chanlist)
-    %saveResearchData(paths.research, blocks, metadata, eeg_data, chanlist, data_filename);
 
-    %check this function
-    [~, ~, ~, montage] = ez_lfbad_putou70_ini_e1(tall(eeg_datas{1}), chanlist, metadatas(1,:,:), [data_filename extention]);
+    %saveResearchData(paths.research, blocks, metadata, eeg_data, chanlist, data_filename);
+    load([paths.montages data_filename '_montage'],'montage');
+    ez_montage = montage; %this is because there is a matlab function with that name and makes trouble
 
     parfor i=1:blocks
-        gd=gpuDevice;
+        gd = gpuDevice;
         disp(gd.Index);
-        processBatch(eeg_datas{i}, metadatas(i,:,:), chanlist, montage, paths);
-        eeg_datas{i} = 0; %to release memory?
+        processBatch(eeg_data{i}, metadata(i), chanlist, ez_montage, paths);
+        eeg_data{i} = 0; %to release memory?
     end
-
 end
 
 %%%%%%% Local Funtions  %%%%%%%
 
+function chanlist = getChanlist(number_of_channels, signal_header, swapping_data)
+    swap_array_file = swapping_data.swap_array_file;
+    chan_swap = swapping_data.chan_swap;
+    swap_array_file_given = ~strcmp(swap_array_file,'default');
+    if swap_array_file_given
+        load(swap_array_file);
+    end
+
+    chanlist={};
+    for j=1:number_of_channels
+        chanlist{j} = signal_header(j).signal_labels;
+    end
+
+    if chan_swap
+        chanlist = chanlist(swap_array);
+    end
+end
 
 function file_pointers = getFilePointers(sampling_rate, start_time, stop_time, cycle_time, file_size)
     file_pointers = struct();
@@ -138,57 +127,37 @@ function blocks = calculateBlocksAmount(file_pointers, sampling_rate)
     end
 end
 
-function [eeg_data, metadata, chanlist] = computeEEGSegment(segment_data, eeg_edf_tall)
-    
-    file_pointers = segment_data.file_pointers;
+function [eeg_data, metadata] = computeEEGSegments(file_pointers, data_filename, sampling_rate, ...
+                                                   number_of_channels, blocks, eeg_edf_tall)
+    desired_hz = 2000;
     base_pointer = file_pointers.start;
     stop_pointer = file_pointers.end;
-
     block_size = file_pointers.block_size;
-    blocks_done = segment_data.block_index - 1;
-    block_start_ptr = base_pointer+blocks_done*block_size;
-    block_stop_ptr = block_start_ptr+block_size-1;
-    %For the last block
-    if block_stop_ptr > stop_pointer
-        block_stop_ptr = stop_pointer;
+    
+    for i = 1:blocks
+        block_index = i;
+        blocks_done = i-1;
+        block_start_ptr = base_pointer+blocks_done*block_size;
+        block_start_ptr = block_start_ptr; 
+        block_stop_ptr = min(block_start_ptr+block_size-1, stop_pointer);
+    
+        [eeg_data{i},metadata(i)] = computeEEGSegment(data_filename, sampling_rate, desired_hz, ...
+                                                      number_of_channels, block_index, ...
+                                                      block_start_ptr, block_stop_ptr, eeg_edf_tall);
+        %later log(size(metadata), metadatam, size(eeg_data))
     end
-    disp('File pointer values: ')
-    display(['base_pointer:' num2str(base_pointer)])
-    display(['stop_pointer:' num2str(stop_pointer)])
-    display(['block_size:' num2str(block_size)])
-    display(['block_start_ptr:' num2str(block_start_ptr)])
-    display(['block_stop_ptr:' num2str(block_stop_ptr)])
-    
-    eeg_data = gather(eeg_edf_tall(:,block_start_ptr:block_stop_ptr));
-    
-    metadata = struct();
-    metadata.file_id = segment_data.filename;
-    metadata.file_block = num2str(segment_data.block_index); %metadata.block_index would be better
-    
-    number_of_channels = gather(numel(eeg_edf_tall(:,1)));
-    chanlist = getChanlist(number_of_channels, segment_data.signal_header,...
-                           segment_data.swapping_data);
-    
-    eeg_data = resampleData(segment_data.sampling_rate, 2000, number_of_channels, eeg_data);
-
 end
 
-function chanlist = getChanlist(number_of_channels, signal_header, swapping_data)
-    swap_array_file = swapping_data.swap_array_file;
-    chan_swap = swapping_data.chan_swap;
-    swap_array_file_given = ~strcmp(swap_array_file,'default');
-    if swap_array_file_given
-        load(swap_array_file);
-    end
+function [eeg_data, metadata]= computeEEGSegment(filename, sampling_rate, desired_hz, ...
+                                                  number_of_channels, block_index, ...
+                                                  block_start_ptr, block_stop_ptr, eeg_edf_tall)
 
-    chanlist={};
-    for j=1:number_of_channels
-        chanlist{j} = signal_header(j).signal_labels;
-    end
-
-    if chan_swap
-        chanlist = chanlist(swap_array);
-    end
+    eeg_data = gather(eeg_edf_tall(:,block_start_ptr:block_stop_ptr));
+    eeg_data = resampleData(sampling_rate, desired_hz, ...
+                            number_of_channels, eeg_data);
+    metadata = struct();
+    metadata.file_id = filename;
+    metadata.file_block = num2str(block_index); %metadata.block_index would be better
 end
 
 function eeg_data = resampleData(sampling_rate, desired_hz, number_of_channels, eeg_data)
@@ -202,28 +171,26 @@ function eeg_data = resampleData(sampling_rate, desired_hz, number_of_channels, 
         end
         disp(['Resampled: ' num2str(number_of_channels) ' data channels.']);
     end
-    clear channel;
 end
 
 function saveResearchData(contest_path, metadata, eeg_data, chanlist)
-    for i = 1:length(metadata)
-        metadata_i = metadata{i};
+    for i = 1:numel(metadata)
         eeg_data_i = eeg_data{i};
+        metadata_i = metadata{i};
         chanlist_i = chanlist{i};
         data_filename = metadata.file_id;
         full_path=[contest_path data_filename '_' num2str(i) '.mat']; 
         save(full_path, 'metadata_i', 'eeg_data_i', 'chanlist_i'); 
     end
-    clear metadata_i eeg_data_i chanlist_i;
 end
 
-function processBatch(eeg_data, metadata, chanlist, montage, paths)    
+function processBatch(eeg_data, metadata, chanlist, ez_montage, paths)    
     ez_tall = tall(eeg_data);
     clear eeg_data;
     %refactor that function
-    [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_putou70_e1(ez_tall, chanlist, metadata, montage);
+    [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, metadata, chanlist, ez_montage);
     clear ez_tall;
-    metadata.montage = montage;
+    metadata.montage = ez_montage;
 
     %maybe they could be removed if we save inside dsp
     [hfo_ai, fr_ai] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths);
@@ -257,8 +224,8 @@ function createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths)
         disp('Finished dsp_bp');
         
         dsp_bipolar_filename = ['dsp_bp_output_' metadata.file_block '.mat'];
-        disp('Saving dsp_m output');
+        disp('Saving dsp_bp output');
         save([paths.dsp_bipolar_out dsp_bipolar_filename], '-struct', 'dsp_bipolar_output');
-        disp('Saved dsp_m output');
+        disp('Saved dsp_bp output');
     end
 end
