@@ -31,6 +31,7 @@
 %optimize metadata datastructure
 %log the input configuration of main and show if defaults.
 %variable names declarativity, see lines and files to improve names with sheenan
+%remove clears, see function pac
 
 function main(edf_dataset_path, varargin)
     

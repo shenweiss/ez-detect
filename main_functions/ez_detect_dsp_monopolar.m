@@ -20,37 +20,15 @@
 
 function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, metadata, paths);
 
-
     error_status = 0; error_msg = '';
-
     file_block = metadata.file_block;
 
-% v4 bug fix perform xcorr function prior to running hfbad in order to
-% remove other 60 cycle artifact outliers prior to hfbad
-    eeg_data = gather(ez_tall_m);
-    low = 200; high = 600; sampling_rate = 2000;
-    fr = ez_eegfilter(eeg_data, low, high, sampling_rate); 
-    fr_xcorr=[];
-    for i=1:numel(fr(:,1))
-        temp_data_gpu=fr(i,:); %improve variable name temp_data_gpu
-        [xcorrelations,lags] = xcorr(temp_data_gpu);
-        xcorrelations = gather(xcorrelations);
-        nbins = 1000;
-        [no,xo] = hist(xcorrelations,nbins);
-        fr_xcorr(i) = sum(no(531:nbins));
-    end
-zfr_xcorr=zscore_2(fr_xcorr);
-[a,b]=find(zfr_xcorr>0.75);
-[c,d]=find(fr_xcorr>10000); % changed from 50k in order to remove more 60 cycle channels.
-b=intersect(b,d);
-metadata.hf_xcorr_bad=b;
-eeg_data(b,:)=[];
-metadata.m_chanlist(b)=[];
-ez_tall_m=tall(eeg_data);
-clear eeg_data
+    % v4 bug fix perform xcorr function prior to running hfbad in order to
+    % remove other 60 cycle artifact outliers prior to hfbad
+    [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metadata); %NEW
 
-fprintf('Removing excess HF artifact electrodes \r');
-[metadata] = ez_hfbad_putou02(ez_tall_m,metadata); % Find MI of maximum artifact
+    fprintf('Removing excess HF artifact electrodes \r');
+    [metadata] = ez_hfbad_putou02(ez_tall_m,metadata); % Find MI of maximum artifact
 
 % Remove bad channels from monopolar montage
 eeg_mp=gather(ez_tall_m);
@@ -1738,3 +1716,32 @@ dsp_monopolar_output = struct( ...
     'num_trc_blocks', num_trc_blocks, ...
     'error_flag', error_flag ...
 );
+
+end
+
+function [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metadata)
+
+    eeg_data = gather(ez_tall_m); %add un _m to var name
+    
+    low = 200; high = 600; sampling_rate = 2000;
+    fr = ez_eegfilter(eeg_data, low, high, sampling_rate);%improve fr variable name
+    fr_xcorr = [];
+    for i = 1:numel(fr(:,1))
+        temp_data_gpu = fr(i,:); %improve variable name temp_data_gpu
+        [xcorrelations,lags] = xcorr(temp_data_gpu);
+        xcorrelations = gather(xcorrelations);
+        nbins = 1000;
+        [no,xo] = hist(xcorrelations,nbins); %matlab suggest reeplacing hist for histogram, see later
+        fr_xcorr(i) = sum(no(531:nbins));
+    end
+    zfr_xcorr = zscore_2(fr_xcorr);
+
+    [a,b] = find(zfr_xcorr > 0.75); 
+    [c,d] = find(fr_xcorr > 10000); % changed from 50k in order to remove more 60 cycle channels.
+    b = intersect(b,d);
+    eeg_data(b,:) = [];
+    metadata.m_chanlist(b) = [];
+    metadata.hf_xcorr_bad = b;
+    
+    ez_tall_m = tall(eeg_data); 
+end
