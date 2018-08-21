@@ -1,18 +1,21 @@
-function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_ini(ez_tall, metadata, chanlist, ez_montage)
 %% Putou v7.0 Addition of NN for finding bad channels
+%Talk with sheenan to see what does he want to do here to
+%improve code declarativity
+
+function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, metadata, chanlist, ez_montage)
+  
   eeg_data = gather(ez_tall);
   number_of_channels = numel(eeg_data(:,1));
+  file_size = numel(eeg_data(1,:)); %check if the variable name is correct
 
-  file_size = numel(eeg_data(1,:));
   sixty_cycle = impedenceCheck(eeg_data, number_of_channels, file_size);
   zsixty_cycle = zscore_2(sixty_cycle);
-   % To remove electrodes with very large sixty cycle artifact. 
+  % To remove electrodes with very large sixty cycle artifact. 
   aFilter = (sixty_cycle>1e9)&(zsixty_cycle>0.3);%Leaves a 1 in index i if an element satisfies both conditions
   [a,imp] = find(aFilter); %detects the non zero indexes and outputs them as rows and columns indexes
   imp = unique(imp);%imp are column indexes. What are their semantic?
 
-  % excludes 60 cycle channels (if too many channels removed this should be
-  % altered in version 7.1
+  % excludes 60 cycle channels (if too many channels removed this should be altered in version 7.1
 
   %% Calculate montages
   fprintf('Saving data as unipolar and bipolar montages\r') %?
@@ -34,10 +37,12 @@ function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_ini(ez_tall, metadata, cha
  
   %name the conditions semantic
   %talk with sheenan to see this. Remove repetead code
+  %indexes are strange, you may be overwriting cells.
   for j=1:number_of_channels
     columnIndexes_j_validation = ~ismember(j,imp); %improve name of this variable
     if ez_montage{j,3}~=0 && ez_montage{j,4}~=1 && columnIndexes_j_validation
       counter_1=counter_1+1;
+      
       eeg_bp.eeg_data(counter_1,:)=eeg_data(j,:)-eeg_data(ez_montage{j,3},:);
       eeg_bp.chanlist(counter_1)=chanlist(j);
     end
@@ -45,6 +50,7 @@ function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_ini(ez_tall, metadata, cha
     if ez_montage{j,2}==1
       if ez_montage{j,4}~=1 && columnIndexes_j_validation
         counter_2=counter_2+1;
+        
         eeg_mp.eeg_data(counter_2,:)=eeg_data(j,:);  
         eeg_mp.chanlist(counter_2)=chanlist(j);
       end    
@@ -87,55 +93,55 @@ function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad_ini(ez_tall, metadata, cha
   logf2 = log10(f(f >= 1 & f <= 16));
   logf3 = log10(f(f >= 16 & f<=500));
 
+  % GENERATE LINEAR FITS FOR LOGLOG POWERSPECTRUM FOR REQUISIT BANDS
   for chan = 1:numel(eeg_bp.eeg_data(:,1))
-    % GENERATE LINEAR FITS FOR LOGLOG POWERSPECTRUM FOR REQUISIT BANDS
     mdl0 = fitlm(logf,logpxx(chan,:));
     mdl1 = fitlm(logf1, logpxx1(chan,:));
     mdl2 = fitlm(logf2, logpxx2(chan,:));
     mdl3 = fitlm(logf3, logpxx3(chan,:));
     
-    nnetworkin(chan,4:5) = [mdl0.Rsquared.Ordinary mdl0.Coefficients.Estimate(2,1)] ;
-    nnetworkin(chan,6:7) = [mdl1.Rsquared.Ordinary mdl1.Coefficients.Estimate(2,1)] ;
-    nnetworkin(chan,8:9) = [mdl2.Rsquared.Ordinary mdl2.Coefficients.Estimate(2,1)] ;
-    nnetworkin(chan,10:11) = [mdl3.Rsquared.Ordinary mdl3.Coefficients.Estimate(2,1)] ;
+    nnetworkin(chan,4:5) = [mdl0.Rsquared.Ordinary mdl0.Coefficients.Estimate(2,1)];
+    nnetworkin(chan,6:7) = [mdl1.Rsquared.Ordinary mdl1.Coefficients.Estimate(2,1)];
+    nnetworkin(chan,8:9) = [mdl2.Rsquared.Ordinary mdl2.Coefficients.Estimate(2,1)];
+    nnetworkin(chan,10:11) = [mdl3.Rsquared.Ordinary mdl3.Coefficients.Estimate(2,1)];
   end
   % End of new code
 
   %% Running neural network
   [Y] = badchannel_nn(nnetworkin);
-  [a,b]= find(Y>0.32);
+  [a,b] = find(Y > 0.32);
   % end of section
 
   %% Section to remove bad channels
-  counter_lf=0;
-  for j=1:numel(a)
-    counter_lf=counter_lf+1;
-    lf_bad(counter_lf)=eeg_bp.chanlist(a(j));
-    [C, IA, IB]=intersect(eeg_bps.chanlist, lf_bad(counter_lf));
-    if numel(IA)>0
+  counter_lf = 0;
+  for j = 1:numel(a)
+    counter_lf = counter_lf+1;
+    lf_bad(counter_lf) = eeg_bp.chanlist(a(j));
+    [C, IA, IB] = intersect(eeg_bps.chanlist, lf_bad(counter_lf));
+    if numel(IA) > 0
         eeg_bps.eeg_data(IA,:)=[];
         eeg_bps.chanlist(IA)=[];
     end;
     [C, IA, IB]=intersect(eeg_mp.chanlist, lf_bad(counter_lf));
-    if numel(IA)>0
+    if numel(IA) > 0
         eeg_mp.eeg_data(IA,:)=[];
         eeg_mp.chanlist(IA)=[];
-    end;
-  end;
+    end
+  end
 
   if isempty(a)
       lf_bad=[];
   end;
 
-  ez_tall_m=tall(eeg_mp.eeg_data);
-  ez_tall_bp=tall(eeg_bps.eeg_data);
+  ez_tall_m = tall(eeg_mp.eeg_data);
+  ez_tall_bp = tall(eeg_bps.eeg_data);
   if ~isempty(eeg_mp.eeg_data)
-  metadata.m_chanlist=eeg_mp.chanlist;
-  end;
+    metadata.m_chanlist=eeg_mp.chanlist;
+  end
   if ~isempty(eeg_bp.eeg_data)
-  metadata.bp_chanlist=eeg_bps.chanlist;
-  end;
-  metadata.lf_bad=lf_bad;
+    metadata.bp_chanlist=eeg_bps.chanlist;
+  end
+  metadata.lf_bad = lf_bad;
   % end of section
 
 end

@@ -1,7 +1,7 @@
  
 %Usage as follows
 %For first use please see and set the paths in getPaths() function in this file
-%cd project_path && matlab_binary -r  "main(edf_dataset,start_time, stop_time, ...
+%cd project_path && matlab_binary -r  "main(edf_dataset_path,start_time, stop_time, ...
 %%                                     cycle_time, chan_swap, swap_array_file)"
 
 %TO ASK
@@ -29,22 +29,24 @@
 %introduce logging
 %just pass needed paths to branches instead of all the paths.
 %optimize metadata datastructure
+%log the input configuration of main and show if defaults.
+%variable names declarativity, see lines and files to improve names with sheenan
 
-function main(edf_dataset,varargin)
+function main(edf_dataset_path, varargin)
     
     %Argument parsing and structuring
-    paths = getPaths();
+    paths = getPaths(edf_dataset_path);
     optional_args = struct2cell(getDefaults());
     %Overwrites the defaults if variable arguments are given
     optional_args(1:(nargin-1)) = varargin;
     %Setnames of optional arguments
     [start_time, stop_time, cycle_time, chan_swap, swap_array_file] = optional_args{:};
     swapping_data = struct('chan_swap', chan_swap, 'swap_array_file', swap_array_file);
-    %validateArgs(edf_dataset, start_time, stop_time, cycle_time, swapping_data)
+    %validateArgs(paths, start_time, stop_time, cycle_time, swapping_data)
     
     start = tic;
     %Generate dsp outputs
-    ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, swapping_data, paths);
+    ez_detect_batch(paths, start_time, stop_time, cycle_time, swapping_data);
     toc(start);
 
     disp('Starting to process dsp monopolar/bipolar outputs...')
@@ -56,9 +58,10 @@ function main(edf_dataset,varargin)
     toc(start);
 end
 
-function paths = getPaths()
+function paths = getPaths(edf_dataset_path)
 
     paths = struct();
+    paths.edf_dataset = edf_dataset_path;
     paths.project_root = '~/ez-detect/';
     paths.hfo_engine = [paths.project_root 'hfo_engine_1/'];
     
@@ -91,7 +94,7 @@ function defaults = getDefaults()
     defaults.swap_array_file = 'default';
 end
 
-%function validateArgs(edf_dataset, start_time, stop_time, cycle_time, swapping_data)
+%function validateArgs(paths, start_time, stop_time, cycle_time, swapping_data)
 %end
 
 %This will not be necesary later, see backlog

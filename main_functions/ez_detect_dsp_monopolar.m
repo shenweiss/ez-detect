@@ -7,37 +7,38 @@
 % files and annotations (for now), tall data structures for ic1, fr_ic1,
 % mean ai, and mean fr_ai.
 
+% hf_bad uses the HFO band pass filtered EEG mutual information
+% adjacency matrix, and graph theory (community) during episodes of artifact
+% to define dissimilar electrodes. 
+%The bipolar montage is calculated for the dissimilar electrodes
+
 % This work is protected by US patent applications US20150099962A1,
 % UC-2016-158-2-PCT, US provisional #62429461
 
 % Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
 % Philadelphia, PA USA.
 
-function dsp_monopolar_output = ez_detect_dsp_m_putou_e1(ez_tall_m,ez_tall_bp,metadata,paths);
+function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, metadata, paths);
 
-% hf_bad uses the HFO band pass filtered EEG mutual information
-% adjacency matrix, and graph theory (community) during episodes of artifact to define dissimar
-% electrodes. The bipolar montage is calculated for the dissimilar
-% electrodes
 
-file_block=metadata.file_block;
+    error_status = 0; error_msg = '';
 
-error_status=0;
-error_msg='';
+    file_block = metadata.file_block;
 
 % v4 bug fix perform xcorr function prior to running hfbad in order to
 % remove other 60 cycle artifact outliers prior to hfbad
-eeg_data=gather(ez_tall_m);
-fr=ez_eegfilter(eeg_data,200,600,2000);
-fr_xcorr=[];
-for i=1:numel(fr(:,1))
-    temp_data=fr(i,:);
-    temp_data_gpu=temp_data;
-    [c,lags] = xcorr(temp_data_gpu);
-    c=gather(c);
-    [no,xo]=hist(c,1000);
-    fr_xcorr(i)=sum(no(531:1000));
-end;
+    eeg_data = gather(ez_tall_m);
+    low = 200; high = 600; sampling_rate = 2000;
+    fr = ez_eegfilter(eeg_data, low, high, sampling_rate); 
+    fr_xcorr=[];
+    for i=1:numel(fr(:,1))
+        temp_data_gpu=fr(i,:); %improve variable name temp_data_gpu
+        [xcorrelations,lags] = xcorr(temp_data_gpu);
+        xcorrelations = gather(xcorrelations);
+        nbins = 1000;
+        [no,xo] = hist(xcorrelations,nbins);
+        fr_xcorr(i) = sum(no(531:nbins));
+    end
 zfr_xcorr=zscore_2(fr_xcorr);
 [a,b]=find(zfr_xcorr>0.75);
 [c,d]=find(fr_xcorr>10000); % changed from 50k in order to remove more 60 cycle channels.
@@ -48,8 +49,8 @@ metadata.m_chanlist(b)=[];
 ez_tall_m=tall(eeg_data);
 clear eeg_data
 
-fprintf('removing excess HF artifact electrodes \r');
-[metadata]=ez_hfbad_putou02(ez_tall_m,metadata); % Find MI of maximum artifact
+fprintf('Removing excess HF artifact electrodes \r');
+[metadata] = ez_hfbad_putou02(ez_tall_m,metadata); % Find MI of maximum artifact
 
 % Remove bad channels from monopolar montage
 eeg_mp=gather(ez_tall_m);

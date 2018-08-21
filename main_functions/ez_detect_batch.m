@@ -1,15 +1,32 @@
 %{ 
- Note: Now the main functions is called main() 
- (You can call it with optional args and if you dont specify defaults are given) 
+ Note: Now the main functions is called main() (You can call it with all optional args. 
+ If you don't specify, defaults are given) 
  To call this function all arguments are required. main() handles that setting.
  
-
  Input semantic:
+    
+    - paths: a Struct containing strings for every path is used in the project. It is set in main()
+      and it includes paths.edf_dataset which is the file to work with, saving directories, etc.
+    
+    - start_time: a number in seconds indicating from when, relative to the file duration, 
+      do you want to analize the eeg.
+    
+    - stop_time: a number in seconds indicating up to when, relative to the file duration, 
+      do you want to analize the eeg.
+      
+      For example if you want to process the last 5 minutes of an eeg of 20 minutes you would use
+      as input start_time = 15*60 = 900 and stop_time = 20*60 = 1200.
+    
+    - cycle_time: a number in seconds indicating the size of the blocks to cut the data in blocks.
+      This improves time performance since it can be parallelized. Example: 300 (5 minutes)
+    
+    -Swapping data: a struct containing the channel swapping flag (1:yes, 0:no) (in case that 
+     channels were incorrectly assigned in the original EDF file as can be the case for intraop 
+     recordings) and the swap_array that can be used to correct the channel assignments.
  
- The channel swapping flag (1: yes 0: no)
- In case that channels were incorrectly assigned in the original EDF file
- as can be the case for intraop recordings, and the 4th variable is the swap_array that can be
- used to correct the channel assignments. 
+ Output: DSP monopolar/bipolar outputs as matfiles get saved in the corresponding working directory
+ indicated in the argument 'paths'.
+
  
  This work is protected by US patent applications US20150099962A1,
  UC-2016-158-2-PCT, US provisional #62429461
@@ -17,40 +34,18 @@
  Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
  Philadelphia, PA USA. 2017
 
- Revision history  (I THINK THIS SHOULD BE SOMEWHERE ELSE, MAYBE IT WORTHS TO CREATE A REVISION HISTORY FILE)
- 
- v3: Added asymmetric GPU filtering, made adjustments to
- time annotations in the DSP to account for phase delay.
-
- v4: 1)Added entropy measures to remove noisy electrodes. 
-     2)Added correction for skew of BP filtered distributions. 
-     3) Removed line noise and otherwise noisy channels using GPU autocorrelation function. 
-     4) Impedence check (60 cycles) using GPU FFT.
-
- v5: 1)Implement in engine #1/#2 
-     2)Change ez_detect loops to one minute from 20 seconds
-     3)Remove annotation writing from ez_detect 
-     4) add new GPU ez_top. 
-     5) remove transient events after ez_top. 
-     6) write TRC annotations after ez_top. 
-     7) mongoDB functions to upload ez_pac results and add metadata.
-
- v7: 1)Added nnetwork to find bad channels 
-     2)Added nnetwork to find bad channels on the basis of captured ripple events. 
-     3)Added nnetwork to find bad channels on the basis of captured fripple events.
-
 %}
 
-function ez_detect_batch(edf_dataset, start_time, stop_time, cycle_time, swapping_data, paths)
+function ez_detect_batch(paths, start_time, stop_time, cycle_time, swapping_data)
     disp('Running EZ_Detect v7.0 Putou')
-    narginchk(6,6);
+    narginchk(5,5);
 
-    [header, signal_header, eeg_edf] = edf_load(edf_dataset); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
+    [header, signal_header, eeg_edf] = edf_load(paths.edf_dataset); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
     disp('EDF file loaded')
     eeg_edf_tall=tall(eeg_edf);
     clear eeg_edf;
     
-    [data_path, data_filename, extention] = fileparts(edf_dataset); 
+    [data_path, data_filename, extention] = fileparts(paths.edf_dataset); 
     sampling_rate = double(header.srate);
     %disp(['Sampling rate: ' int2str(round(sampling_rate)) 'Hz']);
     number_of_channels = gather(numel(eeg_edf_tall(:,1)));    
@@ -202,7 +197,7 @@ function [hfo_ai, fr_ai] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata
         %Why monopolar takes and saves ez_tall_bp?
         %If always will save, maybe should be inside dsp to avoid copies
         disp('Starting dsp_m');
-        dsp_monopolar_output = ez_detect_dsp_m_putou70_e1(ez_tall_m, ez_tall_bp, metadata, paths);
+        dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, metadata, paths);
         disp('Finished dsp_m');
         
         dsp_monopolar_filename = ['dsp_m_output_' metadata.file_block '.mat'];
@@ -220,7 +215,7 @@ end
 function createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths)
     if ~isempty(gather(ez_tall_bp))
         disp('Starting dsp_bp');
-        dsp_bipolar_output = ez_detect_dsp_bp_putou70_e1(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);
+        dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);
         disp('Finished dsp_bp');
         
         dsp_bipolar_filename = ['dsp_bp_output_' metadata.file_block '.mat'];

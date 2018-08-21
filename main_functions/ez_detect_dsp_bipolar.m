@@ -15,7 +15,7 @@
 
 % Main DSP Algorithm for HFO research and calibration
 
-function dsp_bipolar_output = ez_detect_dsp_bp_putou70_e1(ez_tall_bp, hfo_ai, fr_ai, metadata,paths);
+function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, metadata,paths);
 
 % hf_bad uses the HFO band pass filtered EEG mutual information
 % adjacency matrix during episodes of artifact to define dissimar
