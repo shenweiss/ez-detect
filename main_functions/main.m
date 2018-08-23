@@ -5,6 +5,7 @@
 %%                                     cycle_time, chan_swap, swap_array_file)"
 
 %TO ASK
+%single instead of double? 
 %processBatch %Why monopolar takes and saves ez_tall_bp?  
 %ProcessBatch If always will save, maybe should be inside dsp to avoid copies
 %warnings , excepciones, error_codes?
@@ -14,6 +15,9 @@
 %if so replace fields extentions such as _m _bp everywhere with a method_name field and remove 
 %method_labels argument since they will be the same
 %lfbad && lfbad ini
+%what is the difference btw bps and bp in dsp_monopolar
+%num_trc_blocks no va en metadata? metadata is duplicated. Whats the difference btw DSP_data & metadata. Unify.
+%name for metadata.montage(:,1) montage chanlist? 
 
 %TODO: 
 %Backlog:
@@ -24,7 +28,7 @@
 %create an ezDetect class?
 %use a parser later to optionally get monopolar/bipolar/trc  FR
 %validate arguments 
-%optimize tall evaluations, read about using tall.
+%optimize tall evaluations and argument passing, read about using tall.
 %optimize ram usage
 %introduce logging
 %just pass needed paths to branches instead of all the paths.
@@ -32,6 +36,8 @@
 %log the input configuration of main and show if defaults.
 %variable names declarativity, see lines and files to improve names with sheenan
 %remove clears, see function pac
+%ask if the matrixes are sparse
+%analizar codigo y buscar potenciales fallas
 
 function main(edf_dataset_path, varargin)
     

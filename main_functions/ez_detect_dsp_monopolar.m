@@ -22,6 +22,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
 
     error_status = 0; error_msg = '';
     file_block = metadata.file_block;
+    sampling_rate = 2000; %view if we can add it to metadata struct
 
     % v4 bug fix perform xcorr function prior to running hfbad in order to
     % remove other 60 cycle artifact outliers prior to hfbad
@@ -30,77 +31,30 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
     fprintf('Removing excess HF artifact electrodes \r');
     [metadata] = ez_hfbad_putou02(ez_tall_m,metadata); % Find MI of maximum artifact
 
-% Remove bad channels from monopolar montage
-eeg_mp=gather(ez_tall_m);
-eeg_bps=gather(ez_tall_bp);
-metadata.hf_bad_m=metadata.m_chanlist(metadata.hf_bad_m_index);
-new_eeg_bp=[];
-new_bp_chans={''};
-counter=0;
-for i=1:numel(metadata.hf_bad_m_index)
-    % locate bp channel (possibly not found)
-    [C,IA,IB]=intersect(metadata.hf_bad_m(i),metadata.montage(:,1));
-    if ~isempty(C)
-        ref=cell2mat(metadata.montage(IB,3));
-        if ref~=0
-            [C2,IIA,IIB]=intersect(metadata.montage(ref,1),metadata.m_chanlist);
-            if ~isempty(C2)
-                counter=counter+1;
-                new_eeg_bp(counter,:)=eeg_mp(metadata.hf_bad_m_index(i),:)-eeg_mp(IIB,:);
-                new_bp_chans(counter)=metadata.hf_bad_m(i);
-            end;
-        end;
-    end;
-end;
+    % Remove bad channels from monopolar montage
+    chan_indexes = metadata.hf_bad_m_index;
+    [ez_tall_m,ez_tall_bps,hf_bad_m_out,metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ....
+                                                                     ez_tall_bp, metadata, chan_indexes);
+    metadata.hf_bad_m = hf_bad_m_out;
+    ez_tall_bp = ez_tall_bps; %check
 
-clear C C2 IA IIA IB IIB counter
+    % Bug fix for empty cells (search and correct)
+    emptyCells = cellfun(@isempty, metadata.m_chanlist);
+    [a,b] = find(emptyCells==1);
+    metadata.m_chanlist(b) = {'BUG'};
 
-% add bp recording to bp array
-fprintf('rebuilding monopolar and bipolar montages \r');
-eeg_bps=vertcat(new_eeg_bp, eeg_bps);
-metadata.bp_chanlist=horzcat(new_bp_chans, metadata.bp_chanlist);
+    %% Notch filter eeg_data
+    [eeg_data, eeg_data_no_notch] = notchFilter(ez_tall_m);
 
-% build tall structure
-ez_tall_bp=tall(eeg_bps);
-eeg_bps=[];
-new_eeg_bp=[];
+    % cudaica_matlab function isolates muscle artifact producing artifactual
+    % HFOs to the first independent component of the HFO band pass filtered
+    % EEG. The first independent component is removed to reduce artifact, and
+    % IC1 is also used to refine the artifact index on a millisecond time
+    % scale.
 
-clear eeg_bps new_eeg_bp
+    [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple_putou_e1(eeg_data_no_notch, sampling_rate, paths);
 
-% remove bipolar recordings from memory
-eeg_mp(metadata.hf_bad_m_index,:)=[];
-metadata.m_chanlist(metadata.hf_bad_m_index)=[];
-ez_tall_m=tall(eeg_mp);
-
-% Bug fix for empty cells
-emptyCells = cellfun(@isempty,metadata.m_chanlist);
-[a,b]=find(emptyCells==1);
-metadata.m_chanlist(b)={'BUG'};
-
-%% Notch filter eeg_data
-eeg_data_no_notch=eeg_mp;
-for i=1:length(eeg_mp(:,1));
-    eeg_temp=eeg_mp(i,:);
-    f0 = (2*(60/2000));
-    df = .1;
-    N = 30; % must be even for this trick
-    h=remez(N,[0 f0-df/2 f0+df/2 1],[1 1 0 0]);
-    h = 2*h - ((0:N)==(N/2));
-    eeg_notch=filtfilt(h,1,eeg_temp);
-    eeg_data(i,:)=eeg_notch;
-end;
-eeg_mp=[]; % From here on in use the eeg_data structure.
-
-clear f0 df N h eeg_notch eeg_temp eeg_mp eeg_bps
-
-% cudaica_matlab function isolates muscle artifact producing artifactual
-% HFOs to the first independent component of the HFO band pass filtered
-% EEG. The first independent component is removed to reduce artifact, and
-% IC1 is also used to refine the artifact index on a millisecond time
-% scale.
-
-[hfo, ic1, EEG, error_flag]=ez_cudaica_ripple_putou_e1(eeg_data_no_notch,2000, paths);
-if error_flag==0 % error flag 1
+if error_flag==0 % error flag 1. Why this comment? that's the other case
     ez_tall_hfo_m=tall(hfo);
     
     % The code below is used to detect overstripped recordings
@@ -1598,12 +1552,12 @@ if error_flag==0 % error flag 1
             error_flag=1;
         end;
     else % error_flag 1 i.e. CUDAICA exploded ICA #2
-        b=numel(metadata.m_chanlist);
-        b=[1:b];
+        b = numel(metadata.m_chanlist);
+        b = [1:b];
         fprintf('CUDAICA exploded moving channels to bipolar montage \r');
         % Remove bad channels from monopolar montage
-        eeg_mp=gather(ez_tall_m);
-        eeg_bps=gather(ez_tall_bp);
+        eeg_mp = gather(ez_tall_m);
+        eeg_bps = gather(ez_tall_bp);
         metadata.hf_bad_m2=(metadata.m_chanlist(b));
         new_eeg_bp=[];
         new_bp_chans={''};
@@ -1649,75 +1603,46 @@ if error_flag==0 % error flag 1
         save('-v7.3',filename1,'DSP_data_m');
         error_flag=1;
     end;
+    %to be improved later
+    dsp_monopolar_output = struct( ...
+        'DSP_data_m', DSP_data_m, ...
+        'ez_tall_m', ez_tall_m, ...
+        'ez_tall_bp', ez_tall_bp, ...
+        'hfo_ai', hfo_ai, ...
+        'fr_ai', fr_ai, ...
+        'ez_tall_hfo_m', ez_tall_hfo_m, ...
+        'ez_tall_fr_m', ez_tall_fr_m, ...
+        'metadata', metadata, ...
+        'num_trc_blocks', num_trc_blocks, ...
+        'error_flag', error_flag ...
+    );
+
 else % error_flag 1 i.e. CUDAICA exploded ICA #3
-    b=numel(metadata.m_chanlist);
-    b=[1:b];
+    
     fprintf('CUDAICA exploded moving channels to bipolar montage \r');
-    % Remove bad channels from monopolar montage
-    eeg_mp=gather(ez_tall_m);
-    eeg_bps=gather(ez_tall_bp);
-    metadata.hf_bad_m2=(metadata.m_chanlist(b));
-    new_eeg_bp=[];
-    new_bp_chans={''};
-    counter=0;
-    for i=1:numel(b)
-        % locate bp channel (possibly not found)
-        [C,IA,IB]=intersect(metadata.hf_bad_m2(i),metadata.montage(:,1));
-        if ~isempty(C)
-            ref=cell2mat(metadata.montage(IB,3));
-            if ref~=0
-                [C2,IIA,IIB]=intersect(metadata.montage(ref,1),metadata.m_chanlist);
-                if ~isempty(C2)
-                    counter=counter+1;
-                    new_eeg_bp(counter,:)=eeg_mp(b(i),:)-eeg_mp(IIB,:);
-                    new_bp_chans(counter)=metadata.hf_bad_m2(i);
-                end;
-            end;
-        end;
-    end;
-    
-    clear C C2 IA IIA IB IIB counter
-    
-    % add bp recording to bp array
-    fprintf('rebuilding monopolar and bipolar montages \r');
-    eeg_bps=vertcat(new_eeg_bp, eeg_bps);
-    metadata.bp_chanlist=horzcat(new_bp_chans, metadata.bp_chanlist);
-    
-    % build tall structure
-    ez_tall_bp=tall(eeg_bps);
-    eeg_bps=[];
-    new_eeg_bp=[];
-    DSP_data_m=[];
-    ez_tall_m=[];
-    hfo_ai=zeros(numel(gather(ez_tall_bp(1,:))),1);
-    fr_ai=zeros(numel(gather(ez_tall_bp(1,:))),1);
-    ez_tall_hfo_m=[];
-    ez_tall_fr_m=[];
-    num_trc_blocks=1;
-    file_id_size=numel(metadata.file_id);
-    file_id=metadata.file_id(1:(file_id_size-4));
-    filename1=['dsp_' file_id '_m_' file_block '.mat'];
-    filename1=strcat(paths.ez_top_in,filename1);
-    save('-v7.3',filename1,'DSP_data_m');
-    error_flag=1;
-end;
+    chan_indexes = [1:numel(metadata.m_chanlist)];
+    [ez_tall_m, ez_tall_bps, hf_bad_m_out, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ez_tall_bp, metadata, chan_indexes);
+    metadata.hf_bad_m2 = hf_bad_m_out;
 
+    dsp_monopolar_output = struct( ...
+        'DSP_data_m', [], ...
+        'ez_tall_m', [], ...
+        'ez_tall_bp', ez_tall_bps, ...
+        'hfo_ai', zeros(numel(gather(ez_tall_bp(1,:))),1), ... %shouldnt be ez_tall_bps?
+        'fr_ai', zeros(numel(gather(ez_tall_bp(1,:))),1), ...
+        'ez_tall_hfo_m', [], ...
+        'ez_tall_fr_m', [], ...
+        'metadata', metadata, ...
+        'num_trc_blocks', 1, ...
+        'error_flag', 1 ...
+    );
 
-%to be improved later
-dsp_monopolar_output = struct( ...
-    'DSP_data_m', DSP_data_m, ...
-    'ez_tall_m', ez_tall_m, ...
-    'ez_tall_bp', ez_tall_bp, ...
-    'hfo_ai', hfo_ai, ...
-    'fr_ai', fr_ai, ...
-    'ez_tall_hfo_m', ez_tall_hfo_m, ...
-    'ez_tall_fr_m', ez_tall_fr_m, ...
-    'metadata', metadata, ...
-    'num_trc_blocks', num_trc_blocks, ...
-    'error_flag', error_flag ...
-);
+    filename1 = ['dsp_' metadata.file_id '_m_' file_block '.mat'];
+    filename1 = strcat(paths.ez_top_in, filename1);
+    save(filename1,'DSP_data_m', '-v7.3'); %in this case you are saving just an empty array? 
+end %end of enormous if else
 
-end
+end %end of dsp function
 
 function [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metadata)
 
@@ -1745,3 +1670,107 @@ function [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metada
     
     ez_tall_m = tall(eeg_data); 
 end
+
+% Remove bad channels from monopolar montage
+function [ez_tall_m, ez_tall_bps, hf_bad_m_out, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ...
+                                                                         ez_tall_bp, metadata, chan_indexes)
+    eeg_mp = gather(ez_tall_m);
+    eeg_bps = gather(ez_tall_bp);
+    hf_bad_m = metadata.m_chanlist(chan_indexes);  
+    % Filter from chan_indexes the ones that are in montage, 
+    % have a ref for that channel ~=0 and that are in metadata.m_chanlist.  
+    
+    % From the ones I want to remove, I get the indexes of the ones that are in montage
+    [~,chan_relative_indexes, montage_row_indexes] = intersect(hf_bad_m, metadata.montage(:,1));
+    % This maps the ref for each index in montage
+    get_montage_refs = @(i) cell2mat(metadata.montage(i,3));
+    montage_refs = get_montage_refs(montage_row_indexes);
+    % Filter zeros (non refs)
+    non_cero_indexes = find(montage_refs ~= 0);
+    montage_refs = montage_refs(non_cero_indexes); 
+    chan_relative_indexes = chan_relative_indexes(non_cero_indexes);
+    %This maps the 'chan label' for each ref in montage
+    get_ref_channel = @(ref) metadata.montage(ref,1);
+    ref_channels = get_ref_channel(montage_refs);
+    %Get the indexes of one that are in m_chanlist
+    [~,ref_channels_indexes,ref_m_chanlist_indexes] = intersect(ref_channels, metadata.m_chanlist);
+    chan_relative_indexes = chan_relative_indexes(ref_channels_indexes);
+    
+    efective_indexes = chan_indexes(chan_relative_indexes);
+    new_eeg_bp = eeg_mp(efective_indexes,:) - eeg_mp(ref_m_chanlist_indexes,:);
+    new_bp_chans = hf_bad_m(ref_channels_indexes);
+
+    % Add bipolar recordings to bp array
+    fprintf('Rebuilding monopolar and bipolar montages \r');
+    eeg_bps = vertcat(new_eeg_bp, eeg_bps);
+    ez_tall_bps = tall(eeg_bps);
+    metadata.bp_chanlist = horzcat(new_bp_chans, metadata.bp_chanlist);
+    
+    % Remove bipolar recordings from m memory. 
+    eeg_mp(chan_indexes,:) = [];
+    ez_tall_m = tall(eeg_mp);
+    metadata.m_chanlist(chan_indexes) = [];
+    hf_bad_m_out = hf_bad_m;
+    %{ 
+    OLD VERSION OF THIS... I have to do further testing to check if the i is being calculated ok,
+    otherwise we can use ismember instead of intersecting for each index.
+    ## Remove bad channels from monopolar montage
+    eeg_mp=gather(ez_tall_m);
+    eeg_bps=gather(ez_tall_bp);
+    metadata.hf_bad_m=metadata.m_chanlist(metadata.hf_bad_m_index);
+    new_eeg_bp=[];
+    new_bp_chans={''};
+    counter=0;
+    for i=1:numel(metadata.hf_bad_m_index)
+        ## locate bp channel (possibly not found)
+        [C,IA,IB]=intersect(metadata.hf_bad_m(i),metadata.montage(:,1));
+        if ~isempty(C)
+            ref=cell2mat(metadata.montage(IB,3));
+            if ref~=0
+                [C2,IIA,IIB]=intersect(metadata.montage(ref,1),metadata.m_chanlist);
+                if ~isempty(C2)
+                    counter=counter+1;
+                    new_eeg_bp(counter,:)=eeg_mp(metadata.hf_bad_m_index(i),:)-eeg_mp(IIB,:);
+                    new_bp_chans(counter)=metadata.hf_bad_m(i);
+                end;
+            end;
+        end;
+    end;
+
+    clear C C2 IA IIA IB IIB counter
+
+    ## add bp recording to bp array
+    fprintf('rebuilding monopolar and bipolar montages \r');
+    eeg_bps=vertcat(new_eeg_bp, eeg_bps);
+    metadata.bp_chanlist=horzcat(new_bp_chans, metadata.bp_chanlist);
+
+    ## build tall structure
+    ez_tall_bp=tall(eeg_bps);
+    eeg_bps=[];
+    new_eeg_bp=[];
+
+    clear eeg_bps new_eeg_bp
+
+    ##remove bipolar recordings from memory
+    eeg_mp(metadata.hf_bad_m_index,:)=[];
+    metadata.m_chanlist(metadata.hf_bad_m_index)=[];
+    ez_tall_m=tall(eeg_mp);
+    %}
+end
+
+
+function [eeg_data, eeg_data_no_notch] = notchFilter(ez_tall_m)
+    %I think that eeg_data is the filtered one. The other one is just a copy. Improve names later.
+    eeg_mp = gather(ez_tall_m);
+    eeg_data_no_notch = eeg_mp;
+    for i = 1:numel(eeg_mp(:,1));
+        eeg_temp = eeg_mp(i,:);
+        f0 = (2*(60/2000));
+        df = .1;
+        N = 30; % must be even for this trick
+        h = remez(N,[0 f0-df/2 f0+df/2 1],[1 1 0 0]);
+        h = 2*h - ((0:N)==(N/2));
+        eeg_notch = filtfilt(h,1,eeg_temp);
+        eeg_data(i,:) = eeg_notch;
+    end
+end    

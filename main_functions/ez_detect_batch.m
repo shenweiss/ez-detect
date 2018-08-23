@@ -68,7 +68,7 @@ function ez_detect_batch(paths, start_time, stop_time, cycle_time, swapping_data
         gd = gpuDevice;
         disp(gd.Index);
         processBatch(eeg_data{i}, metadata(i), chanlist, ez_montage, paths);
-        eeg_data{i} = 0; %to release memory?
+        eeg_data{i} = 0; %to release memory? this works?? 
     end
 end
 
