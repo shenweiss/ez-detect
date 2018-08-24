@@ -37,6 +37,7 @@
 %variable names declarativity, see lines and files to improve names with sheenan
 %remove clears, see function pac
 %ask if the matrixes are sparse
+%review saving directories
 %analizar codigo y buscar potenciales fallas
 
 function main(edf_dataset_path, varargin)
@@ -56,13 +57,13 @@ function main(edf_dataset_path, varargin)
     ez_detect_batch(paths, start_time, stop_time, cycle_time, swapping_data);
     toc(start);
 
-    disp('Starting to process dsp monopolar/bipolar outputs...')
+    %disp('Starting to process dsp monopolar/bipolar outputs...')
     
-    start = tic;
+    %start = tic;
     %Process dsp outputs
-    process_dsp_outputs(paths.dsp_monopolar_out, monopolarLabels(), paths);
-    process_dsp_outputs(paths.dsp_bipolar_out, bipolarLabels(), paths);
-    toc(start);
+    %process_dsp_outputs(paths.dsp_monopolar_out, monopolarLabels(), paths);
+    %process_dsp_outputs(paths.dsp_bipolar_out, bipolarLabels(), paths);
+    %toc(start);
 end
 
 function paths = getPaths(edf_dataset_path)
