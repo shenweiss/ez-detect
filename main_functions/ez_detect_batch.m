@@ -155,16 +155,18 @@ function [eeg_data, metadata]= computeEEGSegment(filename, sampling_rate, desire
     metadata.file_block = num2str(block_index); %metadata.block_index would be better
 end
 
-function eeg_data = resampleData(sampling_rate, desired_hz, number_of_channels, eeg_data)
+function resampled_data = resampleData(sampling_rate, desired_hz, number_of_channels, eeg_data)
     %Resample Data to 2khz required.
     if sampling_rate ~= desired_hz
         [p,q] = rat(desired_hz/sampling_rate);
         disp(['Resampling the Data to ' num2str(desired_hz/1000) 'KHz']);
         for j=1:number_of_channels
             channel = eeg_data(j,:);
-            eeg_data(j,:) = resample(channel,p,q);
+            resampled_data(j,:) = resample(channel,p,q);
         end
         disp(['Resampled: ' num2str(number_of_channels) ' data channels.']);
+    else % No resample needed
+        resampled_data = eeg_data;
     end
 end
 
