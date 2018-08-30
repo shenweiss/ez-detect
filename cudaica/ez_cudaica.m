@@ -81,7 +81,7 @@
 % 11/06/01 add absolute path of files (lines 157-170 & 198) -ad
 % 01-25-02 reformated help & license, added links -ad 
  
-function [error_flag,wts,sph,tmpint] = cudaica(data,var2,var3,var4,var5,var6,var7,var8,var9,var10,var11,var12,var13,var14,var15,var16,var17,var18,var19,var20,var21,var22,var23,var24,var25)
+function [wts, sph, tmpint, error_flag] = ez_cudaica(data,var2,var3,var4,var5,var6,var7,var8,var9,var10,var11,var12,var13,var14,var15,var16,var17,var18,var19,var20,var21,var22,var23,var24,var25)
 
 disp('ENTERING CUDAICA.M')
 

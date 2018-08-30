@@ -114,7 +114,7 @@ function blocks = calculateBlocksAmount(file_pointers, sampling_rate)
     full_blocks = floor(images_number/file_pointers.block_size);
     images_remaining = rem(images_number,file_pointers.block_size);
     seconds_remaining = images_remaining/sampling_rate;
-    %Ask about this.
+    %Ask about this later.
     if seconds_remaining > 100
         blocks = full_blocks+1;
     else
@@ -189,12 +189,12 @@ function processBatch(eeg_data, metadata, chanlist, ez_montage, paths)
     clear ez_tall;
     metadata.montage = ez_montage;
 
-    %maybe they could be removed if we save inside dsp
-    [hfo_ai, fr_ai] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths);
+    %maybe these two below could be removed if we save inside dsp
+    [ez_tall_bp, hfo_ai, fr_ai, metadata] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths);
     createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);  
 end
 
-function [hfo_ai, fr_ai] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths)
+function [ez_tall_bp, hfo_ai, fr_ai, metadata] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths)
     if ~isempty(gather(ez_tall_m))
         %Why monopolar takes and saves ez_tall_bp?
         %If always will save, maybe should be inside dsp to avoid copies
@@ -206,8 +206,10 @@ function [hfo_ai, fr_ai] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata
         disp('Saving dsp_m output');
         save([paths.dsp_monopolar_out dsp_monopolar_filename], '-struct', 'dsp_monopolar_output');
         disp('Saved dsp_m output');
+        ez_tall_bp = dsp_monopolar_output.ez_tall_bp;
         hfo_ai = dsp_monopolar_output.hfo_ai;
         fr_ai = dsp_monopolar_output.fr_ai;
+        metadata = dsp_monopolar_output.metadata;
     else
         hfo_ai = zeros(numel(gather(ez_tall_bp(1,:))),1)';
         fr_ai = hfo_ai;

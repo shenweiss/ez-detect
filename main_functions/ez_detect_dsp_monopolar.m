@@ -23,6 +23,10 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
     error_status = 0; error_msg = '';
     file_block = metadata.file_block;
     file_id = metadata.file_id;
+    ripple.low = 80;
+    ripple.high = 600;
+    fripple.low = 200;
+    fripple.high = 600;
     sampling_rate = 2000; %view if we can add it to metadata struct
     
     % v4 bug fix perform xcorr function prior to running hfbad in order to
@@ -34,9 +38,9 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
 
     % Remove bad channels from monopolar montage
     chan_indexes = metadata.hf_bad_m_index;
-    [ez_tall_m,ez_tall_bp,hf_bad_m_out,metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ....
+    metadata.hf_bad_m = metadata.m_chanlist(chan_indexes);
+    [ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ....
                                                                      ez_tall_bp, metadata, chan_indexes);
-    metadata.hf_bad_m = hf_bad_m_out;
 
     % Bug fix for empty cells (search and correct)
     emptyCells = cellfun(@isempty, metadata.m_chanlist);
@@ -52,8 +56,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
     % IC1 is also used to refine the artifact index on a millisecond time
     % scale.
 
-    [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple_putou_e1(eeg_data_no_notch, sampling_rate, paths);
-
+    [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, ripple.low, ripple.high, sampling_rate, paths);
     if error_flag == 0 
         
         ez_tall_hfo_m = tall(hfo);
@@ -121,9 +124,9 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 fprintf('Removing bad electrodes repeating calculations and detections \r');
                 
                 chan_indexes = b;
-                [ez_tall_m, ez_tall_bps, hf_bad_m_out, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ...
+                metadata.hf_bad_m2 = metadata.m_chanlist(chan_indexes);
+                [ez_tall_m, ez_tall_bps, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ...
                                                                          ez_tall_bp, metadata, b);
-                metadata.hf_bad_m2 = hf_bad_m_out;
                 
                 % Remove bad electrodes from eeg_data and eeg_data_no_notch
                 eeg_data(b,:)=[];
@@ -135,7 +138,8 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 metadata.m_chanlist(b)={'BUG'};
                 
                 % Repeat ICA
-                [hfo, ic1, EEG, error_flag]=ez_cudaica_ripple_putou_e1(eeg_data_no_notch,sampling_rate,paths);
+                [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, ripple.low, ripple.high, sampling_rate, paths);
+                
                 if error_flag == 0
                     ez_tall_hfo_m = tall(hfo);
 
@@ -195,24 +199,19 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                     num_of_data_rows = numel(eeg_data(:,1));
                     [hfo_times, ~] = convRippleClips_timeToIndices(num_of_data_rows, ripple_clip_t, ic1, total_ripple);
                 else % error_flag 1 i.e. CUDAICA exploded ICA #2 
-                    fprintf('CUDAICA exploded moving channels to bipolar montage \r');
-                    
-                    chan_indexes = [1:numel(metadata.m_chanlist)];
-                    [ez_tall_m, ez_tall_bp, hf_bad_m_out, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ez_tall_bp, metadata, chan_indexes);
-                    metadata.hf_bad_m2 = hf_bad_m_out;
-
-                    DSP_data_m = [];
-                    ez_tall_m = [];
-                    hfo_ai = zeros(numel(gather(ez_tall_bp(1,:))),1); 
-                    fr_ai = zeros(numel(gather(ez_tall_bp(1,:))),1);
-                    ez_tall_hfo_m = [];
-                    ez_tall_fr_m = [];
-                    num_trc_blocks = 1;
-                    error_flag = 1;
-
-                    filename1 = ['dsp_' file_id '_m_' file_block '.mat'];
-                    filename1 = strcat(paths.ez_top_in, filename1);
-                    save(filename1,'DSP_data_m', '-v7.3'); %in this case you are saving just an empty array? 
+                    dsp_monopolar_output = cudaica_failure_handle(ez_tall_m, ez_tall_bp, metadata, paths.ez_top_in);
+                    %return %ask for this added return if cudaica fails is it worthy to continue? 
+                    %unpack to continue until confirm the return and stop the execution if error_flag ==1
+                    DSP_data_m = dsp_monopolar_output.DSP_data_m;
+                    ez_tall_m = dsp_monopolar_output.ez_tall_m;
+                    ez_tall_bp = dsp_monopolar_output.ez_tall_bp;
+                    hfo_ai = dsp_monopolar_output.hfo_ai;
+                    fr_ai = dsp_monopolar_output.fr_ai;
+                    ez_tall_hfo_m = dsp_monopolar_output.ez_tall_hfo_m;
+                    ez_tall_fr_m = dsp_monopolar_output.ez_tall_fr_m;
+                    metadata = dsp_monopolar_output.metadata;
+                    num_trc_blocks = dsp_monopolar_output.num_trc_blocks ;
+                    error_flag = dsp_monopolar_output.error_flag;
                 end
             end % bad electrode detected loop
         
@@ -249,7 +248,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
             hfo_times, ripple_clip,ripple_clip_t,ripple_clip_event_t,ripple_clip_abs_t, total_ripple, ripple_ic_clip,ripple_ic_clip_t,ripple_ic_clip_event_t,ripple_ic_clip_abs_t, total_ripple_ic );
 
             %% Calculate ICA for fast ripples (FR)
-            [fr, fr_ic1, EEG, error_flag] = ez_cudaica_fripple_putou_e1(eeg_data_no_notch, sampling_rate, paths);
+            [fr, fr_ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, fripple.low, fripple.high, sampling_rate, paths);
             
             if error_flag == 0
                 ez_tall_fr_m=tall(fr);
@@ -335,102 +334,63 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 DSP_data_m.fripple_clip_abs_t=fripple_clip_abs_t;
                 DSP_data_m.fripple_clip_event_t=fripple_clip_event_t;
                 
+                dsp_monopolar_output = struct( ...
+                    'DSP_data_m', DSP_data_m, ...
+                    'ez_tall_m', ez_tall_m, ...      
+                    'ez_tall_bp', ez_tall_bp, ...
+                    'hfo_ai', hfo_ai, ...
+                    'fr_ai', fr_ai, ...
+                    'ez_tall_hfo_m', ez_tall_hfo_m, ...
+                    'ez_tall_fr_m', ez_tall_fr_m, ...
+                    'metadata', metadata, ...
+                    'num_trc_blocks', num_trc_blocks, ...
+                    'error_flag', error_flag ...
+                );
+
                 filename1 = ['dsp_' file_id '_m_' file_block '.mat'];
                 filename1 = strcat(paths.ez_top_in,filename1);
                 save(filename1,'DSP_data_m', '-v7.3');
             
             else % error_flag 1 i.e. CUDAICA exploded ICA #1
-                b=numel(metadata.m_chanlist);
-                b=[1:b];
-                fprintf('CUDAICA exploded moving channels to bipolar montage \r');
-                % Remove bad channels from monopolar montage
-                eeg_mp=gather(ez_tall_m);
-                eeg_bps=gather(ez_tall_bp);
-                metadata.hf_bad_m2=(metadata.m_chanlist(b));
-                new_eeg_bp=[];
-                new_bp_chans={''};
-                counter=0;
-                for i=1:numel(b)
-                    % locate bp channel (possibly not found)
-                    [C,IA,IB]=intersect(metadata.hf_bad_m2(i),metadata.montage(:,1));
-                    if ~isempty(C)
-                        ref=cell2mat(metadata.montage(IB,3));
-                        if ref~=0
-                            [C2,IIA,IIB]=intersect(metadata.montage(ref,1),metadata.m_chanlist);
-                            if ~isempty(C2)
-                                counter=counter+1;
-                                new_eeg_bp(counter,:)=eeg_mp(b(i),:)-eeg_mp(IIB,:);
-                                new_bp_chans(counter)=metadata.hf_bad_m2(i);
-                            end;
-                        end;
-                    end;
-                end;
-                
-                clear C C2 IA IIA IB IIB counter
-                
-                % add bp recording to bp array
-                fprintf('rebuilding monopolar and bipolar montages \r');
-                eeg_bps=vertcat(new_eeg_bp, eeg_bps);
-                metadata.bp_chanlist=horzcat(new_bp_chans, metadata.bp_chanlist);
-                
-                % build tall structure
-                ez_tall_bp=tall(eeg_bps);
-                eeg_bps=[];
-                new_eeg_bp=[];
-                DSP_data_m=[];
-                ez_tall_m=[];
-                hfo_ai=zeros(numel(gather(ez_tall_bp(1,:))),1);
-                fr_ai=zeros(numel(gather(ez_tall_bp(1,:))),1);
-                ez_tall_hfo_m=[];
-                ez_tall_fr_m=[];
-                num_trc_blocks=1;
-                file_id_size=numel(metadata.file_id);
-                file_id=metadata.file_id(1:(file_id_size-4));
-                filename1=['dsp_' file_id '_m_' file_block '.mat'];
-                filename1=strcat(paths.ez_top_in,filename1);
-                save('-v7.3',filename1,'DSP_data_m');
-                error_flag=1;
-            end;
-            
+                dsp_monopolar_output = cudaica_failure_handle(ez_tall_m, ez_tall_bp, metadata, paths.ez_top_in);
+            end
         else % number of bad electrodes are the vast majority
             error_status = 1;
             error_msg = 'mostly noisy mp electrodes';
         end
     else % error_flag 1 i.e. CUDAICA exploded ICA #3
-        
-        fprintf('CUDAICA exploded moving channels to bipolar montage \r');
-        chan_indexes = [1:numel(metadata.m_chanlist)];
-        [ez_tall_m, ez_tall_bp, hf_bad_m_out, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ez_tall_bp, metadata, chan_indexes);
-        metadata.hf_bad_m2 = hf_bad_m_out;
-
-        DSP_data_m = [];
-        ez_tall_m = [];
-        hfo_ai = zeros(numel(gather(ez_tall_bp(1,:))),1); 
-        fr_ai = zeros(numel(gather(ez_tall_bp(1,:))),1);
-        ez_tall_hfo_m = [];
-        ez_tall_fr_m = [];
-        num_trc_blocks = 1;
-        error_flag = 1;
-
-        filename1 = ['dsp_' metadata.file_id '_m_' file_block '.mat'];
-        filename1 = strcat(paths.ez_top_in, filename1);
-        save(filename1,'DSP_data_m', '-v7.3'); %in this case you are saving just an empty array? 
+        dsp_monopolar_output = cudaica_failure_handle(ez_tall_m, ez_tall_bp, metadata, paths.ez_top_in);
     end %end of enormous if else
 
-    %to be improved later
+end %end of dsp function
+
+function dsp_monopolar_output = cudaica_failure_handle(ez_tall_m, ez_tall_bp, metadata, ez_top_in_dir)
+
+    fprintf('CUDAICA exploded moving channels to bipolar montage \r');
+    chan_indexes = 1:numel(metadata.m_chanlist);
+    metadata.hf_bad_m2 = metadata.m_chanlist(chan_indexes);
+    [ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ez_tall_bp, metadata, chan_indexes);
+
+    %ask if this will be used, otherwise remove 
+    cudaica_failure_ai = zeros(numel(gather(ez_tall_bp(1,:))),1);
+    DSP_data_m = [];
     dsp_monopolar_output = struct( ...
         'DSP_data_m', DSP_data_m, ...
-        'ez_tall_m', ez_tall_m, ...
+        'ez_tall_m', [], ...      
         'ez_tall_bp', ez_tall_bp, ...
-        'hfo_ai', hfo_ai, ...
-        'fr_ai', fr_ai, ...
-        'ez_tall_hfo_m', ez_tall_hfo_m, ...
-        'ez_tall_fr_m', ez_tall_fr_m, ...
+        'hfo_ai', cudaica_failure_ai, ...
+        'fr_ai', cudaica_failure_ai, ...
+        'ez_tall_hfo_m', [], ...
+        'ez_tall_fr_m', [], ...
         'metadata', metadata, ...
-        'num_trc_blocks', num_trc_blocks, ...
-        'error_flag', error_flag ...
+        'num_trc_blocks', 1, ...
+        'error_flag', 1 ...
     );
-end %end of dsp function
+
+    filename1 = ['dsp_' metadata.file_id '_m_' metadata.file_block '.mat'];
+    filename1 = strcat(ez_top_in_dir, filename1);
+    save(filename1,'DSP_data_m', '-v7.3'); %in this case you are saving just an empty array? 
+end
 
 function [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metadata)
 
@@ -460,8 +420,8 @@ function [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metada
 end
 
 % Remove bad channels from monopolar montage
-function [ez_tall_m, ez_tall_bp, hf_bad_m_out, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ...
-                                                                         ez_tall_bp, metadata, chan_indexes)
+function [ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ...
+                                                              ez_tall_bp, metadata, chan_indexes)
     eeg_mp=gather(ez_tall_m);
     eeg_bps=gather(ez_tall_bp);
     hf_bad_m=metadata.m_chanlist(chan_indexes);
@@ -499,7 +459,6 @@ function [ez_tall_m, ez_tall_bp, hf_bad_m_out, metadata] = removeBadChannelsFrom
     eeg_mp(chan_indexes,:)=[];
     metadata.m_chanlist(chan_indexes)=[];
     ez_tall_m=tall(eeg_mp);
-    hf_bad_m_out = hf_bad_m; %to improve later
 
     %{ 
     I think this will be faster and equivalent. I have to do further testing to check if the i is being calculated ok,
@@ -542,8 +501,6 @@ function [ez_tall_m, ez_tall_bp, hf_bad_m_out, metadata] = removeBadChannelsFrom
     ez_tall_m = tall(eeg_mp);
     metadata.m_chanlist(chan_indexes) = [];
 
-    hf_bad_m_out = hf_bad_m; %to improve later
-   
     %}
 end
 
@@ -597,7 +554,7 @@ function [z_delta_amp_peak, z_lost_peaks] = detectOverstrippedRecordings(data, i
     z_lost_peaks = z_lost_peaks_method(lost_peaks);
 end
 
-% Improve name of function
+% ask what name should be here
 function z_lost_peaks = method_one(lost_peaks)
     lost_peaks = lost_peaks-min(lost_peaks);
     lambdahat = poissfit_2(lost_peaks);
@@ -1148,6 +1105,7 @@ function [fripple_ic_clip,fripple_ic_clip_t,fripple_ic_clip_event_t,fripple_ic_c
     end;
 end
 
+%if the i was not in both cases, unify this with an _2 
 function [hfo_times, hfo_values] = convRippleClips_timeToIndices(num_of_data_rows, clip_t, ic1, total)
 
     hfo_times=cell(num_of_data_rows,1);
@@ -1365,6 +1323,7 @@ function num_trc_blocks = writeTRCBlocks(TRC, file_block, file_id, trc_temp_dir,
     end;
 end
 
+%To be merged with getFrippleIcs
 function ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai)
     hfo_extract_index=[];
     ai_extract_index=[];

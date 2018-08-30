@@ -6,6 +6,7 @@
 
 %TO ASK
 %single instead of double? 
+% limpiar memoria haciendo = [] o = 0 
 %processBatch %Why monopolar takes and saves ez_tall_bp?  
 %ProcessBatch If always will save, maybe should be inside dsp to avoid copies
 %warnings , excepciones, error_codes?
@@ -18,10 +19,17 @@
 %what is the difference btw bps and bp in dsp_monopolar
 %num_trc_blocks no va en metadata? metadata is duplicated. Whats the difference btw DSP_data & metadata. Unify.
 %name for metadata.montage(:,1) montage chanlist? 
+%comments in ez_detect_batch
+%add sampling rate to metadata.
 
 %TODO: 
 %Backlog:
-
+%correct everywhere the filename -4 
+%unify main with batch and move the saves of dsp to the functions
+%remember the return after the second error_flag handle in dsp_monopolar
+%see if the save for ez_top_in is being used
+%refactorize dsp_monopolar local functions
+%change for tall expressions the dsp_outputs
 % refactor ez detect functions 
 %dsp bipolar refactoring = create error_flag for dsp_bipolar (lanzar warning y exc?)
 %remove conditional for error_flag in process_DSP_output
@@ -38,7 +46,7 @@
 %remove clears, see function pac
 %ask if the matrixes are sparse
 %review saving directories
-%analizar codigo y buscar potenciales fallas
+%create a pack to struct
 
 function main(edf_dataset_path, varargin)
     
