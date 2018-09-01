@@ -3,7 +3,7 @@
 dataset=$1
 cycle_duration=$2
 batches_number=$3
-clean_hfo_engine_afterwards="'$4'"
+clean_hfo_engine_afterwards=$4
 dataset_path='~/EDFs/'$dataset
 dataset_path="'$dataset_path'"
 
@@ -34,17 +34,16 @@ cd $tryAddPaths_path
 
 SECONDS=0 #timestamp
 
-#Instead of adding path for every session you can use savepath and then rmpath(genpath('$project_path'))
 $matlab_path -nodesktop -r "tryAddPaths('$project_path');ez_detect_test($dataset_path,$cycle_duration,$batches_number);quit" &
 
 wait
 
-#ver porque no anda
-#if [ $clean_hfo_engine_afterwards -eq '--clean' ]
-#then
-#	cd $hfo_engine_path
-#	./clean.sh 
-#fi
+if [ $clean_hfo_engine_afterwards == "--cleanOutputsAfter" ]
+then
+	echo "Cleaning outputs after execution..."
+	cd $hfo_engine_path
+	./clean.sh 
+fi
 
 echo "Input configuration:"
 echo "Dataset:" $dataset

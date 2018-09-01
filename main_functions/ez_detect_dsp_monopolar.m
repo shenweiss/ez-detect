@@ -34,7 +34,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
     [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metadata); %NEW
 
     fprintf('Removing excess HF artifact electrodes \r');
-    [metadata] = ez_hfbad_putou02(ez_tall_m,metadata); % Find MI of maximum artifact
+    [metadata] = ez_hfbad_putou02(ez_tall_m, metadata); % Find MI of maximum artifact
 
     % Remove bad channels from monopolar montage
     chan_indexes = metadata.hf_bad_m_index;
@@ -107,12 +107,30 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
         % row. This structure may need to be revised to improve efficiency.
         
         %ask if calculateSmoothedHFOamplitude isnt rip detection as well, to move the message inside this func
-        %this function will be improved.
-        [ripple_clip,ripple_clip_t,ripple_clip_event_t,ripple_clip_abs_t, total_ripple]=runRippleDetection(eeg_data, score_amp_ripple, ...
-                                                                     zscore_amp_ripple, ic1, ai, thresh_z, thresh_zoff);
-        % Convert ripple clips from time to indices
+        config = struct();
+        config.zscore_amp_thresh_z = thresh_z;
+        config.zscore_amp_thresh_zoff = thresh_zoff;
+        config.amp_thresh = 5.5;
+        config.min_event_duration_snds = 0.008;
+        config.sampling_rate = sampling_rate;
+        config.cycle_thresh = 59.99; %in seconds %improve name
+        config.search_granularity= 0.001; %Every millisecond
+        config.duration_cutoffs = struct(...
+            'fst_range', 150, ...
+            'fst_val', 0.012, ...
+            'snd_range', 250, ...
+            'snd_val', 0.008, ...
+            'trd_range', 400, ...
+            'trd_val', 1 ...  
+        );
+        config.fripple_run = false;
+        config.ai_thresh = 0.05; %1
+
+        ripple_data = rippleDetection(eeg_data, score_amp_ripple, zscore_amp_ripple, ic1, ai, config);
+
+        % Convert ripple clips from time to indices, this can be improved directly in rippleDetection saving them
         num_of_data_rows = numel(eeg_data(:,1));
-        [hfo_times, hfo_values] = convRippleClips_timeToIndices(num_of_data_rows, ripple_clip_t, ic1, total_ripple);
+        [hfo_times, hfo_values] = convRippleClips_timeToIndices(num_of_data_rows, ripple_data.clip_t, ic1, ripple_data.total_count);
         
         % v7 MODIFICATION: this new section removes bad channels based on a trained neural network
         % improve b name
@@ -167,11 +185,9 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
 
                     % Start Ripple detection
                     % Calculate smoothed HFO amplitude
-                    
                     [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude(nan_ica, hfo, ic1); 
                     
                     num_of_m_channels = numel(metadata.m_chanlist);
-                    
                     thresh_z_values = struct(...
                         'first', 1.1, ...
                         'second', 1.3, ...
@@ -188,20 +204,32 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                     );
                     [thresh_z, thresh_zoff] = skewnessCorrection(zscore_amp_ripple, num_of_m_channels, ...
                                                                     thresh_z_values, thresh_zoff_values);
-                   
-                    [ripple_clip,ripple_clip_t,ripple_clip_event_t,ripple_clip_abs_t, total_ripple]=runRippleDetection(eeg_data, score_amp_ripple, ...
-                                                                     zscore_amp_ripple, ic1, ai, thresh_z, thresh_zoff);
+                    config = struct();
+                    config.zscore_amp_thresh_z = thresh_z;
+                    config.zscore_amp_thresh_zoff = thresh_zoff;
+                    config.amp_thresh = 5.5;
+                    config.min_event_duration_snds = 0.008;
+                    config.sampling_rate = sampling_rate;
+                    config.cycle_thresh = 59.99; %in seconds %improve name
+                    config.search_granularity= 0.001; %Every millisecond
+                    config.duration_cutoffs = struct(...
+                        'fst_range', 150, ...
+                        'fst_val', 0.012, ...
+                        'snd_range', 250, ...
+                        'snd_val', 0.008, ...
+                        'trd_range', 400, ...
+                        'trd_val', 1 ...  
+                    );
+                    config.fripple_run = false;
+                    config.ai_thresh = 0.05; 
+
+                    ripple_data = rippleDetection(eeg_data, score_amp_ripple, zscore_amp_ripple, ic1, ai, config);
+
                     % Convert ripple clips from time to indices
-                    % in this call there was a difference in a line but I think it was an error, check later,
-                    % there was an i missing as argument of ic1 in line
-                    % ripple_val_concat=horzcat(ripple_val_concat, ic1(ripple_time)); %v4 modification calculate ripple values
-                    % the previous call line was ripple_val_concat=horzcat(ripple_val_concat, ic1(i,ripple_time));
                     num_of_data_rows = numel(eeg_data(:,1));
-                    [hfo_times, ~] = convRippleClips_timeToIndices(num_of_data_rows, ripple_clip_t, ic1, total_ripple);
+                    [hfo_times, ~] = convRippleClips_timeToIndices(num_of_data_rows, ripple_data.clip_t, ic1, ripple_data.total_count);
                 else % error_flag 1 i.e. CUDAICA exploded ICA #2 
                     dsp_monopolar_output = cudaica_failure_handle(ez_tall_m, ez_tall_bp, metadata, paths.ez_top_in);
-                    %return %ask for this added return if cudaica fails is it worthy to continue? 
-                    %unpack to continue until confirm the return and stop the execution if error_flag ==1
                     DSP_data_m = dsp_monopolar_output.DSP_data_m;
                     ez_tall_m = dsp_monopolar_output.ez_tall_m;
                     ez_tall_bp = dsp_monopolar_output.ez_tall_bp;
@@ -222,31 +250,62 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
            
             % Continue ripple detection part 2.
             % Calculate ripple extract index
-
             num_of_data_cols = numel(eeg_data(1,:));
             num_of_data_rows = numel(eeg_data(:,1));
-            ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai);
+            ripple_art_index_thresh = 0.025;
+            ripple_hfo_extract_index_thresh = 800;
+            ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai, ripple_art_index_thresh, ripple_hfo_extract_index_thresh);
 
             % redefine z_score block using ripple_ics
-            num_of_data_rows = numel(hfo(:,1));
-            [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude_2(num_of_data_rows, ripple_ics);
+            num_of_data_rows = numel(hfo(:,1));            
+            score_amp_ripple_i_method = @score_amp_ripple_i_method_2;
+            zscore_amp_ripple_i_method = @zscore_amp_ripple_i_method_2;
+            [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude_3(num_of_data_rows, ripple_ics, ...
+                                                    score_amp_ripple_i_method, zscore_amp_ripple_i_method);
             
-            [ripple_ic_clip,ripple_ic_clip_t,ripple_ic_clip_event_t,ripple_ic_clip_abs_t, ....
-             total_ripple_ic] = runRippleDetection_2(eeg_data, hfo, score_amp_ripple, zscore_amp_ripple, ripple_ics);
+            %%DEBUG
+            disp('THESE DIMENSIONS SHOULD BE THE SAME');  %_2
+            %check this should be the same for _2
+            disp(['eeg_data_channels' num2str(numel(eeg_data(:,1)) )] );
+            disp(['eeg_data_cols' num2str(numel(eeg_data(1,:)) )] );
+
+            disp(['hfo_channels' num2str(numel(hfo(:,1)) )] );
+            disp(['hfo_cols' num2str(numel(hfo(1,:)))]);
+
+            %ai were not being used in this call, it was added, ask if it doesn't mess up
+            config = struct();
+            config.zscore_amp_thresh_z = ones(1, numel(eeg_data(:,1)));
+            config.zscore_amp_thresh_zoff = ones(1, numel(eeg_data(:,1)))*(-0.2);
+            config.amp_thresh = 4;
+            config.min_event_duration_snds = 0.001;
+            config.sampling_rate = sampling_rate;
+            config.cycle_thresh = 59.9;
+            config.search_granularity = 0.002; %Every two millisecond
+            config.duration_cutoffs = struct(...
+                'fst_range', 150, ...
+                'fst_val', 0.001, ...
+                'snd_range', 200, ...
+                'snd_val', 0.001, ...
+                'trd_range', 400, ...
+                'trd_val', 1 ...  
+            );
+            config.fripple_run = false;
+            config.ai_thresh = 0.05; 
+
+            ripple_ics_data = rippleDetection(eeg_data, score_amp_ripple, zscore_amp_ripple, ripple_ics, ai, config);
             
-            % create master look up ripple time index for step 1 detection
-            % convert ripple clips from time to indices
+            % Create master look up ripple time index for step 1 detection
+            % Convert ripple clips from time to indices, we can have save indexes in rippleDeteccion, for later
             % Create ripple index
             num_of_data_rows = numel(eeg_data(:,1));
-            [hfo_times, ~ ] = convRippleClips_timeToIndices(num_of_data_rows, ripple_clip_t, ic1, total_ripple);
+            [hfo_times, ~ ] = convRippleClips_timeToIndices(num_of_data_rows, ripple_data.clip_t, ic1, ripple_data.total_count);
 
-            total_ripple_backup = total_ripple;
+            total_ripple_backup = ripple_data.total_count;
             % if ripple not in look up index add the to total_ripple and add ripples
             % from step 2 to ripple clips
 
-            [ripple_clip,ripple_clip_t,ripple_clip_event_t,ripple_clip_abs_t, total_ripple] = addRipples(num_of_data_rows, ...
-            hfo_times, ripple_clip,ripple_clip_t,ripple_clip_event_t,ripple_clip_abs_t, total_ripple, ripple_ic_clip,ripple_ic_clip_t,ripple_ic_clip_event_t,ripple_ic_clip_abs_t, total_ripple_ic );
-
+            ripple_data = addRipples(num_of_data_rows,hfo_times, ripple_data, ripple_ics_data);
+    
             %% Calculate ICA for fast ripples (FR)
             [fr, fr_ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, fripple.low, fripple.high, sampling_rate, paths);
             
@@ -269,8 +328,13 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 smooth_method = 'moving';
                 [ai] = calculateArtifactIndex(ai_rows, ai_cols, fr, fr_ic1, smooth_span, smooth_method);
                 fr_ai = ai; 
-
-                [score_amp_fripple, zscore_amp_fripple] = calculateSmoothedHFOamplitude_3(fr, fr_ic1);
+                
+                num_of_data_rows = numel(fr(:,1));
+                ics = fr_ic1;
+                score_amp_ripple_i_method = @score_amp_ripple_i_method_3; 
+                zscore_amp_ripple_i_method = @zscore_2;
+                [score_amp_fripple, zscore_amp_fripple] = calculateSmoothedHFOamplitude_3(num_of_data_rows, ics, ...
+                                                          score_amp_ripple_i_method, zscore_amp_ripple_i_method);
                 
                 % V4 add adjustment for skewness for fast ripple detection
                 num_of_m_channels = numel(metadata.m_chanlist);
@@ -292,27 +356,47 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
 
                 [thresh_z, thresh_zoff] = skewnessCorrection(zscore_amp_fripple, num_of_m_channels, ...
                                                                       thresh_z_values, thresh_zoff_values);
+                config = struct();
+                config.zscore_amp_thresh_z = thresh_z;
+                config.zscore_amp_thresh_zoff = thresh_zoff;
+                config.amp_thresh = 4;
+                config.min_event_duration_snds = 0.006;
+                config.sampling_rate = sampling_rate;
+                config.cycle_thresh = 59.9;
+                config.fripple_run = true;
+                config.ai_thresh = 0.1;
                 
-                [fripple_clip,fripple_clip_t,fripple_clip_event_t,fripple_clip_abs_t, ...
-                 total_fripple] = runRippleDetection_3(eeg_data, score_amp_fripple, zscore_amp_fripple, ai, thresh_z, thresh_zoff);
+                fripple_data = rippleDetection(eeg_data, score_amp_fripple, zscore_amp_fripple, ics, ai, config);
                 
                 % Create ripple index
                 num_of_data_rows = numel(eeg_data(:,1));
-                [hfo_times, ~] = convRippleClips_timeToIndices(num_of_data_rows, fripple_clip_t, ic1, total_fripple);
+                [hfo_times, ~] = convRippleClips_timeToIndices(num_of_data_rows, fripple_data.clip_t, ic1,fripple_data.total_count);
 
                 num_of_data_cols = numel(eeg_data(1,:));
-                fripple_ics = getFrippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai);
+                fripple_art_index_thresh = 0.020;
+                fripple_hfo_extract_index_thresh = 150;
+                fripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai, fripple_art_index_thresh, fripple_hfo_extract_index_thresh);
+
+                score_amp_ripple_i_method = @score_amp_ripple_i_method_2;
+                zscore_amp_ripple_i_method = @zscore_amp_ripple_i_method_2;
+                [eeg.score_amp_fripple, eeg.zscore_amp_fripple] = calculateSmoothedHFOamplitude_3(num_of_data_rows, fripple_ics, ...
+                                                                  score_amp_ripple_i_method, zscore_amp_ripple_i_method);
                 
-                [eeg.score_amp_fripple, eeg.zscore_amp_fripple] = calculateSmoothedHFOamplitude_2(num_of_data_rows, fripple_ics);
-                
-                [fripple_ic_clip,fripple_ic_clip_t,fripple_ic_clip_event_t,fripple_ic_clip_abs_t, ....
-                 total_fripple_ic] = runRippleDetection_4(eeg_data, eeg.score_amp_fripple, eeg.zscore_amp_fripple);
+                config = struct();
+                config.zscore_amp_thresh_z = ones(1, numel(eeg_data(:,1)))*0.5;
+                config.zscore_amp_thresh_zoff = ones(1, numel(eeg_data(:,1)))*(-0.2);
+                config.amp_thresh = 3;
+                config.min_event_duration_snds = 0.005;
+                config.sampling_rate = sampling_rate;
+                config.cycle_thresh = 59.9; %in seconds %improve name
+                config.fripple_run = true;
+                config.ai_thresh = 0.1; 
 
-                total_fripple_backup = total_fripple;
+                fripple_ics_data = rippleDetection(eeg_data, eeg.score_amp_fripple, eeg.zscore_amp_fripple, ics, ai, config);
+                total_fripple_backup = fripple_data.total_count;
 
-                [fripple_clip,fripple_clip_t,fripple_clip_event_t,fripple_clip_abs_t, total_fripple] = addRipples(num_of_data_rows, ...
-                hfo_times, fripple_clip,fripple_clip_t,fripple_clip_event_t,fripple_clip_abs_t, total_fripple, fripple_ic_clip,fripple_ic_clip_t,fripple_ic_clip_event_t,fripple_ic_clip_abs_t, total_fripple_ic );
-
+                fripple_data = addRipples(num_of_data_rows,hfo_times, fripple_data, fripple_ics_data);
+    
                 % output the stored discrete HFOs
                 DSP_data_m.error_status=error_status;
                 DSP_data_m.error_msg=error_msg;
@@ -325,14 +409,14 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 [a,b]=find(fr_ai>0.1);
                 artifact_duration=(numel(a)/2000);
                 DSP_data_m.fr_clean_duration=DSP_data_m.data_duration-artifact_duration;
-                DSP_data_m.total_ripple=total_ripple;
-                DSP_data_m.ripple_clip=ripple_clip;
-                DSP_data_m.ripple_clip_abs_t=ripple_clip_abs_t;
-                DSP_data_m.ripple_clip_event_t=ripple_clip_event_t;
-                DSP_data_m.total_fripple=total_fripple;
-                DSP_data_m.fripple_clip=fripple_clip;
-                DSP_data_m.fripple_clip_abs_t=fripple_clip_abs_t;
-                DSP_data_m.fripple_clip_event_t=fripple_clip_event_t;
+                DSP_data_m.total_ripple=ripple_data.total_count;
+                DSP_data_m.ripple_clip=ripple_data.clip;
+                DSP_data_m.ripple_clip_abs_t=ripple_data.clip_abs_t;
+                DSP_data_m.ripple_clip_event_t=ripple_data.clip_event_t;
+                DSP_data_m.total_fripple=fripple_data.total_count;
+                DSP_data_m.fripple_clip=fripple_data.clip;
+                DSP_data_m.fripple_clip_abs_t=fripple_data.clip_abs_t;
+                DSP_data_m.fripple_clip_event_t=fripple_data.clip_event_t;
                 
                 dsp_monopolar_output = struct( ...
                     'DSP_data_m', DSP_data_m, ...
@@ -391,6 +475,7 @@ function dsp_monopolar_output = cudaica_failure_handle(ez_tall_m, ez_tall_bp, me
     filename1 = strcat(ez_top_in_dir, filename1);
     save(filename1,'DSP_data_m', '-v7.3'); %in this case you are saving just an empty array? 
 end
+
 
 function [ez_tall_m, metadata] = remove60CycleArtifactOutliers(ez_tall_m, metadata)
 
@@ -606,14 +691,14 @@ function nan_ica = compensateOverstrippingHFO_IC1(nan_ica_size, z_lost_peaks, th
     end
 end
 
-function [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude(nan_ica, hfo, ic1)
-    
+function [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude(nan_ica, hfo, ic1)    
     for i=1:numel(hfo(:,1))
         if nan_ica(i)==1
             hilbert_hfo_amp=abs(hilbert(hfo(i,:)));
         else
             hilbert_hfo_amp=abs(hilbert(ic1(i,:)));
         end
+        
         score_amp=hilbert_hfo_amp;
         smooth_length=40;
         score_amp_ripple(i,:)=smooth(score_amp,smooth_length,'loess');
@@ -626,33 +711,30 @@ function [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude(n
     end
 end
 
-%Merge with the one above later
-function [score_amp, zscore_amp] = calculateSmoothedHFOamplitude_2(num_of_data_rows, ics)
-    % redefine z_score block using ics
-    for i=1:num_of_data_rows
-        hilbert_amp=abs(hilbert(ics(i,:)));
-        smooth_length=round((2000/2000)*40);
-        score_amp(i,:)=smooth(hilbert_amp,smooth_length,'loess');
-        score_amp(i,:)=abs(score_amp(i,:));
-        lambdahat = poissfit_2(score_amp(i,:));
-        zscore_amp(i,:)=2*(sqrt(score_amp(i,:))-sqrt(2.5*lambdahat)); %difference with _1
-    end
-end
-
-%% Merge with the two above later
-function [score_amp_fripple, zscore_amp_fripple] = calculateSmoothedHFOamplitude_3(fr, fr_ic1)
-    for i=1:numel(fr(:,1));
-        hilbert_hfo_amp=abs(hilbert(fr_ic1(i,:)));
-        score_amp=hilbert_hfo_amp;
-        smooth_length=round((2000/2000)*40);
-        score_amp_fripple(i,:)=smooth(score_amp,smooth_length,'loess');
-        zscore_amp_fripple(i,:)=zscore_2(score_amp_fripple(i,:));
+function [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude_3(num_of_data_rows, ics, ...
+                                                 score_amp_ripple_i_method, zscore_amp_ripple_i_method)
+    for i = 1:num_of_data_rows
+        hilbert_amp = abs(hilbert(ics(i,:)));
+        smooth_length = round((2000/2000)*40); %ask about this... thats 40 always, ask if they wanna extract variable as srate
+        score_amp_ripple(i,:) = score_amp_ripple_i_method(hilbert_amp, smooth_length);
+        zscore_amp_ripple(i,:) = zscore_amp_ripple_i_method(score_amp_ripple(i,:));
     end;
 end
 
-function [thresh_z, thresh_zoff] = skewnessCorrection(zscore_amp, num_of_m_channels, ...
-                                                      thresh_z_values, thresh_zoff_values)
-        
+%Ask if the difference in the calls are ok or are bugs
+function score_amp_ripple_i = score_amp_ripple_i_method_2(hilbert_amp, smooth_length)
+    score_amp_ripple_i = abs(smooth(hilbert_amp,smooth_length,'loess'));
+end
+function score_amp_ripple_i = score_amp_ripple_i_method_3(hilbert_amp, smooth_length)
+    score_amp_ripple_i = smooth(hilbert_amp,smooth_length,'loess');
+end
+function zscore_amp_ripple_i = zscore_amp_ripple_i_method_2(score_amp_ripple_i)
+    lambdahat = poissfit_2(score_amp_ripple_i);
+    zscore_amp_ripple_i = 2*(sqrt(score_amp_ripple_i)-sqrt(2.5*lambdahat)); %difference with _1
+end
+%zscore_amp_ripple_i_method_3 is zscore_2
+
+function [thresh_z, thresh_zoff] = skewnessCorrection(zscore_amp,num_of_m_channels,thresh_z_values,thresh_zoff_values)
     temp_skew=skewness(zscore_amp'); % v4 add skewness correction for initial ripple detection to improve sensitivity.
     z_skew=zscore_2(temp_skew);
     thresh_z=[];
@@ -684,428 +766,185 @@ function [thresh_z, thresh_zoff] = skewnessCorrection(zscore_amp, num_of_m_chann
     fprintf('Done calculating baseline stats \r')
 end
 
-%To be refactored.
-function [ripple_clip,ripple_clip_t,ripple_clip_event_t,ripple_clip_abs_t, total_ripple]=runRippleDetection(eeg_data, score_amp_ripple, ...
-                                                                     zscore_amp_ripple, ic1, ai, thresh_z, thresh_zoff)
-    fprintf('Running Ripple Detection\r');
+function block = updateBlockData(block, eeg_index, eeg_data,zscore_amp_ripple, score_amp_ripple, ics, ai, fripple_run)
+    block.end_ptr = eeg_index+block.size-1; 
+    block.data_range = eeg_index:block.end_ptr;
 
-    num_of_data_rows = numel(eeg_data(:,1));
-    initial_value = cell(num_of_data_rows,1);
-    
-    ripple_clip = initial_value;
-    ripple_clip_t = initial_value;
-    ripple_clip_event_t = initial_value;
-    ripple_clip_abs_t = initial_value;
-    total_ripple = zeros(num_of_data_rows,1);
-    
-    datablock=0;
-    eeg_index=1;
-    while eeg_index < (numel(eeg_data(1,:)) -(59.99*2000))
-        ieeg_block=eeg_data(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        zscore_block=zscore_amp_ripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        amp_block=score_amp_ripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        ic1_block=ic1(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        ai_block=ai((eeg_index+1):(eeg_index+(2000*60)-1));
-        eeg_index=eeg_index+(2000*60)-1;
-        %eeg_index/2000 this was being printed to std out log later if necesary
-        for channel=1:numel(eeg_data(:,1))
-            
-            % Define ic1,z_score amp traces from blocks.
-            zscore_amp=zscore_block(channel,:);
-            amp=amp_block(channel,:);
-            ic1_chan=ic1_block(channel,:);
-            
-            % Set initial values for HFO search
-            flagged=0;
-            start=1;
-
-            % Define interval to search for HFO events in the zscore_amp time series
-            step_search=(0.001*2000);
-            
-            % Iterate through entire z-scored time series, start of event defined at Z>3.5, note this
-            % is a relatively low cut off. The point here is to capture as many events as possible
-            % they will be refined later in the analysis. An event is complete when the Z score is
-            % below <1.5. An event is only saved if it is greater than 15 msec in duration.
-            if datablock == 0
-                start_index=800;
-            else
-                start_index=1;
-            end;
-            for j=start_index:step_search:numel(zscore_amp);
-                A_boolean=zscore_amp(j)>thresh_z(channel); % v4 with skewness adjustment
-                B_boolean=amp(j)>5.5;
-                C_boolean= and(A_boolean,B_boolean);
-                if ((flagged==0) && (C_boolean==1)) % Optimization factor #1
-                    flagged=1;
-                    start=j;
-                end;
-                if ((flagged==1) && (zscore_amp(j)>thresh_zoff(channel))) end; % Optimization factor #2
-                if ((flagged==1) && (zscore_amp(j)<thresh_zoff(channel)))
-                    
-                    if  ((j-start)*(1/2000)) > 0.008
-                        % to determine if HFO is valid the first step is calculating
-                        % its frequency at the peak of its psd.
-                        
-                        nfft = 2^nextpow2(length(ic1_chan(start:j)));
-                        Pxx = abs(fft(ic1_chan(start:j),nfft)).^2/length(ic1_chan(start:j))/2000;
-                        Hpsd = dspdata.psd(Pxx(1:length(Pxx)/2),'Fs',2000);
-                        [a,b]=max(Hpsd.Data);
-                        HFO_frequency=Hpsd.Frequencies(b);
-                        
-                        %  calculate the duration cutoff based on the peak frequency of
-                        %  the HFO.
-                        duration_cutoff=0;
-                        
-                        if (HFO_frequency <= 150) duration_cutoff = 0.012; end % Optimization Factor #3
-                        if (HFO_frequency > 150 && HFO_frequency < 250) duration_cutoff = 0.008; end
-                        if (HFO_frequency >= 250 && HFO_frequency < 400) duration_cutoff = 1; end
-                        if (HFO_frequency >= 400)  duration_cutoff = 1; end;
-                        
-                        %if the HFO duration exceeds the duration cutoff save the raw HFO accompanying
-                        %the event, the instantaneous phase of the eeg at the time of the event, the
-                        %unfiltered signal at the time of the event, and the Z-scored HFO stream at the
-                        %time of the event.
-                        if ((j-start)*(1/2000)) > duration_cutoff
-                            if ((j-start)*(1/2000)) < 0.5; % Is the HFO less than half a second i.e. not artifact
-                                artifact=0;
-                                for k=start:j % Look up artifact index to determine if HFO is artefactual.
-                                    if ai_block(k)>0.05 % v4 raised AI thresh to 0.05
-                                        artifact=1;
-                                    end;
-                                end;
-                                if artifact==0
-                                    total_ripple(channel)=total_ripple(channel)+1;
-                                    if start-1100 < 1   % v3 adjust 0.25 sec for asymmetric filtering
-                                        clip_start=1;
-                                    else
-                                        clip_start=start-1100;
-                                    end;
-                                    if j+100 > numel(ieeg_block(1,:))
-                                        clip_end=numel(ieeg_block(1,:));
-                                    else
-                                        clip_end=j+100;
-                                    end;
-                                    ripple_clip{channel,total_ripple(channel)}=ieeg_block(channel,(clip_start):(clip_end));
-                                    ripple_clip_t{channel,total_ripple(channel)}=[((start/2000)+(datablock*60)-.0035) ((j/2000)+(datablock*60))]; % v3 do not adjust 0.25 sec for asymmetric filtering b/c off stage II
-                                    ripple_clip_event_t{channel,total_ripple(channel)}=[((start/2000)+(datablock*60)-.0035)-500 ((j/2000)+(datablock*60))-500];
-                                    ripple_clip_abs_t{channel, total_ripple(channel)}=[((clip_start/2000)+(datablock*60)) ((clip_end/2000)+(datablock*60))];
-                                end;
-                            end;
-                        end;
-                    end;
-                    flagged=0;
-                end;
-            end;
-        end;
-        datablock=datablock+1;
-    end;
-    %clear A_boolean a_value ai_block amp amp_block artifact b_boolean b_ind C_boolean chan_block_str channel clip_end clip_start counter2 datablock duration_cutoff eeg_index HFO_frequency hilbert_hfo_amp ic1_block ic1_chan i j k lambdahat nfft p Pxx q ref score_amp zscore_amp_ripple zscore_block
+    block.ieeg = eeg_data(:,block.data_range);
+    block.zscore = zscore_amp_ripple(:,block.data_range);
+    block.amp = score_amp_ripple(:,block.data_range);
+    if (~fripple_run) block.ic1 = ics(:,block.data_range); end
+    block.ai = ai(block.data_range);
 end
 
-%Merge with the one above later
-function [ripple_ic_clip,ripple_ic_clip_t,ripple_ic_clip_event_t,ripple_ic_clip_abs_t, ....
-          total_ripple_ic] = runRippleDetection_2(eeg_data, hfo, score_amp_ripple, zscore_amp_ripple, ripple_ics)
-    fprintf('Running Ripple ic Detection\r');
+function start_index = fixRelativeStartIndex(current_block)
+    if current_block == 1
+        start_index = 800; 
+    else
+        start_index = 1;
+    end
+end
+
+function HFO_frequency = getHFOfrequency(event_img_count, event_indexes, event_duration_snds, ic1_chan, sampling_rate)
+    nfft = 2^nextpow2(event_img_count);
+    ic1_chan_fft = fft( ic1_chan(event_indexes), nfft);
+    Pxx = abs(ic1_chan_fft).^2/event_duration_snds; %I think this is equivalent
+    Hpsd = dspdata.psd(Pxx(1:numel(Pxx)/2),'Fs',sampling_rate);
+    [~,max_index]= max(Hpsd.Data);
+    HFO_frequency = Hpsd.Frequencies(max_index);
+end
+
+function duration_cutoff = getDurationCutOff(HFO_frequency, dur_cutoffs)
+    % Calculate the duration cutoff based on the peak frequency ofthe HFO.
+    % Optimization Factor #3
+    % @Shennan: I changed the <= 150 for < 150 and > 150 for >= 150 to be consistent , is that ok?
+    duration_cutoff = 0;
+    if (HFO_frequency < dur_cutoffs.fst_range) 
+        duration_cutoff = dur_cutoffs.fst_val; end 
+    if (HFO_frequency >= dur_cutoffs.fst_range && HFO_frequency < dur_cutoffs.snd_range) 
+        duration_cutoff = dur_cutoffs.snd_val; end
+    if (HFO_frequency >= dur_cutoffs.snd_range && HFO_frequency < dur_cutoffs.trd_range) 
+        duration_cutoff = dur_cutoffs.trd_val; end
+    if (HFO_frequency >= dur_cutoffs.trd_range) 
+        duration_cutoff = dur_cutoffs.trd_val; end;  
+end
+
+function is_artifact = isArtifactualHFO(event_indexes, ai_block, ai_thresh)
+    is_artifact = false;
+    for i = event_indexes % Look up artifact index to determine if HFO is artefactual.
+        if ai_block(i) > ai_thresh % v4 raised AI thresh to 0.05 
+            is_artifact = true;
+        end
+    end
+end
+
+function ripple_data = getRippleData(ripple_data, hfo_detection_start_ptr, rel_img_index, block, sampling_rate, chan, current_block)
+
+    ripple_data.total_count(chan) = ripple_data.total_count(chan)+1;
+    % Here you are adding margins to the clip right?
+    % @Shennan: What does this next line comment mean? 0.25 snds with srate=2000 is 500 images
+    clip_start = max(1, hfo_detection_start_ptr-1100);% v3 adjust 0.25 sec for asymmetric filtering.
+    clip_end = min(rel_img_index+100, numel(block.ieeg(1,:)));
+    chan_hfo_index = ripple_data.total_count(chan);
+
+    ripple_data.clip{chan, chan_hfo_index} = block.ieeg(chan, clip_start:clip_end); 
+    %This clip above corresponds to ripple_data.clip_abs_t pointers, but remember that it doesn't match with clip_t nor clip_event_t
+    event_clip_rel_start_snds = clip_start/sampling_rate;
+    event_clip_rel_stop_snds = clip_end/sampling_rate;
+    time_passed_snds = (current_block-1)*60;
+    ripple_data.clip_abs_t{chan, chan_hfo_index} = time_passed_snds+ [event_clip_rel_start_snds ...
+                                                                      event_clip_rel_stop_snds];
+    %Other pointers
+    event_rel_start_snds = hfo_detection_start_ptr/sampling_rate;
+    event_rel_stop_snds = rel_img_index/sampling_rate;
+    % v3 do not adjust 0.25 sec for asymmetric filtering b/c off stage II
+    ripple_data.clip_t{chan, chan_hfo_index} = time_passed_snds+[(event_rel_start_snds-0.0035) ... %Shennan this pointer could get out of range if its in the first very beginning of the block. We can set it to max(0.0005, actual_pointer) if we are sure that srate will be >= 2000
+                                                                    event_rel_stop_snds]; %@Shennan: is this end correct without the + 0.0035? if you want the +0.0035, same comment than the line above for out of range but we can handle it 
+                                                                      
+    ripple_data.clip_event_t{chan, chan_hfo_index} = time_passed_snds+[(event_rel_start_snds-0.0035-500) ... %@Shennan: here there could be a bug, I think you want to remove 500 images (0.25 secs) but the left side has already been converted to time, it should be time or images count? Besides we should handle out of range.
+                                                                          (event_rel_stop_snds-500)]; %@Shennan: Is this -500 correct for the stop or you meant +500 here
+end
+
+%the versions for ics didn't use isArtifactualHFO funciton, this one does it, ask if that doesn't makes trouble.
+function ripple_data = rippleDetection(eeg_data, score_amp_ripple, zscore_amp_ripple, ics, ai, config)
     
-    num_of_data_rows = numel(eeg_data(:,1));
-    initial_value = cell(num_of_data_rows,1);
+    fprintf('Running Ripple Detection\r'); 
+    channel_count = numel(eeg_data(:,1));
+    data_length = numel(eeg_data(1,:));
+    initial_value = {cell(channel_count,1)};
+    ripple_data = struct( ...
+        'clip', initial_value, ...
+        'clip_t', initial_value, ...      
+        'clip_event_t', initial_value, ...
+        'clip_abs_t', initial_value, ...
+        'total_count', zeros(channel_count,1) ...
+    );
+    block = struct();
+    block.time_size_snds = 60; %in seconds
+    block.size = config.sampling_rate*block.time_size_snds; 
+    if config.fripple_run
+        search_step = 1;
+    else
+        hfo_search_step_snds = config.search_granularity; %just to clearify they are seconds
+        search_step = floor(hfo_search_step_snds*config.sampling_rate); %added 'floor' just in case in future srate differs 2000
+    end
+    current_block = 1;
 
-    ripple_ic_clip=initial_value;
-    ripple_ic_clip_t=initial_value;
-    ripple_ic_clip_event_t=initial_value;
-    ripple_ic_clip_abs_t=initial_value;
-    total_ripple_ic=zeros(numel(hfo(:,1)),1);
+    for eeg_index = 1:block.size:(data_length- config.cycle_thresh*config.sampling_rate) %@Shennan: why are you missing almost the last minute? cycle_thresh is 59.99
 
-    datablock=0;
-    eeg_index=1;
-    while eeg_index < (numel(hfo(1,:))-(59.9*2000))
-        ieeg_block=eeg_data(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        amp_block=score_amp_ripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        zscore_block=zscore_amp_ripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        ic1_block=ripple_ics(:,(eeg_index+1):(eeg_index+(2000*60)));
-        eeg_index=eeg_index+(2000*60)-1;
-        %eeg_index/2000
-        for channel=1:numel(hfo(:,1))
+        block = updateBlockData(block, eeg_index, eeg_data,zscore_amp_ripple, score_amp_ripple, ics, ai, config.fripple_run);
+        for channel_index = 1:channel_count
             
-            % Define ic1,z_score amp traces from blocks.
-            zscore_amp=zscore_block(channel,:);
-            amp=amp_block(channel,:);
-            ic1_chan=ic1_block(channel,:);
-            
-            % Set initial values for HFO search
-            flagged=0;
-            start=1;
-            
-            % Define interval to search for HFO events in the zscore_amp time series
-            step_search=(0.002*2000);
-            
+            zscore_amp = block.zscore(channel_index,:);
+            amp = block.amp(channel_index,:);
+            if (~config.fripple_run) ic1_chan = block.ic1(channel_index,:); end
+
+            hfo_event_detected = false; %old 'flagged var'
+            chan = channel_index; %just to reduce syntax
             % Iterate through entire z-scored time series, start of event defined at Z>3.5, note this
             % is a relatively low cut off. The point here is to capture as many events as possible
             % they will be refined later in the analysis. An event is complete when the Z score is
-            % below <1.5. An event is only saved if it is greater than 15 msec in duration.
-            if datablock == 0
-                start_index=800;
-            else
-                start_index=1;
-            end;
-            for j=start_index:step_search:numel(zscore_amp);
-                A_boolean=zscore_amp(j)>1;
-                B_boolean=amp(j)>4;
-                C_boolean=and(A_boolean,B_boolean);
-                if ((flagged==0) && (C_boolean==1)) % Optimization factor #1
-                    flagged=1;
-                    start=j;
+            % below <1.5. An event is only saved if it is greater than 15 msec in duration. %@Shennan I think this is old info, now code says 8ms
+            
+            %@Shennan: why this? avoids the first 0.4 secs and consider now that dsp_m will be called for many blocks,
+            % and then for each of them use these small 1 minute blocks. So you would miss the first 0.4 secs for every main blocks in ez_detect batch
+            start_index = fixRelativeStartIndex(current_block);
+            for rel_img_index = start_index:search_step:numel(zscore_amp)
+                
+                %Detect hfo event
+                img_detected_positive = false;
+                if ~hfo_event_detected 
+                    zscore_amp_outstrips_thresh = zscore_amp(rel_img_index) > config.zscore_amp_thresh_z(chan); % v4 with skewness adrel_img_indexustment
+                    amp_outstrips_thresh = amp(rel_img_index) > config.amp_thresh;
+                    img_detected_positive = and(zscore_amp_outstrips_thresh,amp_outstrips_thresh);
                 end
-                if ((flagged==1) && (zscore_amp(j)>-0.2)) end; % Optimization factor #2
-                if ((flagged==1) && (zscore_amp(j)<-0.2))
-                    
-                    if  ((j-start)*(1/2000)) > 0.001
-                        % to determine if HFO is valid the first step is calculating
-                        % its frequency at the peak of its psd.
-                        
-                        nfft = 2^nextpow2(length(ic1_chan(start:j)));
-                        Pxx = abs(fft(ic1_chan(start:j),nfft)).^2/length(ic1_chan(start:j))/2000;
-                        Hpsd = dspdata.psd(Pxx(1:length(Pxx)/2),'Fs',2000);
-                        [a,b]=max(Hpsd.Data);
-                        HFO_frequency=Hpsd.Frequencies(b);
-                        
-                        %  calculate the duration cutoff based on the peak frequency of
-                        %  the HFO.
-                        duration_cutoff=0;
-                        
-                        if (HFO_frequency <= 150) duration_cutoff = 0.001; end % Optimization Factor #3
-                        if (HFO_frequency > 150 && HFO_frequency < 200) duration_cutoff = 0.001; end
-                        if (HFO_frequency >= 200 && HFO_frequency < 400) duration_cutoff = 1; end
-                        if (HFO_frequency >= 400)  duration_cutoff = 1; end;
-                        
-                        %if the HFO duration exceeds the duration cutoff save the raw HFO accompanying
-                        %the event, the instantaneous phase of the eeg at the time of the event, the
-                        %unfiltered signal at the time of the event, and the Z-scored HFO stream at the
-                        %time of the event.
-                        if ((j-start)*(1/2000)) > duration_cutoff
-                            if ((j-start)*(1/2000)) < 0.5; % Is the HFO less than half a second i.e. not artifact
-                                artifact=0;
-                                if artifact==0
-                                    total_ripple_ic(channel)=total_ripple_ic(channel)+1;
-                                    
-                                    if start-1100 < 1   % v3 adjust for asymmetric filtering
-                                        clip_start=1;
-                                    else
-                                        clip_start=start-1100;
-                                    end;
-                                    
-                                    if j+100 > numel(ieeg_block(1,:))    % v3 adjust for asymmetric filtering
-                                        clip_end=numel(ieeg_block(1,:));
-                                    else
-                                        clip_end=j+100;
-                                    end;
-                                    ripple_ic_clip{channel,total_ripple_ic(channel)}=ieeg_block(channel,(clip_start):(clip_end));
-                                    ripple_ic_clip_t{channel,total_ripple_ic(channel)}=[((start/2000)+(datablock*60)-.0035) ((j/2000)+(datablock*60))];   % v3 do not adjust b/c step II
-                                    ripple_ic_clip_event_t{channel,total_ripple_ic(channel)}=[((start/2000)+(datablock*60)-.0035)-500 ((j/2000)+(datablock*60))-500];
-                                    ripple_ic_clip_abs_t{channel,total_ripple_ic(channel)}=[((clip_start/2000)+(datablock*60)) ((clip_end/2000)+(datablock*60))];
-                                end;
-                            end;
-                        end;
-                    end;
-                    flagged=0;
-                end;
-            end;
-        end;
-        datablock=datablock+1;
-    end;
-end
-
-%Merge with the 2 above later
-function [fripple_clip,fripple_clip_t,fripple_clip_event_t,fripple_clip_abs_t, ....
-          total_fripple] = runRippleDetection_3(eeg_data, score_amp_fripple, zscore_amp_fripple, ai, thresh_z, thresh_zoff)
-    
-    fprintf('Running Fast Ripple Detection \r')
-    num_of_data_rows = numel(eeg_data(:,1));
-    initial_value = cell(num_of_data_rows,1);
-
-    fripple_clip= initial_value;
-    fripple_clip_t= initial_value;
-    fripple_clip_event_t= initial_value;
-    fripple_clip_abs_t=initial_value;
-    total_fripple=zeros(num_of_data_rows,1);
-    
-    datablock=0;
-    eeg_index=1;
-    while eeg_index < (numel(eeg_data(1,:))-(59.9*2000))
-        ieeg_block=eeg_data(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        amp_block=score_amp_fripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        zscore_block=zscore_amp_fripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        ai_block=ai((eeg_index+1):(eeg_index+(2000*60)-1)); %difference with _4
-        eeg_index=eeg_index+(2000*60)-1;
-        %eeg_index/2000
-        for channel=1:numel(eeg_data(:,1))
-            
-            % Define z_score amp traces from blocks.
-            zscore_amp=zscore_block(channel,:);
-            amp=amp_block(channel,:);
-            
-            % initialize search values
-            flagged=0;
-            start=1;
-            
-            % Iterate through entire z-scored time series, start of event defined at Z>3.5, note this
-            % is a relatively low cut off. The point here is to capture as many events as possible
-            % they will be refined later in the analysis. An event is complete when the Z score is
-            % below <1.5. An event is only saved if it is greater than 15 msec in duration.
-            if datablock == 0
-                start_index=800;
-            else
-                start_index=1;
-            end;
-            for j=start_index:numel(zscore_amp);
-                A_boolean=zscore_amp(j)>thresh_z(channel); %V4 to account for skewness of deviation
-                B_boolean=amp(j)>4;
-                C_boolean=and(A_boolean,B_boolean);
-                if ((flagged==0) && (C_boolean==1))  % Optimization factor #1
-                    flagged=1;
-                    start=j;
-                end;
-                if ((flagged==1) && (zscore_amp(j)>thresh_zoff(channel))) end; % Optimization factor #2 add this in the others
-                if ((flagged==1) && (zscore_amp(j)<thresh_zoff(channel)))
-                    
-                    if  ((j-start)*(1/2000)) > 0.006
-                        
-                        %if the HFO duration exceeds the duration cutoff save the raw HFO accompanying
-                        %the event, the instantaneous phase of the eeg at the time of the event, the
-                        %unfiltered signal at the time of the event, and the Z-scored HFO stream at the
-                        %time of the event.
-                        if ((j-start)*(1/2000)) < 0.5; % Is the HFO less than half a second i.e. not artifact
-                            artifact=0;
-                            for k=start:j % Look up artifact index to determine if HFO is artefactual.
-                                if ai_block(k)>0.1
-                                    artifact=1;
-                                end;
-                            end;
-                            if artifact==0
-                                total_fripple(channel)=total_fripple(channel)+1;
-                                chan_block_ann=ceil(channel/32);
-                                
-                                if start-1100 < 1 % v3 adjust for asymmetric filtering
-                                    clip_start=1;
-                                else
-                                    clip_start=start-1100;
-                                end;
-                                
-                                if j+100 > numel(ieeg_block(1,:))
-                                    clip_end=numel(ieeg_block(1,:));
-                                else
-                                    clip_end=j+100;
-                                end;
-                                fripple_clip{channel,total_fripple(channel)}=ieeg_block(channel,(clip_start):(clip_end));
-                                fripple_clip_t{channel,total_fripple(channel)}=[((start/2000)+(datablock*60)-.0035) ((j/2000)+(datablock*60))];  %v3 do not adjust due to step II
-                                fripple_clip_event_t{channel, total_fripple(channel)}=[((clip_start/2000)+(datablock*60))-500 ((clip_end/2000)+(datablock*60))-500];
-                                fripple_clip_abs_t{channel, total_fripple(channel)}=[((clip_start/2000)+(datablock*60)) ((clip_end/2000)+(datablock*60))];
-                            end;
-                        end;
-                    end;
-                    flagged=0;
-                end;
-            end;
-        end;
-        datablock=datablock+1;
-    end;
-end
-
-%to be merged with the 3 above later
-function [fripple_ic_clip,fripple_ic_clip_t,fripple_ic_clip_event_t,fripple_ic_clip_abs_t, ....
-          total_fripple_ic] = runRippleDetection_4(eeg_data, score_amp_fripple, zscore_amp_fripple)
-    fprintf('Running Fast Ripple Detection 2 \r')
-    num_of_data_rows = numel(eeg_data(:,1));
-    initial_value = cell(num_of_data_rows,1);
-
-    fripple_ic_clip= initial_value;
-    fripple_ic_clip_t= initial_value;
-    fripple_ic_clip_event_t= initial_value;
-    fripple_ic_clip_abs_t=initial_value;
-    total_fripple_ic = zeros(num_of_data_rows,1);
-    
-    eeg_index=1;
-    datablock=0;
-    while eeg_index < (numel(eeg_data(1,:))-(59.9*2000))
-        ieeg_block=eeg_data(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        amp_block=score_amp_fripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        zscore_block=zscore_amp_fripple(:,(eeg_index+1):(eeg_index+(2000*60)-1));
-        eeg_index=eeg_index+(2000*60)-1;
-        %eeg_index/2000
-        for channel=1:numel(eeg_data(:,1))
-            
-            % Define ic1,z_score amp traces from blocks.
-            zscore_amp=zscore_block(channel,:);
-            amp=amp_block(channel,:);
-            
-            % Set initial values for HFO search
-            flagged=0;
-            start=1;
-            
-            % Define interval to search for HFO events in the zscore_amp time series
-            step_search=(0.0005*2000);
-            
-            % Iterate through entire z-scored time series, start of event defined at Z>3.5, note this
-            % is a relatively low cut off. The point here is to capture as many events as possible
-            % they will be refined later in the analysis. An event is complete when the Z score is
-            % below <1.5. An event is only saved if it is greater than 15 msec in duration.
-            if datablock == 0
-                start_index=800;
-            else
-                start_index=1;
-            end;
-            
-            for j=start_index:step_search:numel(zscore_amp);
-                A_boolean=zscore_amp(j)>0.5;
-                B_boolean=amp(j)>3;
-                C_boolean=and(A_boolean,B_boolean);
-                if ((flagged==0) && (C_boolean==1)) % Optimization factor #1
-                    flagged=1;
-                    start=j;
+                if  ~hfo_event_detected && img_detected_positive  % Optimization factor #1
+                    hfo_event_detected = true;
+                    hfo_detection_start_ptr = rel_img_index;
                 end
-                if ((flagged==1) && (zscore_amp(j)>-0.2)) end; % Optimization factor #2
-                if ((flagged==1) && (zscore_amp(j)<-0.2))
+                % Optimization factor #2.
+                if (hfo_event_detected && (zscore_amp(rel_img_index) > config.zscore_amp_thresh_zoff(chan)) ) end; %@Shennan: This isn't doing anything, it would be the same to remove it.
+                if hfo_event_detected && (zscore_amp(rel_img_index) < config.zscore_amp_thresh_zoff(chan) )
                     
-                    if  ((j-start)*(1/2000)) > 0.005
-                        % to determine if HFO is valid the first step is calculating
-                        % its frequency at the peak of its psd.
+                    event_img_count = rel_img_index-hfo_detection_start_ptr+1; %@Shennan: Fixed bug, +1 was missing, now we count all images
+                    event_duration_snds = event_img_count/config.sampling_rate; 
+                    event_indexes = hfo_detection_start_ptr:rel_img_index;
+                    if  event_duration_snds > config.min_event_duration_snds  %if the image is detected and event since rising flag is longer than 8 milliseconds
+                        % To determine if HFO is valid the first step is calculating its frequency at the peak of its psd.
                         
-                        %if the HFO duration exceeds the duration cutoff save the raw HFO accompanying
+                        if ~config.fripple_run
+                            HFO_frequency = getHFOfrequency(event_img_count, event_indexes, ...
+                                            event_duration_snds, ic1_chan, config.sampling_rate);
+                            duration_cutoff = getDurationCutOff(HFO_frequency, config.duration_cutoffs);
+                        end
+                        %If the HFO duration exceeds the duration cutoff save the raw HFO accompanying
                         %the event, the instantaneous phase of the eeg at the time of the event, the
                         %unfiltered signal at the time of the event, and the Z-scored HFO stream at the
                         %time of the event.
-                        if ((j-start)*(1/2000)) < 0.5; % Is the HFO less than half a second i.e. not artifact
-                            artifact=0;
-                            if artifact==0
-                                total_fripple_ic(channel)=total_fripple_ic(channel)+1;
+                        if config.fripple_run || (event_duration_snds > duration_cutoff)
+                            if event_duration_snds < 0.5  % prune surely artifacts
+                                is_artifact = isArtifactualHFO(event_indexes, block.ai, config.ai_thresh);
                                 
-                                if start-1100 < 1 % v3 adjust for asymmetric filtering
-                                    clip_start=1;
-                                else
-                                    clip_start=start-1100;
-                                end;
-                                
-                                if j+100 > numel(ieeg_block(1,:))   % v3 adjust for asymmetric filtering
-                                    clip_end=numel(ieeg_block(1,:));
-                                else
-                                    clip_end=j+100;
-                                end;
-                                fripple_ic_clip{channel,total_fripple_ic(channel)}=ieeg_block(channel,(clip_start):(clip_end));
-                                fripple_ic_clip_t{channel,total_fripple_ic(channel)}=[((start/2000)+(datablock*60)-.0035) ((j/2000)+(datablock*60))]; % v3 do not adjust b/c of step II
-                                fripple_ic_clip_event_t{channel, total_fripple_ic(channel)}=[((clip_start/2000)+(datablock*60))-500 ((clip_end/2000)+(datablock*60))-500];
-                                fripple_ic_clip_abs_t{channel, total_fripple_ic(channel)}=[((clip_start/2000)+(datablock*60)) ((clip_end/2000)+(datablock*60))];
-                            end;
-                        end;
-                    end;
-                    flagged=0;
-                end;
-            end;
-        end;
-        datablock=datablock+1;
-    end;
+                                if ~is_artifact
+                                    ripple_data = getRippleData(ripple_data, hfo_detection_start_ptr, rel_img_index, ...
+                                                                block, config.sampling_rate, chan, current_block);
+                                    hfo_event_detected = false; %@Shennan: I have just added this line, does it make sense to you? When you save, you start again.
+                                end
+                            else
+                                hfo_event_detected = false; %@Shennan: I have just added this line, does it make sense to you? 
+                                                            %If event_duration_snds >= 0.5 already tells you is artifactual we should discard the event right?
+                            end
+                        end
+                    end
+                     % @Shennan flagged = 0 is happening here. So this is cancelling every start of hfo_event_detection, since at first event duration is 1 millisecond < 8 milliseconds
+                     % I think it goes inside 
+                     hfo_event_detected = false; % Comment for now, I think that is a bug
+                end
+            end
+        end
+    end
 end
 
-%if the i was not in both cases, unify this with an _2 
 function [hfo_times, hfo_values] = convRippleClips_timeToIndices(num_of_data_rows, clip_t, ic1, total)
 
     hfo_times=cell(num_of_data_rows,1);
@@ -1323,21 +1162,23 @@ function num_trc_blocks = writeTRCBlocks(TRC, file_block, file_id, trc_temp_dir,
     end;
 end
 
-%To be merged with getFrippleIcs
-function ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai)
+function ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai, art_index_thresh, ...
+                                   hfo_extract_index_thresh)
+     % Calculate ripple extract index
     hfo_extract_index=[];
-    ai_extract_index=[];
     hfo_times_chan=[];
-    [~,artindex]=find(ai>0.025);
+    [~,artindex]=find(ai>art_index_thresh);
     non_artindex=1:num_of_data_cols;
-    non_artindex(artindex)=[];
+    ai_extract_index=[];
+
     for i=2:num_of_data_rows
         ic_prune=1:num_of_data_rows;
         ic_prune(i)=[];
         OUTEEG = pop_subcomp(EEG, ic_prune, 0);
-        ai_amp=(abs(OUTEEG.data(1,artindex)));
-        non_ai_amp=(abs(OUTEEG.data(1,non_artindex)));
+        ai_amp= abs(OUTEEG.data(1,artindex));
+        non_ai_amp= abs(OUTEEG.data(1,non_artindex));
         ai_extract_index(i-1)=mean(ai_amp)/mean(non_ai_amp);
+        
         for j=1:num_of_data_rows
             non_hfo_times=1:num_of_data_cols;
             temp_time=hfo_times{j,1};
@@ -1347,11 +1188,13 @@ function ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_
             hfo_times_chan=hfo_times{j,1};
             hfo_times_chan(b)=[];
             hfo_amp=abs(OUTEEG.data(j,hfo_times_chan));
-            non_hfo_amp=abs(OUTEEG.data(2,non_hfo_times));
+            non_hfo_amp=abs(OUTEEG.data(j,non_hfo_times));
+            %non_hfo_amp=abs(OUTEEG.data(2,non_hfo_times)); getRipple had this line above with the 2 index instead of the j, ask if it was a bug or not
             hfo_extract_index((i-1),j)=mean(hfo_amp)/mean(non_hfo_amp);
-        end;
-    end;
-    
+            %ai_amp=mean(abs(OUTEEG.data(j,artindex))); getFripppleIcs had this line but ai_amp isn't being used at all, ask if this is a bug or if this can be removed
+        end
+    end
+
     % find ripple ics
     temp_zeros=zeros(numel(hfo_extract_index(1,:)),1);
     hfo_extract_index=vertcat(temp_zeros', hfo_extract_index);
@@ -1361,7 +1204,7 @@ function ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_
     
     C=zscore_2(clustering_coef_wd(hfo_extract_index));
     [a,b]=find(C>1);
-    [c,d]=find(hfo_extract_index>800);
+    [c,d]=find(hfo_extract_index>hfo_extract_index_thresh);
     e=vertcat(a,c);
     f=unique(e);
     
@@ -1376,80 +1219,24 @@ function ripple_ics = getRippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_
     OUTEEG = pop_subcomp(EEG, ic_prune, 0);
     
     ripple_ics=OUTEEG.data;
-end
 
-%To be merged with getRippleIcs
-function fripple_ics = getFrippleIcs(num_of_data_cols, num_of_data_rows, EEG, hfo_times, ai)
-    % Calculate fripple extract index
-    hfo_extract_index=[];
-    hfo_times_chan=[];
-    [~,artindex]=find(ai>0.02);
-    non_artindex=1:num_of_data_cols;
-    non_artindex(artindex)=[];
-    for i=2:num_of_data_rows
-        ic_prune= 1:num_of_data_rows;
-        ic_prune(i)=[];
-        OUTEEG = pop_subcomp(EEG, ic_prune, 0);
-        ai_amp=(abs(OUTEEG.data(1,artindex)));
-        non_ai_amp=(abs(OUTEEG.data(1,non_artindex)));
-        ai_extract_index(i-1)=mean(ai_amp)/mean(non_ai_amp);
-        for j=1:num_of_data_rows
-            non_hfo_times=1:num_of_data_cols;
-            temp_time=hfo_times{j,1};
-            [a,b]=find(temp_time<1);
-            temp_time(b)=[];
-            non_hfo_times(temp_time)=[];
-            hfo_times_chan=hfo_times{j,1};
-            hfo_times_chan(b)=[];
-            hfo_amp=abs(OUTEEG.data(j,hfo_times_chan));
-            ai_amp=mean(abs(OUTEEG.data(j,artindex)));
-            non_hfo_amp=abs(OUTEEG.data(j,non_hfo_times));
-            hfo_extract_index((i-1),j)=mean(hfo_amp)/mean(non_hfo_amp);
-        end;
-    end;
-    
-    % find fripple ics
-    temp_zeros=zeros(numel(hfo_extract_index(1,:)),1);
-    hfo_extract_index=vertcat(temp_zeros', hfo_extract_index);
-    hfo_extract_index(isnan(hfo_extract_index))=0;
-    
-    ai_extract_index= [NaN ai_extract_index];
-    
-    C=zscore_2(clustering_coef_wd(hfo_extract_index));
-    [a,b]=find(C>1);
-    [c,d]=find(hfo_extract_index>150);
-    e=vertcat(a,c);
-    f=unique(e);
-    
-    D=zscore_2(ai_extract_index);
-    g=D(f);
-    [h,i]=find(g>0);
-    f(i)=[];
-    
-    % extract ripple ics
-    ic_prune=1:num_of_data_rows;
-    ic_prune(f)=[];
-    OUTEEG = pop_subcomp(EEG, ic_prune, 0);
-    
-    fripple_ics=OUTEEG.data;
 end
 
 % if ripple not in look up index add the to total_ripple and add ripples from step 2 to ripple clips
-function [clip,clip_t,clip_event_t,clip_abs_t, total] = addRipples(num_of_data_rows, ...
-          hfo_times, clip,clip_t,clip_event_t,clip_abs_t, total, ic_clip, ic_clip_t, ic_clip_event_t, ic_clip_abs_t, total_ic)
-            
+function ripple_data = addRipples(num_of_data_rows,hfo_times, ripple_data, ripple_ics_data)
+    
     for i=1:num_of_data_rows
         temp_lookup=hfo_times{i,:};
-        for j=1:total_ic(i)
-            lookup_val1=int32(ic_clip_t{i,j}(1)*2000);
-            lookup_val2=int32(ic_clip_t{i,j}(2)*2000);
+        for j=1:ripple_ics_data.total_count(i)
+            lookup_val1=int32(ripple_ics_data.clip_t{i,j}(1)*2000);
+            lookup_val2=int32(ripple_ics_data.clip_t{i,j}(2)*2000);
             lookup_val12=lookup_val1:lookup_val2;
             if isempty(intersect(lookup_val12,temp_lookup))
-                total(i)=total(i)+1;
-                clip{i,total(i)}=ic_clip{i,j};
-                clip_t{i,total(i)}=ic_clip_t{i,j};
-                clip_event_t{i,total(i)}=ic_clip_event_t{i,j};
-                clip_abs_t{i,total(i)}=ic_clip_abs_t{i,j};
+                ripple_data.total_count(i)=ripple_data.total_count(i)+1;
+                ripple_data.clip{i,ripple_data.total_count(i)}=ripple_ics_data.clip{i,j};
+                ripple_data.clip_t{i,total(i)}=ripple_ics_data.clip_t{i,j};
+                ripple_data.clip_event_t{i,total(i)}=ripple_ics_data.clip_event_t{i,j};
+                ripple_data.clip_abs_t{i,total(i)}=ripple_ics_data.clip_abs_t{i,j};
             end;
         end;
     end;

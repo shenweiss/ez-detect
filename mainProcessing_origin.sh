@@ -4,7 +4,7 @@ dataset=$1
 start_time=$2
 stop_time=$3
 cycle_duration=$4
-clean_hfo_engine_afterwards="'$5'"
+clean_hfo_engine_afterwards=$5
 dataset_path='~/EDFs/'$dataset
 dataset_path="'$dataset_path'"
 
@@ -41,11 +41,12 @@ $matlab_path -nodesktop -r "tryAddPaths('$project_path');main($dataset_path,$sta
 
 wait
 
-#if [ $clean_hfo_engine_afterwards -eq '--clean' ]
-#then
-#	cd $hfo_engine_path
-#	./clean.sh 
-#fi
+if [ $clean_hfo_engine_afterwards == "--cleanOutputsAfter" ]
+then
+	echo "Cleaning outputs after execution..."
+	cd $hfo_engine_path
+	./clean.sh 
+fi
 
 echo "Input configuration:"
 echo "Dataset:" $dataset
