@@ -11,9 +11,7 @@ if montage == 0
 else
      fname_var='_bp_'
 end;
-% corrects the file_id
-file_id_size=numel(metadata.file_id);
-file_id=metadata.file_id(1:(file_id_size-4));
+file_id = metadata.file_id;
 
 new_output_fname = [paths.ez_pac_out file_id fname_var metadata.file_block '.mat'];
 

@@ -64,9 +64,7 @@ if ~isempty(ftTRonS.channel)
     end;
 end;
 
-% corrects the file_id
-file_id_size=numel(metadata.file_id);
-file_id=metadata.file_id(1:(file_id_size-4));
+file_id = metadata.file_id;
 
 if montage == 0
     % initialize annotation files

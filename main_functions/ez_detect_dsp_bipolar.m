@@ -598,9 +598,7 @@ if ~isempty(eeg_bp)
     
     clear x temp2 temp
     
-    % corrects the file_id
-    file_id_size=numel(metadata.file_id);
-    file_id=metadata.file_id(1:(file_id_size-4));
+    file_id = metadata.file_id;
     
     % Clear the temporary .mat files
     system(['rm -f ' paths.trc_tmp_bipolar 'eeg_2k_a_' file_block '.mat']);

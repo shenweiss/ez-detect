@@ -6,9 +6,7 @@ else
     fname_var='_bp_'
 end;
 
-% corrects the file_id
-file_id_size=numel(metadata.file_id);
-file_id=metadata.file_id(1:(file_id_size-4));
+file_id = metadata.file_id;
 output_fname = ['ezTop_' file_id fname_var metadata.file_block '.mat'];
 
 if sum(fileData.total_ripple) < 40000  % exit function if memory overload

@@ -766,14 +766,18 @@ function [thresh_z, thresh_zoff] = skewnessCorrection(zscore_amp,num_of_m_channe
     fprintf('Done calculating baseline stats \r')
 end
 
-function block = updateBlockData(block, eeg_index, eeg_data,zscore_amp_ripple, score_amp_ripple, ics, ai, fripple_run)
-    block.end_ptr = eeg_index+block.size-1; 
+function block = updateBlockData(block, eeg_index, eeg_data,zscore_amp_ripple, score_amp_ripple, ics, ai, config)
+
+    avoid_reading_last_imgs = config.avoid_reading_last_snds * config.sampling_rate;
+    data_length = numel(eeg_data(1,:));
+
+    block.end_ptr = min(eeg_index+block.size-1, data_length-avoid_reading_last_imgs); 
     block.data_range = eeg_index:block.end_ptr;
 
     block.ieeg = eeg_data(:,block.data_range);
     block.zscore = zscore_amp_ripple(:,block.data_range);
     block.amp = score_amp_ripple(:,block.data_range);
-    if (~fripple_run) block.ic1 = ics(:,block.data_range); end
+    if (~config.fripple_run) block.ic1 = ics(:,block.data_range); end
     block.ai = ai(block.data_range);
 end
 
@@ -869,10 +873,11 @@ function ripple_data = rippleDetection(eeg_data, score_amp_ripple, zscore_amp_ri
         search_step = floor(hfo_search_step_snds*config.sampling_rate); %added 'floor' just in case in future srate differs 2000
     end
     current_block = 1;
-
+    config.avoid_reading_last_snds = 0.001; %make it argument later
+    % for eeg_index = 1:block.size:(data_length- config.cycle_thresh*config.sampling_rate) OLD
     for eeg_index = 1:block.size:(data_length- config.cycle_thresh*config.sampling_rate) %@Shennan: why are you missing almost the last minute? cycle_thresh is 59.99
 
-        block = updateBlockData(block, eeg_index, eeg_data,zscore_amp_ripple, score_amp_ripple, ics, ai, config.fripple_run);
+        block = updateBlockData(block, eeg_index, eeg_data,zscore_amp_ripple, score_amp_ripple, ics, ai, config);
         for channel_index = 1:channel_count
             
             zscore_amp = block.zscore(channel_index,:);
@@ -928,16 +933,16 @@ function ripple_data = rippleDetection(eeg_data, score_amp_ripple, zscore_amp_ri
                                 if ~is_artifact
                                     ripple_data = getRippleData(ripple_data, hfo_detection_start_ptr, rel_img_index, ...
                                                                 block, config.sampling_rate, chan, current_block);
-                                    hfo_event_detected = false; %@Shennan: I have just added this line, does it make sense to you? When you save, you start again.
+                                    %hfo_event_detected = false; %@Shennan: I have just added this line, does it make sense to you? When you save, you start again.
                                 end
-                            else
-                                hfo_event_detected = false; %@Shennan: I have just added this line, does it make sense to you? 
+                            %else  %comment for now because of Shennan answer
+                            %    hfo_event_detected = false; %@Shennan: I have just added this line, does it make sense to you? 
                                                             %If event_duration_snds >= 0.5 already tells you is artifactual we should discard the event right?
                             end
                         end
                     end
                      % @Shennan flagged = 0 is happening here. So this is cancelling every start of hfo_event_detection, since at first event duration is 1 millisecond < 8 milliseconds
-                     % I think it goes inside 
+                     % I think it goes inside  SW answer: This is correct because of the if second condition. Analize later.
                      hfo_event_detected = false; % Comment for now, I think that is a bug
                 end
             end
