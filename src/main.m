@@ -189,7 +189,7 @@ function ez_detect_batch(paths, start_time, stop_time, cycle_time, swapping_data
     parfor i=1:blocks
         gd = gpuDevice;
         disp(gd.Index);
-        processBatch(eeg_data{i}, metadata(i), chanlist, ez_montage, paths);
+        process_parallel_block(eeg_data{i}, metadata(i), chanlist, ez_montage, paths);
         eeg_data{i} = 0; %to release memory? this works?? 
     end
 end
@@ -302,51 +302,3 @@ function saveResearchData(contest_path, metadata, eeg_data, chanlist)
         save(full_path, 'metadata_i', 'eeg_data_i', 'chanlist_i'); 
     end
 end
-
-function processBatch(eeg_data, metadata, chanlist, ez_montage, paths)    
-    ez_tall = tall(eeg_data);
-    clear eeg_data;
-    %refactor that function
-    [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, metadata, chanlist, ez_montage);
-    clear ez_tall;
-    metadata.montage = ez_montage;
-
-    %maybe these two below could be removed if we save inside dsp
-    [ez_tall_bp, hfo_ai, fr_ai, metadata] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths);
-    createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);  
-end
-
-function [ez_tall_bp, hfo_ai, fr_ai, metadata] = createMonopolarOutput(ez_tall_m, ez_tall_bp, metadata, paths)
-    if ~isempty(gather(ez_tall_m))
-        %Why monopolar takes and saves ez_tall_bp?
-        %If always will save, maybe should be inside dsp to avoid copies
-        disp('Starting dsp_m');
-        dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, metadata, paths);
-        disp('Finished dsp_m');
-        
-        dsp_monopolar_filename = ['dsp_m_output_' metadata.file_block '.mat'];
-        disp('Saving dsp_m output');
-        save([paths.dsp_monopolar_out dsp_monopolar_filename], '-struct', 'dsp_monopolar_output');
-        disp('Saved dsp_m output');
-        ez_tall_bp = dsp_monopolar_output.ez_tall_bp;
-        hfo_ai = dsp_monopolar_output.hfo_ai;
-        fr_ai = dsp_monopolar_output.fr_ai;
-        metadata = dsp_monopolar_output.metadata;
-    else
-        hfo_ai = zeros(numel(gather(ez_tall_bp(1,:))),1)';
-        fr_ai = hfo_ai;
-    end
-end
-
-function createBipolarOutput(ez_tall_bp, hfo_ai, fr_ai, metadata, paths)
-    if ~isempty(gather(ez_tall_bp))
-        disp('Starting dsp_bp');
-        dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);
-        disp('Finished dsp_bp');
-        
-        dsp_bipolar_filename = ['dsp_bp_output_' metadata.file_block '.mat'];
-        disp('Saving dsp_bp output');
-        save([paths.dsp_bipolar_out dsp_bipolar_filename], '-struct', 'dsp_bipolar_output');
-        disp('Saved dsp_bp output');
-    end
-end 
