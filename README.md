@@ -1,5 +1,43 @@
+This work is protected by US patent applications US20150099962A1,
+ UC-2016-158-2-PCT, US provisional #62429461
 
-Usage: TODO mainProcessing.sh is for now the main script, ez_detect_batch is the main executable, followed by processDSPMonopolar/BipolarOutput
+ Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
+ Philadelphia, PA USA. 2017
+
+
+Usage as follows:
+
+ For first use please see and set the paths in getPaths() local function in this file.
+ then run in shell: 
+
+ matlab_binary -r  "main(edf_dataset_path, start_time, stop_time, ...
+                         cycle_time, chan_swap, swap_array_file)"
+
+(You can call it with all optional args except from the requiered edf_dataset_path so 
+ If you don't specify, defaults are given) 
+ 
+ Input semantic:
+    - edf_dataset_path: The directory path to the file with the data to analize.
+
+    - start_time: a number in seconds indicating from when, relative to the file
+      duration, do you want to analize the eeg.
+    
+    - stop_time: a number in seconds indicating up to when, relative to the file
+      duration, do you want to analize the eeg.
+      
+      For example if you want to process the last 5 minutes of an eeg of 20 minutes
+      you would use as input start_time = 15*60 = 900 and stop_time = 20*60 = 1200.
+    
+    - cycle_time: a number in seconds indicating the size of the blocks to cut the data
+      in blocks.This improves time performance since it can be parallelized. 
+      Example: 300 (5 minutes)
+    
+    -Swapping data: a struct containing the channel swapping flag (1:yes, 0:no) (in case that 
+     channels were incorrectly assigned in the original EDF file as can be the case for intraop 
+     recordings) and the swap_array that can be used to correct the channel assignments.
+ 
+ Output: DSP monopolar/bipolar outputs as matfiles get saved in the corresponding working directory
+ indicated in the argument 'paths'.
 
 Presetting:
 
