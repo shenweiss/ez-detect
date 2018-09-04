@@ -53,5 +53,4 @@ echo "Cycle duration:" $cycle_duration "(seconds)"
 echo "Number of batches:" $batches_number
 echo "Clean hfo_engine afterwards: " $clean_hfo_engine_afterwards
 
-echo "Output:"
 echo "Total time:" $SECONDS "(seconds)"

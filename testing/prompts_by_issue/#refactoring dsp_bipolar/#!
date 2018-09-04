@@ -1,0 +1,714 @@
+tomas-pastore@tomaspastore-HP-Pavilion-Notebook:~/ez-detect/testing$ ./mainProcessing_test.sh 449_correct.edf 300 1
+Input configuration:
+Dataset: 449_correct.edf
+Dataset path: '~/EDFs/449_correct.edf'
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Clean hfo_engine afterwards: 
+Paths to be used:
+Matlab path: /home/tomas-pastore/matlab/bin/matlab
+Project source: /home/tomas-pastore/ez-detect
+Saving outputs directory: /home/tomas-pastore/ez-detect/hfo_engine_1
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Running EZ_Detect v7.0 Putou
+Built: 67 of 67 tall data channels.
+EDF file loaded
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 4 workers.
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Finished eeg_data processing
+     1
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:es 
+
+Evaluation completed in 0 sec
+Starting dsp MONOPOLAR
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:odes 
+
+Evaluation completed in 0 sec
+Filtered: 62 of 62 data.
+M =
+
+    62
+
+
+N =
+
+        2321
+
+
+M =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     3
+     1
+     1
+     1
+     1
+     1
+     1
+     2
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     3
+     4
+     4
+     4
+     4
+     4
+     4
+     4
+     5
+     5
+     5
+     6
+     6
+     6
+     6
+     6
+     6
+     7
+     7
+     7
+     7
+     7
+     7
+
+
+Q =
+
+    0.6558
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered: 62 of 62 data.eeg_checkset warning: number of column in signal array (62) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600000) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600000); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc'
+
+
+binary ica files left in pwd:
+-rw-rw-rw- 1 tomas-pastore tomas-pastore   401 sep  4 03:11 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sc
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 15376 sep  4 03:14 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.sph
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 15376 sep  4 03:14 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5519.wts
+
+  Name       Size                    Bytes  Class     Attributes
+
+  data      62x600000            297600000  double              
+  sph       62x62                    30752  double              
+  wts       62x62                    30752  double              
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 62
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [62×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [62×62 double]
+          icaweights: [62×62 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 62
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [62×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [62×62 double]
+          icaweights: [62×62 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+mods =
+
+    '5519'
+
+
+error_flag =
+
+     0
+
+Computing projection ....
+   1.0e+06 *ditional bad electrodes using neural network
+
+  Columns 1 through 7
+
+    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+   -0.0264   -0.0014   -0.0001   -0.0004   -3.1487   -0.0155   -0.0001
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 8 through 14
+
+    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+   -0.0004   -0.0000   -0.0083   -0.0182   -0.0054   -0.1928   -0.2864
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 15 through 21
+
+    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+   -0.0255   -0.0224   -0.0591   -0.0245   -0.0350   -0.0053   -0.1062
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+    xoffset: [6×1 double]
+       gain: [6×1 double]
+       ymin: -1
+
+     1     1
+
+     1     1
+
+Evaluating tall expression using the Local MATLAB Session:ons 
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered: 41 of 41 data.eeg_checkset warning: number of column in signal array (41) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600000) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600000); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.sc'
+
+
+binary ica files left in pwd:
+-rw-rw-rw- 1 tomas-pastore tomas-pastore  401 sep  4 03:15 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.sc
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 sep  4 03:17 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.sph
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 sep  4 03:17 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica5953.wts
+
+  Name       Size                    Bytes  Class     Attributes
+
+  data      41x600000            196800000  double              
+  sph       41x41                    13448  double              
+  wts       41x41                    13448  double              
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+mods =
+
+    '5953'
+
+
+error_flag =
+
+     0
+
+Computing projection ....
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Resampling the Data to 2048Hz
+Resampled: 41 data channels.
+Computing projection ....ackground 
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+THESE DIMENSIONS SHOULD BE THE SAME
+eeg_data_channels41
+eeg_data_cols600000
+hfo_channels41
+hfo_cols600000
+Filtered: 41 of 41 data.eeg_checkset warning: number of column in signal array (41) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600000) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600000); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.sc'
+
+
+binary ica files left in pwd:
+-rw-rw-rw- 1 tomas-pastore tomas-pastore  398 sep  4 03:18 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.sc
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 sep  4 03:20 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.sph
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 sep  4 03:20 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica340.wts
+
+  Name       Size                    Bytes  Class     Attributes
+
+  data      41x600000            196800000  double              
+  sph       41x41                    13448  double              
+  wts       41x41                    13448  double              
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+mods =
+
+    '340'
+
+
+error_flag =
+
+     0
+
+Computing projection ....
+Computing projection .... stats ipple ica 
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Finished dsp MONOPOLARon
+Saving dsp MONOPOLAR output.
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Elapsed time is 753.469747 seconds.
+Starting to process dsp monopolar/bipolar outputs...
+Elapsed time is 0.017229 seconds.
+./mainProcessing_test.sh: línea 42: [: ==: se esperaba un operador unario
+Input configuration:
+Dataset: 449_correct.edf
+Dataset path: '~/EDFs/449_correct.edf'
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Clean hfo_engine afterwards: 
+Output:
+Total time: 763 (seconds)
+tomas-pastore@tomaspastore-HP-Pavilion-Notebook:~/ez-detect/testing$ 

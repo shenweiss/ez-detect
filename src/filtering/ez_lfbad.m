@@ -2,7 +2,7 @@
 %Talk with sheenan to see what does he want to do here to
 %improve code declarativity
 
-function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, metadata, chanlist, ez_montage)
+function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, chanlist, metadata, ez_montage)
   
   eeg_data = gather(ez_tall);
   number_of_channels = numel(eeg_data(:,1));
