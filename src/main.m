@@ -14,20 +14,20 @@
  Input semantic:
     - edf_dataset_path: The directory path to the file with the data to analize.
 
-    - start_time: a number in seconds indicating from when, relative to the file
+    - [start_time]: a number in seconds indicating from when, relative to the file
       duration, do you want to analize the eeg.
     
-    - stop_time: a number in seconds indicating up to when, relative to the file
+    - [stop_time]: a number in seconds indicating up to when, relative to the file
       duration, do you want to analize the eeg.
       
       For example if you want to process the last 5 minutes of an eeg of 20 minutes
       you would use as input start_time = 15*60 = 900 and stop_time = 20*60 = 1200.
     
-    - cycle_time: a number in seconds indicating the size of the blocks to cut the data
+    - [cycle_time]: a number in seconds indicating the size of the blocks to cut the data
       in blocks.This improves time performance since it can be parallelized. 
       Example: 300 (5 minutes)
     
-    -Swapping data: a struct containing the channel swapping flag (1:yes, 0:no) (in case that 
+    - [Swapping data]: a struct containing the channel swapping flag (1:yes, 0:no) (in case that 
      channels were incorrectly assigned in the original EDF file as can be the case for intraop 
      recordings) and the swap_array that can be used to correct the channel assignments.
  
@@ -45,7 +45,10 @@
 function main(edf_dataset_path, varargin)
     
     %Argument parsing and structuring
-    paths = getPaths(edf_dataset_path);
+    paths = getPaths(edf_dataset_path); %log later
+    change_dir = 'cd ';
+    system([change_dir paths.hfo_engine ' && ./clean.sh']); %cleans previous execution outputs
+
     optional_args = struct2cell(getDefaults());
     %Overwrites the defaults if variable arguments are given
     optional_args(1:(nargin-1)) = varargin;
@@ -72,8 +75,11 @@ function paths = getPaths(edf_dataset_path)
 
     paths = struct();
     paths.edf_dataset = edf_dataset_path;
+    paths.matlab_bin='~/matlab/bin/matlab';
+
     paths.project_root = '~/ez-detect/';
     paths.hfo_engine = [paths.project_root 'hfo_engine_1/'];
+    %paths.datasets_path='~/EDFs/'; for future optional option
     
     paths.dsp_monopolar_out=[paths.hfo_engine 'dsp_output/monopolar/'];
     paths.dsp_bipolar_out=[paths.hfo_engine 'dsp_output/bipolar/'];
@@ -90,9 +96,9 @@ function paths = getPaths(edf_dataset_path)
     paths.trc_tmp_monopolar=[paths.hfo_engine 'trc/temp/monopolar/'];
     paths.trc_tmp_bipolar=[paths.hfo_engine 'trc/temp/bipolar/'];
     
-    paths.binica_sc=[paths.hfo_engine 'binica.sc'];
-    paths.cudaica_bin=[paths.hfo_engine 'cudaica'];
-    paths.cudaica_dir= paths.hfo_engine;
+    paths.cudaica_dir= [paths.project_root '/src/cudaica/'];
+    paths.binica_sc=[paths.cudaica_dir 'binica.sc'];
+    paths.cudaica_bin=[paths.cudaica_dir 'cudaica'];
 end
 
 function defaults = getDefaults()

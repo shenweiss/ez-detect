@@ -87,8 +87,8 @@ disp('ENTERING CUDAICA.M')
 
 %to be removed in future refactoring, once fixed the arguments...
 hfo_engine='/home/tomas-pastore/ez-detect/hfo_engine_1/';
-binica_sc='/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc';
-cudaica_bin='/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica';
+binica_sc='/home/tomas-pastore/ez-detect/src/cudaica/binica.sc';
+cudaica_bin='/home/tomas-pastore/ez-detect/src/cudaica/cudaica';
 
 if ~isdeployed
     addpath(hfo_engine);

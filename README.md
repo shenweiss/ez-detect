@@ -4,18 +4,28 @@ This work is protected by US patent applications US20150099962A1,
  Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
  Philadelphia, PA USA. 2017
 
+Project directory: 
+  -documents: Project documentation
+  -hfo_engine_1: output saving directories.
+  -src: project code.
+  -testing: testing tools, historical issue prompts.
+  -tools: useful packages used in src code. third parties.
 
 Usage as follows:
 
- For first use please see and set the paths in getPaths() local function in this file.
- then run in shell: 
+For first use please see and set the paths in getPaths() local function in this file.
+
+Warning, during execution, the program will clean previous outputs in hfo_engine_1 directory. So if you
+want to save them, just create a copy of hfo_engine_1 folder and set that path in getPaths() function.
+
+To run, write in shell: 
 
  matlab_binary -r  "main(edf_dataset_path, start_time, stop_time, ...
                          cycle_time, chan_swap, swap_array_file)"
 
 (You can call it with all optional args except from the requiered edf_dataset_path so 
  If you don't specify, defaults are given) 
- 
+
  Input semantic:
     - edf_dataset_path: The directory path to the file with the data to analize.
 

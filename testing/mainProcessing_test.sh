@@ -26,10 +26,6 @@ echo "Matlab path:" $matlab_path
 echo "Project source:" $project_path
 echo "Saving outputs directory:" $hfo_engine_path 
 
-#Cleans outputs from previous executions.
-cd $hfo_engine_path
-./clean.sh 
-
 #For matlab to find the method
 cd $tryAddPaths_path 
 
