@@ -1,0 +1,74 @@
+#!/bin/bash
+#Description: This is just a shortcut for calling main while testing when you run constantly.
+#Usage ./mainShortcut.sh -py/-m dataset_filename xml_output_path cycle_duration blocks
+#[--cleanOutputsAfterRun]
+# -py/-m, write -py for executing new python3 main. -m to call old matlab main instead
+# dataset_filename is the name of the input edf to analize, for example 449_correct.edf
+# xml_output_path is the path to the directory where output will be saved (not configured yet)
+# cycle_duration the length in seconds for the data chunks to parallelize
+# blocks the amount of cycles we want to process, along with cycle_duration will determine start
+# and end pointers for reading the edf file.
+#
+
+callMain=$1
+dataset=$2
+xml_output_path=$3
+cycle_duration=$4
+blocks=$5
+clean_hfo_engine_afterwards=$6
+
+dataset_path='~/EDFs/'$dataset
+
+echo "Input configuration:"
+echo "Dataset:" $dataset
+echo "Dataset path: "$dataset_path
+echo "Cycle duration:" $cycle_duration "(seconds)"
+echo "Number of blocks:" $blocks
+echo "Clean hfo_engine afterwards:" $clean_hfo_engine_afterwards
+
+matlab_path=~/matlab/bin/matlab
+main_path=~/ez-detect/src/
+hfo_engine_path=~/ez-detect/hfo_engine_1
+
+echo "Paths to be used:"
+echo "Matlab path:" $matlab_path
+echo "Main path:" $main_path
+echo "Saving outputs directory:" $hfo_engine_path 
+
+start_time=1
+stop_time=$(($cycle_duration * $blocks))
+#For matlab to find main
+cd $main_path 
+
+SECONDS=0 #timestamp
+
+if [ $callMain == "-m" ]
+then
+	echo "Calling old matlab main..."
+	dataset_path="'$dataset_path'"
+	$matlab_path -nodesktop -r "hfo_annotate($dataset_path, $start_time, $stop_time, $cycle_duration);quit" &
+
+elif [ $callMain == "-py" ]
+then
+	echo "Calling new python3 main..."
+	xml_output_path="'$xml_output_path'"
+	python3 hfo_annotate.py -in=$dataset_path -out=$xml_output_path -str_t=$start_time -stp_t=$stop_time -c=$cycle_duration
+fi
+
+wait
+
+if [ $clean_hfo_engine_afterwards == "--cleanAfter=yes" ]
+then
+	echo "Cleaning outputs after execution..."
+	cd $hfo_engine_path
+	./clean.sh 
+fi
+
+echo "Input configuration:"
+echo "Dataset:" $dataset
+echo "Dataset path: "$dataset_path
+echo "Cycle duration:" $cycle_duration "(seconds)"
+echo "Number of blocks:" $blocks
+echo "Clean hfo_engine afterwards: " $clean_hfo_engine_afterwards
+
+echo "Total time:" $SECONDS "(seconds)"
