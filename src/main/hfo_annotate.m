@@ -100,7 +100,7 @@ function paths = getPaths(edf_dataset_path)
     paths.trc_tmp_monopolar=[paths.hfo_engine 'trc/temp/monopolar/'];
     paths.trc_tmp_bipolar=[paths.hfo_engine 'trc/temp/bipolar/'];
     
-    paths.cudaica_dir= [paths.project_root '/src/cudaica/'];
+    paths.cudaica_dir= [paths.project_root 'src/cudaica/'];
     paths.binica_sc=[paths.cudaica_dir 'binica.sc'];
     paths.cudaica_bin=[paths.cudaica_dir 'cudaica'];
 end

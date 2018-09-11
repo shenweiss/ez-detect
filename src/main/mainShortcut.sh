@@ -26,9 +26,10 @@ echo "Cycle duration:" $cycle_duration "(seconds)"
 echo "Number of blocks:" $blocks
 echo "Clean hfo_engine afterwards:" $clean_hfo_engine_afterwards
 
+project_path=~/ez-detect
 matlab_path=~/matlab/bin/matlab
-main_path=~/ez-detect/src/
-hfo_engine_path=~/ez-detect/hfo_engine_1
+main_path=$project_path/src/main
+hfo_engine_path=$project_path/hfo_engine_1/
 
 echo "Paths to be used:"
 echo "Matlab path:" $matlab_path
@@ -63,6 +64,9 @@ then
 	cd $hfo_engine_path
 	./clean.sh 
 fi
+rm -f $project_path/tools/misc_code/batch_input.json
+rm -r -f $main_path/__pycache__
+
 
 echo "Input configuration:"
 echo "Dataset:" $dataset

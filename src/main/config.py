@@ -1,0 +1,3 @@
+#Global variables
+
+#TODO: PUT PATHS HERE INSTEAD OF MAIN 

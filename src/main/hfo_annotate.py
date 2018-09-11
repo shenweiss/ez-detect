@@ -23,34 +23,53 @@ one given as argument.
  Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
  Philadelphia, PA USA. 2017
 '''
+import matlab.engine
 import argparse
 import os
-from config import matlab_session as matlab
-from process_batch import process_batch
+import config
+import json #temporal until process_batch gets fully translated to python, 
+# json is used to call matlab subprocess for ez-batch since matalab engine doesn't handle parfor
 
 def hfo_annotate(paths, start_time, stop_time, cycle_time, swapping_data):
     
-    os.chdir(paths['misc_code'])
-    matlab.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
-    
-    os.chdir(paths['hfo_matlab']) 
+    os.chdir(paths['hfo_engine']) 
     os.system('./clean.sh') #cleans previous execution outputs
     
-    #This is currently not working because of the parfor inside ez_detect_batch.m 
-    #I will translate ez_detect_batch_to python
-    #Generate dsp outputs 
-    process_batch(paths,start_time,stop_time,cycle_time, swapping_data, nargout=0)
+    os.chdir(paths['misc_code'])
+    #starts matlab session in current dir
+    engine = matlab.engine.start_matlab() 
+    engine.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
+    #config.matlab = engine #save current session object in global config file 
+
+    #Generate dsp outputs
+    #I had to do this ugly thing because of the parfor inside ez_detect_batch.m doens't
+    #work if you call the function with matlab_engine object. 
+    #I will translate ez_detect_batch_to python and remove this later
+    #paths_js = json.dumps(paths)
+    #start_time_js = json.dumps(start_time)
+    #stop_time_js = json.dumps(stop_time)
+    #cycle_time_js = json.dumps(cycle_time)
+    #swapping_data_js = json.dumps(swapping_data)
+    batch_input = [paths, start_time, stop_time, cycle_time, swapping_data]
+    with open('batch_input.json', 'w') as outfile:
+        json.dump(batch_input, outfile)
+    print('Wrote json input for process_batch.m')
+    
+    m_commands = '\"tryAddPaths(\'{}\');process_batch_json();quit\"'.format(paths['project_root'])  
+    m_flags =' -nodesktop -nosplash -r '
+    os.system(paths['matlab'] + m_flags + m_commands)
 
     print('Starting to process dsp monopolar/bipolar outputs...')
     
     #Process dsp outputs
-    matlab.process_dsp_outputs(paths['dsp_monopolar_out'],monopolarLabels(),paths, nargout=0);
-    matlab.process_dsp_outputs(paths['dsp_bipolar_out'],bipolarLabels(),paths, nargout=0);
+    engine.process_dsp_outputs(paths['dsp_monopolar_out'],monopolarLabels(),paths, nargout=0);
+    engine.process_dsp_outputs(paths['dsp_bipolar_out'],bipolarLabels(),paths, nargout=0);
 
-    matlab.quit()
+    engine.quit()
 
 def getPaths(edf_dataset_path, project_dir_path, xml_output_path):
     paths = {}
+    paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
     paths['edf_dataset']= edf_dataset_path
     paths['xml_output_path']= xml_output_path
     paths['project_root']= project_dir_path
@@ -71,10 +90,10 @@ def getPaths(edf_dataset_path, project_dir_path, xml_output_path):
     paths['trc_tmp_monopolar']= paths['hfo_engine']+'trc/temp/monopolar/'
     paths['trc_tmp_bipolar']= paths['hfo_engine']+'trc/temp/bipolar/'
 
-    paths['cudaica_dir']= paths['project_root']+'/src/cudaica/'
+    paths['cudaica_dir']= paths['project_root']+'src/cudaica/'
     paths['binica_sc']= paths['cudaica_dir']+'binica.sc'
     paths['cudaica_bin']= paths['cudaica_dir']+'cudaica'
-    paths['misc_code']= paths['project_root']+'tools/misc_code'
+    paths['misc_code']= paths['project_root']+'tools/misc_code/'
 
     return paths
 
