@@ -8,8 +8,8 @@ function process_dsp_outputs(dsp_outputs_path, method_labels, paths)
 end
 
 function processDspOutput(filename, method_labels, paths)
-    %method_data is for example DSP_data, metadata, num_trc_blocks, ...
-    % error_flag, ez_tall, ez_tall_hfo, ez_tall_fr
+    %TODO generalize in method_data instead of method labels for example DSP_data, 
+    %metadata, num_trc_blocks, error_flag, ez_tall, ez_tall_hfo, ez_tall_fr
     
     if isfield(method_labels, 'error_flag') %this will be removed when once added the error_flag to dsp_bipolar function
 

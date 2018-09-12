@@ -25,11 +25,10 @@ To call this function all arguments are required. hfo_annotate handles that sett
  indicated in the argument 'paths'.
 %}
 
-function process_batch(paths, start_time, stop_time, cycle_time, swapping_data)
+function process_batch(paths, start_time, stop_time, cycle_time)
     disp('Running EZ_Detect v7.0 Putou')
-    narginchk(5,5);
+    narginchk(4,4);
     paths = struct(paths); %to convert python dic to matlab struct if called with main.py. To be removed later.
-    swapping_data = struct(swapping_data); %to convert python dic to matlab struct if called with main.py. To be removed later.
     [header, signal_header, eeg_edf] = edf_load(paths.edf_dataset); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
     disp('EDF file loaded')
     eeg_edf_tall=tall(eeg_edf);
@@ -39,7 +38,7 @@ function process_batch(paths, start_time, stop_time, cycle_time, swapping_data)
     sampling_rate = double(header.srate);
     %disp(['Sampling rate: ' int2str(round(sampling_rate)) 'Hz']);
     number_of_channels = gather(numel(eeg_edf_tall(:,1)));    
-    chanlist = getChanlist(number_of_channels, signal_header, swapping_data);
+    chanlist = getChanlist(number_of_channels, signal_header, paths.swap_array_file);
     file_size = gather(numel(eeg_edf_tall(1,:))); 
     file_pointers = getFilePointers(sampling_rate, start_time, stop_time, cycle_time, file_size);
     
@@ -64,20 +63,15 @@ end
 
 %%%%%%% Local Funtions  %%%%%%%
 
-function chanlist = getChanlist(number_of_channels, signal_header, swapping_data)
-    swap_array_file = swapping_data.swap_array_file;
-    chan_swap = swapping_data.chan_swap;
-    swap_array_file_given = ~strcmp(swap_array_file,'default');
-    if swap_array_file_given
-        load(swap_array_file);
-    end
-
+function chanlist = getChanlist(number_of_channels, signal_header, swap_array_file_path)
     chanlist={};
     for j=1:number_of_channels
         chanlist{j} = signal_header(j).signal_labels;
     end
 
-    if chan_swap
+    swap_array_file_given = ~strcmp(swap_array_file_path,'NOT_GIVEN');
+    if swap_array_file_given
+        load(swap_array_file);
         chanlist = chanlist(swap_array);
     end
 end
@@ -209,7 +203,7 @@ function processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths)
         disp(['Finished dsp ' montage_names.bipolar]);
         saveDSPOutput(montage_names.bipolar, montage_names, dsp_bipolar_output, metadata.file_block, paths);
     else
-        disp("Didnt enter dsp bipolar, ez_tall_bp was empty");
+        disp("Didn't enter dsp bipolar, ez_tall_bp was empty");
 
     end
 end

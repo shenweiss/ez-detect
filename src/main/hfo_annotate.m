@@ -42,7 +42,7 @@
  Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
  Philadelphia, PA USA. 2017
 %}
-% varargin = [start_time, stop_time, cycle_time, chan_swap, swap_array_file]
+% varargin = [start_time, stop_time, cycle_time, swap_array_file]
 function hfo_annotate(edf_dataset_path, varargin)
     
     %Argument parsing and structuring
@@ -56,13 +56,12 @@ function hfo_annotate(edf_dataset_path, varargin)
     %Overwrites the defaults if variable arguments are given
     optional_args(1:(nargin-1)) = varargin;
     %Setnames of optional arguments
-    [start_time, stop_time, cycle_time, chan_swap, swap_array_file] = optional_args{:};
-    swapping_data = struct('chan_swap', chan_swap, 'swap_array_file', swap_array_file);
-    %validateArgs(paths, start_time, stop_time, cycle_time, swapping_data)
+    [start_time, stop_time, cycle_time, swap_array_file] = optional_args{:};
+    paths.swap_array_file = swap_array_file;
     
     %Generate dsp outputs
     start = tic;
-    process_batch(paths, start_time, stop_time, cycle_time, swapping_data);
+    process_batch(paths, start_time, stop_time, cycle_time);
     toc(start);
 
     disp('Starting to process dsp monopolar/bipolar outputs...')
@@ -110,11 +109,11 @@ function defaults = getDefaults()
     defaults.start_time = 1; %starting in the first sec is assumed to include it.
     defaults.stop_time = 0; %if is not given its not relevant because we will take all the file.   
     defaults.cycle_time = 300; %5 minutes
-    defaults.chan_swap = 0;
-    defaults.swap_array_file = 'default';
+    defaults.swap_array_file = 'NOT_GIVEN';
 end
 
 %function validateArgs(paths, start_time, stop_time, cycle_time, swapping_data)
+    %TODO matlab version doesn't have arguent validation as python version has.
 %end
 
 %This will not be necesary later, see backlog

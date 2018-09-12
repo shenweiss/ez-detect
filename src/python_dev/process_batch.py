@@ -39,7 +39,7 @@ import threading #ask if we will use threads or processes
 import multiprocessing
 import numpy as np
 
-def process_batch(paths, start_time, stop_time, cycle_time, swapping_data):
+def process_batch(paths, start_time, stop_time, cycle_time):
     print('Running EZ_Detect v7.0 Putou')
 
     #Note that this edf_load version modified to read max 60 minutes of EEG due to memory constraints.
@@ -53,7 +53,7 @@ def process_batch(paths, start_time, stop_time, cycle_time, swapping_data):
     #print(['Sampling rate: ' str(round(sampling_rate)) 'Hz']);
     #number_of_channels = matlab.gather(numel(eeg_edf_tall(:,1)))   
     number_of_channels = len(eeg_edf)   
-    chanlist = getChanlist(number_of_channels, signal_header, swapping_data)
+    chanlist = getChanlist(number_of_channels, signal_header, paths['swap_array_file'])
     
     #file_size = matlab.gather(numel(eeg_edf_tall(1,:))) 
     file_size = len(eeg_edf[0]) 
@@ -76,13 +76,13 @@ def process_batch(paths, start_time, stop_time, cycle_time, swapping_data):
 
 ############  Local Funtions  #########
 
-def getChanlist(number_of_channels, signal_header, swapping_data):
+def getChanlist(number_of_channels, signal_header, swap_array_file):
     chanlist={}
     for j in range(1,number_of_channels+1):
         chanlist{j} = signal_header(j).signal_labels
     
-    if swapping_data.chan_swap:
-        swap_array = scipy.io.loadmat(swapping_data.swap_array_file)
+    if swap_array_file != 'NOT_GIVEN':
+        swap_array = scipy.io.loadmat(swap_array_file)
         chanlist = [chanlist[i-1] for i in swap_array] 
 
     return chanlist

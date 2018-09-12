@@ -8,5 +8,5 @@ function process_batch_json()
     str = char(raw'); 
     fclose(fid); 
     val = jsondecode(str);
-    process_batch(val{1}, val{2}, val{3}, val{4}, val{5});
+    process_batch(val{1}, val{2}, val{3}, val{4});
 end

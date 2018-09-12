@@ -13,51 +13,28 @@ Project directory:
 
 Usage as follows:
 
-For first use please see and set the paths in getPaths() local function in this file.
+For first use please see and set the paths in getPaths() local function in src/main/config.py file.
 
 Warning, during execution, the program will clean previous outputs in hfo_engine_1 directory. So if you
-want to save them, just create a copy of hfo_engine_1 folder and set that path in getPaths() function.
+want to save them, do it before the next run.
 
-To run, write in shell: 
+Main function is src/main/hfo_annotate_py. For usage please type: 
 
- matlab_binary -r  "main(edf_dataset_path, start_time, stop_time, ...
-                         cycle_time, chan_swap, swap_array_file)"
+ 'python3 hfo_annotate.py --help'
 
-(You can call it with all optional args except from the requiered edf_dataset_path so 
- If you don't specify, defaults are given) 
+ Minimum arguments for a run would be like: python3 hfo_annotate.py --edf_dataset_path=test.edf
 
- Input semantic:
-    - edf_dataset_path: The directory path to the file with the data to analize.
-
-    - start_time: a number in seconds indicating from when, relative to the file
-      duration, do you want to analize the eeg.
-    
-    - stop_time: a number in seconds indicating up to when, relative to the file
-      duration, do you want to analize the eeg.
-      
-      For example if you want to process the last 5 minutes of an eeg of 20 minutes
-      you would use as input start_time = 15*60 = 900 and stop_time = 20*60 = 1200.
-    
-    - cycle_time: a number in seconds indicating the size of the blocks to cut the data
-      in blocks.This improves time performance since it can be parallelized. 
-      Example: 300 (5 minutes)
-    
-    -Swapping data: a struct containing the channel swapping flag (1:yes, 0:no) (in case that 
-     channels were incorrectly assigned in the original EDF file as can be the case for intraop 
-     recordings) and the swap_array that can be used to correct the channel assignments.
+The only requiered argument is --edf_dataset_path, the other ones are optional and
+defaults within config.py are given in case you don't specify them.
  
- Output: DSP monopolar/bipolar outputs as matfiles get saved in the corresponding working directory
- indicated in the argument 'paths'.
-
-Presetting:
-
- 1)If it it's the first run in this computer please check misc_code/setGlobalPaths.m
+Output: DSP monopolar/bipolar outputs as matfiles get saved in the corresponding working directory
+indicated in the argument 'paths'.
 
 Conventions for the code:
 
   Formats:
       Filename && Function name: Dash separated names. Example: ez_detect_batch
-      Local Function name: If you define local functions within a files, use CamelCase. Example: processBatch
+      Local Function name: CamelCase. Example: processBatch
       Local Variables: Descriptive names. Dash separated names. Example: start_time
       Global Variables: Dash separated UPPERCASE. Example: PROJECT_PATH
 
