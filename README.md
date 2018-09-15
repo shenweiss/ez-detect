@@ -9,26 +9,50 @@ Project directory:
   -hfo_engine_1: output saving directories.
   -src: project code.
   -testing: testing tools, historical issue prompts.
-  -tools: useful packages used in src code. third parties.
+  -tools: useful packages used in src code. Third parties.
 
-Usage as follows:
+Requirements 
 
-For first use please see and set the paths in getPaths() local function in src/main/config.py file.
+  1) Python 3.5 if there is no stand-alone executable file.
+  2) Matlab 2017a or later. 
+  3) Cudaica binary for the current running device.
+
+
+Installation and configuration instructions:
+ 
+  1) If you don't have python installed, you can find 3.5 version for your O.S in https://www.python.org/
+  2) Get sure you have matlab 2017a installed and working.
+  3) Get cudaica binary for the running device: please find instructions in the README of cudaica 
+  in folder ez-detect/src/cudaica/README_cudaica.md
+  Note: Once you reach the step of configuring cudaica mentioned in the file, consider to use the flag –-with-cuda-arch=CC where CC is your gpu compute capability.
+  4) Go to src/main/config.py and manually edit the paths to matlab binary and to the project 
+  root directory (example '/home/username/ez-detect') in getPaths() local function. 
+  *The other paths are relative to this last one. So as long as they exist, they will work.
+  **You can also set defaults for input arguments as you desire here.
+
+Usage:
 
 Warning, during execution, the program will clean previous outputs in hfo_engine_1 directory. So if you
-want to save them, do it before the next run.
+want to save outputs of previous executions, do it before the next run. I THINK THIS SHOULD BE MODIFIED TO CREATE A NEW SAVING ROOT DIR, example hfo_engine_2.
 
 Main function is src/main/hfo_annotate_py. For usage please type: 
 
- 'python3 hfo_annotate.py --help'
+ LINUX: 'python3 hfo_annotate.py --help'
+ WINDOWS: 'python hfo_annotate.py --help'
 
- Minimum arguments for a run would be like: python3 hfo_annotate.py --edf_dataset_path=test.edf
+Minimum arguments for a run would be for example: python3 hfo_annotate.py --edf_dataset_path=test.edf
 
-The only requiered argument is --edf_dataset_path, the other ones are optional and
+In other words, the only requiered argument is --edf_dataset_path, the other ones are optional and
 defaults within config.py are given in case you don't specify them.
  
-Output: DSP monopolar/bipolar outputs as matfiles get saved in the corresponding working directory
-indicated in the argument 'paths'.
+Output: 
+
+DSP monopolar/bipolar outputs as matfiles get saved in the corresponding working directory
+indicated in the argument 'paths'. XML file is saved in the directory passed by argument or in default
+set in src/main/config.py
+
+
+Developers:
 
 Conventions for the code:
 
@@ -37,6 +61,10 @@ Conventions for the code:
       Local Function name: CamelCase. Example: processBatch
       Local Variables: Descriptive names. Dash separated names. Example: start_time
       Global Variables: Dash separated UPPERCASE. Example: PROJECT_PATH
+
+
+OLD README BELOW
+
 
 1. Prerequisites for Deployment 
 
