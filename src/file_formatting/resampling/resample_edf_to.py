@@ -15,33 +15,25 @@ def resample_edf_to(new_sampling_rate, input_edf_path, out_edf_path):
                                   exclude=(), preload=True, verbose=None)
     
     eeg_picks = mne.pick_types(raw_eeg.info, meg=False, eeg=True, stim=False)
-    raw_eeg.resample(new_sampling_rate)
+    raw_eeg = raw_eeg.copy().resample(new_sampling_rate, npad='auto')
     
-    
-
-    file_out = out_edf_path+ os.path.basename(input_edf_path)+ '_resampled_'+ str(new_sampling_rate)+'.edf'
+    file_out = out_edf_path+'resampled_'+ str(new_sampling_rate)+'.edf'
     #raw_eeg.save(filename, picks=eeg_picks) this saves a .fif not edf
 
     #IDK if this below is right... trying to imitate https://github.com/holgern/pyedflib/blob/master/demo/writeEDFFile.py
 
     f = pyedflib.EdfWriter(file_out, len(raw_eeg.ch_names),
                            file_type=pyedflib.FILETYPE_EDF)
-    data_list = raw_eeg.get_data()
 
     channel_info = []
-    #srate = raw_eeg.info.get('srate')
-    srate = new_sampling_rate
-    print('new sampling rate')
-    print(new_sampling_rate)
-    #assert(srate == new_sampling_rate)
     channel_names = raw_eeg.ch_names
 
     for ch in range(len(raw_eeg.ch_names)):
-        ch_dict = {'label': channel_names[ch], 'dimension': 'uV', 'sample_rate': srate, 'physical_max': 100, 'physical_min': -100, 'digital_max': 32767, 'digital_min': -32768, 'transducer': '', 'prefilter':''}
+        ch_dict = {'label': channel_names[ch], 'dimension': 'uV', 'sample_rate': raw_eeg.info['sfreq'], 'physical_max': 100, 'physical_min': -100, 'digital_max': 32767, 'digital_min': -32768, 'transducer': '', 'prefilter':''}
         channel_info.append(ch_dict)
 
     f.setSignalHeaders(channel_info)
-    f.writeSamples(data_list)
+    f.writeSamples(raw_eeg.get_data())
     f.close()
     
 if __name__ == "__main__":
