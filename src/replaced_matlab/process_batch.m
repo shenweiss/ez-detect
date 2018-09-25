@@ -168,31 +168,28 @@ end
 % parallelized computing. This improves time performance corresponding to dsp processing. 
 
 function processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths)    
-    
-    ez_tall = tall(eeg_data);
-    clear eeg_data;
+    %fix removed tall expressions
     %refactor this function below
-    [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, chanlist, metadata, ez_montage);
+    [ez_mp, ez_bp, metadata] = ez_lfbad(eeg_data, chanlist, metadata, ez_montage);
 
-    clear ez_tall;
     metadata.montage = ez_montage;
     montage_names = struct();
     montage_names.monopolar = 'MONOPOLAR';
     montage_names.bipolar = 'BIPOLAR';
 
-    if ~isempty(gather(ez_tall_m))
+    if ~isempty(ez_mp)
         
         disp(['Starting dsp ' montage_names.monopolar]);
-        dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, metadata, paths);
+        dsp_monopolar_output = ez_detect_dsp_monopolar(ez_mp, ez_bp, metadata, paths);
         disp(['Finished dsp ' montage_names.monopolar]);
 
-        ez_tall_bp = dsp_monopolar_output.ez_tall_bp;
+        ez_bp = dsp_monopolar_output.ez_tall_bp;
         hfo_ai = dsp_monopolar_output.hfo_ai;
         fr_ai = dsp_monopolar_output.fr_ai;
         metadata = dsp_monopolar_output.metadata;
         saveDSPOutput(montage_names.monopolar, montage_names, dsp_monopolar_output, metadata.file_block, paths);
     else 
-        hfo_ai = zeros(numel(gather(ez_tall_bp(1,:))),1)';
+        hfo_ai = zeros(numel(ez_bp(1,:)),1)';
         fr_ai = hfo_ai;
     end
 

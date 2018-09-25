@@ -4,8 +4,8 @@
 classdef EzDetectDspToolbox
 	methods 
 
-		function [eeg_data, eeg_data_no_notch] = notchFilter(Ez, ez_tall)
-			[eeg_data, eeg_data_no_notch] = notchFilter_(ez_tall);
+		function [eeg_data, eeg_data_no_notch] = notchFilter(Ez, eeg)
+			[eeg_data, eeg_data_no_notch] = notchFilter_(eeg);
 		end
 
 		function [score_amp_ripple, zscore_amp_ripple] = calculateSmoothedHFOamplitude(Ez, num_of_data_rows, ics, ...
@@ -40,9 +40,9 @@ classdef EzDetectDspToolbox
 		                                                               run_fripple_nn, fripple_thresh);
 		end
 		
-		function num_trc_blocks = writeTRCfiles(Ez, ez_tall, chanlist, metadata, sampling_rate, ...
+		function num_trc_blocks = writeTRCfiles(Ez, eeg, chanlist, metadata, sampling_rate, ...
 		                                     trc_temp_dir, executable_dir, mat2trc_bin_filename)
-			num_trc_blocks = writeTRCfiles_(ez_tall, chanlist, metadata, sampling_rate, ...
+			num_trc_blocks = writeTRCfiles_(eeg, chanlist, metadata, sampling_rate, ...
 		                                     trc_temp_dir, executable_dir, mat2trc_bin_filename);
 		end
 		
@@ -63,9 +63,8 @@ end
 
 %Methods definition
 
-function [eeg_data, eeg_data_no_notch] = notchFilter_(ez_tall)
+function [eeg_data, eeg_data_no_notch] = notchFilter_(eeg)
     %I think that eeg_data is the filtered one. The other one is just a copy. Improve names later.
-    eeg = gather(ez_tall);
     eeg_data_no_notch = eeg;
     for i = 1:numel(eeg(:,1));
         eeg_temp = eeg(i,:);
@@ -199,11 +198,10 @@ end
 % % The function first outputs the 32 channel .TRC files for the annotations
 % % from the input iEEG file.
 
-function num_trc_blocks = writeTRCfiles_(ez_tall, chanlist, metadata, sampling_rate, ...
+function num_trc_blocks = writeTRCfiles_(eeg, chanlist, metadata, sampling_rate, ...
                                      trc_temp_dir, executable_dir, mat2trc_bin_filename)
     fprintf('Writing monopolar iEEG to trc format \r');
     fprintf('Converting data to 2048 Hz sampling rate \r');
-    eeg = gather(ez_tall);
     % The first step is to convert the sampling rate to 2048 Hz
     number_of_channels = numel(eeg(:,1));
     desired_hz = 2048;

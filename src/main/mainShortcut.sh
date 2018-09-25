@@ -17,7 +17,7 @@ cycle_duration=$4
 blocks=$5
 clean_hfo_engine_afterwards=$6
 
-dataset_path='~/EDFs/'$dataset
+dataset_path='/home/tomas-pastore/EDFs/'$dataset
 
 echo "Input configuration:"
 echo "Dataset:" $dataset
@@ -51,9 +51,9 @@ then
 
 elif [ $callMain == "-py" ]
 then
-	echo "Calling new python3 main..."
+	echo "Calling new python3.5 main..."
 	xml_output_path="'$xml_output_path'"
-	python3 hfo_annotate.py -in=$dataset_path -out=$xml_output_path -str_t=$start_time -stp_t=$stop_time -c=$cycle_duration
+	python hfo_annotate.py -in=$dataset_path -out=$xml_output_path -str_t=$start_time -stp_t=$stop_time -c=$cycle_duration
 fi
 
 wait
@@ -64,7 +64,6 @@ then
 	cd $hfo_engine_path
 	./clean.sh 
 fi
-rm -f $project_path/tools/misc_code/batch_input.json
 rm -r -f $main_path/__pycache__
 
 

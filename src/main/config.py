@@ -1,4 +1,10 @@
+#!/usr/bin/env python3.5
+# -*- coding: utf-8 -*-
+import matlab.engine
+import os
+
 #Global variables
+
 START_TIME_DEFAULT = 1
 STOP_TIME_DEFAULT = 0 #fix later to take file length
 CYCLE_TIME_DEFAULT = 300 #5 minutes
@@ -33,8 +39,8 @@ def getPaths():
 
     return paths
 
-def updatePaths(paths, edf_dataset_path, project_dir_path, xml_output_path, swap_array_path):
-    paths['edf_dataset']= edf_dataset_path
+def updatePaths(paths, trc_fname, project_dir_path, xml_output_path, swap_array_path):
+    paths['trc_fname']= trc_fname
     paths['project_root']= project_dir_path
     paths['xml_output_path']= xml_output_path
     paths['swap_array_file'] = swap_array_path
@@ -64,3 +70,11 @@ def bipolarLabels():
         'ez_tall_fr': 'ez_tall_fr_bp',
         'ez_tall_hfo': 'ez_tall_hfo_bp'
     }
+
+os.chdir(paths['hfo_engine']) 
+os.system('./clean.sh') #cleans previous execution outputs
+
+os.chdir(paths['misc_code'])
+#starts matlab session in current dir
+matlab_session = matlab.engine.start_matlab() 
+matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups

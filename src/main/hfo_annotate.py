@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
  
 '''
@@ -24,28 +24,17 @@ xml_output gets saved in the default directory or the one given as argument.
  Philadelphia, PA USA. 2017
 '''
 import matlab.engine
+import config
+from process_batch import *
 import argparse
 import os
-import config
-import json #temporal until process_batch gets fully translated to python, 
-# json is used to call matlab subprocess for ez-batch since matalab engine doesn't handle parfor
+#import json #temporal until process_batch gets fully translated to python, 
 
 def hfo_annotate(paths, start_time, stop_time, cycle_time):
     
-    os.chdir(paths['hfo_engine']) 
-    os.system('./clean.sh') #cleans previous execution outputs
     
-    os.chdir(paths['misc_code'])
-    #starts matlab session in current dir
-    engine = matlab.engine.start_matlab() 
-    engine.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
-    #config.matlab = engine #save current session object in global config file 
-
     #Generate dsp outputs
-    #I had to do to start a new matlab session with system command for the 
-    #call to process_batch(ez_detect_batch.m) because matlab_engine object 
-    #can't handle the parfor inside it
-    #I will translate process_batch_to python and remove this later
+    '''
     batch_input = [paths, start_time, stop_time, cycle_time]
     with open('batch_input.json', 'w') as outfile:
         json.dump(batch_input, outfile)
@@ -54,9 +43,12 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time):
     m_commands = '\"tryAddPaths(\'{}\');process_batch_json();quit\"'.format(paths['project_root'])  
     m_flags =' -nodesktop -nosplash -r '
     os.system(paths['matlab'] + m_flags + m_commands)
+    '''
+    process_batch(paths, start_time, stop_time, cycle_time)
 
     print('Starting to process dsp monopolar/bipolar outputs...')
     
+    engine = confg.matlab_session
     #Process dsp outputs
     engine.process_dsp_outputs(paths['dsp_monopolar_out'],config.monopolarLabels(),paths, nargout=0);
     engine.process_dsp_outputs(paths['dsp_bipolar_out'],config.bipolarLabels(),paths, nargout=0);
@@ -68,7 +60,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     #Agregar types y argument validation
-    parser.add_argument("-in", "--edf_dataset_path", 
+    parser.add_argument("-in", "--trc_path", 
                         help="The directory path to the file with the data to analize.", 
                         required=True)
     
@@ -106,7 +98,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    paths = config.updatePaths(config.paths, args.edf_dataset_path, args.project_dir_path, 
+    paths = config.updatePaths(config.paths, args.trc_path, args.project_dir_path, 
                                           args.xml_output_path, args.swap_array_file_path)
 
     hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time)

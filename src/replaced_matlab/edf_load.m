@@ -31,7 +31,7 @@ function varargout = edf_load(varargin)
 %
 % Function Prototypes:
 %                                header = blockEdfLoad(edfFN)
-%                 header, signalHeader] = blockEdfLoad(edfFN)
+%                 [header, signalHeader] = blockEdfLoad(edfFN)
 %    [header, signalHeader, signalCell] = blockEdfLoad(edfFN)
 %    [header, signalHeader, signalCell] = blockEdfLoad(edfFN, signalLabels)
 %    [header, signalHeader, signalCell] = blockEdfLoad(edfFN, signalLabels, epochs)

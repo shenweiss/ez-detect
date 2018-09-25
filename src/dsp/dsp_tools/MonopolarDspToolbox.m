@@ -2,19 +2,19 @@
 classdef MonopolarDspToolbox < EzDetectDspToolbox
 	
 	methods
-		function dsp_monopolar_output = cudaica_failure_handle(Ez, ez_tall_m, ez_tall_bp, metadata, ez_top_in_dir)
-			dsp_monopolar_output = cudaica_failure_handle_(ez_tall_m, ez_tall_bp, metadata, ez_top_in_dir);
+		function dsp_monopolar_output = cudaica_failure_handle(Ez, eeg_mp, eeg_mp, metadata, ez_top_in_dir)
+			dsp_monopolar_output = cudaica_failure_handle_(eeg_mp, eeg_bp, metadata, ez_top_in_dir);
 		end
 
-		function [ez_tall_m, metadata] = remove60CycleArtifactOutliers(Ez, ez_tall_m, metadata)
-			[ez_tall_m, metadata] = remove60CycleArtifactOutliers_(ez_tall_m, metadata);
+		function [eeg_data, metadata] = remove60CycleArtifactOutliers(Ez, eeg_data, metadata)
+			[eeg_data, metadata] = remove60CycleArtifactOutliers_(eeg_data, metadata);
 		
 		end
 		
-		function [ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMontage(Ez, ez_tall_m, ...
-                                                              ez_tall_bp, metadata, chan_indexes)
-			[ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMontage_(ez_tall_m, ...
-                                                              ez_tall_bp, metadata, chan_indexes);
+		function [eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage(Ez, eeg_mp, ...
+                                                              eeg_bp, metadata, chan_indexes)
+			[eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage_(eeg_mp, ...
+                                                              eeg_bp, metadata, chan_indexes);
 		end
 		
 		function [z_delta_amp_peak, z_lost_peaks] = detectOverstrippedRecordings(Ez, data, ic1, z_lost_peaks_method)
@@ -53,24 +53,24 @@ end
 
 %Methods definition
 
-function dsp_monopolar_output = cudaica_failure_handle_(ez_tall_m, ez_tall_bp, metadata, ez_top_in_dir)
+function dsp_monopolar_output = cudaica_failure_handle_(eeg_mp, eeg_bp, metadata, ez_top_in_dir)
 
     fprintf('CUDAICA exploded moving channels to bipolar montage \r');
     chan_indexes = 1:numel(metadata.m_chanlist);
     metadata.hf_bad_m2 = metadata.m_chanlist(chan_indexes);
-    [ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMontage(ez_tall_m, ez_tall_bp, metadata, chan_indexes);
+    [eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage(eeg_mp, eeg_bp, metadata, chan_indexes);
 
     %ask if this will be used, otherwise remove 
-    cudaica_failure_ai = zeros(numel(gather(ez_tall_bp(1,:))),1);
+    cudaica_failure_ai = zeros(numel(eeg_bp(1,:)),1);
     DSP_data_m = [];
     dsp_monopolar_output = struct( ...
         'DSP_data_m', DSP_data_m, ...
-        'ez_tall_m', [], ...      
-        'ez_tall_bp', ez_tall_bp, ...
+        'ez_mp', [], ...      
+        'ez_bp', eeg_bp, ...
         'hfo_ai', cudaica_failure_ai, ...
         'fr_ai', cudaica_failure_ai, ...
-        'ez_tall_hfo_m', [], ...
-        'ez_tall_fr_m', [], ...
+        'ez_hfo_mp', [], ...
+        'ez_fr_mp', [], ...
         'metadata', metadata, ...
         'num_trc_blocks', 1, ...
         'error_flag', 1 ...
@@ -82,10 +82,8 @@ function dsp_monopolar_output = cudaica_failure_handle_(ez_tall_m, ez_tall_bp, m
 end
 
 
-function [ez_tall_m, metadata] = remove60CycleArtifactOutliers_(ez_tall_m, metadata)
+function [eeg_data, metadata] = remove60CycleArtifactOutliers_(eeg_data, metadata)
 
-    eeg_data = gather(ez_tall_m); %add un _m to var name
-    
     low = 200; high = 600; sampling_rate = 2000;
     fr = ez_eegfilter(eeg_data, low, high, sampling_rate);%improve fr variable name
     fr_xcorr = [];
@@ -106,14 +104,11 @@ function [ez_tall_m, metadata] = remove60CycleArtifactOutliers_(ez_tall_m, metad
     metadata.m_chanlist(b) = [];
     metadata.hf_xcorr_bad = b;
     
-    ez_tall_m = tall(eeg_data); 
 end
 
 % Remove bad channels from monopolar montage
-function [ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMontage_(ez_tall_m, ...
-                                                              ez_tall_bp, metadata, chan_indexes)
-    eeg_mp=gather(ez_tall_m);
-    eeg_bps=gather(ez_tall_bp);
+function [eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage_(eeg_mp, ...
+                                                              eeg_bp, metadata, chan_indexes)
     hf_bad_m=metadata.m_chanlist(chan_indexes);
     
     new_eeg_bp=[];
@@ -130,25 +125,19 @@ function [ez_tall_m, ez_tall_bp, metadata] = removeBadChannelsFromMonopolarMonta
                     counter=counter+1;
                     new_eeg_bp(counter,:)=eeg_mp(chan_indexes(i),:)-eeg_mp(IIB,:);
                     new_bp_chans(counter)=hf_bad_m(i);
-                end;
-            end;
-        end;
-    end;
+                end
+            end
+        end
+    end
 
     %% add bp recording to bp array
     fprintf('Rebuilding monopolar and bipolar montages \r');
-    eeg_bps=vertcat(new_eeg_bp, eeg_bps);
+    eeg_bp=vertcat(new_eeg_bp, eeg_bp);
     metadata.bp_chanlist=horzcat(new_bp_chans, metadata.bp_chanlist);
-
-    %% build tall structure
-    ez_tall_bp=tall(eeg_bps);
-    eeg_bps=[];
     new_eeg_bp=[];
-
     %%remove bipolar recordings from memory
     eeg_mp(chan_indexes,:)=[];
     metadata.m_chanlist(chan_indexes)=[];
-    ez_tall_m=tall(eeg_mp);
 
     %{ 
     I think this will be faster and equivalent. I have to do further testing to check if the i is being calculated ok,

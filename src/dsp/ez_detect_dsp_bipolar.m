@@ -15,7 +15,7 @@
 
 % Main DSP Algorithm for HFO research and calibration
 
-function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);
+function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, hfo_ai, fr_ai, metadata, paths);
 
 % hf_bad uses the HFO band pass filtered EEG mutual information
 % adjacency matrix during episodes of artifact to define dissimar
@@ -32,17 +32,14 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, m
     %fripple.low = 200;
     %fripple.high = 600;
     sampling_rate = 2000; %view if we can add it to metadata struct
-    eeg_bp = gather(ez_tall_bp);
 
     if ~isempty(eeg_bp)
 
         low = 80;
         high = 600;
         hfo = ez_eegfilter(eeg_bp,low, high, sampling_rate);
-        ez_tall_hfo_bp = tall(hfo);
-        
-        [eeg_data, eeg_data_no_notch] = bp_toolbox.notchFilter(ez_tall_bp); %eeg_data_no_notch is an unfiltered copy of the data.
-        clear eeg_bp; % From here on in use the eeg_data structure.
+
+        [eeg_data, eeg_data_no_notch] = bp_toolbox.notchFilter(eeg_bp); %eeg_data_no_notch is an unfiltered copy of the data.
 
         % Start Ripple detection
         % Calculate smoothed HFO amplitude
@@ -106,13 +103,12 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, m
         if numel(b)~=numel(metadata.bp_chanlist)
             % Remove all data for bad channel
             if ~isempty(b)
-                eeg_bp = gather(ez_tall_bp);
                 eeg_bp(b,:)=[];
                 eeg_data(b,:)=[];
                 eeg_data_no_notch(b,:)=[];
                 hfo(b,:)=[];
-                ez_tall_bp = tall(eeg_bp);
-                ez_tall_hfo_bp = tall(hfo);
+                ez_bp = eeg_bp;
+                ez_hfo_bp = hfo;
                 ripple_data.total_count(b)=[];
                 ripple_data.clip(b,:)=[];
                 ripple_data.clip_t(b,:)=[];
@@ -186,15 +182,14 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, m
     if numel(b)~=numel(metadata.bp_chanlist)
         % Remove all data for bad channel
         if ~isempty(b)
-            eeg_bp = gather(ez_tall_bp);
             eeg_bp(b,:) = [];
             eeg_data(b,:) = [];
             eeg_data_no_notch(b,:) = [];
             hfo(b,:) = [];
             fr(b,:) = [];
-            ez_tall_bp = tall(eeg_bp);
-            ez_tall_hfo_bp = tall(hfo);
-            ez_tall_fr_bp = tall(fr);
+            ez_bp = eeg_bp;
+            ez_hfo_bp = hfo;
+            ez_fr_bp = fr;
             ripple_data.total_count(b) = [];
             fripple_data.total_count(b) = [];
             ripple_data,clip(b,:) = [];
@@ -210,14 +205,14 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, m
             metadata.hf_bad_bp_index_fr=b;
             metadata.bp_chanlist(metadata.hf_bad_bp_index_fr)=[];
         else
-            ez_tall_fr_bp=tall(fr);
+            ez_fr_bp = fr;
         end;
     else
-        error_status=1;
-        error_msg='all noisy bp electrodes';
+        error_status = 1;
+        error_msg = 'all noisy bp electrodes';
     end
     
-    eeg_bp = gather(ez_tall_bp);
+    eeg_bp = ez_bp;
     if ~isempty(eeg_bp)
         % % Bug fix for empty cells
         emptyCells = cellfun(@isempty,metadata.bp_chanlist);
@@ -226,7 +221,7 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, m
         
         chanlist = metadata.bp_chanlist;
         mat2trc_bin_filename ='mat2trc32_bp2k';
-        num_trc_blocks = bp_toolbox.writeTRCfiles(tall(eeg_bp), chanlist, metadata, sampling_rate, ...
+        num_trc_blocks = bp_toolbox.writeTRCfiles(eeg_bp, chanlist, metadata, sampling_rate, ...
                          paths.trc_tmp_bipolar, paths.executable, mat2trc_bin_filename);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % output the stored discrete HFOs
@@ -255,17 +250,17 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, m
         save(filename1,'DSP_data_bp','-v7.3');
     else
         DSP_data_bp=[];
-        ez_tall_bp=[];
-        ez_tall_hfo_bp=[];
-        ez_tall_fr_bp=[];
+        ez_bp=[];
+        ez_hfo_bp=[];
+        ez_fr_bp=[];
     end % if eeg_bp exists
 
     %to be improved later, add error_flag
     dsp_bipolar_output = struct( ...
         'DSP_data_bp', DSP_data_bp, ...
-        'ez_tall_bp', ez_tall_bp, ...
-        'ez_tall_hfo_bp', ez_tall_hfo_bp, ...
-        'ez_tall_fr_bp', ez_tall_fr_bp, ...
+        'ez_bp', ez_bp, ...
+        'ez_hfo_bp', ez_hfo_bp, ...
+        'ez_fr_bp', ez_fr_bp, ...
         'metadata', metadata, ...
         'num_trc_blocks', num_trc_blocks ...
     );

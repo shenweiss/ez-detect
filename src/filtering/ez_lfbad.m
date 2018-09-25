@@ -1,10 +1,7 @@
-%% Putou v7.0 Addition of NN for finding bad channels
-%Talk with sheenan to see what does he want to do here to
-%improve code declarativity
+%% this is just a temporal file to delete tall expression and call from python
 
-function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, chanlist, metadata, ez_montage)
+function [ez_mp, ez_bp, metadata] = ez_lfbad(eeg_data, chanlist, metadata, ez_montage)
   
-  eeg_data = gather(ez_tall);
   number_of_channels = numel(eeg_data(:,1));
   file_size = numel(eeg_data(1,:)); %check if the variable name is correct
 
@@ -133,8 +130,8 @@ function [ez_tall_m, ez_tall_bp, metadata] = ez_lfbad(ez_tall, chanlist, metadat
       lf_bad=[];
   end;
 
-  ez_tall_m = tall(eeg_mp.eeg_data);
-  ez_tall_bp = tall(eeg_bps.eeg_data);
+  ez_mp = eeg_mp.eeg_data;
+  ez_bp = eeg_bps.eeg_data;
   if ~isempty(eeg_mp.eeg_data)
     metadata.m_chanlist=eeg_mp.chanlist;
   end

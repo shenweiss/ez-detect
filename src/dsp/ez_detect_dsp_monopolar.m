@@ -18,7 +18,7 @@
 % Written by Shennan Aibel Weiss MD, PhD. in Matlab at Thomas Jefferson University
 % Philadelphia, PA USA.
 
-function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, metadata, paths);
+function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata, paths);
 
     mp_toolbox = MonopolarDspToolbox; 
     error_status = 0; 
@@ -33,16 +33,16 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
     
     % v4 bug fix perform xcorr function prior to running hfbad in order to
     % remove other 60 cycle artifact outliers prior to hfbad
-    [ez_tall_m, metadata] = mp_toolbox.remove60CycleArtifactOutliers(ez_tall_m, metadata); %NEW
+    [eeg_mp, metadata] = mp_toolbox.remove60CycleArtifactOutliers(eeg_mp, metadata); %NEW
 
     fprintf('Removing excess HF artifact electrodes \r');
-    [metadata] = ez_hfbad_putou02(ez_tall_m, metadata); % Find MI of maximum artifact
+    [metadata] = ez_hfbad_putou02(eeg_mp, metadata); % Find MI of maximum artifact
 
     % Remove bad channels from monopolar montage
     chan_indexes = metadata.hf_bad_m_index;
     metadata.hf_bad_m = metadata.m_chanlist(chan_indexes);
-    [ez_tall_m, ez_tall_bp, metadata] = mp_toolbox.removeBadChannelsFromMonopolarMontage(ez_tall_m, ....
-                                                         ez_tall_bp, metadata, chan_indexes);
+    [eeg_mp, eeg_bp, metadata] = mp_toolbox.removeBadChannelsFromMonopolarMontage(eeg_mp, ....
+                                                         eeg_bp, metadata, chan_indexes);
 
     % Bug fix for empty cells (search and correct)
     emptyCells = cellfun(@isempty, metadata.m_chanlist);
@@ -50,7 +50,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
     metadata.m_chanlist(b) = {'BUG'};
 
     %% Notch filter eeg_data
-    [eeg_data, eeg_data_no_notch] = mp_toolbox.notchFilter(ez_tall_m);
+    [eeg_data, eeg_data_no_notch] = mp_toolbox.notchFilter(eeg_mp);
 
     % cudaica_matlab function isolates muscle artifact producing artifactual
     % HFOs to the first independent component of the HFO band pass filtered
@@ -61,8 +61,6 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
     [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, ripple.low, ripple.high, sampling_rate, paths);
     if error_flag == 0 
         
-        ez_tall_hfo_m = tall(hfo);
-
         % The code below is used to detect overstripped recordings
         % following pruning of IC1.
         [~, z_lost_peaks] = mp_toolbox.detectOverstrippedRecordings(hfo, ic1, @mp_toolbox.method_one);
@@ -155,8 +153,8 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 
                 chan_indexes = b;
                 metadata.hf_bad_m2 = metadata.m_chanlist(chan_indexes);
-                [ez_tall_m, ez_tall_bp, metadata] = mp_toolbox.removeBadChannelsFromMonopolarMontage(ez_tall_m, ...
-                                                                         ez_tall_bp, metadata, b);
+                [eeg_mp, eeg_bp, metadata] = mp_toolbox.removeBadChannelsFromMonopolarMontage(eeg_mp, ...
+                                                                         eeg_bp, metadata, b);
                 
                 % Remove bad electrodes from eeg_data and eeg_data_no_notch
                 eeg_data(b,:)=[];
@@ -171,7 +169,6 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, ripple.low, ripple.high, sampling_rate, paths);
                 
                 if error_flag == 0
-                    ez_tall_hfo_m = tall(hfo);
 
                     % The code below is used to detect overstripped recordings
                     % following pruning of IC1.
@@ -245,14 +242,14 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                     num_of_data_rows = numel(eeg_data(:,1));
                     [hfo_times, ~] = mp_toolbox.convRippleClips_timeToIndices(num_of_data_rows, ripple_data.clip_t, ic1, ripple_data.total_count);
                 else % error_flag 1 i.e. CUDAICA exploded ICA #2 
-                    dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(ez_tall_m, ez_tall_bp, metadata, paths.ez_top_in);
+                    dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
                     DSP_data_m = dsp_monopolar_output.DSP_data_m;
-                    ez_tall_m = dsp_monopolar_output.ez_tall_m;
-                    ez_tall_bp = dsp_monopolar_output.ez_tall_bp;
+                    ez_mp = dsp_monopolar_output.ez_mp;
+                    ez_bp = dsp_monopolar_output.ez_bp;
                     hfo_ai = dsp_monopolar_output.hfo_ai;
                     fr_ai = dsp_monopolar_output.fr_ai;
-                    ez_tall_hfo_m = dsp_monopolar_output.ez_tall_hfo_m;
-                    ez_tall_fr_m = dsp_monopolar_output.ez_tall_fr_m;
+                    ez_hfo_m = dsp_monopolar_output.ez_hfo_mp;
+                    ez_fr_m = dsp_monopolar_output.ez_fr_mp;
                     metadata = dsp_monopolar_output.metadata;
                     num_trc_blocks = dsp_monopolar_output.num_trc_blocks ;
                     error_flag = dsp_monopolar_output.error_flag;
@@ -264,7 +261,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
             % from the input iEEG file.
             chanlist = metadata.m_chanlist;
             mat2trc_bin_filename = 'mat2trc32_m2k';            
-            num_trc_blocks = mp_toolbox.writeTRCfiles(ez_tall_m, chanlist, metadata, sampling_rate, ...
+            num_trc_blocks = mp_toolbox.writeTRCfiles(eeg_mp, chanlist, metadata, sampling_rate, ...
                              paths.trc_tmp_monopolar, paths.executable, mat2trc_bin_filename);
            
             % Continue ripple detection part 2.
@@ -332,7 +329,6 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
             [fr, fr_ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, fripple.low, fripple.high, sampling_rate, paths);
             
             if error_flag == 0
-                ez_tall_fr_m=tall(fr);
                 [z_delta_amp_peak_fr, z_lost_peaks_fr] = mp_toolbox.detectOverstrippedRecordings(fr, fr_ic1, @zscore_2);
                 
                 %[a_value,b_ind]=min((z_delta_amp_peak_fr)); % Find Replacement AI index  %THIS WASN'T BEING USED
@@ -444,12 +440,12 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 
                 dsp_monopolar_output = struct( ...
                     'DSP_data_m', DSP_data_m, ...
-                    'ez_tall_m', ez_tall_m, ...      
-                    'ez_tall_bp', ez_tall_bp, ...
+                    'ez_mp', eeg_mp ...      
+                    'ez_bp', eeg_bp, ...
                     'hfo_ai', hfo_ai, ...
                     'fr_ai', fr_ai, ...
-                    'ez_tall_hfo_m', ez_tall_hfo_m, ...
-                    'ez_tall_fr_m', ez_tall_fr_m, ...
+                    'ez_hfo_mp', hfo, ...
+                    'ez_fr_mp', fr, ...
                     'metadata', metadata, ...
                     'num_trc_blocks', num_trc_blocks, ...
                     'error_flag', error_flag ...
@@ -460,14 +456,14 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(ez_tall_m, ez_tall_bp, m
                 save(filename1,'DSP_data_m', '-v7.3');
             
             else % error_flag 1 i.e. CUDAICA exploded ICA #1
-                dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(ez_tall_m, ez_tall_bp, metadata, paths.ez_top_in);
+                dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
             end
         else % number of bad electrodes are the vast majority
             error_status = 1;
             error_msg = 'mostly noisy mp electrodes';
         end
     else % error_flag 1 i.e. CUDAICA exploded ICA #3
-        dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(ez_tall_m, ez_tall_bp, metadata, paths.ez_top_in);
+        dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
     end %end of enormous if else
 
 end %end of dsp function
