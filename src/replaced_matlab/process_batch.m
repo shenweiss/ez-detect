@@ -28,25 +28,22 @@ To call this function all arguments are required. hfo_annotate handles that sett
 function process_batch(paths, start_time, stop_time, cycle_time)
     disp('Running EZ_Detect v7.0 Putou')
     narginchk(4,4);
-    paths = struct(paths); %to convert python dic to matlab struct if called with main.py. To be removed later.
-    [header, signal_header, eeg_edf] = edf_load(paths.edf_dataset); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
+    paths = struct(paths); %to convert python dic to matlab struct if called with main.py.
+    [header, signal_header, eeg_edf] = edf_load(paths.trc_fname); %in this case is a edf. not a trc, but didnt want to change the field name.
     disp('EDF file loaded')
-    eeg_edf_tall=tall(eeg_edf);
-    clear eeg_edf;
     
-    [data_path, data_filename, extention] = fileparts(paths.edf_dataset); 
+    [data_path, data_filename, extention] = fileparts(paths.trc_fname); 
     sampling_rate = double(header.srate);
     %disp(['Sampling rate: ' int2str(round(sampling_rate)) 'Hz']);
-    number_of_channels = gather(numel(eeg_edf_tall(:,1)));    
+    number_of_channels = numel(eeg_edf(:,1));    
     chanlist = getChanlist(number_of_channels, signal_header, paths.swap_array_file);
-    file_size = gather(numel(eeg_edf_tall(1,:))); 
+    file_size = numel(eeg_edf(1,:)); 
     file_pointers = getFilePointers(sampling_rate, start_time, stop_time, cycle_time, file_size);
     
     blocks = calculateBlocksAmount(file_pointers, sampling_rate);    
     %Note need to add patch that limits second cycle if < 60 seconds. %ask what is this
     [eeg_data, metadata] = computeEEGSegments(file_pointers, data_filename, sampling_rate, ...
-                                              number_of_channels, blocks, eeg_edf_tall);
-    clear eeg_edf_tall;
+                                              number_of_channels, blocks, eeg_edf);
     disp('Finished creating eeg_data blocks');
 
     %saveResearchData(paths.research, blocks, metadata, eeg_data, chanlist, data_filename);
@@ -107,7 +104,7 @@ function blocks = calculateBlocksAmount(file_pointers, sampling_rate)
 end
 
 function [eeg_data, metadata] = computeEEGSegments(file_pointers, data_filename, sampling_rate, ...
-                                                   number_of_channels, blocks, eeg_edf_tall)
+                                                   number_of_channels, blocks, eeg_edf)
     desired_hz = 2000;
     base_pointer = file_pointers.start;
     stop_pointer = file_pointers.end;
@@ -121,16 +118,16 @@ function [eeg_data, metadata] = computeEEGSegments(file_pointers, data_filename,
     
         [eeg_data{i},metadata(i)] = computeEEGSegment(data_filename, sampling_rate, desired_hz, ...
                                                       number_of_channels, block_index, ...
-                                                      block_start_ptr, block_stop_ptr, eeg_edf_tall);
+                                                      block_start_ptr, block_stop_ptr, eeg_edf);
         %later log(size(metadata), metadatam, size(eeg_data))
     end
 end
 
 function [eeg_data, metadata]= computeEEGSegment(filename, sampling_rate, desired_hz, ...
                                                   number_of_channels, block_index, ...
-                                                  block_start_ptr, block_stop_ptr, eeg_edf_tall)
+                                                  block_start_ptr, block_stop_ptr, eeg_edf)
 
-    eeg_data = gather(eeg_edf_tall(:,block_start_ptr:block_stop_ptr));
+    eeg_data = eeg_edf(:,block_start_ptr:block_stop_ptr);
     eeg_data = resampleData(sampling_rate, desired_hz, ...
                             number_of_channels, eeg_data);
     metadata = struct();
@@ -168,7 +165,12 @@ end
 % parallelized computing. This improves time performance corresponding to dsp processing. 
 
 function processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths)    
-    [ez_mp, ez_bp, metadata] = ez_lfbad(eeg_data, chanlist, metadata, ez_montage);
+    %%%% testing transaltion to python
+    args_fname = [paths.temp_pythonToMatlab_dsp_MATLAB 'lfbad_args_' metadata.file_block '.mat']; 
+    save(args_fname, 'eeg_data', 'chanlist', 'metadata', 'ez_montage');
+    %%%%%
+
+    [ez_mp, ez_bp, metadata] = ez_lfbad_m(eeg_data, chanlist, metadata, ez_montage);
 
     metadata.montage = ez_montage;
     montage_names = struct();
@@ -191,7 +193,7 @@ function processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths)
         fr_ai = hfo_ai;
     end
 
-    if ~isempty(ez_bp))
+    if ~isempty(ez_bp)
         
         disp(['Starting dsp ' montage_names.bipolar]);
         dsp_bipolar_output = ez_detect_dsp_bipolar(ez_bp, hfo_ai, fr_ai, metadata, paths);

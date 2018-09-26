@@ -28,23 +28,24 @@ import config
 from process_batch import *
 import argparse
 import os
-#import json #temporal until process_batch gets fully translated to python, 
 
 def hfo_annotate(paths, start_time, stop_time, cycle_time):
     
-    
+    runMatlabProcessBatch = False
     #Generate dsp outputs
-    '''
-    batch_input = [paths, start_time, stop_time, cycle_time]
-    with open('batch_input.json', 'w') as outfile:
-        json.dump(batch_input, outfile)
-    print('Wrote json input for process_batch.m')
+    if runMatlabProcessBatch:  #this if will be gone soon.
+        import json #temporal until process_batch gets fully translated to python, 
+        batch_input = [paths, start_time, stop_time, cycle_time]
+        with open('batch_input.json', 'w') as outfile:
+            json.dump(batch_input, outfile)
+        print('Wrote json input for process_batch.m')
+        
+        m_commands = '\"tryAddPaths(\'{}\');process_batch_json();quit\"'.format(paths['project_root'])  
+        m_flags =' -nodesktop -nosplash -r '
+        os.system(paths['matlab'] + m_flags + m_commands)
     
-    m_commands = '\"tryAddPaths(\'{}\');process_batch_json();quit\"'.format(paths['project_root'])  
-    m_flags =' -nodesktop -nosplash -r '
-    os.system(paths['matlab'] + m_flags + m_commands)
-    '''
-    process_batch(paths, start_time, stop_time, cycle_time)
+    else: #run new python batch 
+        process_batch(paths, start_time, stop_time, cycle_time)
 
     print('Starting to process dsp monopolar/bipolar outputs...')
     
@@ -89,7 +90,7 @@ if __name__ == "__main__":
                         "for the data to be cut. This improves time performance.",
                         required=False, default= config.CYCLE_TIME_DEFAULT, type=int)
 
-    parser.add_argument("-saf", "--swap_array_file_path", #TODO add this argument to config.paths
+    parser.add_argument("-saf", "--swap_array_file_path", 
                         help="This optional file should contain a swap_array"+
                         " variable, which can be used to correct the channel"+
                         " assignments in case that channels were incorrectly"+

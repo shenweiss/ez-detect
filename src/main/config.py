@@ -16,6 +16,7 @@ def getPaths():
     paths['hfo_engine']= paths['project_root']+'hfo_engine_1/'
     
     paths['temp_pythonToMatlab_dsp'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp/'
+    paths['temp_pythonToMatlab_dsp_MATLAB'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp_MATLAB/'
 
     paths['xml_output_path']= paths['hfo_engine']+'xml_output'
     paths['swap_array_file'] = "NOT_GIVEN"
@@ -57,9 +58,9 @@ def monopolarLabels():
         'dsp_data':'DSP_data_m',
         'metadata': 'metadata',
         'num_trc_blocks': 'num_trc_blocks',
-        'ez_tall': 'ez_tall_m',
-        'ez_tall_fr': 'ez_tall_fr_m',
-        'ez_tall_hfo': 'ez_tall_hfo_m',
+        'ez_mp': 'ez_mp',
+        'ez_fr_mp': 'ez_fr_mp',
+        'ez_hfo_mp': 'ez_hfo_mp',
         'error_flag': 'error_flag'
     }
 
@@ -68,9 +69,9 @@ def bipolarLabels():
         'dsp_data': 'DSP_data_bp',
         'metadata': 'metadata',
         'num_trc_blocks': 'num_trc_blocks',
-        'ez_tall': 'ez_tall_bp',
-        'ez_tall_fr': 'ez_tall_fr_bp',
-        'ez_tall_hfo': 'ez_tall_hfo_bp'
+        'ez_bp': 'ez_bp',
+        'ez_fr_bp': 'ez_fr_bp',
+        'ez_hfo_bp': 'ez_hfo_bp'
     }
 
 os.chdir(paths['hfo_engine']) 

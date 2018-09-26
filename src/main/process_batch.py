@@ -67,7 +67,7 @@ def process_batch(paths, start_time, stop_time, cycle_time):
 
     number_of_channels = raw_trc.info['nchan']  
     print("Number of channels " + str(number_of_channels))
-    chanlist = getChanlist(number_of_channels, raw_trc.info['ch_names'], paths['swap_array_file'])
+    chanlist = getChanlist(raw_trc.info['ch_names'], paths['swap_array_file'])
     
     eeg = raw_trc.get_data() 
     samples_num = len(eeg[0]) 
@@ -80,7 +80,8 @@ def process_batch(paths, start_time, stop_time, cycle_time):
     print('Finished creating eeg_data blocks')
 
     #saveResearchData(paths['research'], blocks, metadata, eeg_data, chanlist, data_filename)
-    montage = scipy.io.loadmat(paths['montages']+ '449_correct' +'_montage')['montage'] #analize if this works as expected
+    #mock to test
+    montage = scipy.io.loadmat(paths['montages']+ '449_correct' +'_montage')['montage'][0:64] #analize if this works as expected
     #montage = matlab.load(paths['montages']+ data_filename +'_montage')['montage'] #analize if this works as expected
 
     useThreads = True
@@ -91,8 +92,10 @@ def process_batch(paths, start_time, stop_time, cycle_time):
 
 ############  Local Funtions  #########
 
-def getChanlist(number_of_channels, chan_names, swap_array_file):
+def getChanlist(chan_names, swap_array_file):
     
+    chan_names = np.array(chan_names ,dtype=object) #for compatibility, for matlab engine to know conversion into cell array
+
     if swap_array_file != 'NOT_GIVEN':
         swap_array = matlab.load(swap_array_file)
         chan_names = [chan_names[i-1] for i in swap_array] 
@@ -199,6 +202,11 @@ def processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths):
     #matlab.engine doesnt support np arrays...
     #sol 1 save as matfile using scipy.io.savemat('test.mat', dict(x=x, y=y))
     args_fname = paths['temp_pythonToMatlab_dsp']+'lfbad_args_'+metadata['file_block']+'.mat' 
+    print("eeg_data: "+str(type(eeg_data)) + "shape "+ str(eeg_data.shape))
+    print("chanlist: "+str(type(chanlist)) + "shape "+ str(chanlist.shape)+ "type "+ str(chanlist.dtype.name))
+    print("metadata: "+str(type(metadata)))
+    print("ez_montage: "+str(type(ez_montage))+ "shape "+ str(ez_montage.shape) + "type "+ str(ez_montage.dtype.name))
+
     scipy.io.savemat(args_fname,
                      dict(eeg_data=eeg_data, chanlist=chanlist, metadata=metadata, ez_montage=ez_montage))
     

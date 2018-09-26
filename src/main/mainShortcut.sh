@@ -1,8 +1,8 @@
 #!/bin/bash
 #Description: This is just a shortcut for calling main while testing when you run constantly.
-#Usage ./mainShortcut.sh -py/-m dataset_filename xml_output_path cycle_duration blocks
+#Usage ./mainShortcut.sh dataset_filename xml_output_path cycle_duration blocks
 #[--cleanOutputsAfterRun]
-# -py/-m, write -py for executing new python3 main. -m to call old matlab main instead
+# COMMENTED OPTION: -py/-m, write -py for executing new python3 main. -m to call old matlab main instead
 # dataset_filename is the name of the input edf to analize, for example 449_correct.edf
 # xml_output_path is the path to the directory where output will be saved (not configured yet)
 # cycle_duration the length in seconds for the data chunks to parallelize
@@ -10,12 +10,12 @@
 # and end pointers for reading the edf file.
 #
 
-callMain=$1
-dataset=$2
-xml_output_path=$3
-cycle_duration=$4
-blocks=$5
-clean_hfo_engine_afterwards=$6
+#callMain=$1
+dataset=$1
+xml_output_path=$2
+cycle_duration=$3
+blocks=$4
+clean_hfo_engine_afterwards=$5
 
 dataset_path='/home/tomas-pastore/EDFs/'$dataset
 
@@ -43,18 +43,22 @@ cd $main_path
 
 SECONDS=0 #timestamp
 
-if [ $callMain == "-m" ]
-then
-	echo "Calling old matlab main..."
-	dataset_path="'$dataset_path'"
-	$matlab_path -nodesktop -r "hfo_annotate($dataset_path, $start_time, $stop_time, $cycle_duration);quit" &
+#if [ $callMain == "-m" ]
+#then
+#	echo "Calling old matlab main..."
+#	dataset_path="'$dataset_path'"
+#	$matlab_path -nodesktop -r "hfo_annotate($dataset_path, $start_time, $stop_time, $cycle_duration);quit" &
 
-elif [ $callMain == "-py" ]
-then
-	echo "Calling new python3.5 main..."
+#elif [ $callMain == "-py" ]
+#then
+#	echo "Calling python3.5 hfo_annotate..."
+#	xml_output_path="'$xml_output_path'"
+#	python hfo_annotate.py -in=$dataset_path -out=$xml_output_path -str_t=$start_time -stp_t=$stop_time -c=$cycle_duration
+#fi
+
+echo "Calling python3.5 hfo_annotate..."
 	xml_output_path="'$xml_output_path'"
 	python hfo_annotate.py -in=$dataset_path -out=$xml_output_path -str_t=$start_time -stp_t=$stop_time -c=$cycle_duration
-fi
 
 wait
 

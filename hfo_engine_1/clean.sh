@@ -10,6 +10,8 @@ rm -f ./research_matfiles/*
 rm -f ./trc/temp/monopolar/*
 rm -f ./trc/temp/bipolar/*
 rm -f ./trc/output/*
+rm -f ./temp_pythonToMatlab_dsp/*
+rm -f ./temp_pythonToMatlab_dsp_MATLAB/*
 
 rm -f ./cudaica*.wts
 rm -f ./cudaica*.sph

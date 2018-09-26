@@ -2,8 +2,7 @@
 
 %parameters eeg_data, chanlist, metadata, ez_montage, now loading from a temp .mat because of matlab.engine
 % doesnt support python data types
-function [ez_mp, ez_bp, metadata] = ez_lfbad(input_args_fname)
-  load(input_args_fname); %temporal solution
+function [ez_mp, ez_bp, metadata] = ez_lfbad(eeg_data, chanlist, metadata, ez_montage)
   
   number_of_channels = numel(eeg_data(:,1));
   file_size = numel(eeg_data(1,:)); %check if the variable name is correct
@@ -23,8 +22,7 @@ function [ez_mp, ez_bp, metadata] = ez_lfbad(input_args_fname)
   
   eeg_bps.eeg_data=[];
   eeg_bps.chanlist={''};
-  eeg_bp.eeg_data=[];
-  eeg_bp.chanlist={''};
+  eeg_bp=[];
   eeg_mp.eeg_data=[];
   eeg_mp.chanlist={''};
   metadata.lf_bad={''}; % start building metadata
@@ -43,15 +41,7 @@ function [ez_mp, ez_bp, metadata] = ez_lfbad(input_args_fname)
     columnIndexes_j_validation = ~ismember(j,imp); %improve name of this variable
     if ez_montage{j,3}~=0 && ez_montage{j,4}~=1 && columnIndexes_j_validation
       counter_1=counter_1+1;
-    
-      %disp('debuging')
-      %disp('first')
-      %eeg_bp.eeg_data(counter_1,:)
-      %disp('second')
-      %eeg_data(j,:)
-      %disp('third')
-      %eeg_data(ez_montage{j,3},:)
-      %disp('end debug')
+      
       eeg_bp.eeg_data(counter_1,:)=eeg_data(j,:)-eeg_data(ez_montage{j,3},:);
       eeg_bp.chanlist(counter_1)=chanlist(j);
     end

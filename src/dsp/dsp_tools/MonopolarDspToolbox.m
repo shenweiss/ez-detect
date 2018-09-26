@@ -2,7 +2,7 @@
 classdef MonopolarDspToolbox < EzDetectDspToolbox
 	
 	methods
-		function dsp_monopolar_output = cudaica_failure_handle(Ez, eeg_mp, eeg_mp, metadata, ez_top_in_dir)
+		function dsp_monopolar_output = cudaica_failure_handle(Ez, eeg_mp, eeg_bp, metadata, ez_top_in_dir)
 			dsp_monopolar_output = cudaica_failure_handle_(eeg_mp, eeg_bp, metadata, ez_top_in_dir);
 		end
 

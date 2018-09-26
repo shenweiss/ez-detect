@@ -23,8 +23,8 @@ function processDspOutput(filename, method_labels, paths)
             ez_detect_annotate_e1(output_fname, num_trc_blocks,montage,paths);
             clear DSP_data_m;
             
-            load(filename, method_labels.ez_tall, method_labels.ez_tall_fr, method_labels.ez_tall_hfo);
-            ezpac_putou70_e1(ez_tall_m, ez_tall_fr_m, ez_tall_hfo_m, output_fname,metadata,montage,paths);
+            load(filename, method_labels.ez_mp, method_labels.ez_fr_mp, method_labels.ez_hfo_mp);
+            ezpac_putou70_e1(ez_mp, ez_fr_mp, ez_hfo_mp, output_fname,metadata,montage,paths);
         else
             disp('Error in process_dsp_output error_flag != 0');
         end
@@ -38,8 +38,8 @@ function processDspOutput(filename, method_labels, paths)
         ez_detect_annotate_e1(output_fname, num_trc_blocks,montage, paths);
         clear DSP_data_bp; 
         
-        load(filename, method_labels.ez_tall, method_labels.ez_tall_fr, method_labels.ez_tall_hfo);
-        ezpac_putou70_e1(ez_tall_bp, ez_tall_fr_bp, ez_tall_hfo_bp, output_fname, metadata, montage, paths);
+        load(filename, method_labels.ez_bp, method_labels.ez_fr_bp, method_labels.ez_hfo_bp);
+        ezpac_putou70_e1(ez_bp, ez_fr_bp, ez_hfo_bp, output_fname, metadata, montage, paths);
             
     end
 
