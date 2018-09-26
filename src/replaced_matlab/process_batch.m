@@ -168,8 +168,6 @@ end
 % parallelized computing. This improves time performance corresponding to dsp processing. 
 
 function processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths)    
-    %fix removed tall expressions
-    %refactor this function below
     [ez_mp, ez_bp, metadata] = ez_lfbad(eeg_data, chanlist, metadata, ez_montage);
 
     metadata.montage = ez_montage;
@@ -183,7 +181,7 @@ function processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths)
         dsp_monopolar_output = ez_detect_dsp_monopolar(ez_mp, ez_bp, metadata, paths);
         disp(['Finished dsp ' montage_names.monopolar]);
 
-        ez_bp = dsp_monopolar_output.ez_tall_bp;
+        ez_bp = dsp_monopolar_output.ez_bp;
         hfo_ai = dsp_monopolar_output.hfo_ai;
         fr_ai = dsp_monopolar_output.fr_ai;
         metadata = dsp_monopolar_output.metadata;
@@ -193,14 +191,14 @@ function processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths)
         fr_ai = hfo_ai;
     end
 
-    if ~isempty(gather(ez_tall_bp))
+    if ~isempty(ez_bp))
         
         disp(['Starting dsp ' montage_names.bipolar]);
-        dsp_bipolar_output = ez_detect_dsp_bipolar(ez_tall_bp, hfo_ai, fr_ai, metadata, paths);
+        dsp_bipolar_output = ez_detect_dsp_bipolar(ez_bp, hfo_ai, fr_ai, metadata, paths);
         disp(['Finished dsp ' montage_names.bipolar]);
         saveDSPOutput(montage_names.bipolar, montage_names, dsp_bipolar_output, metadata.file_block, paths);
     else
-        disp("Didn't enter dsp bipolar, ez_tall_bp was empty");
+        disp("Didn't enter dsp bipolar, ez_bp was empty");
 
     end
 end

@@ -48,7 +48,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time):
 
     print('Starting to process dsp monopolar/bipolar outputs...')
     
-    engine = confg.matlab_session
+    engine = config.matlab_session
     #Process dsp outputs
     engine.process_dsp_outputs(paths['dsp_monopolar_out'],config.monopolarLabels(),paths, nargout=0);
     engine.process_dsp_outputs(paths['dsp_bipolar_out'],config.bipolarLabels(),paths, nargout=0);

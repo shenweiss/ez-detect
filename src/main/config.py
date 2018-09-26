@@ -14,7 +14,9 @@ def getPaths():
     paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
     paths['project_root']= '/home/tomas-pastore/ez-detect/'
     paths['hfo_engine']= paths['project_root']+'hfo_engine_1/'
-        
+    
+    paths['temp_pythonToMatlab_dsp'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp/'
+
     paths['xml_output_path']= paths['hfo_engine']+'xml_output'
     paths['swap_array_file'] = "NOT_GIVEN"
     paths['dsp_monopolar_out']= paths['hfo_engine']+'dsp_output/monopolar/'

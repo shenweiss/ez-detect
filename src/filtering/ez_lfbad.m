@@ -1,6 +1,9 @@
 %% this is just a temporal file to delete tall expression and call from python
 
-function [ez_mp, ez_bp, metadata] = ez_lfbad(eeg_data, chanlist, metadata, ez_montage)
+%parameters eeg_data, chanlist, metadata, ez_montage, now loading from a temp .mat because of matlab.engine
+% doesnt support python data types
+function [ez_mp, ez_bp, metadata] = ez_lfbad(input_args_fname)
+  load(input_args_fname); %temporal solution
   
   number_of_channels = numel(eeg_data(:,1));
   file_size = numel(eeg_data(1,:)); %check if the variable name is correct
