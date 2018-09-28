@@ -80,8 +80,7 @@ def process_batch(paths, start_time, stop_time, cycle_time):
     print('Finished creating eeg_data blocks')
 
     #saveResearchData(paths['research'], blocks, metadata, eeg_data, chanlist, data_filename)
-    #mock to test
-    montage = scipy.io.loadmat(paths['montages']+ '449_correct' +'_montage')['montage'][0:64] #analize if this works as expected
+    montage = scipy.io.loadmat(paths['montages']+ data_filename +'_montage')['montage'] #analize if this works as expected
     #montage = matlab.load(paths['montages']+ data_filename +'_montage')['montage'] #analize if this works as expected
 
     useThreads = True

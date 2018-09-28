@@ -31,9 +31,8 @@ import os
 
 def hfo_annotate(paths, start_time, stop_time, cycle_time):
     
-    runMatlabProcessBatch = False
     #Generate dsp outputs
-    if runMatlabProcessBatch:  #this if will be gone soon.
+    if config.runMatlabProcessBatch:  #this if will be gone soon.
         import json #temporal until process_batch gets fully translated to python, 
         batch_input = [paths, start_time, stop_time, cycle_time]
         with open('batch_input.json', 'w') as outfile:

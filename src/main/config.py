@@ -81,3 +81,5 @@ os.chdir(paths['misc_code'])
 #starts matlab session in current dir
 matlab_session = matlab.engine.start_matlab() 
 matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
+
+runMatlabProcessBatch = False
