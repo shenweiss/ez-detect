@@ -11,8 +11,11 @@ CYCLE_TIME_DEFAULT = 300 #5 minutes
 
 def getPaths():
     paths = {}
-    paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
-    paths['project_root']= '/home/tomas-pastore/ez-detect/'
+    #paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
+    #paths['project_root']= '/home/tomas-pastore/ez-detect/'
+    paths['matlab']= "C:/\"Program Files\"/MATLAB/R2017a/bin/matlab.exe"
+    paths['project_root']= "C:/Users/Tomas Pastore/Documents/ez-detect/"
+
     paths['hfo_engine']= paths['project_root']+'hfo_engine_1/'
     
     paths['temp_pythonToMatlab_dsp'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp/'
@@ -74,8 +77,11 @@ def bipolarLabels():
         'ez_hfo_bp': 'ez_hfo_bp'
     }
 
-os.chdir(paths['hfo_engine']) 
-os.system('./clean.sh') #cleans previous execution outputs
+
+#TODO add if SO == 
+#os.chdir(paths['hfo_engine']) 
+#os.system('./clean.sh') #cleans previous execution outputs #In linux 
+#os.system('./clean.sh') #cleans previous execution outputs  #in windows 
 
 os.chdir(paths['misc_code'])
 #starts matlab session in current dir
