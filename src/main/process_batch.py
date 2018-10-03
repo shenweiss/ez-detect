@@ -201,60 +201,95 @@ def processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths):
     #matlab.engine doesnt support np arrays...
     #sol 1 save as matfile using scipy.io.savemat('test.mat', dict(x=x, y=y))
     args_fname = paths['temp_pythonToMatlab_dsp']+'lfbad_args_'+metadata['file_block']+'.mat' 
-    print("eeg_data: "+str(type(eeg_data)) + "shape "+ str(eeg_data.shape))
-    print("chanlist: "+str(type(chanlist)) + "shape "+ str(chanlist.shape)+ "type "+ str(chanlist.dtype.name))
-    print("metadata: "+str(type(metadata)))
-    print("ez_montage: "+str(type(ez_montage))+ "shape "+ str(ez_montage.shape) + "type "+ str(ez_montage.dtype.name))
+    #print("eeg_data: "+str(type(eeg_data)) + "shape "+ str(eeg_data.shape))
+    #print("chanlist: "+str(type(chanlist)) + "shape "+ str(chanlist.shape)+ "type "+ str(chanlist.dtype.name))
+    #print("metadata: "+str(type(metadata)))
+    #print("ez_montage: "+str(type(ez_montage))+ "shape "+ str(ez_montage.shape) + "type "+ str(ez_montage.dtype.name))
+    scipy.io.savemat(args_fname, dict(eeg_data=eeg_data, chanlist=chanlist, metadata=metadata, ez_montage=ez_montage))
 
-    scipy.io.savemat(args_fname,
-                     dict(eeg_data=eeg_data, chanlist=chanlist, metadata=metadata, ez_montage=ez_montage))
-    
-    [eeg_mp, eeg_bp, metadata] = matlab.ez_lfbad(args_fname,nargout=3)
-
+    [eeg_mp, eeg_bp, metadata] = matlab.ez_lfbad(args_fname, nargout=3)
     metadata.montage = ez_montage;
-    montage_names = {'monopolar':'MONOPOLAR', 'bipolar':'BIPOLAR'}
 
+    mp_updated_vars = monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths)
+
+    bipolarAnnotations(mp_updated_vars, paths)
+
+def monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
+        
     if eeg_mp: #not empty
         
-        print('Starting dsp '+ amontage_names['monopolar']);
-        dsp_monopolar_output = matlab.ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata, paths); 
-        print('Finished dsp '+montage_names['monopolar'])
+        print('Starting dsp monopolar')
+        dsp_monopolar_out = matlab.ez_detect_dsp_monopolar(eeg_mp, eeg_bp, 
+                                                           metadata, paths) 
+        print('Finished dsp bipolar')
+        if dsp_monopolar_output['error_flag'] == 0: 
+            montage = 0
+            output_fname = matlab.eztop_putou_e1(dsp_monopolar_out['DSP_data_m'], 
+                                                 dsp_monopolar_out['metadata'], 
+                                                 montage, 
+                                                 paths)
+            matlab.ez_detect_annotate_e1(output_fname, 
+                                         dsp_monopolar_out['num_trc_blocks'], 
+                                         montage, 
+                                         paths, 
+                                         nargout=0)
+            matlab.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
+                                    dsp_monopolar_out['ez_fr_mp'], 
+                                    dsp_monopolar_out['ez_hfo_mp'], 
+                                    output_fname,
+                                    dsp_monopolar_out['metadata'],
+                                    montage,
+                                    paths, 
+                                    nargout=0)
+        else:
+            print('Error in process_dsp_output, error_flag != 0');
 
-        eeg_bp = dsp_monopolar_output.ez_bp;
-        hfo_ai = dsp_monopolar_output.hfo_ai;
-        fr_ai = dsp_monopolar_output.fr_ai;
-        metadata = dsp_monopolar_output.metadata;
-        saveDSPOutput(montage_names['monopolar'], montage_names, dsp_monopolar_output, metadata['file_block'], paths)
-    else:
-        hfo_ai = np.zeros(len(eeg_bp[0]))
-        fr_ai = hfo_ai
+        output = {'eeg_bp' : dsp_monopolar_out['ez_bp'],
+                'metadata' : dsp_monopolar_out['metadata'],
+                'hfo_ai' : dsp_monopolar_out['hfo_ai'],
+                'fr_ai' : dsp_monopolar_out['fr_ai']}
+    else:  #eeg_mp is empty
+        
+        output = {'eeg_bp' : eeg_bp,
+                'metadata' : metadata,
+                'hfo_ai' : np.zeros(len(eeg_bp[0])),
+                'fr_ai' : hfo_ai}
+
+    return output
+
+def bipolarAnnotations(mp_updated_vars, paths):
 
     if eeg_bp:
         
-        print('Starting dsp '+ montage_names['bipolar'])
-        dsp_bipolar_output = matlab.ez_detect_dsp_bipolar(eeg_bp, hfo_ai, fr_ai, metadata, paths);
-        print('Finished dsp '+ montage_names['bipolar'])
-        saveDSPOutput(montage_names['bipolar'], montage_names, dsp_bipolar_output, metadata['file_block'], paths)
+        print('Starting bipolar dsp block')
+        dsp_bipolar_out = matlab.ez_detect_dsp_bipolar(mp_updated_vars['eeg_bp'], 
+                                                          mp_updated_vars['hfo_ai'], 
+                                                          mp_updated_vars['fr_ai'], 
+                                                          mp_updated_vars['metadata'], 
+                                                          paths)
+        print('Finished bipolar dsp block')
+        print('Annotating bipolar block')
+        montage = 1; 
+        output_fname = matlab.eztop_putou_e1(dsp_bipolar_out['DSP_data_bp'],
+                                             dsp_bipolar_out['metadata'],
+                                             montage, 
+                                             paths)
+        
+        matlab.ez_detect_annotate_e1(output_fname, 
+                                     dsp_bipolar_out['num_trc_blocks'],
+                                     montage, 
+                                     paths, 
+                                     nargout=0)
+
+        matlab.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
+                                dsp_bipolar_out['ez_fr_bp'], 
+                                dsp_bipolar_out['ez_hfo_bp'], 
+                                output_fname, 
+                                dsp_bipolar_out['metadata'], 
+                                montage, 
+                                paths, nargout=0)
+
+        print('Finished annotating bipolar block')
     else:
         print("Didn't enter dsp bipolar, eeg_bp was empty")
 
-
-def saveDSPOutput(montage_name, montage_names, dsp_output, file_block, paths):
-
-    print('Saving dsp '+montage_name+' output.')
-    
-    if montage_name == montage_names['monopolar']:
-        
-        out_filename = 'dsp_m_output_'+ file_block +'.mat'
-        saving_directory = paths['dsp_monopolar_out']
-    
-    elif montage_name == montage_names['bipolar']:
-        
-        out_filename = 'dsp_bp_output_' + file_block + '.mat'
-        saving_directory = paths['dsp_bipolar_out']
-    
-    else: print("Unkown montage_name.")
-    
-    matlab.workspace['dsp_output'] = dsp_output
-    matlab.save(saving_directory+out_filename, '-struct', 'dsp_output')
-    print('Dsp '+ montage_name + 'output was saved.')

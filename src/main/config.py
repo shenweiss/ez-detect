@@ -1,20 +1,21 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import matlab.engine
 import os
-
-#Global variables
+import platform
 
 START_TIME_DEFAULT = 1
-STOP_TIME_DEFAULT = 0 #fix later to take file length
-CYCLE_TIME_DEFAULT = 300 #5 minutes
+#Once read the input trc, if Stop_time is == STOP_TIME_DEFAULT, it will be 
+#updated to take all the eeg.
+STOP_TIME_DEFAULT = 0  
+CYCLE_TIME_DEFAULT = 300 #300 seconds = 5 minutes
 
 def getPaths():
     paths = {}
-    #paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
-    #paths['project_root']= '/home/tomas-pastore/ez-detect/'
-    paths['matlab']= "C:/\"Program Files\"/MATLAB/R2017a/bin/matlab.exe"
-    paths['project_root']= "C:/Users/Tomas Pastore/Documents/ez-detect/"
+    paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
+    paths['project_root']= '/home/tomas-pastore/ez-detect/'
+    #paths['matlab']= "C:/\"Program Files\"/MATLAB/R2017a/bin/matlab.exe"
+    #paths['project_root']= "C:/Users/Tomas Pastore/Documents/ez-detect/"
 
     paths['hfo_engine']= paths['project_root']+'hfo_engine_1/'
     
@@ -78,14 +79,17 @@ def bipolarLabels():
     }
 
 
-#TODO add if SO == 
-#os.chdir(paths['hfo_engine']) 
-#os.system('./clean.sh') #cleans previous execution outputs #In linux 
-#os.system('./clean.sh') #cleans previous execution outputs  #in windows 
+#Cleans previous execution outputs
+os.chdir(paths['hfo_engine']) 
+running_os = platform.system()
+if running_os == 'Windows':
+    os.system('clean') 
+elif running_os == 'Linux':
+    os.system('./clean.sh') 
 
-os.chdir(paths['misc_code'])
-#starts matlab session in current dir
+#Starts matlab session in current dir
+os.chdir(paths['misc_code']) #to find tryAddPaths
 matlab_session = matlab.engine.start_matlab() 
 matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
 
-runMatlabProcessBatch = False
+runMatlabProcessBatch = True
