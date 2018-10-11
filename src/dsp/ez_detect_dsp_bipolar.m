@@ -15,12 +15,17 @@
 
 % Main DSP Algorithm for HFO research and calibration
 
-function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, hfo_ai, fr_ai, metadata, paths);
+function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr_ai, paths);
 
 % hf_bad uses the HFO band pass filtered EEG mutual information
 % adjacency matrix during episodes of artifact to define dissimar
 % electrodes. The bipolar montage is calculated for the bad electrodes
 % and the HFOs are identified in ez_detect_dps_bi.
+    %recover cell structure after matlab engine
+    dims = metadata.montage_shape;
+    metadata.montage = reshape(metadata.montage, dims(1), dims(2));
+    %%%%%%%%%%%%%%%
+
     bp_toolbox = BipolarDspToolbox; 
     error_status=0;
     error_msg='';
@@ -264,6 +269,26 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, hfo_ai, fr_ai, metad
         'metadata', metadata, ...
         'num_trc_blocks', num_trc_blocks ...
     );
+    
+%%%%%%FOR MATLAB ENGINE only
+
+%%%fixing metadata montage dims
+dsp_monopolar_output.metadata.montage_shape = [numel(dsp_monopolar_output.metadata.montage(:,1)),numel(dsp_monopolar_output.metadata.montage(1,:))];
+dsp_monopolar_output.metadata.montage= reshape(dsp_monopolar_output.metadata.montage,1,[]); %matlab engine can only return 1*n cell arrays. I changed the data structure to get mlarray.
+
+
+%fixing dsp_data
+dsp_data = dsp_bipolar_output.DSP_data_bp;
+dsp_data.metadata.montage_shape  = [numel(dsp_data.metadata.montage(:,1)),numel(dsp_data.metadata.montage(1,:))];
+dsp_data.metadata.montage = reshape(dsp_data.metadata.montage,1,[]); 
+%dsp_data.ripple_clip = cell2mat(dsp_data.ripple_clip);
+%dsp_data.ripple_clip_abs_t = cell2mat(dsp_data.ripple_clip_abs_t);
+%dsp_data.ripple_clip_event_t = cell2mat(dsp_data.ripple_clip_event_t);
+%dsp_data.fripple_clip = cell2mat(dsp_data.fripple_clip);
+%dsp_data.fripple_clip_abs_t = cell2mat(dsp_data.fripple_clip_abs_t);
+%dsp_data.fripple_clip_event_t = cell2mat(dsp_data.fripple_clip_event_t);
+dsp_bipolar_output.DSP_data_bp = dsp_data;
+
 
 end %Close dsp_bipolar function
 

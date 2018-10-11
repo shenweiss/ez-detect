@@ -37,6 +37,7 @@ function process_batch(paths, start_time, stop_time, cycle_time)
     %disp(['Sampling rate: ' int2str(round(sampling_rate)) 'Hz']);
     number_of_channels = numel(eeg_edf(:,1));    
     chanlist = getChanlist(number_of_channels, signal_header, paths.swap_array_file);
+    chanlist
     file_size = numel(eeg_edf(1,:)); 
     file_pointers = getFilePointers(sampling_rate, start_time, stop_time, cycle_time, file_size);
     

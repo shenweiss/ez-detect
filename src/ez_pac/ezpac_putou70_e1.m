@@ -1,9 +1,21 @@
-function ezpac_putou_e1(ez_tall,ez_fr,ez_hfo,output_fname,metadata,montage,paths)
+function ezpac_putou_e1(eeg_data, fr, hfo, output_fname, metadata, montage, paths)
 % Written by Dr. Shennan Aibel Weiss and Dr. Inkyung Song TJU 2016-2017, Portions
 % of this code were written by Dr. Shennan Aibel Weiss at UCLA 2014-2016. 
 
 % This work is protected by US patent applications US20150099962A1,
 % UC-2016-158-2-PCT, US provisional #62429461
+
+
+disp("entering ezpac")
+%%only for matlab engine for python, to be removed
+%recover cell structure after matlab engine
+dims = metadata.montage_shape;
+metadata.montage = reshape(metadata.montage, dims(1), dims(2));
+
+%%%
+
+
+
 load(output_fname)
 
 if montage == 0
@@ -15,7 +27,6 @@ file_id = metadata.file_id;
 
 new_output_fname = [paths.ez_pac_out file_id fname_var metadata.file_block '.mat'];
 
-hfo=gather(ez_hfo);
 hfo_amp=[];
 for i=1:numel(hfo(:,1))
     temp=abs(hilbert(hfo(i,:)));
@@ -29,7 +40,6 @@ RonO.amp={''};
 RonO.time_index={''};
 clear hfo
 
-fr=gather(ez_fr);
 fr_amp=[];
 for i=1:numel(fr(:,1))
     temp=abs(hilbert(fr(i,:)));
@@ -42,7 +52,6 @@ ftRonO.amp={''};
 ftRonO.time_index={''};
 clear fr
 
-eeg_data=gather(ez_tall);
 eeg_data_ds=[];
 for i=1:(numel(eeg_data(:,1)))
     eeg_data_ds(i,:)=decimate(eeg_data(i,:),4,'fir');

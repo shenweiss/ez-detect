@@ -19,11 +19,19 @@
 % Philadelphia, PA USA.
 
 function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata, paths);
+    disp('entering dsp monopolar')
+
+    %recover cell structure after matlab engine
+    dims = metadata.montage_shape;
+    metadata.montage = reshape(metadata.montage, dims(1), dims(2));
+
+    %now metadata is a row_count * col_count cell array again. Matlab is horrible.
 
     mp_toolbox = MonopolarDspToolbox; 
     error_status = 0; 
     error_msg = '';
     file_block = metadata.file_block;
+    disp(["file block is " file_block])
     file_id = metadata.file_id;
     ripple.low = 80;
     ripple.high = 600;
@@ -255,7 +263,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
                     error_flag = dsp_monopolar_output.error_flag;
                 end
             end % bad electrode detected loop
-        
+            
             % Write TRC files
             % The function first outputs the 32 channel .TRC files for the annotations
             % from the input iEEG file.
@@ -454,17 +462,45 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
                 filename1 = ['dsp_' file_id '_m_' file_block '.mat'];
                 filename1 = strcat(paths.ez_top_in,filename1);
                 save(filename1,'DSP_data_m', '-v7.3');
-            
-            else % error_flag 1 i.e. CUDAICA exploded ICA #1
+                
+                %%%%%%%%%%%%%compatibility btw python and matlab engine
+
+
+            else % error_flag 1 i.e. CUDAICA exploded ICA #3
                 dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
             end
         else % number of bad electrodes are the vast majority
             error_status = 1;
             error_msg = 'mostly noisy mp electrodes';
         end
-    else % error_flag 1 i.e. CUDAICA exploded ICA #3
+    else % error_flag 1 i.e. CUDAICA exploded ICA #1
         dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
     end %end of enormous if else
 
-end %end of dsp function
 
+
+
+%%%%%%FOR MATLAB ENGINE only
+
+%%%fixing metadata montage dims
+%matlab engine can only return 1*n cell arrays. I changed the data structure to get mlarray.
+dsp_monopolar_output.metadata.montage_shape = [numel(dsp_monopolar_output.metadata.montage(:,1)),numel(dsp_monopolar_output.metadata.montage(1,:))];
+dsp_monopolar_output.metadata.montage= reshape(dsp_monopolar_output.metadata.montage,1,[]); %matlab engine can only return 1*n cell arrays. I changed the data structure to get mlarray.
+
+
+%fixing dsp_data
+dsp_data = dsp_monopolar_output.DSP_data_m;
+dsp_data.metadata.montage_shape  = [numel(dsp_data.metadata.montage(:,1)),numel(dsp_data.metadata.montage(1,:))];
+dsp_data.metadata.montage = reshape(dsp_data.metadata.montage,1,[]); 
+disp("ripple clip value is")
+dsp_data.ripple_clip
+
+%dsp_data.ripple_clip = cell2mat(dsp_data.ripple_clip); cell2mat({[];[]}) gives [] and that breaks. Handle
+%dsp_data.ripple_clip_abs_t = cell2mat(dsp_data.ripple_clip_abs_t);
+%dsp_data.ripple_clip_event_t = cell2mat(dsp_data.ripple_clip_event_t);
+%dsp_data.fripple_clip = cell2mat(dsp_data.fripple_clip);
+%dsp_data.fripple_clip_abs_t = cell2mat(dsp_data.fripple_clip_abs_t);
+%dsp_data.fripple_clip_event_t = cell2mat(dsp_data.fripple_clip_event_t);
+dsp_monopolar_output.DSP_data_m = dsp_data;
+
+end %end of dsp function

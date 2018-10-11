@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#import pdb ;pdb.set_trace() 
+
 import matlab.engine
 import os
 import platform
@@ -92,4 +94,4 @@ os.chdir(paths['misc_code']) #to find tryAddPaths
 matlab_session = matlab.engine.start_matlab() 
 matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
 
-runMatlabProcessBatch = True
+runMatlabProcessBatch = False
