@@ -46,6 +46,11 @@ def process_batch(paths, start_time, stop_time, cycle_time):
     raw_trc = read_raw_trc(paths['trc_fname'], preload=True, include=None)
     print('TRC file loaded')
     
+    mont = raw_trc._raw_extras[0]['montages']
+
+    print(mont)
+
+
     data_filename = splitext(basename(paths['trc_fname']))[0] 
     
     sampling_rate = int(raw_trc.info['sfreq'])
@@ -226,6 +231,9 @@ def monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
     if eeg_mp: #not empty
         
         print('Starting dsp monopolar block')
+        print("accepted type in linux")
+        print(str(type(eeg_mp)))
+        print(str(type(eeg_bp)))
 
         dsp_monopolar_out = MATLAB.ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata, paths)
 
@@ -301,9 +309,12 @@ def bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
 def generateMontage(chanlist):
     montage = []
     #Temp solution
-    for chan_index in range(len(chanlist)):
-        ref = int(chan_index+1) if chan_index % 10 == 1 else 0
-        chan_montage_info = [chanlist[chan_index], int(1),ref, int(0)]
+    for chan in chanlist:
+        #ref = int(chan_index+1) if chan_index % 10 == 1 else 0
+        referential = int(1)
+        no_matter = int(0)
+        dont_exclude = int(0)
+        chan_montage_info = tuple([chanlist[chan_index], referential, no_matter, dont_exclude])
         montage.append(chan_montage_info)
 
     return np.array(montage,dtype=object)

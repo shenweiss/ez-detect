@@ -372,10 +372,10 @@ end
 %
 % If created by cudaica(), rm temporary data file
 % NOTE: doesn't remove the .sc .wts and .fdt files
-eval(['!rm -f ' datafile]);
-eval(['!rm -f ' spherefile]);
-eval(['!rm -f ' weightsfile]);
-eval(['!rm -f ' scriptfile]);
+%eval(['!rm -f ' datafile]);
+%eval(['!rm -f ' spherefile]);
+%eval(['!rm -f ' weightsfile]);
+%eval(['!rm -f ' scriptfile]);
 
 if ~isempty(tmpdata)
     eval(['!rm -f ' datafile]);
