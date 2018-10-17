@@ -82,12 +82,12 @@ def bipolarLabels():
 
 
 #Cleans previous execution outputs
-os.chdir(paths['hfo_engine']) 
-running_os = platform.system()
-if running_os == 'Windows':
-    os.system('clean') 
-elif running_os == 'Linux':
-    os.system('./clean.sh') 
+#os.chdir(paths['hfo_engine']) 
+#running_os = platform.system()
+#if running_os == 'Windows':
+#    os.system('clean') 
+#elif running_os == 'Linux':
+#    os.system('./clean.sh') 
 
 #Starts matlab session in current dir
 os.chdir(paths['misc_code']) #to find tryAddPaths

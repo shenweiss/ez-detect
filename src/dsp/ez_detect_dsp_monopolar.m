@@ -492,8 +492,8 @@ dsp_monopolar_output.metadata.montage= reshape(dsp_monopolar_output.metadata.mon
 dsp_data = dsp_monopolar_output.DSP_data_m;
 dsp_data.metadata.montage_shape  = [numel(dsp_data.metadata.montage(:,1)),numel(dsp_data.metadata.montage(1,:))];
 dsp_data.metadata.montage = reshape(dsp_data.metadata.montage,1,[]); 
-disp("ripple clip value is")
-dsp_data.ripple_clip
+%disp("ripple clip value is")
+%dsp_data.ripple_clip
 
 %dsp_data.ripple_clip = cell2mat(dsp_data.ripple_clip); cell2mat({[];[]}) gives [] and that breaks. Handle
 %dsp_data.ripple_clip_abs_t = cell2mat(dsp_data.ripple_clip_abs_t);
