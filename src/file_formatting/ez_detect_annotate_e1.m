@@ -66,6 +66,7 @@ end;
 
 file_id = metadata.file_id;
 
+
 if montage == 0
     % initialize annotation files
     fprintf('initializing annotation files\r');
@@ -562,4 +563,5 @@ if ~isempty(ftTRonS.channel)
         end;
     end;
 end;
+
 save(fname,'RonO','TRonS','FRonS','ftRonO','ftTRonS','ftFRonS','Total_RonO','Total_TRonS','Total_FRonS','Total_ftRonO','Total_ftTRonS','Total_ftFRonS');

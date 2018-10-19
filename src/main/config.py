@@ -24,7 +24,7 @@ def getPaths():
     paths['temp_pythonToMatlab_dsp'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp/'
     paths['temp_pythonToMatlab_dsp_MATLAB'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp_MATLAB/'
 
-    paths['xml_output_path']= paths['hfo_engine']+'xml_output'
+    paths['xml_output_path']= paths['hfo_engine']+'xml_out.evt'
     paths['swap_array_file'] = "NOT_GIVEN"
     paths['dsp_monopolar_out']= paths['hfo_engine']+'dsp_output/monopolar/'
     paths['dsp_bipolar_out']= paths['hfo_engine']+'dsp_output/bipolar/'

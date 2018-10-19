@@ -39,6 +39,12 @@ import threading #ask if we will use threads or processes
 import multiprocessing
 import numpy as np
 import matlab.engine
+from os import listdir
+
+#For the xml
+from lxml import etree as eTree
+import uuid
+from datetime import datetime, tzinfo, timedelta
 
 def process_batch(paths, start_time, stop_time, cycle_time):
     print('Running EZ_Detect v7.0 Putou')
@@ -70,8 +76,14 @@ def process_batch(paths, start_time, stop_time, cycle_time):
 
     print('Sampling rate: ' + str(round(sampling_rate)) +'Hz')
 
-    number_of_channels = raw_trc.info['nchan']  
+    number_of_channels = raw_trc.info['nchan']
     print("Number of channels " + str(number_of_channels))
+    
+    header = raw_trc._raw_extras[0]
+    rec_time = datetime( year = header['rec_year'], month= header['rec_month'],
+                         day = header['rec_day'], hour = header['rec_hour'],
+                         minute = header['rec_min'], second = header['rec_sec'])
+    
     #print('Printing channel names')
     #print(raw_trc.info['ch_names'])
     chanlist = updateChanlist(raw_trc.info['ch_names'], paths['swap_array_file'])
@@ -95,15 +107,20 @@ def process_batch(paths, start_time, stop_time, cycle_time):
     #column 3: index of channel to substract if marked as bipolar in column 2
     #column 4: 1 to exclude this channel, 0 to take it.
 
-    #For now, the easiest is mark every channel as referential.
     montage = generateMontage(chanlist)    
     #print(montage)
 
+    xml_set_event_types(paths['xml_output_path'])
+
     useThreads = True
     if useThreads:
-        processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths)
+        processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths, rec_time)
     else:
-        processParallelBlocks_processes(blocks, eeg_data, chanlist, metadata, montage, paths)
+        processParallelBlocks_processes(blocks, eeg_data, chanlist, metadata, montage, paths, rec_time)
+
+    for f in listdir(paths['ez_top_out']):
+        if f != '.keep':
+            xml_append_annotations(paths['xml_output_path'], output_fname, rec_time)
 
 ############  Local Funtions  #########
 
@@ -176,13 +193,13 @@ def saveResearchData(contest_path, metadata, eeg_data, chanlist):
         MATLAB.save(full_path, 'metadata_i', 'eeg_data_i', 'chanlist')
         #ask if it is worthy to save the blocks or not
 
-def processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths):
+def processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths, rec_time):
     
     threads = []
     
     def startBlockThread(i):
         thread = threading.Thread(target=processParallelBlock, name='DSP_block_'+str(i),
-                 args=(eeg_data[i], chanlist, metadata[i], montage, paths))
+                 args=(eeg_data[i], chanlist, metadata[i], montage, paths, rec_time))
         thread.start()
         threads.append(thread)
         return
@@ -212,7 +229,7 @@ def processParallelBlocks_processes(blocks, eeg_data, chanlist, metadata, montag
     pool.close()
     pool.join()
 
-def processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths):    
+def processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths, rec_time):    
     
     #matlab.engine doesnt support np arrays...
     #sol 1 save as matfile using scipy.io.savemat('test.mat', dict(x=x, y=y))
@@ -222,11 +239,11 @@ def processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths):
     eeg_mp, eeg_bp, metadata = MATLAB.ez_lfbad(args_fname, nargout=3)
     #metadata.montage is a cell array of 1 * n 
 
-    eeg_bp, metadata, hfo_ai, fr_ai = monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths)
+    eeg_bp, metadata, hfo_ai, fr_ai = monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths, rec_time)
 
-    bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths)
+    bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths, rec_time)
 
-def monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
+def monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths, rec_time):
         
     if eeg_mp: #not empty
         
@@ -249,6 +266,7 @@ def monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
                                          montage, 
                                          paths, 
                                          nargout=0)
+            
 
             MATLAB.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
                                     dsp_monopolar_out['ez_fr_mp'], 
@@ -274,7 +292,7 @@ def monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
     
     return eeg_bp, metadata, hfo_ai, fr_ai 
 
-def bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
+def bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths, rec_time):
 
     if eeg_bp:
         
@@ -293,6 +311,7 @@ def bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
                                      montage, 
                                      paths, 
                                      nargout=0)
+        
 
         MATLAB.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
                                 dsp_bipolar_out['ez_fr_bp'], 
@@ -340,3 +359,226 @@ def restoreShapes(dic):
         print("Done with reshapes")
     return dic
 
+
+###XML FUNCTIONS, alpha?
+
+def newGuidString():
+    return str(uuid.uuid4())
+
+def fixFormat(aDateTime):
+    
+    return aDateTime.strftime('%Y-%m-%dT%H:%M:%S') + aDateTime.strftime('.%f')[:7] + 'Z'
+
+def xml_set_event_types(xml_filename):
+
+    #move these defs to config.py
+    HFO_CATEGORY_GUID = "27e2727f-e49d-4113-aa8c-4944ef8f2588"
+    HFO_SUBCATEGORY_GUID = "c142e214-826e-4dfe-965a-110246492c9e"
+    DEF_HFO_SPIKE_GUID = "bf513752-2cb7-43bc-93f5-370def800b93"
+    DEF_HFO_RIPPLE_GUID = "167b6fad-f95a-4880-a9c6-968f468a1297"
+    DEF_HFO_FASTRIPPLE_GUID = "e0a58c9c-b3c0-4a7d-a3c3-d3ed6a57dc3a"
+
+    now = fixFormat(datetime.utcnow())  
+    
+    #puse un salto de linea por tab en el arbol xml para ordenar un poco
+    root = eTree.Element("EventFile", Version="1.00", CreationDate=now, Guid=newGuidString() )
+    
+    evt_types = eTree.SubElement(root, "EventTypes")
+    
+    category = eTree.SubElement(evt_types, "Category", Name="HFO")
+    
+    eTree.SubElement(category, "Description").text = "HFO Category"
+    eTree.SubElement(category, "IsPredefined").text = "true"
+    eTree.SubElement(category, "Guid").text = HFO_CATEGORY_GUID
+    subCategory = eTree.SubElement(category, "SubCategory", Name="HFO")
+    
+    eTree.SubElement(subCategory, "Description").text = "HFO Subcategory"
+    eTree.SubElement(subCategory, "IsPredefined").text = "true"
+    eTree.SubElement(subCategory, "Guid").text = HFO_SUBCATEGORY_GUID
+
+    #TODO: create this abstraction below to remove the repetead code below
+    #defineHFOType(subCategory, type_name, def_evt_guid, description, graph_argb_color)
+
+    defHFOSpike = eTree.SubElement(subCategory, "Definition", Name="HFO Spike")
+    
+    eTree.SubElement(defHFOSpike, "Guid").text = DEF_HFO_SPIKE_GUID
+    eTree.SubElement(defHFOSpike, "Description").text = "HFO Spike Event Definition"
+    eTree.SubElement(defHFOSpike, "IsPredefined").text = "true"
+    eTree.SubElement(defHFOSpike, "isDefinitionAdjustable").text = "false"
+    eTree.SubElement(defHFOSpike, "CanInsert").text = "true"
+    eTree.SubElement(defHFOSpike, "CanDelete").text = "true"
+    eTree.SubElement(defHFOSpike, "CanUpdateText").text = "true"
+    eTree.SubElement(defHFOSpike, "CanUpdatePosition").text = "true"
+    eTree.SubElement(defHFOSpike, "CanReassign").text = "false"
+    eTree.SubElement(defHFOSpike, "InsertionType").text = "ClickAndDrag"
+    eTree.SubElement(defHFOSpike, "FixedInsertionDuration").text = "PT1S"
+    eTree.SubElement(defHFOSpike, "TextType").text = "FromDefinitionDescription"
+    eTree.SubElement(defHFOSpike, "ReferenceType").text = "SingleLine"
+    eTree.SubElement(defHFOSpike, "DurationType").text = "Interval"
+    eTree.SubElement(defHFOSpike, "TextArgbColor").text = "4294901760"
+    eTree.SubElement(defHFOSpike, "GraphicArgbColor").text = "805306623"
+    eTree.SubElement(defHFOSpike, "GraphicType").text = "FillRectangle"
+    eTree.SubElement(defHFOSpike, "VisualizationType").text = "Graphic"
+    eTree.SubElement(defHFOSpike, "FontFamily").text = "Segoe UI"
+    eTree.SubElement(defHFOSpike, "FontSize").text = "11"
+    eTree.SubElement(defHFOSpike, "FontItalic").text = "false"
+    eTree.SubElement(defHFOSpike, "FontBold").text = "false"
+
+
+    defHFORipple = eTree.SubElement(subCategory, "Definition", Name="HFO Ripple")
+    
+    eTree.SubElement(defHFORipple, "Guid").text = DEF_HFO_RIPPLE_GUID
+    eTree.SubElement(defHFORipple, "Description").text = "HFO Ripple Event Definition"
+    eTree.SubElement(defHFORipple, "IsPredefined").text = "true"
+    eTree.SubElement(defHFORipple, "isDefinitionAdjustable").text = "false"
+    eTree.SubElement(defHFORipple, "CanInsert").text = "true"
+    eTree.SubElement(defHFORipple, "CanDelete").text = "true"
+    eTree.SubElement(defHFORipple, "CanUpdateText").text = "true"
+    eTree.SubElement(defHFORipple, "CanUpdatePosition").text = "true"
+    eTree.SubElement(defHFORipple, "CanReassign").text = "false"
+    eTree.SubElement(defHFORipple, "InsertionType").text = "ClickAndDrag"
+    eTree.SubElement(defHFORipple, "FixedInsertionDuration").text = "PT1S"
+    eTree.SubElement(defHFORipple, "TextType").text = "FromDefinitionDescription"
+    eTree.SubElement(defHFORipple, "ReferenceType").text = "SingleLine"
+    eTree.SubElement(defHFORipple, "DurationType").text = "Interval"
+    eTree.SubElement(defHFORipple, "TextArgbColor").text = "4294901760"
+    eTree.SubElement(defHFORipple, "GraphicArgbColor").text = "822018048"
+    eTree.SubElement(defHFORipple, "GraphicType").text = "FillRectangle"
+    eTree.SubElement(defHFORipple, "VisualizationType").text = "Graphic"
+    eTree.SubElement(defHFORipple, "FontFamily").text = "Segoe UI"
+    eTree.SubElement(defHFORipple, "FontSize").text = "11"
+    eTree.SubElement(defHFORipple, "FontItalic").text = "false"
+    eTree.SubElement(defHFORipple, "FontBold").text = "false"
+
+    defHFOFripple = eTree.SubElement(subCategory, "Definition", Name="HFO FastRipple")
+    
+    eTree.SubElement(defHFOFripple, "Guid").text = DEF_HFO_FASTRIPPLE_GUID
+    eTree.SubElement(defHFOFripple, "Description").text = "HFO FastRipple Event Definition"
+    eTree.SubElement(defHFOFripple, "IsPredefined").text = "true"
+    eTree.SubElement(defHFOFripple, "isDefinitionAdjustable").text = "false"
+    eTree.SubElement(defHFOFripple, "CanInsert").text = "true"
+    eTree.SubElement(defHFOFripple, "CanDelete").text = "true"
+    eTree.SubElement(defHFOFripple, "CanUpdateText").text = "true"
+    eTree.SubElement(defHFOFripple, "CanUpdatePosition").text = "true"
+    eTree.SubElement(defHFOFripple, "CanReassign").text = "false"
+    eTree.SubElement(defHFOFripple, "InsertionType").text = "ClickAndDrag"
+    eTree.SubElement(defHFOFripple, "FixedInsertionDuration").text = "PT1S"
+    eTree.SubElement(defHFOFripple, "TextType").text = "FromDefinitionDescription"
+    eTree.SubElement(defHFOFripple, "ReferenceType").text = "SingleLine"
+    eTree.SubElement(defHFOFripple, "DurationType").text = "Interval"
+    eTree.SubElement(defHFOFripple, "TextArgbColor").text = "4294901760"
+    eTree.SubElement(defHFOFripple, "GraphicArgbColor").text = "805371648"
+    eTree.SubElement(defHFOFripple, "GraphicType").text = "FillRectangle"
+    eTree.SubElement(defHFOFripple, "VisualizationType").text = "Graphic"
+    eTree.SubElement(defHFOFripple, "FontFamily").text = "Segoe UI"
+    eTree.SubElement(defHFOFripple, "FontSize").text = "11"
+    eTree.SubElement(defHFOFripple, "FontItalic").text = "false"
+    eTree.SubElement(defHFOFripple, "FontBold").text = "false"
+
+    #Create Events label empty to append annotations later.
+    events = eTree.SubElement(root, "Events")
+
+    tree = eTree.ElementTree(root)
+    tree.write(xml_filename, encoding="utf-8", xml_declaration=True, pretty_print=True)
+
+
+def xml_append_annotations(xml_file, events_matfile, rec_time):
+
+    #parti en 3 por si las variables que se cargan de matlab ocupan mucha memoria, despues vemos.
+    append_spike_annotations(xml_file, events_matfile, rec_time)
+    append_ripple_annotations(xml_file, events_matfile, rec_time)
+    append_fripple_annotations(xml_file, events_matfile, rec_time)
+
+
+def append_spike_annotations(xml_file, events_matfile, rec_time):
+    
+    parser = eTree.XMLParser(remove_blank_text=True)
+    tree = eTree.parse(xml_file, parser)
+    root = tree.getroot()
+    events = scipy.io.loadmat(events_matfile, variable_names=["TRonS", "ftTRonS", "FRonS", "ftFRonS"])
+    
+    DEF_HFO_SPIKE_GUID = "bf513752-2cb7-43bc-93f5-370def800b93"
+    spike_on_offset = - timedelta(seconds=0.02)
+    spike_off_offset = + timedelta(seconds=0.01)
+    now = fixFormat(datetime.utcnow())  #ver si quieren hacerlo mas preciso por evento.
+    
+    appendEventsOfKind('TRonS', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_SPIKE_GUID, spike_on_offset, spike_off_offset, now)
+
+    appendEventsOfKind('ftTRonS', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_SPIKE_GUID, spike_on_offset, spike_off_offset, now)
+
+    appendEventsOfKind('FRonS', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_SPIKE_GUID, spike_on_offset, spike_off_offset, now)
+    
+    appendEventsOfKind('ftFRonS', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_SPIKE_GUID, spike_on_offset, spike_off_offset, now)
+
+
+def append_ripple_annotations(xml_file, events_matfile, rec_time):
+    
+    parser = eTree.XMLParser(remove_blank_text=True)
+    tree = eTree.parse(xml_file, parser)
+    root = tree.getroot()
+    events = scipy.io.loadmat(events_matfile, variable_names=["RonO", "TRonS"])
+    
+    DEF_HFO_RIPPLE_GUID = "167b6fad-f95a-4880-a9c6-968f468a1297"
+    ripple_on_offset = - timedelta(milliseconds=5)
+    ripple_off_offset = + timedelta(milliseconds=5)
+    now = fixFormat(datetime.utcnow())  
+    
+    appendEventsOfKind('RonO', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_RIPPLE_GUID, ripple_on_offset, ripple_off_offset, now)
+
+    #Warning, this kind below appeared also as spike annotation, ask if it is a bug.
+    appendEventsOfKind('TRonS', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_RIPPLE_GUID, ripple_on_offset, ripple_off_offset, now)
+
+def append_fripple_annotations(xml_file, events_matfile, rec_time):
+    
+    parser = eTree.XMLParser(remove_blank_text=True)
+    tree = eTree.parse(xml_file, parser)
+    root = tree.getroot()
+    events = scipy.io.loadmat(events_matfile, variable_names=["ftRonO", "ftTRonS"])
+    
+    DEF_HFO_FASTRIPPLE_GUID = "e0a58c9c-b3c0-4a7d-a3c3-d3ed6a57dc3a"
+    fripple_on_offset = - timedelta(milliseconds=2.5)
+    fripple_off_offset = + timedelta(milliseconds=2.5)
+    now = fixFormat(datetime.utcnow())  
+    
+    appendEventsOfKind('ftRonO', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_FASTRIPPLE_GUID, fripple_on_offset, fripple_off_offset, now)
+
+    appendEventsOfKind('ftTRonS', events, rec_time, xml_file, tree, root, 
+                        DEF_HFO_FASTRIPPLE_GUID, fripple_on_offset, fripple_off_offset, now)
+
+
+def appendEventsOfKind(aKindOfEvent, events, rec_time, xml_file, tree, root, 
+                       evt_def_guid, on_offset, off_offset, now):
+
+    if len(events[aKindOfEvent]['channel']) > 0:
+        for i in range(len(events[aKindOfEvent]['channel'])):
+            channel = events[aKindOfEvent]['channel'][i][0]
+            begin = fixFormat(rec_time + timedelta(seconds=events[aKindOfEvent]['start_t'][i])+on_offset)
+            end = fixFormat(rec_time + timedelta(seconds=events[aKindOfEvent]['finish_t'][i])+off_offset)
+
+            appendEvent(xml_file, tree, root, evt_def_guid, channel, begin, end, now)
+
+#TODO MERGE WITH appendEventsOfkind    
+def appendEvent(xml_file, tree, root, evt_def_guid, channel, begin, end, now):
+    
+    evt = eTree.SubElement(root.find("Events"), "Event", Guid=newGuidString() )
+    eTree.SubElement(evt, "EventDefinitionGuid").text = evt_def_guid
+    eTree.SubElement(evt, "Begin").text = begin
+    eTree.SubElement(evt, "End").text = end
+    eTree.SubElement(evt, "Value").text = "0"
+    eTree.SubElement(evt, "ExtraValue").text = "0"
+    eTree.SubElement(evt, "DerivationInvID").text = str(channel) #review this. Shennan was adding +63 in matlab code, but the doc says it is the channel reference
+    eTree.SubElement(evt, "DerivationNotInvID").text = "0"
+    eTree.SubElement(evt, "CreatedBy").text = "Shennan Weiss"
+    eTree.SubElement(evt, "CreatedDate").text = now
+    eTree.SubElement(evt, "UpdatedBy").text = "Shennan Weiss"
+    eTree.SubElement(evt, "UpdatedDate").text = now
+
+    tree.write(xml_file, encoding="utf-8", xml_declaration=True, pretty_print=True)
+    
