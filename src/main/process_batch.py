@@ -559,8 +559,8 @@ def appendEventsOfKind(aKindOfEvent, events, rec_time, xml_file, tree, root,
     if len(events[aKindOfEvent]['channel']) > 0:
         for i in range(len(events[aKindOfEvent]['channel'])):
             channel = events[aKindOfEvent]['channel'][i][0]
-            begin = fixFormat(rec_time + timedelta(seconds=events[aKindOfEvent]['start_t'][i])+on_offset)
-            end = fixFormat(rec_time + timedelta(seconds=events[aKindOfEvent]['finish_t'][i])+off_offset)
+            begin = fixFormat(rec_time + timedelta(seconds=events[aKindOfEvent]['start_t'][i][0])+on_offset)
+            end = fixFormat(rec_time + timedelta(seconds=events[aKindOfEvent]['finish_t'][i][0])+off_offset)
 
             appendEvent(xml_file, tree, root, evt_def_guid, channel, begin, end, now)
 
