@@ -1,19 +1,15 @@
-rm -f ./dsp_output/monopolar/*
-rm -f ./dsp_output/bipolar/*
-rm -f ./executable/*
-rm -f ./ez_pac_output/*
-rm -f ./ez_top/input/*
-rm -f ./ez_top/output/*
-rm -f ./nbm1/*
-rm -f ./nbm2/*
-rm -f ./research_matfiles/*
-rm -f ./trc/temp/monopolar/*
-rm -f ./trc/temp/bipolar/*
-rm -f ./trc/output/*
-rm -f ./temp_pythonToMatlab_dsp/*
-rm -f ./temp_pythonToMatlab_dsp_MATLAB/*
-rm -f ./xml_output/*
-rm -f ./cudaica*.wts
-rm -f ./cudaica*.sph
-rm -f ./cudaica*.sc
-rm -f ./cudaica*.fdt
+rm ./matfiles/*
+rm ./mp_temp_trc/*
+rm ./nbm2/*
+rm ./nbm1/*
+
+rm ./TRC_out/*
+rm ./ez_top_out/*
+rm ./ez_top_in/*
+rm ./ez_pac_out/*
+rm ./cudaica*.wts
+rm ./cudaica*.sph
+rm ./cudaica*.sc
+rm ./cudaica*.fdt
+rm ../dsp_m_output_*.mat
+rm ../dsp_bp_output_*.mat
