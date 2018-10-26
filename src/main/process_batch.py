@@ -118,9 +118,9 @@ def process_batch(paths, start_time, stop_time, cycle_time):
     else:
         processParallelBlocks_processes(blocks, eeg_data, chanlist, metadata, montage, paths, rec_time)
 
-    for f in listdir(paths['ez_top_out']):
-        if f != '.keep':
-            xml_append_annotations(paths['xml_output_path'], output_fname, rec_time)
+    for filename in listdir(paths['ez_top_out']):
+        if filename != '.keep':
+            xml_append_annotations(paths['xml_output_path'], paths['ez_top_out']+filename, rec_time)
 
 ############  Local Funtions  #########
 
