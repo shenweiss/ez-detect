@@ -12,7 +12,7 @@ rm -f ./trc/temp/bipolar/*
 rm -f ./trc/output/*
 rm -f ./temp_pythonToMatlab_dsp/*
 rm -f ./temp_pythonToMatlab_dsp_MATLAB/*
-
+rm -f ./xml_output/*
 rm -f ./cudaica*.wts
 rm -f ./cudaica*.sph
 rm -f ./cudaica*.sc
