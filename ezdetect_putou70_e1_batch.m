@@ -87,8 +87,13 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
     %save(['/home/tomas-pastore/Escritorio/449_correct_EDF.mat'], 'header', 'signalHeader', 'eeg_edf', '-v7.3') 
     
     %Read TRC file
-    error_status_readTRC = system(['LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/tomas-pastore/anaconda3/bin/python /home/tomas-pastore/ez-detect/misc_code/trc_to_mat.py ' file_name_in]);
-    load('/home/tomas-pastore/Escritorio/449_correct_real_TRC.mat', 'header', 'signalHeader', 'eeg_edf' );
+    ENV = 'LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 '
+    PY = '/home/tomas-pastore/anaconda3/bin/python '
+    APP_DIR = '/home/tomas-pastore/ez-detect/python/'
+    APP = 'trc_to_mat.py '
+    ARGS = file_name_in
+    error_status_readTRC = system([ENV PY APP_DIR APP ARGS]);
+    load('/home/tomas-pastore/hfo_engine_1/TRC_in_mat/449_correct_real_TRC.mat', 'header', 'signalHeader', 'eeg_edf' );
     signalHeader = cell2mat(signalHeader);
 
     eeg_edf_tall=tall(eeg_edf);
@@ -98,7 +103,7 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
         starttime_ini=starttime_ini*samplingrate;
     end
     disp(strcat('Sampling rate: ', int2str(round(samplingrate)),'Hz'));
-    disp('EDF file loaded \r')
+    disp('Input file loaded \r')
 
     % Create file blocks and run EZ_detect
     if stoptime_ini==0 % default condition

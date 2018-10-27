@@ -4,6 +4,8 @@ import scipy.io
 import mne
 from trcio import read_raw_trc
 import numpy as np
+from datetime import datetime
+
 #import matlab.engine
 
 def generateMontage(chanlist):
@@ -27,6 +29,7 @@ def trc_to_mat(trc_filename):
     
     trc_header = raw_trc._raw_extras[0]
 
+
     header = {'srate':int(raw_trc.info['sfreq'])}
 
     #print(raw_trc.info['ch_names'])
@@ -34,7 +37,9 @@ def trc_to_mat(trc_filename):
 
     eeg_edf = raw_trc.get_data() #ver si esto da bien
 
-    scipy.io.savemat('/home/tomas-pastore/Escritorio/449_correct_real_TRC.mat', dict(header=header, signalHeader=signalHeader, eeg_edf=eeg_edf))
+
+    scipy.io.savemat('/home/tomas-pastore/hfo_engine_1/TRC_in_mat/449_correct_real_TRC.mat', dict(header=header, signalHeader=signalHeader, 
+                                                                                     eeg_edf=eeg_edf))
 
     #GENERATE EEG_12.TRC MONTAGE
     #montage = generateMontage(raw_trc.info['ch_names'])
@@ -44,18 +49,3 @@ def trc_to_mat(trc_filename):
 if __name__ == "__main__":
     trc_to_mat(sys.argv[1])
 
- #!LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 python /home/tomas-pastore/Escritorio/test.py 1
-
-'''
-    % Read EDF file
-    %disp('filename in ')
-    %disp(file_name_in)
-    %[header, signalHeader, eeg_edf] = ez_edfload_putou02(file_name_in); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
-    disp('EDF file load')
-    %save(['/home/tomas-pastore/Escritorio/449_correct_EDF.mat'], 'header', 'signalHeader', 'eeg_edf', '-v7.3') 
-    
-    %Read TRC file
-    error_status_readTRC = system(['LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/tomas-pastore/anaconda3/bin/python /home/tomas-pastore/Escritorio/trc_to_mat.py ' file_name_in]);
-    load('/home/tomas-pastore/Escritorio/449_correct_real_TRC.mat', 'header', 'signalHeader', 'eeg_edf' );
-    signalHeader = cell2mat(signalHeader);
-    '''
