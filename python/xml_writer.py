@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime, timedelta
 from os import listdir
 from trcio import read_raw_trc
+
 def write_xml(output_filename):
 
     xml_set_event_types(output_filename)
@@ -71,7 +72,7 @@ def defineHFOType(parentElem, name, type_guid, description, text_color, graph_co
     eTree.SubElement(anHFOtype, "Guid").text = type_guid
     eTree.SubElement(anHFOtype, "Description").text = description
     eTree.SubElement(anHFOtype, "IsPredefined").text = "true"
-    eTree.SubElement(anHFOtype, "isDefinitionAdjustable").text = "false"
+    eTree.SubElement(anHFOtype, "IsDefinitionAdjustable").text = "false"
     eTree.SubElement(anHFOtype, "CanInsert").text = "true"
     eTree.SubElement(anHFOtype, "CanDelete").text = "true"
     eTree.SubElement(anHFOtype, "CanUpdateText").text = "true"
@@ -120,13 +121,21 @@ def append_events(xml_file, events_matfile, rec_start_time, evt_type_vars, evt_t
 
 def appendEventsOfKind(aKindOfEvent, events, rec_start_time, xml_file, tree, root, 
                        evt_def_guid, on_offset, off_offset, now):
+    #import pdb; pdb.set_trace()
+    #(Pdb) events['TRonS']
+    #array([[(array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8))]],
+    #dtype=[('channel', 'O'), ('freq_av', 'O'), ('freq_pk', 'O'), ('power_av', 'O'), ('power_pk', 'O'), ('duration', 'O'), ('start_t', 'O'), ('finish_t', 'O')])
 
-    if len(events[aKindOfEvent]['channel']) > 0:
+    #para acceder al arreglo de freq_pk tenes que hacer events[0][0][2] creo
+    channels = events[aKindOfEvent][0][0][0]
+    if len(channels) > 0:
 
-        for i in range(len(events[aKindOfEvent]['channel'])):
-            channel = events[aKindOfEvent]['channel'][i][0]
-            begin = fixFormat(rec_start_time + timedelta(seconds=events[aKindOfEvent]['start_t'][i][0])+on_offset)
-            end = fixFormat(rec_start_time + timedelta(seconds=events[aKindOfEvent]['finish_t'][i][0])+off_offset)
+        for i in range(len(channels)):
+            channel = channels[i][0]
+            start_t = events[aKindOfEvent][0][0][6][i][0]
+            finish_t = events[aKindOfEvent][0][0][7][i][0]
+            begin = fixFormat(rec_start_time + timedelta(seconds=start_t)+on_offset)
+            end = fixFormat(rec_start_time + timedelta(seconds=finish_t)+off_offset)
 
             evt = eTree.SubElement(root.find("Events"), "Event", Guid=newGuidString() )
             eTree.SubElement(evt, "EventDefinitionGuid").text = evt_def_guid

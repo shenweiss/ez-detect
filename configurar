@@ -1,0 +1,7 @@
+Para correrlo:
+
+extraer la carpeta hfo_engine_1 al home
+python/xml_writer.py  tiene hardcodeado el path del trc para sacar el recording_start_time
+en la linea 90 de batch, configurar los paths correctos.
+en mainProcessing.sh configurar los paths
+reemplazar con grep rl los 'tomas-pastore' por el username en todos los archivos 

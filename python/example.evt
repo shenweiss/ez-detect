@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventFile Guid="9eed3879-1f32-433a-ab56-062b9b3de2ae" CreationDate="2018-04-03T10:00:57.7675367Z" Version="1.00">
+  <EventTypes>
+    <Category Name="HFO">
+      <Description>HFO Category</Description>
+      <IsPredefined>true</IsPredefined>
+      <Guid>27e2727f-e49d-4113-aa8c-4944ef8f2588</Guid>
+      <SubCategory Name="HFO">
+        <Description>HFO Subcategory</Description>
+        <IsPredefined>true</IsPredefined>
+        <Guid>c142e214-826e-4dfe-965a-110246492c9e</Guid>
+        <Definition Name="HFO Spike">
+          <Guid>bf513752-2cb7-43bc-93f5-370def800b93</Guid>
+          <Description>S</Description>
+          <IsPredefined>true</IsPredefined>
+          <IsDefinitionAdjustable>false</IsDefinitionAdjustable>
+          <CanInsert>true</CanInsert>
+          <CanDelete>true</CanDelete>
+          <CanUpdateText>true</CanUpdateText>
+          <CanUpdatePosition>true</CanUpdatePosition>
+          <CanReassign>false</CanReassign>
+          <InsertionType>ClickAndDrag</InsertionType>
+          <FixedInsertionDuration>PT1S</FixedInsertionDuration>
+          <TextType>FromDefinitionDescription</TextType>
+          <ReferenceType>SingleLine</ReferenceType>
+          <DurationType>Interval</DurationType>
+          <TextArgbColor>4294901760</TextArgbColor>
+          <GraphicArgbColor>805306623</GraphicArgbColor>
+          <GraphicType>FillRectangle</GraphicType>
+          <VisualizationType>Graphic</VisualizationType>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>11</FontSize>
+          <FontItalic>false</FontItalic>
+          <FontBold>false</FontBold>
+        </Definition>
+        <Definition Name="HFO Ripple">
+          <Guid>167b6fad-f95a-4880-a9c6-968f468a1297</Guid>
+          <Description>R</Description>
+          <IsPredefined>true</IsPredefined>
+          <IsDefinitionAdjustable>false</IsDefinitionAdjustable>
+          <CanInsert>true</CanInsert>
+          <CanDelete>true</CanDelete>
+          <CanUpdateText>true</CanUpdateText>
+          <CanUpdatePosition>true</CanUpdatePosition>
+          <CanReassign>false</CanReassign>
+          <InsertionType>ClickAndDrag</InsertionType>
+          <FixedInsertionDuration>PT1S</FixedInsertionDuration>
+          <TextType>FromDefinitionDescription</TextType>
+          <ReferenceType>SingleLine</ReferenceType>
+          <DurationType>Interval</DurationType>
+          <TextArgbColor>4294901760</TextArgbColor>
+          <GraphicArgbColor>822018048</GraphicArgbColor>
+          <GraphicType>FillRectangle</GraphicType>
+          <VisualizationType>Graphic</VisualizationType>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>11</FontSize>
+          <FontItalic>false</FontItalic>
+          <FontBold>false</FontBold>
+        </Definition>
+        <Definition Name="HFO FastRipple">
+          <Guid>e0a58c9c-b3c0-4a7d-a3c3-d3ed6a57dc3a</Guid>
+          <Description>FR</Description>
+          <IsPredefined>true</IsPredefined>
+          <IsDefinitionAdjustable>false</IsDefinitionAdjustable>
+          <CanInsert>true</CanInsert>
+          <CanDelete>true</CanDelete>
+          <CanUpdateText>true</CanUpdateText>
+          <CanUpdatePosition>true</CanUpdatePosition>
+          <CanReassign>false</CanReassign>
+          <InsertionType>ClickAndDrag</InsertionType>
+          <FixedInsertionDuration>PT1S</FixedInsertionDuration>
+          <TextType>FromDefinitionDescription</TextType>
+          <ReferenceType>SingleLine</ReferenceType>
+          <DurationType>Interval</DurationType>
+          <TextArgbColor>4294901760</TextArgbColor>
+          <GraphicArgbColor>805371648</GraphicArgbColor>
+          <GraphicType>FillRectangle</GraphicType>
+          <VisualizationType>Graphic</VisualizationType>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>11</FontSize>
+          <FontItalic>false</FontItalic>
+          <FontBold>false</FontBold>
+        </Definition>
+      </SubCategory>
+    </Category>
+  </EventTypes>
+  <Events>
+   
+<Event Guid="314ffc9f-04f5-0b34-05c3-06458b3128a6"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:09:56.3017854</Begin> 
+<End>1978-11-05T12:09:56.3424912</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="34eb4ae3-187b-024a-1b8a-0063f9e12888"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:14:14.4856916</Begin> 
+<End>1978-11-05T12:14:14.5472927</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="13c84030-05bf-0bd9-03c6-08b4572ac5e4"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:14:14.4876884</Begin> 
+<End>1978-11-05T12:14:14.5493044</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="1378e69b-2292-1cd8-18af-06c98c0381ed"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:17:23.0369203</Begin> 
+<End>1978-11-05T12:17:23.0806461</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="1fb80819-0ca3-0232-1152-00173e20c5ee"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:15.8639679</Begin> 
+<End>1978-11-05T12:19:15.9032796</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="28a788b4-0fa5-0fb0-08d1-0480ddd845f5"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:25.3584259</Begin> 
+<End>1978-11-05T12:19:25.4155391</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="0925f923-20ae-04a5-15ce-0118254771da"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:17:23.0420130</Begin> 
+<End>1978-11-05T12:17:23.0873104</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>65</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="1fdd3c02-1356-0bfb-1e00-08d91fe00241"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:15.8661234</Begin> 
+<End>1978-11-05T12:19:15.9027017</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>65</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="17ee58a3-1103-1470-0b39-05f5b3fdf02c"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:14:36.4707713</Begin> 
+<End>1978-11-05T12:14:36.5098831</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>66</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="1aa3bf99-0e13-0a94-2155-06da00b6d8e0"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:10:30.2363075</Begin> 
+<End>1978-11-05T12:10:30.2838094</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="21b8d4b1-12a8-0170-186b-051bd586c22d"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:10:41.5279325</Begin> 
+<End>1978-11-05T12:10:41.5839735</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="27a38d54-07b1-0721-1a1d-034fcb83079c"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:12:13.5910390</Begin> 
+<End>1978-11-05T12:12:13.6251594</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="0a7768db-1b4d-1c1d-06f6-081d165b2968"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:12:42.0545001</Begin> 
+<End>1978-11-05T12:12:42.1150293</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="3993b671-10d5-0006-0901-0491b7c9fbc7"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:14:36.4547635</Begin> 
+<End>1978-11-05T12:14:36.4841545</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="2ef9728a-003b-1801-1864-03a341b60c6e"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:14:36.4762713</Begin> 
+<End>1978-11-05T12:14:36.5096394</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="29b04cc1-1779-0239-0919-014bc7102b76"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:17:28.0608459</Begin> 
+<End>1978-11-05T12:17:28.1044136</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="37eebe08-04fe-1e15-0fc2-005b1f2e27f9"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:18:09.9382</Begin> 
+<End>1978-11-05T12:18:09.9954</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="26ab7f61-2267-0362-0f6a-0740c530e2a4"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:18:10.0334192</Begin> 
+<End>1978-11-05T12:18:10.0659709</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="3930232f-12d7-0cd7-1609-035977601b29"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:36.1082596</Begin> 
+<End>1978-11-05T12:19:36.1584257</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>67</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="10de781b-20aa-128b-2195-08ac00389aac"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:12:31.7442843</Begin> 
+<End>1978-11-05T12:12:31.8051831</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>68</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="37ac8a0c-02d4-0381-1588-03c025d2fd9f"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:12:42.1684533</Begin> 
+<End>1978-11-05T12:12:42.2072957</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>68</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="295b5c9c-083b-1e0f-0bf9-07b04ef2ff5b"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:17:28.0793218</Begin> 
+<End>1978-11-05T12:17:28.1235529</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>68</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="396639aa-20f8-05a8-1a97-046451c6b5bb"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:16:29.5401976</Begin> 
+<End>1978-11-05T12:16:29.5990633</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>69</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="21dbe3ae-14e4-0675-0c77-0283efc7cd74"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:15.8704672</Begin> 
+<End>1978-11-05T12:19:15.9097777</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="0a7d043e-0d92-22e7-08d7-06f3c972b176"> 
+<EventDefinitionGuid>167b6fad-f95a-4880-a9c6-968f468a1297</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:15.8741215</Begin> 
+<End>1978-11-05T12:19:15.9106928</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>65</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="1dd2e1b8-0127-06dc-0e72-004a2b9c2c3d"> 
+<EventDefinitionGuid>e0a58c9c-b3c0-4a7d-a3c3-d3ed6a57dc3a</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:15.8679712</Begin> 
+<End>1978-11-05T12:19:15.8825463</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="14f97f6b-105f-0bf6-199d-03b8f558ca3d"> 
+<EventDefinitionGuid>e0a58c9c-b3c0-4a7d-a3c3-d3ed6a57dc3a</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:15.8714832</Begin> 
+<End>1978-11-05T12:19:15.8818270</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>65</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+<Event Guid="2e782e70-129b-1540-2058-004f541c52bd"> 
+<EventDefinitionGuid>e0a58c9c-b3c0-4a7d-a3c3-d3ed6a57dc3a</EventDefinitionGuid> 
+<Begin>1978-11-05T12:19:15.8744716</Begin> 
+<End>1978-11-05T12:19:15.8890456</End> 
+<Value>0</Value> 
+<ExtraValue>0</ExtraValue> 
+<DerivationInvID>64</DerivationInvID> 
+<DerivationNotInvID>0</DerivationNotInvID> 
+<CreatedBy>Shennan Weiss</CreatedBy> 
+<CreatedDate>2017-04-07T15:39:52.6918243Z</CreatedDate> 
+<UpdatedBy>Shennan Weiss</UpdatedBy> 
+<UpdatedDate>2017-04-07T15:39:52.6918243Z</UpdatedDate> 
+</Event>
+
+  </Events>
+</EventFile>
