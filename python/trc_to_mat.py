@@ -26,7 +26,7 @@ def trc_to_mat(trc_filename, saving_path):
     
     #Convert data from volts to microvolts
     print("Converting data from volts to microvolts")
-    raw_trc._data*= 1e06
+    raw_trc._data *= 1e06
     print("Now data is in microvolts")
 
     eeg_edf = raw_trc.get_data() #ver si esto da bien
