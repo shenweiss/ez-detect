@@ -1,5 +1,7 @@
 rm -f ./matfiles/*
 rm -f ./mp_temp_trc/*
+rm -f ./bp_temp_trc/*
+
 rm -f ./nbm2/*
 rm -f ./nbm1/*
 

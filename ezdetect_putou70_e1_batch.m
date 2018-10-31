@@ -82,21 +82,21 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
     % Read EDF file
     %disp('filename in ')
     %disp(file_name_in)
-    [header, signalHeader, eeg_edf] = ez_edfload_putou02(file_name_in); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
-    disp('EDF file load')
-    save(['/home/tomas-pastore/Escritorio/449_correct_EDF.mat'], 'header', 'signalHeader', 'eeg_edf', '-v7.3') 
+    %[header, signalHeader, eeg_edf] = ez_edfload_putou02(file_name_in); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
+    %disp('EDF file load')
+    %save(['/home/tomas-pastore/Escritorio/449_correct_EDF.mat'], 'header', 'signalHeader', 'eeg_edf', '-v7.3') 
     
     %Read TRC file
-    %[filepath,fileName,ext] = fileparts(file_name_in)
-    %ENV = 'LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 '
-    %PY = '/home/tomas-pastore/anaconda3/bin/python '
-    %APP_DIR = '/home/tomas-pastore/ez-detect/python/'
-    %APP = 'trc_to_mat.py '
-    %saving_path = ['/home/tomas-pastore/hfo_engine_1/TRC_in_mat/' fileName '_TRC.mat']
-    %error_status_readTRC = system([ENV PY APP_DIR APP file_name_in ' ' saving_path]); %lee el trc y guarda lo necesario en un matfile para que lo acceda matlab
-    %error_status_readTRC
-    %load(saving_path, 'header', 'signalHeader', 'eeg_edf' );
-    %signalHeader = cell2mat(signalHeader);
+    [filepath,fileName,ext] = fileparts(file_name_in)
+    ENV = 'LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 '
+    PY = '/home/tomas-pastore/anaconda3/bin/python '
+    APP_DIR = '/home/tomas-pastore/ez-detect/python/'
+    APP = 'trc_to_mat.py '
+    saving_path = ['/home/tomas-pastore/hfo_engine_1/TRC_in_mat/' fileName '_TRC.mat']
+    error_flag_readTRC = system([ENV PY APP_DIR APP file_name_in ' ' saving_path]); %lee el trc y guarda lo necesario en un matfile para que lo acceda matlab
+    error_flag_readTRC
+    load(saving_path, 'header', 'signalHeader', 'eeg_edf' );
+    signalHeader = cell2mat(signalHeader);
 
     eeg_edf_tall=tall(eeg_edf);
     clear eeg_edf

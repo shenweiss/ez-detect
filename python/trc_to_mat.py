@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.5
 import sys
 import scipy.io
 import mne
@@ -24,14 +23,22 @@ def generateMontage(chanlist):
 def trc_to_mat(trc_filename, saving_path):
 
     raw_trc = read_raw_trc(trc_filename, preload=True, include=None)
-    trc_header = raw_trc._raw_extras[0]
+    
+    #Convert data from volts to microvolts
+    print("Converting data from volts to microvolts")
+    raw_trc._data*= 1e06
+    print("Now data is in microvolts")
+
+    eeg_edf = raw_trc.get_data() #ver si esto da bien
+    print("First data sig must be 9.375 microvolts")
+    print(str(eeg_edf[0][0]))
 
     header = {'srate':int(raw_trc.info['sfreq'])}
-    #print(raw_trc.info['ch_names'])
     signalHeader = [{'signal_labels':chan_name} for chan_name in raw_trc.info['ch_names']]
-    eeg_edf = raw_trc.get_data() #ver si esto da bien
+    print("Saving TRC mat") 
+    #import pdb ;pdb.set_trace() 
 
-    scipy.io.savemat(saving_path, dict(header=header, signalHeader=signalHeader, eeg_edf=eeg_edf))
+    scipy.io.savemat(saving_path, dict(header=header, signalHeader=signalHeader, eeg_edf=eeg_edf)) #se guardan bien los valores. OK
 
     #GENERATE EEG_12.TRC MONTAGE
     #montage = generateMontage(raw_trc.info['ch_names'])
