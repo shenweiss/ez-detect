@@ -7,7 +7,7 @@ clear;
 
 % Load Files and structure data apporopriately. This section can be
 % suitably modified to fit alternate file structures.
-d1 = dir('/home/tomas-pastore/zac/398/');
+d1 = dir('/home/tpastore/zac/398/');
 d1(1:2,:) = [];
 % for ii = size(d1,1):-1:1
 %     if ~strcmp('IO0',d1(ii).name(1:3))
@@ -16,27 +16,27 @@ d1(1:2,:) = [];
 % end
 % for aa = 1:size(d1)
 for aa = 5
-%     d2 = dir(['/home/tomas-pastore/zac/eztop/in_data/' d1(aa).name '/']);
+%     d2 = dir(['/home/tpastore/zac/eztop/in_data/' d1(aa).name '/']);
 %     d2(1:2,:) = [];
 %     for bb = 1:size(d2,1)
     for bb = 1
         pat = d1(aa).name;
-        load(['/home/tomas-pastore/zac/398/' d1(aa).name])
+        load(['/home/tpastore/zac/398/' d1(aa).name])
 %         pat = d2(bb).name;
-%         load(['/home/tomas-pastore/zac/eztop/in_data/' d1(aa).name '/' pat])
+%         load(['/home/tpastore/zac/eztop/in_data/' d1(aa).name '/' pat])
         if strcmp('p', pat(end-6))
             file_data = DSP_data_bp;
         elseif strcmp('m', pat(end-6))
             file_data = DSP_data_m;
         end
-%         mkdir('/home/tomas-pastore/zac/eztop/in_data/IO_output/', [d1(aa).name '_output/']);
-%         mkdir(['/home/tomas-pastore/zac/eztop/in_data/IO_output/' d1(aa).name '_output/'], 'variables/');
+%         mkdir('/home/tpastore/zac/eztop/in_data/IO_output/', [d1(aa).name '_output/']);
+%         mkdir(['/home/tpastore/zac/eztop/in_data/IO_output/' d1(aa).name '_output/'], 'variables/');
 
-        mkdir('/home/tomas-pastore/zac/eztop/error_files_output/');
-        mkdir('/home/tomas-pastore/zac/eztop/error_files_output/variables/');
+        mkdir('/home/tpastore/zac/eztop/error_files_output/');
+        mkdir('/home/tpastore/zac/eztop/error_files_output/variables/');
 
-        output1 = ['/home/tomas-pastore/zac/eztop/error_files_output/variables/var_' pat];
-        output1 = ['/home/tomas-pastore/zac/eztop/error_files_output/ezTop_' pat];
+        output1 = ['/home/tpastore/zac/eztop/error_files_output/variables/var_' pat];
+        output1 = ['/home/tpastore/zac/eztop/error_files_output/ezTop_' pat];
 
         clearvars -except d1 d2 file_data output* pat aa bb
         

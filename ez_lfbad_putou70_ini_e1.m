@@ -11,7 +11,7 @@ eeg_data=gather(ez_tall);
 file_id_size=numel(file_id);
 file_id=file_id(1:(file_id_size-4));
 file_name=strcat(file_id, '_montage');
-file_name=['/home/tomas-pastore/hfo_engine_1/montages/' file_name];
+file_name=['/home/tpastore/hfo_engine_1/montages/' file_name];
 disp('up to load montage')
 file_name
 disp(['loading montage: ' file_name])

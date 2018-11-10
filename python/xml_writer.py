@@ -6,11 +6,11 @@ from datetime import datetime, timedelta
 from os import listdir
 from trcio import read_raw_trc
 
-def write_xml(output_filename):
+def write_xml(output_filename, trc_path):
 
     xml_set_event_types(output_filename)
 
-    raw_trc = read_raw_trc('/home/tomas-pastore/EDFs/449_correct.TRC', preload=True, include=None)
+    raw_trc = read_raw_trc(trc_path, preload=True, include=None)
     trc_header = raw_trc._raw_extras[0]
     rec_start_time = datetime( year = trc_header['rec_year'], month= trc_header['rec_month'],
                          day = trc_header['rec_day'], hour = trc_header['rec_hour'],

@@ -1,8 +1,8 @@
 Para correrlo:
 
 extraer la carpeta hfo_engine_1 al home
-en mainProcessing.sh cambiar tomas-pastore por tpastore y el path de python por /home/tpastore/ezDetectEnv/bin/python, sacar Escritorio de output_path
+en mainProcessing.sh cambiar tpastore por tpastore y el path de python por /home/tpastore/ezDetectEnv/bin/python, sacar Escritorio de output_path
 times_testing: cambiat el path del TRC
 batch: cambiar python path
 python/xml_writer.py  tiene hardcodeado el path del trc para sacar el recording_start_time
-reemplazar con grep rl los 'tomas-pastore' por el username en todos los archivos 
+reemplazar con grep rl los 'tpastore' por el username en todos los archivos 

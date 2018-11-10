@@ -42,7 +42,7 @@ def trc_to_mat(trc_filename, saving_path):
 
     #GENERATE EEG_12.TRC MONTAGE
     #montage = generateMontage(raw_trc.info['ch_names'])
-    #scipy.io.savemat('/home/tomas-pastore/hfo_engine_1/montages/EEG_12_montage.mat', dict(montage=montage))
+    #scipy.io.savemat('/home/tpastore/hfo_engine_1/montages/EEG_12_montage.mat', dict(montage=montage))
 
 if __name__ == "__main__":
     print("length")

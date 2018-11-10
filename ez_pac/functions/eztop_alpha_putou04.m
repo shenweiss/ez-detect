@@ -13,7 +13,7 @@ if montage == 0
 else
      fname_var='_bp_'
 end;
-output_fname = ['/home/tomas-pastore/ez_detect/putou/ez_top/out_data/' 'ezTop_' metadata.patient_id fname_var metadata.file_block '.mat']
+output_fname = ['/home/tpastore/ez_detect/putou/ez_top/out_data/' 'ezTop_' metadata.patient_id fname_var metadata.file_block '.mat']
         % Ripple clip start/stop time arrays
         rcet = file_data.ripple_clip_event_t;
         rcat = file_data.ripple_clip_abs_t;
