@@ -25,6 +25,10 @@ zsixty_cycle=zscore_2(sixty_cycle);
 imp=unique(imp);
 
   t.Data=montage;
+
+  %NEW save original id of referential channels to do annotations later
+  metadata.original_chanlist = string(montage(:,1))
+
   eeg_bp=[];
   eeg_mp=[];
   eeg_bps=[];
@@ -64,12 +68,6 @@ imp=unique(imp);
          end;
      end;
  end;
-
-if isempty(eeg_bp)
-    eeg_bp.eeg_data=[];
-    eeg_bp.chanlist={''};
-end;
- 
  
 if isempty(eeg_bps)
     eeg_bps.eeg_data=[];
@@ -81,8 +79,6 @@ if isempty(eeg_mp)
     eeg_mp.chanlist={''};
 end;
 
-
-if ~isempty(eeg_bp.eeg_data)
 %% New section to find bad channels
 fprintf('running neural network to find bad electrode recording sites \r');
 nnetworkin=zeros(numel(eeg_bp.eeg_data(:,1)),11);
@@ -153,11 +149,6 @@ if isempty(a)
     lf_bad=[];
 end;
 
-else 
-  
-  lf_bad = [];
-
-end
 ez_tall_m=tall(eeg_mp.eeg_data);
 ez_tall_bp=tall(eeg_bps.eeg_data);
 if ~isempty(eeg_mp.eeg_data)

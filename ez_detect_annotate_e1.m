@@ -563,4 +563,4 @@ if ~isempty(ftTRonS.channel)
         end;
     end;
 end;
-save(fname,'RonO','TRonS','FRonS','ftRonO','ftTRonS','ftFRonS','Total_RonO','Total_TRonS','Total_FRonS','Total_ftRonO','Total_ftTRonS','Total_ftFRonS');
+save(fname,'RonO','TRonS','FRonS','ftRonO','ftTRonS','ftFRonS','Total_RonO','Total_TRonS','Total_FRonS','Total_ftRonO','Total_ftTRonS','Total_ftFRonS','monopolar_chanlist', 'bipolar_chanlist');

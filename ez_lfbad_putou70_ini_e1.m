@@ -1,5 +1,7 @@
 function [ez_tall_m, ez_tall_bp, metadata, montage] = ez_lfbad_putou70_ini_batch(ez_tall, chanlist, metadata, file_id);
 
+%Esta funcion solo la usan para cargar el montage de .mat.. todo lo demas no se usa. Se hace en ez_lfbad_putou70_e1.m
+
 file_block=metadata.file_block;
 
 %Initialize output data structures
@@ -12,9 +14,6 @@ file_id_size=numel(file_id);
 file_id=file_id(1:(file_id_size-4));
 file_name=strcat(file_id, '_montage');
 file_name=['/home/tpastore/hfo_engine_1/montages/' file_name];
-disp('up to load montage')
-file_name
-disp(['loading montage: ' file_name])
 load(file_name,'montage');
 t.Data=montage;
 
@@ -50,44 +49,43 @@ imp=unique(imp);
   counter_1=0;
   counter_2=0;
   counter_3=0;
- 
 
  for j=1:numel(chanlist)
-    if t.Data{j,3}~=0
-        if t.Data{j,4}~=1
-          if isempty(intersect(imp,j))    
-            counter_1=counter_1+1;
-            eeg_bp.eeg_data(counter_1,:)=eeg_data(j,:)-eeg_data(t.Data{j,3},:);
-            eeg_bp.chanlist(counter_1)=chanlist(j);
-          end;
-        end;
-    end;   
-     if t.Data{j,2}==1
+   
+   if t.Data{j,3}~=0 %If it has reference to another channel to considering it bipolar
+       if t.Data{j,4}~=1 %And is not excluded
+         if isempty(intersect(imp,j)) %And is not filtered by impedence check  
+           counter_1=counter_1+1;
+           eeg_bp.eeg_data(counter_1,:)=eeg_data(j,:)-eeg_data(t.Data{j,3},:); %saves channel data as bipolar channel
+           eeg_bp.chanlist(counter_1)=chanlist(j); %append it to the bipolar channel list
+         end;
+       end;
+   end;   
+   %Note: This allows a channel to be both referential and bipolar.
+
+   if t.Data{j,2}==1 %If it is marked down as referential in montage.mat
+     if t.Data{j,4}~=1 %And not excluded
+       if isempty(intersect(imp,j)) %And not filtered by impedence check
+         counter_2=counter_2+1;
+         eeg_mp.eeg_data(counter_2,:)=eeg_data(j,:); %saves channel data as referential channel
+         eeg_mp.chanlist(counter_2)=chanlist(j); %append it to referential chanel list
+       end;
+     end;    
+   else %Same as first. Again to bipolar. 
+     if t.Data{j,3}~=0 
        if t.Data{j,4}~=1
-         if isempty(intersect(imp,j))
-           counter_2=counter_2+1;
-           eeg_mp.eeg_data(counter_2,:)=eeg_data(j,:);  
-           eeg_mp.chanlist(counter_2)=chanlist(j);
-         end;
-       end;    
-     else
-         if t.Data{j,3}~=0
-          if t.Data{j,4}~=1
-           if isempty(intersect(imp,j))   
-             counter_3=counter_3+1;
-             eeg_bps.eeg_data(counter_3,:)=eeg_data(j,:)-eeg_data(t.Data{j,3},:);
-             eeg_bps.chanlist(counter_3)=chanlist(j);
-           end;
+          if isempty(intersect(imp,j))   
+            counter_3=counter_3+1;
+            eeg_bps.eeg_data(counter_3,:)=eeg_data(j,:)-eeg_data(t.Data{j,3},:);
+            eeg_bps.chanlist(counter_3)=chanlist(j);
           end;
-         end;
+       end;
      end;
- end;
-%
-if isempty(eeg_bp)
-    eeg_bp.eeg_data=[];
-    eeg_bp.chanlist={''};
-end;
+   end;
  
+ end
+%
+
 if isempty(eeg_bps)
     eeg_bps.eeg_data=[];
     eeg_bps.chanlist={''};
@@ -97,9 +95,6 @@ if isempty(eeg_mp)
     eeg_mp.eeg_data=[];
     eeg_mp.chanlist={''};
 end;
-
-
-if ~isempty(eeg_bp.eeg_data)
 
 %% New section to find bad channels
 fprintf('running neural network to find bad electrode recording sites \r');
@@ -172,12 +167,6 @@ if isempty(a)
     lf_bad=[];
 end;
 
-else 
-  
-  lf_bad = [];
-
-end
-
 ez_tall_m=tall(eeg_mp.eeg_data);
 ez_tall_bp=tall(eeg_bps.eeg_data);
 if ~isempty(eeg_mp.eeg_data)
@@ -188,4 +177,3 @@ metadata.bp_chanlist=eeg_bps.chanlist;
 end;
 metadata.lf_bad=lf_bad;
 % end of section
-

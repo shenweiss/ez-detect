@@ -33,14 +33,13 @@ do
 done
 
 wait
-
 #WRITE XML, otra opcion es agarrar los txt
 
 ENV='LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6'
 PY='/home/tpastore/anaconda3/bin/python'
 APP='/home/tpastore/ez-detect/python/write_xml.py'
 output_path='/home/tpastore/'$xml_out
-command=$ENV $PY $APP $output_path $trc_in
+command=$ENV $PY $APP $output_path '/home/tpastore/EDFs/'$trc_in
 
 echo $command
 $command &

@@ -163,6 +163,7 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
     clear eeg_edf_tall;
     disp('Finished eeg_data processing');
 
+    chanlist
     [~, ~, ~, montage] = ez_lfbad_putou70_ini_e1(tall(eeg_datas{1}), chanlist, metadatas(1,:,:), file_id);
         
     parfor i=start_iterations:cycles
@@ -181,6 +182,11 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
     clear ez_tall;
     metadata.montage= montage;
 
+    %debug code
+    if ~isempty(gather(ez_tall_bp))
+        disp('processBatch: ez_tall_bp is empty before dsp_monopolar')
+    end
+    %%%
     if ~isempty(gather(ez_tall_m))
         disp('Starting dsp_m');
         [DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag] = ez_detect_dsp_m_putou70_e1(ez_tall_m,ez_tall_bp,metadata);
@@ -204,6 +210,8 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
         filename = ['dsp_bp_output_' metadata.file_block '.mat']
         saveBipolarData(filename, DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
         disp('Saving dsp_m output');
+    else 
+        disp('Did not enter to dsp_bipolar because _ez_tall_bp was empty ')
     end
 
 end

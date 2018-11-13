@@ -1,3 +1,4 @@
+import os
 import sys
 import scipy.io
 import mne
@@ -34,9 +35,17 @@ def trc_to_mat(trc_filename, saving_path):
     print(str(eeg_edf[0][0]))
 
     header = {'srate':int(raw_trc.info['sfreq'])}
-    signalHeader = [{'signal_labels':chan_name} for chan_name in raw_trc.info['ch_names']]
-    print("Saving TRC mat") 
+    
+    filename = os.path.basename(trc_filename)
+    filename = os.path.splitext(filename)[0]
+    montage_filename = os.path.expanduser("~") + '/hfo_engine_1/montages/' + filename + '_montage.mat'
+    aDic = scipy.io.loadmat(montage_filename)
+    chanlist = [aDic['montage'][i][0][0] for i in range(raw_trc.info['nchan']) ]
     #import pdb ;pdb.set_trace() 
+    print('Channel list: ')
+    print(chanlist)
+    signalHeader = [{'signal_labels':chan_name} for chan_name in chanlist]
+    print("Saving TRC mat") 
 
     scipy.io.savemat(saving_path, dict(header=header, signalHeader=signalHeader, eeg_edf=eeg_edf)) #se guardan bien los valores. OK
 

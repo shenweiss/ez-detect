@@ -70,7 +70,7 @@ fprintf(txt_fid,'<Value>0</Value> \n');
 % addend extravalue
 fprintf(txt_fid,'<ExtraValue>0</ExtraValue> \n');
 % addend channel number
-event_chan=channel+63;
+event_chan=channel;
 s_event_chan=num2str(event_chan);
 event_chan_string=['<DerivationInvID>' s_event_chan '</DerivationInvID> \n'];
 fprintf(txt_fid,event_chan_string);

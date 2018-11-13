@@ -59,15 +59,16 @@ new_eeg_bp=[];
 new_bp_chans={''};
 counter=0;
 for i=1:numel(metadata.hf_bad_m_index)
-    % locate bp channel (possibly not found)
+    % locate bp channel (possibly not found) Busca en el montage el nombre de canal malo. 
     [C,IA,IB]=intersect(metadata.hf_bad_m(i),metadata.montage(:,1));
     if ~isempty(C)
         ref=cell2mat(metadata.montage(IB,3));
         if ref~=0
+            %Buscar si el canal de referencia tambien está marcado como referencial
             [C2,IIA,IIB]=intersect(metadata.montage(ref,1),metadata.m_chanlist);
             if ~isempty(C2)
                 counter=counter+1;
-                new_eeg_bp(counter,:)=eeg_mp(metadata.hf_bad_m_index(i),:)-eeg_mp(IIB,:);
+                new_eeg_bp(counter,:)=eeg_mp(metadata.hf_bad_m_index(i),:)-eeg_mp(IIB,:); %designa un nuevo bipolar como el monopolar 
                 new_bp_chans(counter)=metadata.hf_bad_m(i);
             end;
         end;
