@@ -1,5 +1,5 @@
 function mat2trc32_m2k_d(patient_id,file_block)
-load(['/home/tpastore/ez_detect/putou/mp_temp_trc/eeg_2k_d_' file_block '.mat'])
+load(['/home/tomas-pastore/ez_detect/putou/mp_temp_trc/eeg_2k_d_' file_block '.mat'])
 
 TRC.data=[];
 fprintf('checking eeg input size \r');
@@ -21,7 +21,7 @@ end;
 
 fprintf('building .TRC header \r');
 
-trcfile='/home/tpastore/ez_detect/putou/mp_temp_trc/EEG_1_d.TRC'
+trcfile='/home/tomas-pastore/ez_detect/putou/mp_temp_trc/EEG_1_d.TRC'
 fid=fopen(trcfile,'r+');
 if fid==-1
     error('Can''t open *.trc file')
@@ -265,7 +265,7 @@ status=fseek(fid,0,-1)
 A=fread(fid,(Data_Start_Offset*1),'uchar');
 fclose(fid);
 trcfilename=[patient_id '_m4_' file_block '.TRC'];
-trcfilename=strcat('/home/tpastore/ez_detect/putou/TRC_out/',trcfilename);
+trcfilename=strcat('/home/tomas-pastore/ez_detect/putou/TRC_out/',trcfilename);
 fid2=fopen(trcfilename,'w+');
 if fid2==-1
     error('Can''t open *.trc file')

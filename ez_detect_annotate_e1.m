@@ -74,49 +74,49 @@ if montage == 0
         if i==1
             chan_block_str='1';
             evt_1=[file_id 'm_' chan_block_str '_' file_block '.txt'];
-            evt_1=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_1);
+            evt_1=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_1);
             fid1=fopen(evt_1,'wt');
             fclose(fid1);
         end;
         if i==2
             chan_block_str='2';
             evt_2=[file_id 'm_' chan_block_str '_' file_block '.txt'];
-            evt_2=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_2);
+            evt_2=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_2);
             fid2=fopen(evt_2,'wt');
             fclose(fid2);
         end;
         if i==3
             chan_block_str='3';
             evt_3=[file_id 'm_' chan_block_str '_' file_block '.txt'];
-            evt_3=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_3);
+            evt_3=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_3);
             fid3=fopen(evt_3,'wt');
             fclose(fid3);
         end;
         if i==4
             chan_block_str='4';
             evt_4=[file_id '_m_' chan_block_str '_' file_block '.txt'];
-            evt_4=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_4);
+            evt_4=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_4);
             fid4=fopen(evt_4,'wt');
             fclose(fid4);
         end;
         if i==5
             chan_block_str='5';
             evt_5=[file_id '_m_' chan_block_str '_' file_block '.txt'];
-            evt_5=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_5);
+            evt_5=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_5);
             fid5=fopen(evt_5,'wt');
             fclose(fid5);
         end;
         if i==6
             chan_block_str='6';
             evt_6=[file_id '_m_' chan_block_str '_' file_block '.txt'];
-            evt_6=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_6);
+            evt_6=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_6);
             fid6=fopen(evt_6,'wt');
             fclose(fid6);
         end;
         if i==7
             chan_block_str='7';
             evt_7=[file_id '_m_' chan_block_str '_' file_block '.txt'];
-            evt_7=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_7);
+            evt_7=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_7);
             fid7=fopen(evt_7,'wt');
             fclose(fid7);
         end;
@@ -127,49 +127,49 @@ else
         if i==1
             chan_block_str='1';
             evt_1=[file_id '_bp_' chan_block_str '_' file_block '.txt'];
-            evt_1=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_1);
+            evt_1=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_1);
             fid1=fopen(evt_1,'wt');
             fclose(fid1);
         end;
         if i==2
             chan_block_str='2';
             evt_2=[file_id '_bp_' chan_block_str '_' file_block '.txt'];
-            evt_2=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_2);
+            evt_2=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_2);
             fid2=fopen(evt_2,'wt');
             fclose(fid2);
         end;
         if i==3
             chan_block_str='3';
             evt_3=[file_id '_bp_' chan_block_str '_' file_block '.txt'];
-            evt_3=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_3);
+            evt_3=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_3);
             fid3=fopen(evt_3,'wt');
             fclose(fid3);
         end;
         if i==4
             chan_block_str='4';
             evt_4=[file_id '_bp_' chan_block_str '_' file_block '.txt'];
-            evt_4=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_4);
+            evt_4=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_4);
             fid4=fopen(evt_4,'wt');
             fclose(fid4);
         end;
         if i==5
             chan_block_str='5';
             evt_5=[file_id 'bp_' chan_block_str '_' file_block '.txt'];
-            evt_5=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_5);
+            evt_5=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_5);
             fid5=fopen(evt_5,'wt');
             fclose(fid5);
         end;
         if i==6
             chan_block_str='6';
             evt_6=[file_id 'bp_' chan_block_str '_' file_block '.txt'];
-            evt_6=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_6);
+            evt_6=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_6);
             fid6=fopen(evt_6,'wt');
             fclose(fid6);
         end;
         if i==7
             chan_block_str='7';
             evt_7=[file_id 'bp_' chan_block_str '_' file_block '.txt'];
-            evt_7=strcat('/home/tpastore/hfo_engine_1/TRC_out/',evt_7);
+            evt_7=strcat('/home/tomas-pastore/hfo_engine_1/TRC_out/',evt_7);
             fid7=fopen(evt_7,'wt');
             fclose(fid7);
         end;

@@ -16,7 +16,7 @@ end;
 file_id_size=numel(metadata.file_id);
 file_id=metadata.file_id(1:(file_id_size-4));
 
-new_output_fname = ['/home/tpastore/hfo_engine_1/ez_pac_out/' 'ezPac_' file_id fname_var metadata.file_block '.mat'];
+new_output_fname = ['/home/tomas-pastore/hfo_engine_1/ez_pac_out/' 'ezPac_' file_id fname_var metadata.file_block '.mat'];
 
 hfo=gather(ez_hfo);
 hfo_amp=[];

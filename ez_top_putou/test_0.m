@@ -14,7 +14,7 @@ output_fname = ['ezTop_' file_id fname_var metadata.file_block '.mat'];
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 gpuDevice(1);
 clear
-load('home/tpastore/hfo_engine_1/ez_top_in/dsp_IO014J_s1_bp_4.mat')
+load('home/tomas-pastore/hfo_engine_1/ez_top_in/dsp_IO014J_s1_bp_4.mat')
 fileData = DSP_data_bp;
 metadata = DSP_data_bp.metadata;
 montage = 0;
@@ -486,7 +486,7 @@ end
 %     %%% IF ALL LISTS ARE EMPTY CREATE EMPTY STRUCTURES
     
 disp('File Complete: Ripples and Fast Ripples Processed');
-output_fname=['/home/tpastore/hfo_engine_1/ez_top_out/' output_fname];
+output_fname=['/home/tomas-pastore/hfo_engine_1/ez_top_out/' output_fname];
 save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata');
 toc
 

@@ -800,13 +800,13 @@ if error_flag==0 % error flag 1
         clear x temp2 temp
         
         % Clear the temporary .mat files
-        system(['rm -f /home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_a_' file_block '.mat']);
-        system(['rm -f /home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_b_' file_block '.mat']);
-        system(['rm -f /home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_c_' file_block '.mat']);
-        system(['rm -f /home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_d_' file_block '.mat']);
-        system(['rm -f /home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_e_' file_block '.mat']);
-        system(['rm -f /home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_f_' file_block '.mat']);
-        system(['rm -f /home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_g_' file_block '.mat']);
+        system(['rm -f /home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_a_' file_block '.mat']);
+        system(['rm -f /home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_b_' file_block '.mat']);
+        system(['rm -f /home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_c_' file_block '.mat']);
+        system(['rm -f /home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_d_' file_block '.mat']);
+        system(['rm -f /home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_e_' file_block '.mat']);
+        system(['rm -f /home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_f_' file_block '.mat']);
+        system(['rm -f /home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_g_' file_block '.mat']);
         
         % corrects the file_id
         file_id_size=numel(metadata.file_id);
@@ -824,8 +824,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(1:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(1:max_trc_channels);
-                save(['/home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_a_' file_block '.mat'],'eeg');
-                system_command=['/home/tpastore/hfo_engine_1/executable/mat2trc32_m2k_a' ' ' file_id ' ' file_block ' &'];
+                save(['/home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_a_' file_block '.mat'],'eeg');
+                system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_m2k_a' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #1 in background \r');
             end;
@@ -838,8 +838,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(33:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(33:max_trc_channels);
-                save(['/home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_b_' file_block '.mat'],'eeg');
-                system_command=['/home/tpastore/hfo_engine_1/executable/mat2trc32_m2k_b' ' ' file_id ' ' file_block ' &'];
+                save(['/home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_b_' file_block '.mat'],'eeg');
+                system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_m2k_b' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #2 in background \r');
             end;
@@ -852,8 +852,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(65:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(65:max_trc_channels);
-                save(['/home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_c_' file_block '.mat'],'eeg');
-                system_command=['/home/tpastore/hfo_engine_1/executable/mat2trc32_m2k_c' ' ' file_id ' ' file_block ' &'];
+                save(['/home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_c_' file_block '.mat'],'eeg');
+                system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_m2k_c' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #3 in background \r');
             end;
@@ -866,8 +866,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(97:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(97:max_trc_channels);
-                save(['/home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_d_' file_block '.mat'],'eeg');
-                system_command=['/home/tpastore/hfo_engine_1/executable/mat2trc32_m2k_d' ' ' file_id ' ' file_block ' &'];
+                save(['/home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_d_' file_block '.mat'],'eeg');
+                system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_m2k_d' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #4 in background \r');
             end;
@@ -880,8 +880,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(129:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(129:max_trc_channels);
-                save(['/home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_e_' file_block '.mat'],'eeg');
-                system_command=['/home/tpastore/hfo_engine_1/executable/mat2trc32_m2k_e' ' ' file_id ' ' file_block ' &'];
+                save(['/home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_e_' file_block '.mat'],'eeg');
+                system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_m2k_e' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #5 in background \r');
             end;
@@ -894,8 +894,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(161:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(161:max_trc_channels);
-                save(['/home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_f_' file_block '.mat'],'eeg');
-                system_command=['/home/tpastore/hfo_engine_1/executable/mat2trc32_m2k_f' ' ' file_id ' ' file_block ' &'];
+                save(['/home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_f_' file_block '.mat'],'eeg');
+                system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_m2k_f' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #6 in background \r');
             end;
@@ -908,8 +908,8 @@ if error_flag==0 % error flag 1
                 eeg=[];
                 eeg.eeg_data=TRC.data(193:max_trc_channels,:);
                 eeg.chanlist=TRC.chanlist(193:max_trc_channels);
-                save(['/home/tpastore/hfo_engine_1/mp_temp_trc/eeg_2k_g_' file_block '.mat'],'eeg');
-                system_command=['/home/tpastore/hfo_engine_1/executable/mat2trc32_m2k_g' ' ' file_id ' ' file_block ' &'];
+                save(['/home/tomas-pastore/hfo_engine_1/mp_temp_trc/eeg_2k_g_' file_block '.mat'],'eeg');
+                system_command=['/home/tomas-pastore/hfo_engine_1/executable/mat2trc32_m2k_g' ' ' file_id ' ' file_block ' &'];
                 system(system_command);
                 fprintf('writing .TRC file #7 in background \r');
             end;
@@ -1564,7 +1564,7 @@ if error_flag==0 % error flag 1
             DSP_data_m.fripple_clip_abs_t=fripple_clip_abs_t;
             DSP_data_m.fripple_clip_event_t=fripple_clip_event_t;
             filename1=['dsp_' file_id '_m_' file_block '.mat'];
-            filename1=strcat('/home/tpastore/hfo_engine_1/ez_top_in/',filename1);
+            filename1=strcat('/home/tomas-pastore/hfo_engine_1/ez_top_in/',filename1);
             save('-v7.3',filename1,'DSP_data_m');
             
         else % error_flag 1 i.e. CUDAICA exploded ICA #1
@@ -1615,7 +1615,7 @@ if error_flag==0 % error flag 1
             file_id_size=numel(metadata.file_id);
             file_id=metadata.file_id(1:(file_id_size-4));
             filename1=['dsp_' file_id '_m_' file_block '.mat'];
-            filename1=strcat('/home/tpastore/hfo_engine_1/ez_top_in/',filename1);
+            filename1=strcat('/home/tomas-pastore/hfo_engine_1/ez_top_in/',filename1);
             save('-v7.3',filename1,'DSP_data_m');
             error_flag=1;
         end;
@@ -1667,7 +1667,7 @@ if error_flag==0 % error flag 1
         file_id_size=numel(metadata.file_id);
         file_id=metadata.file_id(1:(file_id_size-4));
         filename1=['dsp_' file_id '_m_' file_block '.mat'];
-        filename1=strcat('/home/tpastore/hfo_engine_1/ez_top_in/',filename1);
+        filename1=strcat('/home/tomas-pastore/hfo_engine_1/ez_top_in/',filename1);
         save('-v7.3',filename1,'DSP_data_m');
         error_flag=1;
     end;
@@ -1719,7 +1719,7 @@ else % error_flag 1 i.e. CUDAICA exploded ICA #3
     file_id_size=numel(metadata.file_id);
     file_id=metadata.file_id(1:(file_id_size-4));
     filename1=['dsp_' file_id '_m_' file_block '.mat'];
-    filename1=strcat('/home/tpastore/hfo_engine_1/ez_top_in/',filename1);
+    filename1=strcat('/home/tomas-pastore/hfo_engine_1/ez_top_in/',filename1);
     save('-v7.3',filename1,'DSP_data_m');
     error_flag=1;
 end;

@@ -498,8 +498,8 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         monopolar_chanlist = fileData.metadata.m_chanlist;
         bipolar_chanlist = fileData.metadata.bp_chanlist;
         disp('File Complete: Ripples and Fast Ripples Processed');
-        output_fname=['/home/tpastore/hfo_engine_1/ez_top_out/' output_fname];
-        save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','monopolar_chanlist', 'bipolar_chanlist');
+        output_fname=['/home/tomas-pastore/hfo_engine_1/ez_top_out/' output_fname];
+        save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist');
         toc
         
     else
@@ -551,8 +551,8 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         monopolar_chanlist = fileData.metadata.m_chanlist;
         bipolar_chanlist = fileData.metadata.bp_chanlist;
         disp('File Complete: Ripples and Fast Ripples Processed');
-        output_fname=['/home/tpastore/hfo_engine_1/ez_top_out/' output_fname];
-        save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','monopolar_chanlist', 'bipolar_chanlist');
+        output_fname=['/home/tomas-pastore/hfo_engine_1/ez_top_out/' output_fname];
+        save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist');
     end;
     
 else
@@ -601,13 +601,13 @@ else
     Total_RonO=[];
     Total_TRonS=[];
     disp('File Complete: Ripples and Fast Ripples Processed');
-    output_fname=['/home/tpastore/hfo_engine_1/ez_top_out/' output_fname];
+    output_fname=['/home/tomas-pastore/hfo_engine_1/ez_top_out/' output_fname];
 
     %NEW for correcting channel id of referential montage
     monopolar_chanlist = fileData.metadata.m_chanlist;
     bipolar_chanlist = fileData.metadata.bp_chanlist;
 
-    save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','monopolar_chanlist', 'bipolar_chanlist');
+    save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist');
 end;
 
 

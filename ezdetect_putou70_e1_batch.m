@@ -84,15 +84,15 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
     %disp(file_name_in)
     %[header, signalHeader, eeg_edf] = ez_edfload_putou02(file_name_in); %Note that this version modified to read max 60 minutes of EEG due to memory constraints.
     %disp('EDF file load')
-    %save(['/home/tpastore/Escritorio/449_correct_EDF.mat'], 'header', 'signalHeader', 'eeg_edf', '-v7.3') 
+    %save(['/home/tomas-pastore/Escritorio/449_correct_EDF.mat'], 'header', 'signalHeader', 'eeg_edf', '-v7.3') 
     
     %Read TRC file
     [filepath,fileName,ext] = fileparts(file_name_in)
     ENV = 'LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 '
-    PY = '/home/tpastore/anaconda3/bin/python '
-    APP_DIR = '/home/tpastore/ez-detect/python/'
+    PY = '/home/tomas-pastore/anaconda3/bin/python '
+    APP_DIR = '/home/tomas-pastore/ez-detect/python/'
     APP = 'trc_to_mat.py '
-    saving_path = ['/home/tpastore/hfo_engine_1/TRC_in_mat/' fileName '_TRC.mat']
+    saving_path = ['/home/tomas-pastore/hfo_engine_1/TRC_in_mat/' fileName '_TRC.mat']
     error_flag_readTRC = system([ENV PY APP_DIR APP file_name_in ' ' saving_path]); %lee el trc y guarda lo necesario en un matfile para que lo acceda matlab
     error_flag_readTRC
     load(saving_path, 'header', 'signalHeader', 'eeg_edf' );
@@ -276,7 +276,7 @@ function [eeg_data, metadata, chanlist] = computeEEGSegment(file_id,i,samplingra
         clear p q x temp2
     end
 
-    contest_path='/home/tpastore/hfo_engine_1/matfiles/' % for research only
+    contest_path='/home/tomas-pastore/hfo_engine_1/matfiles/' % for research only
     fname=fn(1:(numel(fn)-4)); %
     fname_int=num2str(i); %
     fname=[fname fname_int '.mat']; %
