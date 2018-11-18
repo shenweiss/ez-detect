@@ -257,7 +257,13 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         TRonS_rip.start_t = [];
         TRonS_rip.finish_t = [];
         
+        %Hot fix adding the fields between channel and start_t
         FRonS_rip.channel = [];
+        FRonS_rip.freq_av = [];
+        FRonS_rip.freq_pk = [];
+        FRonS_rip.power_av = [];
+        FRonS_rip.power_pk = [];
+        FRonS_rip.duration = [];
         FRonS_rip.start_t = [];
         FRonS_rip.finish_t = [];
         
@@ -280,6 +286,11 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         ftTRonS_rip.finish_t = [];
         
         ftFRonS_rip.channel = [];
+        ftFRonS_rip.freq_av = [];
+        ftFRonS_rip.freq_pk = [];
+        ftFRonS_rip.power_av = [];
+        ftFRonS_rip.power_pk = [];
+        ftFRonS_rip.duration = [];
         ftFRonS_rip.start_t = [];
         ftFRonS_rip.finish_t = [];
         
@@ -382,9 +393,14 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         TRonS_frip.finish_t = [];
         
         FRonS_frip.channel = [];
+        FRonS_frip.freq_av = [];
+        FRonS_frip.freq_pk = [];
+        FRonS_frip.power_av = [];
+        FRonS_frip.power_pk = [];
+        FRonS_frip.duration = [];
         FRonS_frip.start_t = [];
         FRonS_frip.finish_t = [];
-        
+
         ftRonO_frip.channel = [];
         ftRonO_frip.freq_av = [];
         ftRonO_frip.freq_pk = [];
@@ -404,6 +420,11 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         ftTRonS_frip.finish_t = [];
         
         ftFRonS_frip.channel = [];
+        ftFRonS_frip.freq_av = [];
+        ftFRonS_frip.freq_pk = [];
+        ftFRonS_frip.power_av = [];
+        ftFRonS_frip.power_pk = [];
+        ftFRonS_frip.duration = [];
         ftFRonS_frip.start_t = [];
         ftFRonS_frip.finish_t = [];
         

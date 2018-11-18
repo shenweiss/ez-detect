@@ -148,9 +148,8 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
         % if < 60 seconds.
     end
 
-    cycles=blocks; %todo lo de arriba no tiene sentido entonces
-
-    eeg_datas = cell(cycles); %no se usa, sera cycles?
+    cycles=blocks; %hasta corregir lo de arriba
+    eeg_datas = cell(cycles); %esto es por la linea de arriba
     for i=1:cycles
         [eeg_data,metadata,chanlist] = computeEEGSegment(file_id,i,samplingrate,cycle_time,starttime_ini,stoptime_ini,end_time,eeg_edf_tall,signalHeader,chan_swap,fn);
         %disp(chanlist);
@@ -170,7 +169,7 @@ function ezdetect_putou70_e1_batch(file_name_in,path_name_in,cycle_time, blocks,
         gd=gpuDevice; 
         disp(gd.Index);
         processBatchs(eeg_datas{i},chanlist,metadatas(i,:,:),montage); %processBatch
-        eeg_datas{i} = zeros(1,1); %% = 0? para que?
+        eeg_datas{i} = zeros(1,1); %% libera memoria supongo
     end
 
 end

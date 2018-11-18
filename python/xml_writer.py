@@ -6,13 +6,20 @@ from datetime import datetime, timedelta
 from os import listdir
 from trcio import read_raw_trc
 
+#loadChansFromMontage dep
+import os
+
+
 def write_xml(output_filename, trc_path):
 
     xml_set_event_types(output_filename)
 
     raw_trc = read_raw_trc(trc_path, preload=True, include=None)
     trc_header = raw_trc._raw_extras[0]
-    original_chanlist = raw_trc.info['ch_names']
+    #original_chanlist = raw_trc.info['ch_names']
+    original_chanlist = loadChansFromMontage(trc_path, raw_trc.info['nchan'])
+    print(original_chanlist)
+    
     rec_start_time = datetime( year = trc_header['rec_year'], month= trc_header['rec_month'],
                          day = trc_header['rec_day'], hour = trc_header['rec_hour'],
                          minute = trc_header['rec_min'], second = trc_header['rec_sec'])
@@ -22,6 +29,15 @@ def write_xml(output_filename, trc_path):
             xml_append_annotations(output_filename, config.paths['ez_top_out']+filename, 
                                    rec_start_time, original_chanlist)
 
+#temp until we get montage from trc
+def loadChansFromMontage(trc_filename, chans_num):
+
+    filename = os.path.basename(trc_filename)
+    filename = os.path.splitext(filename)[0]
+    montage_filename = os.path.expanduser("~") + '/hfo_engine_1/montages/' + filename + '_montage.mat'
+    aDic = scipy.io.loadmat(montage_filename)
+    chanlist = [aDic['montage'][i][0][0] for i in range(chans_num) ]
+    return chanlist
 
 def newGuidString():
     return str(uuid.uuid4())
@@ -88,7 +104,8 @@ def defineHFOType(parentElem, name, type_guid, description, text_color, graph_co
     eTree.SubElement(anHFOtype, "TextArgbColor").text = text_color
     eTree.SubElement(anHFOtype, "GraphicArgbColor").text = graph_color
     eTree.SubElement(anHFOtype, "GraphicType").text = "FillRectangle"
-    eTree.SubElement(anHFOtype, "VisualizationType").text = "Graphic"
+    eTree.SubElement(anHFOtype, "TextPositionType").text = "Top"
+    eTree.SubElement(anHFOtype, "VisualizationType").text = "TextAndGraphic"
     eTree.SubElement(anHFOtype, "FontFamily").text = "Segoe UI"
     eTree.SubElement(anHFOtype, "FontSize").text = "11"
     eTree.SubElement(anHFOtype, "FontItalic").text = "false"
@@ -118,7 +135,8 @@ def xml_append_annotations(xml_file, events_matfile, rec_start_time, original_ch
     append_events(xml_file, events_matfile, rec_start_time, ["ftRonO", "ftTRonS"], 
                   config.DEF_HFO_FASTRIPPLE_GUID, config.fripple_on_offset, config.fripple_off_offset, original_chanlist, modified_chanlist)
     
-def append_events(xml_file, events_matfile, rec_start_time, evt_type_vars, evt_type_guid, on_offset, off_offset, original_chanlist, modified_chanlist):
+def append_events(xml_file, events_matfile, rec_start_time, evt_type_vars, evt_type_guid,
+                  on_offset, off_offset, original_chanlist, modified_chanlist):
     
     parser = eTree.XMLParser(remove_blank_text=True)
     tree = eTree.parse(xml_file, parser)
@@ -133,18 +151,18 @@ def append_events(xml_file, events_matfile, rec_start_time, evt_type_vars, evt_t
 
 def appendEventsOfKind(aKindOfEvent, events, rec_start_time, xml_file, tree, root, 
                        evt_def_guid, on_offset, off_offset, now, original_chanlist, modified_chanlist):
-    #(Pdb) events['TRonS']
+    #(Pdb) events['TRonS']  
+    # import pdb; pdb.set_trace()
     #array([[(array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8))]],
     #dtype=[('channel', 'O'), ('freq_av', 'O'), ('freq_pk', 'O'), ('power_av', 'O'), ('power_pk', 'O'), ('duration', 'O'), ('start_t', 'O'), ('finish_t', 'O')])
 
-    #para acceder al arreglo de freq_pk tenes que hacer events[0][0][2] creo
+    #para acceder al arreglo de freq_pk tenes que hacer events[0][0][2] 
     channels = events[aKindOfEvent][0][0][0]
     if len(channels) > 0:
 
         for i in range(len(channels)):
             modified_channel_idx = channels[i][0] #index in modified_chanlist
             chan_name = modified_chanlist[0][modified_channel_idx - 1][0]
-            #import pdb; pdb.set_trace()
             channel_id = original_chanlist.index(chan_name) + 1 #assuming that start by 1 
             start_t = events[aKindOfEvent][0][0][6][i][0]
             finish_t = events[aKindOfEvent][0][0][7][i][0]
