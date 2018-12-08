@@ -181,12 +181,15 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
     clear ez_tall;
     metadata.montage= montage;
 
-    %debug code
-    if ~isempty(gather(ez_tall_bp))
-        disp('processBatch: ez_tall_bp is empty before dsp_monopolar')
-    end
     %%%
     if ~isempty(gather(ez_tall_m))
+        disp('Saving dsp_m input');
+        eeg_mp = gather(ez_tall_m);
+        eeg_bp = gather(ez_tall_bp);
+        filename2 = ['/home/tomas-pastore/hfo_engine_1/dsp_input/mp_' metadata.file_block '.mat']
+        save(filename2, 'eeg_mp', 'eeg_bp','metadata','-v7.3');
+        disp('Saved dsp_m input');
+
         disp('Starting dsp_m');
         [DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag] = ez_detect_dsp_m_putou70_e1(ez_tall_m,ez_tall_bp,metadata);
         disp('Finished dsp_m');
@@ -195,12 +198,27 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
         filename = ['dsp_m_output_' metadata.file_block '.mat']
         saveMonopolarData(filename, DSP_data_m, ez_tall_m,ez_tall_bp, hfo_ai, fr_ai, ez_tall_hfo_m, ez_tall_fr_m, metadata, num_trc_blocks, error_flag);
         disp('Saved dsp_m output');
+
+        disp('Saving dsp_m output without tall');
+        eeg_mp = gather(ez_tall_m);
+        eeg_bp = gather(ez_tall_bp);
+        ez_hfo_mp = gather(ez_tall_hfo_m);
+        ez_fr_mp = gather(ez_tall_fr_m);
+        filename3 = ['/home/tomas-pastore/hfo_engine_1/dsp_output/mp_' metadata.file_block '.mat']
+        save(filename3, 'DSP_data_m', 'hfo_ai', 'fr_ai', 'eeg_mp', 'eeg_bp', 'ez_hfo_mp', 'ez_fr_mp','metadata','num_trc_blocks', 'error_flag','-v7.3');
+        disp('Saved dsp_m output');
     else
         hfo_ai=zeros(numel(gather(ez_tall_bp(1,:))),1)';
         fr_ai=zeros(numel(gather(ez_tall_bp(1,:))),1)';
     end
 
     if ~isempty(gather(ez_tall_bp))
+        disp('Saving dsp_bp input');
+        eeg_bp = gather(ez_tall_bp);
+        filename2 = ['/home/tomas-pastore/hfo_engine_1/dsp_input/bp_' metadata.file_block '.mat']
+        save(filename2, 'eeg_bp','hfo_ai', 'fr_ai', 'metadata','-v7.3');
+        disp('Saved dsp_bp input');
+
         disp('Starting dsp_bp');
         [DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks] = ez_detect_dsp_bp_putou70_e1(ez_tall_bp, hfo_ai, fr_ai, metadata);
         disp('Finished dsp_bp');
@@ -209,6 +227,14 @@ function processBatchs(eeg_data,chanlist,metadata,montage)
         filename = ['dsp_bp_output_' metadata.file_block '.mat']
         saveBipolarData(filename, DSP_data_bp, ez_tall_bp, ez_tall_hfo_bp, ez_tall_fr_bp, metadata, num_trc_blocks);
         disp('Saving dsp_m output');
+
+        disp('Saving dsp_bp output without tall');
+        eeg_bp = gather(ez_tall_bp);
+        ez_hfo_bp = gather(ez_tall_hfo_bp);
+        ez_fr_bp = gather(ez_tall_fr_bp);
+        filename3 = ['/home/tomas-pastore/hfo_engine_1/dsp_output/bp_' metadata.file_block '.mat']
+        save(filename3, 'DSP_data_bp', 'eeg_bp', 'ez_hfo_bp', 'ez_fr_bp','metadata','num_trc_blocks','-v7.3');
+        disp('Saved dsp_bp output');
     else 
         disp('Did not enter to dsp_bipolar because _ez_tall_bp was empty ')
     end
@@ -231,13 +257,13 @@ function [eeg_data, metadata, chanlist] = computeEEGSegment(file_id,i,samplingra
     if i>1
         if stoptime_ini==0
             if starttime_ini+(i*(cycle_time*samplingrate))<numel(gather(eeg_edf_tall(1,:)))
-                end_time=starttime_ini+(i*(cycle_time*samplingrate));
+                end_time=starttime_ini+(i*(cycle_time*samplingrate))-1;
             else
                 end_time=gather(numel(eeg_edf_tall(1,:)));
             end
         else
             if starttime_ini+(i*(cycle_time*samplingrate))<stoptime_ini
-                end_time=starttime_ini+(i*(cycle_time*samplingrate));
+                end_time=starttime_ini+(i*(cycle_time*samplingrate))-1;
             else
                 end_time=stoptime_ini;
             end

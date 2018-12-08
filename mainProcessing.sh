@@ -9,6 +9,7 @@ echo "batches" $2
 trc_in=$3
 xml_out=$4
 
+#: <<'END_COMMENT'
 cd ./'hfo_engine_1'
 ./clean.sh
 cd ..
@@ -34,6 +35,8 @@ do
 done
 
 wait
+#END_COMMENT
+
 ENV='LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6'
 PY='/home/tomas-pastore/anaconda3/bin/python'
 APP='/home/tomas-pastore/ez-detect/python/write_xml.py'

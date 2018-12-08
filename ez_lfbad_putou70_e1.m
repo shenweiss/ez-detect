@@ -27,7 +27,7 @@ imp=unique(imp);
   t.Data=montage;
 
   %NEW save original id of referential channels to do annotations later
-  metadata.original_chanlist = string(montage(:,1))
+  %metadata.original_chanlist = string(montage(:,1))
 
   eeg_bp=[];
   eeg_mp=[];
@@ -158,4 +158,6 @@ if ~isempty(eeg_bp.eeg_data)
 metadata.bp_chanlist=eeg_bps.chanlist;
 end;
 metadata.lf_bad=lf_bad;
+
+save('/home/tomas-pastore/hfo_engine_1/matfiles/lfbad_metadata.mat', 'metadata','-v7.3')
 
