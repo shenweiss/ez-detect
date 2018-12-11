@@ -1,0 +1,1381 @@
+tomas-pastore@tomaspastore-HP-Pavilion-Notebook:~/ez-detect$ ./mainProcessing_test.sh 449_correct.edf 300 1
+Input configuration:
+Dataset: 449_correct.edf
+Dataset path: '~/EDFs/449_correct.edf'
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Clean hfo_engine afterwards:  ''
+Paths to be used:
+Matlab path: /home/tomas-pastore/matlab/bin/matlab
+Project source: /home/tomas-pastore/ez-detect
+Saving outputs directory: /home/tomas-pastore/ez-detect/hfo_engine_1
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.538062) 64-bit (glnxa64)
+                             February 23, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Running EZ_Detect v7.0 Putou
+Built: 67 of 67 tall data channels.
+EDF file loaded
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 4 workers.
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Finished eeg_data processing
+     1
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:es 
+
+Evaluation completed in 0 sec
+Starting dsp_m
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:odes 
+
+Evaluation completed in 0 sec
+Filtered: 62 of 62 data.
+M =
+
+    62
+
+
+N =
+
+        2321
+
+
+M =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     3
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     2
+     4
+     4
+     4
+     4
+     4
+     4
+     4
+     5
+     5
+     5
+     6
+     6
+     6
+     6
+     6
+     6
+     7
+     7
+     7
+     7
+     7
+     7
+
+
+Q =
+
+    0.6555
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered: 62 of 62 data.eeg_checkset warning: number of column in signal array (62) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600000) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600000); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.sc'
+
+
+binary ica files left in pwd:
+-rw-rw-rw- 1 tomas-pastore tomas-pastore   401 ago 21 16:50 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.sc
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 15376 ago 21 16:53 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.sph
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 15376 ago 21 16:53 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9586.wts
+
+  Name       Size                    Bytes  Class     Attributes
+
+  data      62x600000            297600000  double              
+  sph       62x62                    30752  double              
+  wts       62x62                    30752  double              
+
+
+error_flag =
+
+     0
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 62
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [62×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [62×62 double]
+          icaweights: [62×62 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 62
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [62×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [62×62 double]
+          icaweights: [62×62 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+mods =
+
+    '9586'
+
+Computing projection ....
+Running Ripple Detectione stats ipple ica 
+ans =
+
+    60
+
+
+ans =
+
+  119.9995
+
+
+ans =
+
+  179.9990
+
+
+ans =
+
+  239.9985
+
+
+ans =
+
+  299.9980
+
+   1.0e+06 *ditional bad electrodes using neural network
+
+  Columns 1 through 7
+
+    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+   -0.0703   -0.0014   -0.0046   -0.0043   -6.8515   -0.0504   -0.0015
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 8 through 14
+
+    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+   -0.0056   -0.0013   -0.0165   -0.0634   -0.0286   -0.5662   -0.7188
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+  Columns 15 through 21
+
+    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000    1.2000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+   -0.0854   -0.0699   -0.2588   -0.0884   -0.0988   -0.0070   -0.2171
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+
+    xoffset: [6×1 double]
+       gain: [6×1 double]
+       ymin: -1
+
+     1     1
+
+     1     1
+
+
+a =
+
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+
+
+b =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+
+
+c =
+
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+
+
+d =
+
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+
+Evaluating tall expression using the Local MATLAB Session:ons 
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Filtered: 41 of 41 data.eeg_checkset warning: number of column in signal array (41) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600000) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600000); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.sc'
+
+
+binary ica files left in pwd:
+-rw-rw-rw- 1 tomas-pastore tomas-pastore  401 ago 21 16:54 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.sc
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 ago 21 16:56 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.sph
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 ago 21 16:56 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica7380.wts
+
+  Name       Size                    Bytes  Class     Attributes
+
+  data      41x600000            196800000  double              
+  sph       41x41                    13448  double              
+  wts       41x41                    13448  double              
+
+
+error_flag =
+
+     0
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+mods =
+
+    '7380'
+
+Computing projection ....
+Running Ripple Detectione stats ipple ica 
+ans =
+
+    60
+
+
+ans =
+
+  119.9995
+
+
+ans =
+
+  179.9990
+
+
+ans =
+
+  239.9985
+
+
+ans =
+
+  299.9980
+
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+
+p =
+
+   128
+
+
+q =
+
+   125
+
+Computing projection ....ackground 
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+
+ans =
+
+    60
+
+
+ans =
+
+  119.9995
+
+
+ans =
+
+  179.9990
+
+
+ans =
+
+  239.9985
+
+
+ans =
+
+  299.9980
+
+Filtered: 41 of 41 data.eeg_checkset warning: number of column in signal array (41) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (600000) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=600000); xmax corrected
+ENTERING CUDAICA.M
+cudaica: using source file '/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sc' 
+cudaica(): using binary ica file '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica' 
+/home/tomas-pastore/ez-detect/hfo_engine_1/binica.sccudaica(): processing one (flag, arg) pair.
+   setting lrate, 0.001
+scriptfile = /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.sc
+/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.fdtchmod: no se puede acceder a '/home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.sc': No existe el archivo o el directorio
+
+ans =
+
+     1
+
+
+cudaica(): ica script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.sc data /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.fdt pwd /home/tomas-pastore/ez-detect/hfo_engine_1/.
+
+Running ica from script file /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.sc
+
+eval_call =
+
+    '! /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica -f /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.sc'
+
+
+binary ica files left in pwd:
+-rw-rw-rw- 1 tomas-pastore tomas-pastore  401 ago 21 16:57 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.sc
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 ago 21 16:59 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.sph
+-rw-rw-rw- 1 tomas-pastore tomas-pastore 6724 ago 21 16:59 /home/tomas-pastore/ez-detect/hfo_engine_1/cudaica9467.wts
+
+  Name       Size                    Bytes  Class     Attributes
+
+  data      41x600000            196800000  double              
+  sph       41x41                    13448  double              
+  wts       41x41                    13448  double              
+
+
+error_flag =
+
+     0
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+EEG = 
+
+  struct with fields:
+
+             setname: 'temp'
+            filename: ''
+            filepath: ''
+             subject: ''
+               group: ''
+           condition: ''
+             session: []
+            comments: ''
+              nbchan: 41
+              trials: 1
+                pnts: 600000
+               srate: 2000
+                xmin: 0
+                xmax: 299.9995
+               times: []
+                data: [41×600000 double]
+              icaact: []
+             icawinv: []
+           icasphere: [41×41 double]
+          icaweights: [41×41 double]
+         icachansind: []
+            chanlocs: []
+          urchanlocs: []
+            chaninfo: []
+                 ref: []
+               event: []
+             urevent: []
+    eventdescription: {}
+               epoch: []
+    epochdescription: {}
+              reject: [1×1 struct]
+               stats: [1×1 struct]
+            specdata: []
+          specicaact: []
+          splinefile: ''
+       icasplinefile: ''
+              dipfit: []
+             history: ''
+               saved: 'no'
+                 etc: []
+
+
+mods =
+
+    '9467'
+
+Computing projection ....
+compensating for overstripping fripple ica 
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+j =
+
+     6
+
+
+j =
+
+     7
+
+
+j =
+
+     8
+
+
+j =
+
+     9
+
+
+j =
+
+    10
+
+
+j =
+
+    11
+
+
+j =
+
+    12
+
+
+j =
+
+    13
+
+
+j =
+
+    14
+
+
+j =
+
+    15
+
+
+j =
+
+    16
+
+
+j =
+
+    17
+
+
+j =
+
+    18
+
+
+j =
+
+    19
+
+
+j =
+
+    20
+
+
+j =
+
+    21
+
+
+j =
+
+    22
+
+
+j =
+
+    23
+
+
+j =
+
+    24
+
+
+j =
+
+    25
+
+
+j =
+
+    26
+
+
+j =
+
+    27
+
+
+j =
+
+    28
+
+
+j =
+
+    29
+
+
+j =
+
+    30
+
+
+j =
+
+    31
+
+
+j =
+
+    32
+
+
+j =
+
+    33
+
+
+j =
+
+    34
+
+
+j =
+
+    35
+
+
+j =
+
+    36
+
+
+j =
+
+    37
+
+
+j =
+
+    38
+
+
+j =
+
+    39
+
+
+j =
+
+    40
+
+
+j =
+
+    41
+
+Running Fast Ripple Detection s 
+ans =
+
+    60
+
+
+ans =
+
+  119.9995
+
+
+ans =
+
+  179.9990
+
+
+ans =
+
+  239.9985
+
+
+ans =
+
+  299.9980
+
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+Computing projection ....
+
+ans =
+
+    60
+
+
+ans =
+
+  119.9995
+
+
+ans =
+
+  179.9990
+
+
+ans =
+
+  239.9985
+
+
+ans =
+
+  299.9980
+
+Finished dsp_m
+Saving dsp_m output
+Saved dsp_m output
+Evaluating tall expression using the Local MATLAB Session:
+
+Evaluation completed in 0 sec
+Elapsed time is 815.457741 seconds.
+Starting to process dsp monopolar/bipolar outputs...
+Generating Wavelet Array...
+Downsampling...
+Interpolating...
+TF-Plot Analysis...
+Spikes Complete
+Generating Wavelets...
+Performing Convolutions...
+Topographical Analysis...
+Fast Ripple Complete
+Performing Convolutions...
+Ripple Reflex Complete
+File Complete: Ripples and Fast Ripples Processed
+Elapsed time is 37.075914 seconds.
+initializing annotation files
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+
+<events>
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+eeg_checkset warning: number of column in signal array (41) does not match the number of channels (0), corrected
+eeg_checkset warning: 3rd dimension in signal array (1) does not match the number of epochs (0), corrected
+eeg_checkset warning: number of column in signal array (150000) does not match the number of points (0), corrected
+eeg_checkset warning: inconsistency (xmax-xmin)*rate+1 (=1.000000) must be equal to the number of frames (=150000); xmax corrected
+pop_eegfiltnew() - performing 551 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 3 Hz
+pop_eegfiltnew() - passband edge(s): [12 16] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [10.5 17.5] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |====================| 100%, ETE 00:00
+pop_eegfiltnew() - performing 735 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2.25 Hz
+pop_eegfiltnew() - passband edge(s): [9 12] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [7.875 13.125] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |====================| 100%, ETE 00:00
+pop_eegfiltnew() - performing 827 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2 Hz
+pop_eegfiltnew() - passband edge(s): [2 4] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [1 5] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |====================| 100%, ETE 00:00
+pop_eegfiltnew() - performing 16501 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 0.1 Hz
+pop_eegfiltnew() - passband edge(s): [0.1 2] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [0.05 2.05] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |====================| 100%, ETE 00:00
+pop_eegfiltnew() - performing 827 point bandpass filtering.
+pop_eegfiltnew() - transition band width: 2 Hz
+pop_eegfiltnew() - passband edge(s): [4 30] Hz
+pop_eegfiltnew() - cutoff frequency(ies) (-6 dB): [3 31] Hz
+pop_eegfiltnew() - filtering the data
+firfilt(): |====================| 100%, ETE 00:00
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+
+event_finish_pdelay =
+
+        5047
+
+
+event_finish_pdelay =
+
+       20024
+
+
+event_finish_pdelay =
+
+       43318
+
+
+event_finish_pdelay =
+
+       46661
+
+
+event_finish_pdelay =
+
+       51467
+
+
+event_finish_pdelay =
+
+       65942
+
+
+event_finish_pdelay =
+
+       71899
+
+
+event_finish_pdelay =
+
+       72245
+
+
+event_finish_pdelay =
+
+       99953
+
+
+event_finish_pdelay =
+
+      128169
+
+
+event_finish_pdelay =
+
+      131321
+
+
+event_finish_pdelay =
+
+      144222
+
+
+event_finish_pdelay =
+
+      145229
+
+Evaluating tall expression using the Parallel Pool 'local':
+
+Evaluation completed in 0 sec
+Elapsed time is 72.249451 seconds.
+Input configuration:
+Dataset: 449_correct.edf
+Dataset path: '~/EDFs/449_correct.edf'
+Cycle duration: 300 (seconds)
+Number of batches: 1
+Clean hfo_engine afterwards:  ''
+Output:
+Total time: 897 (seconds)
+tomas-pastore@tomaspastore-HP-Pavilion-Notebook:~/ez-detect$ 

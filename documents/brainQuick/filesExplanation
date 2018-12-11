@@ -1,0 +1,14 @@
+Please download the following zip file containing all of the documents below: https://tinyurl.com/y9pumhcx
+
+ 
+
+Inside you will find the specification for the .TRC file, “EVOLUTION_EEG_File_Structure_4_ENG_1.04.pdf”.
+
+ 
+
+Also inside is the specification for the External Calculation function in BQ. It includes:
+
+the Exchange File format (.MXT)  “BQS_Exchange_EEG_Trace_File_Structure_1.00.003.pdf”  that is used to send the raw data (or filtered) from BQ to an external application,
+the Event File Format (.XML) “BQS_Event_File_structure_1.00.pdf” that is used to import events into BQ from an external application,
+the Specification for External Calculation “BQS_External_Program_Calculation_structure_1.02.pdf”,
+a sample Visual Studio Solution of the Mock Calculation plugin “Micromed.ExternalCalculation.MockExternalCalculation.zip”.
