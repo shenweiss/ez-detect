@@ -8,11 +8,11 @@ metadata.bp_chanlist={''};
 metadata.m_chanlist={''};
 
 %%TEMP UNTIL WE GET MONTAGE FROM TRC 
-file_name=strcat(metadata.file_id, '_montage');
-file_name=[montage_dir file_name];
-disp(['loading montage: ' file_name])
-load(file_name,'montage');
-ez_montage = montage;
+%file_name=strcat(metadata.file_id, '_montage');
+%file_name=[montage_dir file_name];
+%disp(['loading montage: ' file_name])
+%load(file_name,'montage');
+%ez_montage = montage;
 
 metadata.montage_shape = [numel(ez_montage(:,1)),numel(ez_montage(1,:))];
 metadata.montage= reshape(ez_montage,1,[]); %matlab engine can only return 1*n cell arrays. I changed the data structure to get mlarray.

@@ -221,8 +221,8 @@ def read_events(evt_fname):
 def write_evt(output_filename, trc_path, rec_start_time):
     
     raw_trc = read_raw_trc(trc_path, preload=True, include=None)
-    #original_chanlist = raw_trc.info['ch_names']
-    original_chanlist = loadChansFromMontage(trc_path, raw_trc.info['nchan'])
+    #original_chanlist = loadChansFromMontage(trc_path, raw_trc.info['nchan'])
+    original_chanlist = raw_trc.info['ch_names']
     print(original_chanlist)
     
     evt_file = EventFile(output_filename)

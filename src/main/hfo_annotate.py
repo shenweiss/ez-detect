@@ -77,7 +77,8 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time):
 
     sampling_rate = int(raw_trc.info['sfreq'])
     print('Sampling rate: ' + str(sampling_rate) +'Hz')
-    #montages = raw_trc._raw_extras[0]['montages']
+    
+    header = raw_trc._raw_extras[0]
 
     #Note: The resampling was beeing made after getting the data and for each channel(process_batch.m)
     #so file pointers were being calculated with old sampling rate before, this may affect performance, 
@@ -93,12 +94,13 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time):
 
     
     #chanlist = _updateChanlist(raw_trc.info['ch_names'], paths['swap_array_file']) #this will be removed. Ask later.
-    chanlist = np.array( loadChansFromMontage(trc_fname, raw_trc.info['nchan']) ,dtype=object) #until we get montage from trc
-    
+    #chanlist = np.array( loadChansFromMontage(trc_fname, raw_trc.info['nchan']) ,dtype=object) #until we get montage from trc
+    chanlist = np.array(raw_trc.info['ch_names'] ,dtype=object) 
+
     #Debug info
-    print('Channel names in trc: ')
-    print(raw_trc.info['ch_names'])
-    print('For now using montage mat chanlist: ')
+    #print('Channel names in trc: ')
+    #print(raw_trc.info['ch_names'])
+    print('Using chanlist: ')
     print(chanlist)
 
     file_pointers = _getFilePointers(sampling_rate, start_time, stop_time, cycle_time, samples_num = len(raw_trc._data[0]) )
@@ -111,7 +113,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time):
     #This was in Shennan code, but I think it was just for a contest or smth alike
     #_saveResearchData(paths['research'], blocks, metadata, eeg_data, chanlist, trc_fname)
    
-    montage = 0 #until we get it from trc we load the montages.mat from matlab
+    montage = _buildMontageFromTRC(header['montages'], sug_montage_name='Ref.', bp_montage_name='Bipolar')
 
     useThreads = True
     if useThreads:
@@ -203,6 +205,50 @@ def _loadMatMontage(trc_filename, chans_num):
 
     return np.array(montage, dtype=object)
 '''
+
+#user should define a bipolar montage including all channels marked as referential in suggested
+#if he wants to potentially be taken as valid in a bipolar montage if Ez-detect moves it to bp.
+#Por ahora assumo que suggested tiene todos los canales de ref, bipolar solo los que uqiero poder cambiar de ref a bp 
+def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name='Bipolar'):
+
+    #TODO check that set(chanlist) == set(suggested_chanlist)
+    REFERENTIAL = 1
+    BIPOLAR = 0
+    NO_BP_REF = 0
+    sug_lines = montages[sug_montage_name]['lines']
+    bp_lines = montages[bp_montage_name]['lines']
+    chanlist = [pair[1] for pair in montages[bp_montage_name]['inputs'][:sug_lines] ] 
+    bp_defined_channels = [pair[1] for pair in montages[bp_montage_name]['inputs'][:bp_lines]] 
+    
+    montage = []
+    for i in range(sug_lines):
+
+        suggestion = montages[sug_montage_name]['inputs'][i]       
+        
+        #first col of montage.mat
+        chan_name = suggestion[1]
+
+        #second col of montage.mat
+        suggested_mark = REFERENTIAL if suggestion[0] == 'AVG' else BIPOLAR 
+        
+        #third col of montage .mat
+        if suggested_mark == BIPOLAR:
+            bp_ref  = chanlist.index(suggestion[0]) + 1
+        else: ##el usuario sugirio que sea ref
+            try: 
+                chan_bp_idx = bp_defined_channels.index(chan_name)
+                bp_ref = chanlist.index(montages[bp_montage_name]['inputs'][chan_bp_idx][0]) + 1
+
+            except ValueError: #user didn't defined a bp pair for this channel
+                bp_ref = NO_BP_REF
+                            
+        #don't exclude, will be filtered before 
+        exclude = 1 if i >=64 or i == 27 else 0 #fix for 449_correct for now
+        
+        chan_montage_info = tuple([chan_name, suggested_mark, bp_ref, exclude])
+        montage.append(chan_montage_info)
+
+    return np.array(montage, dtype=object)
 
 def _processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths):
     threads = []

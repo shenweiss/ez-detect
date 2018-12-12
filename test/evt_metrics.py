@@ -196,11 +196,14 @@ def proportion_of_naive(A, B):
 
 
 #Requieres input is not empty
-def min_proportion(proportions_by_chan):
+#min_chan_tot is because it makes no sense to use proportions if total is too low.
+#for example 3 events of 6 is 0.5 and the test would fail, but its just because the
+#total amount is too low.
+def min_proportion(proportions_by_chan, min_chan_tot=1):
     min_m, min_tot = INFINITY, 1 #the first will replace it
     for chan, p in proportions_by_chan.items():
         matches, tot = p
-        if matches/tot < min_m/min_tot:
+        if tot > min_chan_tot and matches/tot < min_m/min_tot:
             min_m, min_tot = matches, tot
 
     return min_m, min_tot
@@ -212,8 +215,8 @@ def min_proportion(proportions_by_chan):
 def subset(A, B, delta=0.1):
     if len(A) == 0:
         return True
-    proportions_by_chan = proportion_of(A, B)
-    matches, tot = min_proportion(proportions_by_chan)
+    proportions_by_chan = proportion_of(A, B,)
+    matches, tot = min_proportion(proportions_by_chan, min_chan_tot=50)
 
     return 1 - matches/tot <= delta
 
@@ -222,8 +225,8 @@ def distance(A, B):
     A_prop_by_chan = proportion_of(A, B)
     B_prop_by_chan = proportion_of(B, A)
 
-    matches_A, tot_A = min_proportion(A_prop_by_chan)
-    matches_B, tot_B = min_proportion(B_prop_by_chan)
+    matches_A, tot_A = min_proportion(A_prop_by_chan, min_chan_tot=50)
+    matches_B, tot_B = min_proportion(B_prop_by_chan,  min_chan_tot=50)
     A_min_p = matches_A / tot_A
     B_min_p = matches_B / tot_B
    
@@ -318,8 +321,8 @@ def print_metrics(obtained_fn, expected_fn, delta=0.1):
     sep = '---------------------'
     rows_chan_prop.append([sep, sep, sep, sep])
    
-    O_matches, O_chan_events = min_proportion(O_prop_by_chan)
-    E_matches, E_chan_events = min_proportion(E_prop_by_chan)
+    O_matches, O_chan_events = min_proportion(O_prop_by_chan, min_chan_tot=1)
+    E_matches, E_chan_events = min_proportion(E_prop_by_chan, min_chan_tot=1)
     #Highlighting max, make a function later
     
     obt_prop_exp = O_matches/O_chan_events
