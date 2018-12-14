@@ -11,8 +11,6 @@ We want to test that these sets are 'similar'. We will ask then:
 1) Enough of E events are found in O: meaning 'We keep finding what we found before'
 2) Enough of O events are found in E: meaning 'We aren't adding many events that were not found before'
 
-Specifically:  We defined the following metric.
-
 Given an event 'e' and a set of events S, we will say that e 'is'(or has a match) in S if we find an event
 in S which channel is the same as e's channel, and their time-windows overlap.
 
@@ -31,10 +29,11 @@ Finally, we will also ask that if one criterion is near the threshold, the other
 to compensate it. So we define the notion of distance between the two sets as follows, looking forward 
 for it to be short. 
 
-    distance(O,E) = 2 - (Crit_1 + Crit_2)
+    distance(O,E) = 2 - (Crit_1 + Crit_2) /2
 
 So in this way, we have a third criterion that is that this distance(O,E)
-(which is a number between 0 and 2) must be short. 
+(which is a number between 0 and 1) must be short. This threshold can be a bit more strict than the one
+for Crit_1 and 2 because one component can help the other if it gets a bad score. 
 
 As an example, if we set the threshold to be 0.1, it will lead to the following constraints:
 
@@ -42,11 +41,9 @@ As an example, if we set the threshold to be 0.1, it will lead to the following 
 
 2) Crit_2 >= (1- 0.1) : which means that at least 90% of what we found, was already beeing found (i.e 'we aren't adding too much) 
 
-3) distance(O,E) <= 0.1 
-    2 - 0.1 <= Crit_1 + Crit_2
-    1.9 <= Crit_1 + Crit_2
-
-    Meaning that if Crit_1 is near '90%' Crit_2 must be near '100%' to compensate.
+3) distance(O,E) <= 0.1 - 0.1 / 4  
+#the /4 is to say that here they have to compensate each other so they have to reach a lower threshold.
+Meaning that if Crit_1 is near '90%' Crit_2 must be near '100%' to compensate.
 
 '''
 from math import inf as INFINITY
@@ -57,6 +54,8 @@ from tabulate import tabulate
 
 import sys
 import os
+import io
+from contextlib import redirect_stdout
 sys.path.insert(0, os.path.abspath('../src/main'))
 from evtio import read_events
 from trcio import read_raw_trc
@@ -64,19 +63,12 @@ from trcio import read_raw_trc
 MIN_DATETIME = datetime.min.replace(tzinfo=tzutc())
 MAX_DATETIME = datetime.max.replace(tzinfo=tzutc())
 
-
 # INPUT: an increasingly ordered by begin interval list: [(begin, end)], 
 #        aBegin is a number as the ones in the intervals
 # OUTPUT: The index where an interval with begin == aBegin 
 # can be inserted to mantain the order of the list of intervals.
 # Time Complexity: O(Log(N)) with N = number of intervals to review     
 def binary_search(interval, intervals):
-    #print("trying to match")
-    #print(interval)
-    #print("with one here:")
-    #for i in intervals:
-    #    print(i)
-
     if len(intervals) == 0 : 
         return 0
 
@@ -302,7 +294,11 @@ def print_proportions(O_events, E_events, original_chanlist, obtained_basename, 
 def print_metrics(obtained_fn, expected_fn, trc_fname, delta=0.1):
     obtained_basename = splitext(basename(obtained_fn))[0] 
     expected_basename = splitext(basename(expected_fn))[0] 
-    original_chanlist = read_raw_trc(trc_fname, preload=True).info['ch_names']
+    
+    f = io.StringIO()
+    with redirect_stdout(f):
+        original_chanlist = read_raw_trc(trc_fname, preload=False).info['ch_names']
+    out = f.getvalue()
 
     O_events = read_events(obtained_fn)
     E_events = read_events(expected_fn)

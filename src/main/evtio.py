@@ -6,7 +6,6 @@ import time
 from datetime import datetime, timedelta
 from dateutil import parser as dateutil_parser
 from trcio import read_raw_trc
-
 import os
 
 #temp until we get montage from trc
@@ -218,11 +217,9 @@ def read_events(evt_fname):
     
     return events
 
-def write_evt(output_filename, trc_path, rec_start_time):
+def write_evt(output_filename, trc_path, rec_start_time, original_chanlist):
     
-    raw_trc = read_raw_trc(trc_path, preload=True, include=None)
     #original_chanlist = loadChansFromMontage(trc_path, raw_trc.info['nchan'])
-    original_chanlist = raw_trc.info['ch_names']
     print(original_chanlist)
     
     evt_file = EventFile(output_filename)

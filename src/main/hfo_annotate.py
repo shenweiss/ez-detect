@@ -123,7 +123,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time):
 
     rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
-    write_evt(paths['xml_output_path'], paths['trc_fname'], rec_start_time )
+    write_evt(paths['xml_output_path'], paths['trc_fname'], rec_start_time, raw_trc.info['ch_names'])
 
 
 ############  Private Funtions  #########
