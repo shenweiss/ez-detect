@@ -179,4 +179,4 @@ metadata.bp_chanlist=eeg_bps.chanlist;
 end;
 metadata.lf_bad=lf_bad;
 
-save('/home/tomas-pastore/hfo_engine_1/matfiles/lfbad_metadata.mat', 'metadata','-v7.3')
+save('/home/tomas-pastore/ez-detect/hfo_engine_1/montages/lfbad_metadata.mat', 'metadata','-v7.3')

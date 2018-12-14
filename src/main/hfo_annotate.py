@@ -63,7 +63,7 @@ Output: xml_output gets saved in the default directory or the one given as argum
 
 #TODO: logger
 
-def hfo_annotate(paths, start_time, stop_time, cycle_time):
+def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_montage):
 
     print('Running EZ Detect')
     trc_fname = splitext(basename(paths['trc_fname']))[0] 
@@ -113,7 +113,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time):
     #This was in Shennan code, but I think it was just for a contest or smth alike
     #_saveResearchData(paths['research'], blocks, metadata, eeg_data, chanlist, trc_fname)
    
-    montage = _buildMontageFromTRC(header['montages'], sug_montage_name='Ref.', bp_montage_name='Bipolar')
+    montage = _buildMontageFromTRC(header['montages'], sug_montage_name=sug_montage, bp_montage_name=bp_montage)
 
     useThreads = True
     if useThreads:
@@ -206,9 +206,12 @@ def _loadMatMontage(trc_filename, chans_num):
     return np.array(montage, dtype=object)
 '''
 
-#user should define a bipolar montage including all channels marked as referential in suggested
-#if he wants to potentially be taken as valid in a bipolar montage if Ez-detect moves it to bp.
-#Por ahora assumo que suggested tiene todos los canales de ref, bipolar solo los que uqiero poder cambiar de ref a bp 
+#user should define from BQ
+# suggested montage: For each channel in ref montage, mark input+ to G2 if suggests referential, another valid channel if 
+#                     wants to be bipolar, and EXCLUDE (temporal)
+#                     
+# bipolar montage: For each channel marked as referential in suggested, a valid electrode pair (bipolar pair), in this way
+# ez-detect will be able to move that channel from referential to bipolar if necessary  
 def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name='Bipolar'):
 
     #TODO check that set(chanlist) == set(suggested_chanlist)
@@ -233,7 +236,10 @@ def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name
         
         #third col of montage .mat
         if suggested_mark == BIPOLAR:
-            bp_ref  = chanlist.index(suggestion[0]) + 1
+            try:
+                bp_ref  = chanlist.index(suggestion[0]) + 1
+            except ValueError: #user didn't defined a bp pair for this channel
+                bp_ref = NO_BP_REF #I use this to represent exclusion if bipolar and has an invalid reference
         else: ##el usuario sugirio que sea ref
             try: 
                 chan_bp_idx = bp_defined_channels.index(chan_name)
@@ -243,8 +249,9 @@ def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name
                 bp_ref = NO_BP_REF
                             
         #don't exclude, will be filtered before 
-        exclude = 1 if i >=64 or i == 27 else 0 #fix for 449_correct for now
-        
+        #exclude = 1 if i >=64 or i == 27 else 0 #fix for 449_correct for now
+        exclude = 0
+
         chan_montage_info = tuple([chan_name, suggested_mark, bp_ref, exclude])
         montage.append(chan_montage_info)
 
@@ -410,6 +417,17 @@ if __name__ == "__main__":
                         "for the data to be cut. This improves time performance.",
                         required=False, default= config.CYCLE_TIME_DEFAULT, type=int)
 
+    parser.add_argument("-sug", "--suggested_montage", 
+                        help="The name of one of the montages included in the TRC that should "+
+                        "be considered as base montage.",
+                        required=False, default= 'Ref.')
+
+    parser.add_argument("-bp", "--bipolar_montage", 
+                        help="The name of one of the montages included in the TRC with a definition "+
+                        "of a pair electrode for every channel that we "+
+                        "want to allow to move from referential to bipolar montage .",
+                        required=False, default= 'Bipolar')
+
     #Will this be kept?
     parser.add_argument("-saf", "--swap_array_file_path", 
                         help="This optional file should contain a swap_array"+
@@ -424,4 +442,5 @@ if __name__ == "__main__":
                                args.xml_output_path, args.swap_array_file_path)
 
     print("XML will be written to "+ paths['xml_output_path'])
-    hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time)
+    hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time, 
+                 args.suggested_montage, args.bipolar_montage)
