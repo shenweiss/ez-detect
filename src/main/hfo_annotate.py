@@ -236,10 +236,12 @@ def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name
         
         #third col of montage .mat
         if suggested_mark == BIPOLAR:
-            try:
+            if suggestion[0] == chan_name: #for now I use this to exclude channels, substract with themselves
+                bp_ref = 0
+                exclude = 1
+            else: #user didn't defined a bp pair for this channel
                 bp_ref  = chanlist.index(suggestion[0]) + 1
-            except ValueError: #user didn't defined a bp pair for this channel
-                bp_ref = NO_BP_REF #I use this to represent exclusion if bipolar and has an invalid reference
+                exclude = 0
         else: ##el usuario sugirio que sea ref
             try: 
                 chan_bp_idx = bp_defined_channels.index(chan_name)
@@ -247,7 +249,9 @@ def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name
 
             except ValueError: #user didn't defined a bp pair for this channel
                 bp_ref = NO_BP_REF
-                            
+            
+            exclude = 0
+
         #don't exclude, will be filtered before 
         #exclude = 1 if i >=64 or i == 27 else 0 #fix for 449_correct for now
         exclude = 0
