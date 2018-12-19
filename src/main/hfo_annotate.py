@@ -94,7 +94,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
 
     
     #chanlist = _updateChanlist(raw_trc.info['ch_names'], paths['swap_array_file']) #this will be removed. Ask later.
-    #chanlist = np.array( loadChansFromMontage(trc_fname, raw_trc.info['nchan']) ,dtype=object) #until we get montage from trc
+    #chanlist = np.array( loadChansFromMontage(trc_fname, raw_trc.info['nchan'], paths) ,dtype=object) #until we get montage from trc
     chanlist = np.array(raw_trc.info['ch_names'] ,dtype=object) 
 
     #Debug info
@@ -127,11 +127,11 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
 
 
 ############  Private Funtions  #########
-def loadChansFromMontage(trc_filename, chans_num):
+def loadChansFromMontage(trc_filename, chans_num, paths):
 
     filename = basename(trc_filename)
     filename = splitext(filename)[0]
-    montage_filename = expanduser("~") + '/hfo_engine_1/montages/' + filename + '_montage.mat'
+    montage_filename = paths['montages'] + filename + '_montage.mat'
     aDic = scipy.io.loadmat(montage_filename)
     chanlist = [aDic['montage'][i][0][0] for i in range(chans_num) ]
     return chanlist

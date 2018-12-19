@@ -8,16 +8,6 @@ from dateutil import parser as dateutil_parser
 from trcio import read_raw_trc
 import os
 
-#temp until we get montage from trc
-def loadChansFromMontage(trc_filename, chans_num):
-
-    filename = os.path.basename(trc_filename)
-    filename = os.path.splitext(filename)[0]
-    montage_filename = os.path.expanduser("~") + '/hfo_engine_1/montages/' + filename + '_montage.mat'
-    aDic = scipy.io.loadmat(montage_filename)
-    chanlist = [aDic['montage'][i][0][0] for i in range(chans_num) ]
-    return chanlist
-
 def _newGuidString():
     return str(uuid.uuid4())
 
@@ -219,7 +209,6 @@ def read_events(evt_fname):
 
 def write_evt(output_filename, trc_path, rec_start_time, original_chanlist):
     
-    #original_chanlist = loadChansFromMontage(trc_path, raw_trc.info['nchan'])
     print(original_chanlist)
     
     evt_file = EventFile(output_filename)
