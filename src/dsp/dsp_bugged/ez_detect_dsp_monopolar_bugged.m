@@ -19,14 +19,12 @@
 % Philadelphia, PA USA.
 
 function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata, paths);
+    
     disp('Entering dsp monopolar')
     disp('Saving dsp_m input');
     filename2 = ['/home/tomas-pastore/hfo_engine_1/dsp_input/mp_' metadata.file_block '.mat']
     save(filename2, 'eeg_mp', 'eeg_bp','metadata','-v7.3');
     disp('Saved dsp_m input');
-
-    %save('/home/tomas-pastore/cmp_dsp_m/python/state_1.mat');
-
 
     %recover cell structure after matlab engine
     dims = metadata.montage_shape;
@@ -45,7 +43,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
     fripple.low = 200;
     fripple.high = 600;
     sampling_rate = 2000; %view if we can add it to metadata struct
-    
+
     % v4 bug fix perform xcorr function prior to running hfbad in order to
     % remove other 60 cycle artifact outliers prior to hfbad
     [eeg_mp, metadata] = mp_toolbox.remove60CycleArtifactOutliers(eeg_mp, metadata); %NEW
@@ -72,7 +70,6 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
     % EEG. The first independent component is removed to reduce artifact, and
     % IC1 is also used to refine the artifact index on a millisecond time
     % scale.
-
     [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data_no_notch, ripple.low, ripple.high, sampling_rate, paths);
     if error_flag == 0 
         
@@ -431,6 +428,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
                 total_fripple_backup = fripple_data.total_count;
 
                 fripple_data = mp_toolbox.addRipples(num_of_data_rows,hfo_times, fripple_data, fripple_ics_data);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
                 % output the stored discrete HFOs
                 DSP_data_m.error_status=error_status;

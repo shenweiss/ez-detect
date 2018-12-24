@@ -102,9 +102,9 @@ function [eeg_data, metadata] = remove60CycleArtifactOutliers_(eeg_data, metadat
     [a,b] = find(zfr_xcorr > 0.75); 
     [c,d] = find(fr_xcorr > 10000); % changed from 50k in order to remove more 60 cycle channels.
     b = intersect(b,d);
+    metadata.hf_xcorr_bad = b;
     eeg_data(b,:) = [];
     metadata.m_chanlist(b) = [];
-    metadata.hf_xcorr_bad = b;
     
 end
 
@@ -112,7 +112,6 @@ end
 function [eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage_(eeg_mp, ...
                                                               eeg_bp, metadata, chan_indexes)
     hf_bad_m=metadata.m_chanlist(chan_indexes);
-    
     new_eeg_bp=[];
     new_bp_chans={''};
     counter=0;
@@ -136,7 +135,6 @@ function [eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage_(eeg
     fprintf('Rebuilding monopolar and bipolar montages \r');
     eeg_bp=vertcat(new_eeg_bp, eeg_bp);
     metadata.bp_chanlist=horzcat(new_bp_chans, metadata.bp_chanlist);
-    new_eeg_bp=[];
     %%remove bipolar recordings from memory
     eeg_mp(chan_indexes,:)=[];
     metadata.m_chanlist(chan_indexes)=[];
@@ -360,9 +358,9 @@ function ripple_data = addRipples_(num_of_data_rows,hfo_times, ripple_data, ripp
             if isempty(intersect(lookup_val12,temp_lookup))
                 ripple_data.total_count(i)=ripple_data.total_count(i)+1;
                 ripple_data.clip{i,ripple_data.total_count(i)}=ripple_ics_data.clip{i,j};
-                ripple_data.clip_t{i,total(i)}=ripple_ics_data.clip_t{i,j};
-                ripple_data.clip_event_t{i,total(i)}=ripple_ics_data.clip_event_t{i,j};
-                ripple_data.clip_abs_t{i,total(i)}=ripple_ics_data.clip_abs_t{i,j};
+                ripple_data.clip_t{i,ripple_data.total_count(i)}=ripple_ics_data.clip_t{i,j};
+                ripple_data.clip_event_t{i,ripple_data.total_count(i)}=ripple_ics_data.clip_event_t{i,j};
+                ripple_data.clip_abs_t{i,ripple_data.total_count(i)}=ripple_ics_data.clip_abs_t{i,j};
             end;
         end;
     end;

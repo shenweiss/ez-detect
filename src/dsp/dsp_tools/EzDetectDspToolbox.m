@@ -40,6 +40,7 @@ classdef EzDetectDspToolbox
 		                                                               run_fripple_nn, fripple_thresh);
 		end
 		
+        %not used anymore, will be deleted soon
 		function num_trc_blocks = writeTRCfiles(Ez, eeg, chanlist, metadata, sampling_rate, ...
 		                                     trc_temp_dir, executable_dir, mat2trc_bin_filename)
 			num_trc_blocks = writeTRCfiles_(eeg, chanlist, metadata, sampling_rate, ...
@@ -401,11 +402,10 @@ function ripple_data = rippleDetection_(eeg_data, score_amp_ripple, zscore_amp_r
                 
                 %Detect hfo event
                 img_detected_positive = false;
-                if ~hfo_event_detected 
-                    zscore_amp_outstrips_thresh = zscore_amp(rel_img_index) > config.zscore_amp_thresh_z(chan); % v4 with skewness adrel_img_indexustment
-                    amp_outstrips_thresh = amp(rel_img_index) > config.amp_thresh;
-                    img_detected_positive = and(zscore_amp_outstrips_thresh,amp_outstrips_thresh);
-                end
+                zscore_amp_outstrips_thresh = zscore_amp(rel_img_index) > config.zscore_amp_thresh_z(chan); % v4 with skewness adrel_img_indexustment
+                amp_outstrips_thresh = amp(rel_img_index) > config.amp_thresh;
+                img_detected_positive = and(zscore_amp_outstrips_thresh,amp_outstrips_thresh);
+
                 if  ~hfo_event_detected && img_detected_positive  % Optimization factor #1
                     hfo_event_detected = true;
                     hfo_detection_start_ptr = rel_img_index;
@@ -414,7 +414,7 @@ function ripple_data = rippleDetection_(eeg_data, score_amp_ripple, zscore_amp_r
                 if (hfo_event_detected && (zscore_amp(rel_img_index) > config.zscore_amp_thresh_zoff(chan)) ) end; %@Shennan: This isn't doing anything, it would be the same to remove it.
                 if hfo_event_detected && (zscore_amp(rel_img_index) < config.zscore_amp_thresh_zoff(chan) )
                     
-                    event_img_count = rel_img_index-hfo_detection_start_ptr+1; %@Shennan: Fixed bug, +1 was missing, now we count all images
+                    event_img_count = rel_img_index-hfo_detection_start_ptr; %@Shennan: +1 is missing, but if you add it less events are detected now we count all images
                     event_duration_snds = event_img_count/config.sampling_rate; 
                     event_indexes = hfo_detection_start_ptr:rel_img_index;
                     if  event_duration_snds > config.min_event_duration_snds  %if the image is detected and event since rising flag is longer than 8 milliseconds
@@ -450,6 +450,7 @@ function ripple_data = rippleDetection_(eeg_data, score_amp_ripple, zscore_amp_r
                 end
             end
         end
+        current_block = current_block+1;
     end
 end
 
@@ -477,9 +478,11 @@ function start_index = fixRelativeStartIndex(current_block)
 end
 
 function HFO_frequency = getHFOfrequency(event_img_count, event_indexes, event_duration_snds, ic1_chan, sampling_rate)
-    nfft = 2^nextpow2(event_img_count);
+    nfft = 2^nextpow2(length(ic1_chan(event_indexes)));
+    %nfft = 2^nextpow2(event_img_count);
     ic1_chan_fft = fft( ic1_chan(event_indexes), nfft);
-    Pxx = abs(ic1_chan_fft).^2/event_duration_snds; %I think this is equivalent
+    %Pxx = abs(ic1_chan_fft).^2/event_duration_snds; %I think this is equivalent
+    Pxx = abs(ic1_chan_fft).^2/length(ic1_chan(event_indexes))/2000;
     Hpsd = dspdata.psd(Pxx(1:numel(Pxx)/2),'Fs',sampling_rate);
     [~,max_index]= max(Hpsd.Data);
     HFO_frequency = Hpsd.Frequencies(max_index);
@@ -490,9 +493,9 @@ function duration_cutoff = getDurationCutOff(HFO_frequency, dur_cutoffs)
     % Optimization Factor #3
     % @Shennan: I changed the <= 150 for < 150 and > 150 for >= 150 to be consistent , is that ok?
     duration_cutoff = 0;
-    if (HFO_frequency < dur_cutoffs.fst_range) 
+    if (HFO_frequency <= dur_cutoffs.fst_range) %change for <
         duration_cutoff = dur_cutoffs.fst_val; end 
-    if (HFO_frequency >= dur_cutoffs.fst_range && HFO_frequency < dur_cutoffs.snd_range) 
+    if (HFO_frequency > dur_cutoffs.fst_range && HFO_frequency < dur_cutoffs.snd_range) %change > for >=
         duration_cutoff = dur_cutoffs.snd_val; end
     if (HFO_frequency >= dur_cutoffs.snd_range && HFO_frequency < dur_cutoffs.trd_range) 
         duration_cutoff = dur_cutoffs.trd_val; end
@@ -534,6 +537,7 @@ function ripple_data = getRippleData(ripple_data, hfo_detection_start_ptr, rel_i
                                                                       
     ripple_data.clip_event_t{chan, chan_hfo_index} = time_passed_snds+[(event_rel_start_snds-0.0035-500) ... %@Shennan: here there could be a bug, I think you want to remove 500 images (0.25 secs) but the left side has already been converted to time, it should be time or images count? Besides we should handle out of range.
                                                                           (event_rel_stop_snds-500)]; %@Shennan: Is this -500 correct for the stop or you meant +500 here
+
 end
 
 %review ic1 variable name, sometimes is called with ic1 = hfo. If they are different concepts analize to avoid confusions.
