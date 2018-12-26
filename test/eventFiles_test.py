@@ -27,11 +27,11 @@ class eventFilesTest(unittest.TestCase):
         self.assertTrue( evt_metrics.subset(self.E_events, self.O_events, self.delta) )
 
     #Will be removed after some time
-    def test_binary_match(self):
-        self.assertEqual(evt_metrics.proportion_of_naive(self.O_events, self.E_events),
-                         evt_metrics.proportion_of(self.O_events, self.E_events))
-        self.assertEqual(evt_metrics.proportion_of_naive(self.E_events, self.O_events),
-                          evt_metrics.proportion_of(self.E_events, self.O_events))
+    #def test_binary_match(self):
+    #    self.assertEqual(evt_metrics.proportion_of_naive(self.O_events, self.E_events),
+    #                     evt_metrics.proportion_of(self.O_events, self.E_events))
+    #    self.assertEqual(evt_metrics.proportion_of_naive(self.E_events, self.O_events),
+    #                      evt_metrics.proportion_of(self.E_events, self.O_events))
 
     def test_print_metrics(self):
         if self.trc_fname != 'NOT_GIVEN':
