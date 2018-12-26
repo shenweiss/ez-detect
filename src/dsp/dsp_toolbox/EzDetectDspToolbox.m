@@ -40,13 +40,6 @@ classdef EzDetectDspToolbox
 		                                                               run_fripple_nn, fripple_thresh);
 		end
 		
-        %not used anymore, will be deleted soon
-		function num_trc_blocks = writeTRCfiles(Ez, eeg, chanlist, metadata, sampling_rate, ...
-		                                     trc_temp_dir, executable_dir, mat2trc_bin_filename)
-			num_trc_blocks = writeTRCfiles_(eeg, chanlist, metadata, sampling_rate, ...
-		                                     trc_temp_dir, executable_dir, mat2trc_bin_filename);
-		end
-		
 		function resampled_data = resampleData(Ez, sampling_rate, desired_hz, number_of_channels, eeg_data)
 			resampled_data = resampleData_(sampling_rate, desired_hz, number_of_channels, eeg_data);
 		end
@@ -195,29 +188,6 @@ function b = detectAdditionalBadElectrodes_nn_(hfo, hfo_values, run_ripple_nn, r
     end
 end
 
-% % Write TRC files
-% % The function first outputs the 32 channel .TRC files for the annotations
-% % from the input iEEG file.
-
-function num_trc_blocks = writeTRCfiles_(eeg, chanlist, metadata, sampling_rate, ...
-                                     trc_temp_dir, executable_dir, mat2trc_bin_filename)
-    fprintf('Writing monopolar iEEG to trc format \r');
-    fprintf('Converting data to 2048 Hz sampling rate \r');
-    % The first step is to convert the sampling rate to 2048 Hz
-    number_of_channels = numel(eeg(:,1));
-    desired_hz = 2048;
-    resampled_data = resampleData_(sampling_rate, desired_hz, number_of_channels, eeg);
-
-    TRC.data = resampled_data;
-    TRC.chanlist = chanlist;
-    % Clear the temporary .mat files  %I would do this at the end of the program
-    cleanTempTRC_(trc_temp_dir, metadata.file_block);
-    
-    % The next step is to write the TRC file blocks
-    num_trc_blocks = writeTRCBlocks_(TRC, metadata.file_block, metadata.file_id, ...
-                               trc_temp_dir, executable_dir, mat2trc_bin_filename);
-end
-
 function resampled_data = resampleData_(sampling_rate, desired_hz, number_of_channels, eeg_data)
     disp(['Resampling the Data to ' num2str(desired_hz) 'Hz']);
     if sampling_rate ~= desired_hz
@@ -230,122 +200,6 @@ function resampled_data = resampleData_(sampling_rate, desired_hz, number_of_cha
     else % No resample needed
         resampled_data = eeg_data;
     end
-end
-
-function cleanTempTRC_(directory, file_block)
-    system(['rm -f ' directory 'eeg_2k_a_' file_block '.mat']);
-    system(['rm -f ' directory 'eeg_2k_b_' file_block '.mat']);
-    system(['rm -f ' directory 'eeg_2k_c_' file_block '.mat']);
-    system(['rm -f ' directory 'eeg_2k_d_' file_block '.mat']);
-    system(['rm -f ' directory 'eeg_2k_e_' file_block '.mat']);
-    system(['rm -f ' directory 'eeg_2k_f_' file_block '.mat']);
-    system(['rm -f ' directory 'eeg_2k_g_' file_block '.mat']);
-end
-
-%Los binarios esos no existen, cuando se crean ?  revisar. 
-function num_trc_blocks = writeTRCBlocks_(TRC, file_block, file_id, trc_temp_dir, executable_dir, mat2trc_bin_filename)
-    num_trc_blocks = ceil(numel(TRC.chanlist)/32); %I think i can replace metadata.m_chanlist with TRC.chanlist here, 4 later
-
-    for i=1:num_trc_blocks
-        if i==1
-            if numel(TRC.data(:,1))>=32
-                max_trc_channels=32;
-            else
-                max_trc_channels=numel(TRC.data(:,1));
-            end;
-            eeg=[];
-            eeg.eeg_data=TRC.data(1:max_trc_channels,:);
-            eeg.chanlist=TRC.chanlist(1:max_trc_channels);
-            save([trc_temp_dir 'eeg_2k_a_' file_block '.mat'],'eeg');
-            system_command=[executable_dir  mat2trc_bin_filename '_a' ' ' file_id ' ' file_block ' &'];
-            system(system_command);
-            fprintf('Writing .TRC file #1 in background \r');
-        end;
-        if i==2
-            if numel(TRC.data(:,1))>=64
-                max_trc_channels=64;
-            else
-                max_trc_channels=numel(TRC.data(:,1));
-            end;
-            eeg=[];
-            eeg.eeg_data=TRC.data(33:max_trc_channels,:);
-            eeg.chanlist=TRC.chanlist(33:max_trc_channels);
-            save([trc_temp_dir 'eeg_2k_b_' file_block '.mat'],'eeg');
-            system_command=[executable_dir  mat2trc_bin_filename '_b' ' ' file_id ' ' file_block ' &'];
-            system(system_command);
-            fprintf('Writing .TRC file #2 in background \r');
-        end;
-        if i==3
-            if numel(TRC.data(:,1))>=96
-                max_trc_channels=96;
-            else
-                max_trc_channels=numel(TRC.data(:,1));
-            end;
-            eeg=[];
-            eeg.eeg_data=TRC.data(65:max_trc_channels,:);
-            eeg.chanlist=TRC.chanlist(65:max_trc_channels);
-            save([trc_temp_dir 'eeg_2k_c_' file_block '.mat'],'eeg');
-            system_command=[executable_dir  mat2trc_bin_filename '_c' ' ' file_id ' ' file_block ' &'];
-            system(system_command);
-            fprintf('Writing .TRC file #3 in background \r');
-        end;
-        if i==4
-            if numel(TRC.data(:,1))>=128
-                max_trc_channels=128;
-            else
-                max_trc_channels=numel(TRC.data(:,1));
-            end;
-            eeg=[];
-            eeg.eeg_data=TRC.data(97:max_trc_channels,:);
-            eeg.chanlist=TRC.chanlist(97:max_trc_channels);
-            save([trc_temp_dir 'eeg_2k_d_' file_block '.mat'],'eeg');
-            system_command=[executable_dir  mat2trc_bin_filename '_d' ' ' file_id ' ' file_block ' &'];
-            system(system_command);
-            fprintf('Writing .TRC file #4 in background \r');
-        end;
-        if i==5
-            if numel(TRC.data(:,1))>=160
-                max_trc_channels=160;
-            else
-                max_trc_channels=numel(TRC.data(:,1));
-            end;
-            eeg=[];
-            eeg.eeg_data=TRC.data(129:max_trc_channels,:);
-            eeg.chanlist=TRC.chanlist(129:max_trc_channels);
-            save([trc_temp_dir 'eeg_2k_e_' file_block '.mat'],'eeg');
-            system_command=[executable_dir  mat2trc_bin_filename '_e' ' ' file_id ' ' file_block ' &'];
-            system(system_command);
-            fprintf('Writing .TRC file #5 in background \r');
-        end;
-        if i==6
-            if numel(TRC.data(:,1))>=192
-                max_trc_channels=192;
-            else
-                max_trc_channels=numel(TRC.data(:,1));
-            end;
-            eeg=[];
-            eeg.eeg_data=TRC.data(161:max_trc_channels,:);
-            eeg.chanlist=TRC.chanlist(161:max_trc_channels);
-            save([trc_temp_dir 'eeg_2k_f_' file_block '.mat'],'eeg');
-            system_command=[executable_dir  mat2trc_bin_filename '_f' ' ' file_id ' ' file_block ' &'];
-            system(system_command);
-            fprintf('Writing .TRC file #6 in background \r');
-        end;
-        if i==7
-            if numel(TRC.data(:,1))>=224
-                max_trc_channels=224;
-            else
-                max_trc_channels=numel(TRC.data(:,1));
-            end;
-            eeg=[];
-            eeg.eeg_data=TRC.data(193:max_trc_channels,:);
-            eeg.chanlist=TRC.chanlist(193:max_trc_channels);
-            save([trc_temp_dir 'eeg_2k_g_' file_block '.mat'],'eeg');
-            system_command=[executable_dir  mat2trc_bin_filename '_g' ' ' file_id ' ' file_block ' &'];
-            system(system_command);
-            fprintf('Writing .TRC file #7 in background \r');
-        end;
-    end;
 end
 
 %Main procedure in dsp to detect ripples, ripple_ics, fripples, fripple_ics.

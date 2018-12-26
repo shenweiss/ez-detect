@@ -1,3 +1,7 @@
+import os
+import sys
+from os.path import expanduser
+sys.path.insert(0, os.path.expanduser("~") + '/ez-detect/src/main')
 import config
 import scipy.io
 from lxml import etree as eTree
@@ -6,7 +10,6 @@ import time
 from datetime import datetime, timedelta
 from dateutil import parser as dateutil_parser
 from trcio import read_raw_trc
-import os
 
 def _newGuidString():
     return str(uuid.uuid4())

@@ -250,7 +250,6 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
                     ez_hfo_m = dsp_monopolar_output.ez_hfo_mp;
                     ez_fr_m = dsp_monopolar_output.ez_fr_mp;
                     metadata = dsp_monopolar_output.metadata;
-                    num_trc_blocks = dsp_monopolar_output.num_trc_blocks ;
                     error_flag = dsp_monopolar_output.error_flag;
 
                 end
@@ -260,8 +259,6 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
             error_msg='mostly noisy mp electrodes';
         end
             
-        num_trc_blocks=ceil(numel(metadata.m_chanlist)/32);
-
         % Continue ripple detection part 2.
         % Calculate ripple extract index
         num_of_data_cols = numel(eeg_data(1,:));
@@ -442,7 +439,6 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
                 'ez_hfo_mp', hfo, ...
                 'ez_fr_mp', fr, ...
                 'metadata', metadata, ...
-                'num_trc_blocks', num_trc_blocks, ...
                 'error_flag', error_flag, ...
                 'path_to_data', filename1 ...
             );

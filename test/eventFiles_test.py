@@ -8,8 +8,8 @@ import sys
 import os
 import argparse
 from math import inf as INFINITY
+sys.path.insert(0, os.path.abspath('../src/evtio'))
 import evt_metrics as evt_metrics
-sys.path.insert(0, os.path.abspath('../src/main'))
 from evtio import read_events
 
 class eventFilesTest(unittest.TestCase):

@@ -56,7 +56,7 @@ import sys
 import os
 import io
 from contextlib import redirect_stdout
-sys.path.insert(0, os.path.abspath('../src/main'))
+#sys.path.insert(0, os.path.abspath('../src/main'))
 from evtio import read_events
 from trcio import read_raw_trc
 

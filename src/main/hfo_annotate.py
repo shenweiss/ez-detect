@@ -21,9 +21,11 @@ Output: xml_output gets saved in the default directory or the one given as argum
 import config
 from config import matlab_session as MATLAB
 
-from os.path import basename, splitext, expanduser
+import sys
+from os.path import basename, splitext, expanduser, abspath
 
 from trcio import read_raw_trc
+sys.path.insert(0, abspath(config.paths['project_root']+'src/evtio'))
 from evtio import write_evt
 import scipy.io
 import hdf5storage
@@ -318,12 +320,7 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
             output_fname = MATLAB.eztop_putou_e1(dsp_monopolar_out['path_to_data'], montage, #the other ones are loaded inside because of matlab engine limitations
                                                  paths) #dsp_monopolar_out['DSP_data_m'], 
                                                         #dsp_monopolar_out['metadata'],
-            MATLAB.ez_detect_annotate_e1(output_fname, 
-                                         dsp_monopolar_out['num_trc_blocks'], 
-                                         montage, 
-                                         paths, 
-                                         nargout=0)
-            
+            MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
 
             #MATLAB.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
             #                        dsp_monopolar_out['ez_fr_mp'], 
@@ -363,11 +360,7 @@ def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
                                              montage, 
                                              paths)
         
-        MATLAB.ez_detect_annotate_e1(output_fname, 
-                                     dsp_bipolar_out['num_trc_blocks'],
-                                     montage, 
-                                     paths, 
-                                     nargout=0)
+        MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
         
 
         #MATLAB.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
