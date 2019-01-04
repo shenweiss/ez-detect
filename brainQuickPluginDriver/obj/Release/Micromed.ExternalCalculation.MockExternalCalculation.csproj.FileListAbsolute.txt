@@ -1,0 +1,7 @@
+E:\work\vs\pe_stef_EegReviewX_software\Src\preliminaryTests\bin\Release\Micromed.ExternalCalculation.MockExternalCalculation.dll
+E:\work\vs\pe_stef_EegReviewX_software\Src\preliminaryTests\bin\Release\Micromed.ExternalCalculation.MockExternalCalculation.pdb
+E:\work\vs\pe_stef_EegReviewX_software\Src\preliminaryTests\bin\Release\Plugins\Micromed.ExternalCalculation.MockExternalCalculation.dll
+E:\work\vs\pe_stef_EegReviewX_software\Src\preliminaryTests\bin\Release\Plugins\Micromed.ExternalCalculation.MockExternalCalculation.pdb
+E:\work\vs\pe_stef_EegReviewX_software\Src\preliminaryTests\Micromed.ExternalCalculation.MockExternalCalculation\obj\Release\Micromed.ExternalCalculation.MockExternalCalculation.csprojResolveAssemblyReference.cache
+E:\work\vs\pe_stef_EegReviewX_software\Src\preliminaryTests\Micromed.ExternalCalculation.MockExternalCalculation\obj\Release\Micromed.ExternalCalculation.MockExternalCalculation.dll
+E:\work\vs\pe_stef_EegReviewX_software\Src\preliminaryTests\Micromed.ExternalCalculation.MockExternalCalculation\obj\Release\Micromed.ExternalCalculation.MockExternalCalculation.pdb
