@@ -1,0 +1,89 @@
+﻿<Window x:Class="EzDetectGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EzDetectGUI"
+        mc:Ignorable="d"
+        Title="EZ-detect configuration" Height="661" Width="773">
+    <Grid Margin="0,0,2,0">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="White"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="193*"/>
+            <ColumnDefinition Width="403*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="194*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="6" Margin="52,98,78,56">
+            <ComboBox x:Name="ComboBox_suggested_montage" HorizontalAlignment="Left" Margin="0,111,0,0" VerticalAlignment="Top" Width="285" Height="28" Cursor="ScrollAll" SelectionChanged="ComboBox_suggested_montage_SelectionChanged" Loaded="ComboBox_suggested_montage_Loaded" AutomationProperties.IsRequiredForForm="True" AutomationProperties.Name="micomboBOX" IsReadOnly="True">
+                <ComboBox.Effect>
+                    <DropShadowEffect/>
+                </ComboBox.Effect>
+            </ComboBox>
+            <TextBlock x:Name="SuggestedMontageLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Height="27" FontSize="18" Margin="-6,71,0,0">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect><Run Text="Suggested montage"/><LineBreak/><Run/></TextBlock>
+            <ComboBox x:Name="ComboBox_bp_montage" HorizontalAlignment="Left" Margin="0,197,0,0" VerticalAlignment="Top" Width="285" Height="28" Cursor="ScrollAll" SelectionChanged="ComboBox_bp_montage_SelectionChanged" Loaded="ComboBox_bp_montage_Loaded" AutomationProperties.IsRequiredForForm="True" AutomationProperties.Name="micomboBOX" IsReadOnly="True">
+                <ComboBox.Effect>
+                    <DropShadowEffect/>
+                </ComboBox.Effect>
+            </ComboBox>
+            <TextBlock x:Name="BipolarMontageLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF1D1D1D" Height="33" FontSize="18" Margin="-6,153,0,0" Width="365">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect><Run Text="Bipolar montage"/><LineBreak/><Run/></TextBlock>
+            <TextBlock x:Name="StartTimeLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFBFBFBF" FontSize="18" Margin="-6,259,0,-27" Height="35" Width="268">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect><Run Text="Start time (seconds)"/><LineBreak/><Run/></TextBlock>
+            <TextBlock x:Name="CycleTimeLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Height="35" FontSize="18" Margin="402,212,-211,0" Width="207">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect><Run Text="Cycle time (minutes)"/><LineBreak/><Run/></TextBlock>
+            <TextBlock x:Name="StopTimeLabel" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFA8A8A8" FontSize="18" Margin="-6,352,0,-121" Width="268">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect><Run Text="Stop time (seconds)"/><LineBreak/><Run/></TextBlock>
+            <TextBlock x:Name="TrcTitleLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Height="27" FontSize="18" Margin="-6,0,0,0">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect><Run Text="Trc File "/><LineBreak/><Run/></TextBlock>
+            <TextBlock x:Name="EvtTitleLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Height="27" FontSize="18" Margin="300,0,0,0" Width="219">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect><Run Text="Evt s"/><Run Text="aving directory"/><LineBreak/><Run/></TextBlock>
+            <Label x:Name="TrcLabel" Content="Please select a file" HorizontalAlignment="Left" Margin="0,32,0,0" VerticalAlignment="Top" Width="295" Height="34"/>
+            <Label x:Name="EvtLabel" Content="Please select a file" HorizontalAlignment="Left" Margin="316,32,0,0" VerticalAlignment="Top" Width="307" Height="34"/>
+            <Button x:Name="SearchTrcBtn" Content="Search file" HorizontalAlignment="Left" Margin="75,3,0,0" VerticalAlignment="Top" Width="80" Height="22" Click="SearchTRC_Button_Click" RenderTransformOrigin="0.475,0.696"/>
+            <Button x:Name="SearchEvtBtn" Content="Search file" HorizontalAlignment="Left" Margin="475,4,0,0" VerticalAlignment="Top" Width="80" Height="23" Click="SearchEvt_Button_Click" RenderTransformOrigin="0.475,0.696"/>
+        </Grid>
+        <Label x:Name="TitleLabel" Content="EZ-DETECT TESTER" HorizontalAlignment="Left" Margin="40,31,0,0" VerticalAlignment="Top" FontSize="36" Height="62" Width="409" RenderTransformOrigin="0.684,0.654" Grid.ColumnSpan="2"/>
+        <Button x:Name="RunBtn" Content="Run" HorizontalAlignment="Left" Margin="406.294,473,0,0" VerticalAlignment="Top" Width="83" Height="40" Click="RunBtn_Click" FontSize="20" RenderTransformOrigin="0.518,-0.357" Grid.Column="1" Grid.ColumnSpan="5">
+            <Button.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="1" ScaleX="1"/>
+                    <SkewTransform AngleY="0" AngleX="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.LayoutTransform>
+        </Button>
+        <ProgressBar x:Name="ProgressBarEZ" Height="15" Margin="93,559,114,0" VerticalAlignment="Top" Width="592" Grid.ColumnSpan="6" Minimum="0" Maximum="100" Value="{Binding WorkerState}" RenderTransformOrigin="0.498,0.4" ></ProgressBar>
+        <CheckBox x:Name="Chk_box_run_parallel" Content="Run in parallel&#xD;&#xA;" Grid.Column="1" HorizontalAlignment="Left" Margin="226,268,0,0" VerticalAlignment="Top" Height="40" Width="186" Checked="Chk_box_run_parallel_Checked" FontSize="18" Grid.ColumnSpan="5" FontWeight="Bold" Unchecked="Chk_box_run_parallel_Unchecked"/>
+        <Slider x:Name="Slider_start" AutoToolTipPlacement="BottomRight" Margin="52,404,257,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Cursor="Hand" Minimum="1" Maximum="100" ValueChanged="Slider_start_ValueChanged"/>
+        <RadioButton GroupName="CT" x:Name="c_time_1_rBtn" Content="5" Grid.Column="1" HorizontalAlignment="Left" Margin="295,371,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_1_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
+        <RadioButton GroupName="CT" x:Name="c_time_2_rBtn" Content="8" Grid.Column="1" HorizontalAlignment="Left" Margin="295,399,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_2_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
+        <RadioButton GroupName="CT" x:Name="c_time_3_rBtn" Content="10" Grid.Column="1" HorizontalAlignment="Left" Margin="295,427,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_3_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
+        <RadioButton GroupName="CT" x:Name="c_time_4_rBtn" Content="15" Grid.Column="1" HorizontalAlignment="Left" Margin="295,455,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_4_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
+        <Slider x:Name="Slider_stop" AutoToolTipPlacement="BottomRight" Margin="52,495,257,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Cursor="Hand" Minimum="1" Maximum="100" ValueChanged="Slider_stop_ValueChanged"/>
+
+    </Grid>
+</Window>
