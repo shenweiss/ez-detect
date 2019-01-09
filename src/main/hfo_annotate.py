@@ -175,7 +175,7 @@ def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name
     NO_BP_REF = 0
     sug_lines = montages[sug_montage_name]['lines']
     bp_lines = montages[bp_montage_name]['lines']
-    chanlist = [pair[1] for pair in montages[bp_montage_name]['inputs'][:sug_lines] ] 
+    chanlist = [pair[1] for pair in montages[sug_montage_name]['inputs'][:sug_lines] ] 
     bp_defined_channels = [pair[1] for pair in montages[bp_montage_name]['inputs'][:bp_lines]] 
     montage = []
     for i in range(sug_lines):
