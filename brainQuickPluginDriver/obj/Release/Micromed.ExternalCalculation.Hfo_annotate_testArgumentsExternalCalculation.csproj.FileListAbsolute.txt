@@ -1,6 +1,0 @@
-C:\Users\Tomas Pastore\Desktop\builtPlugins\Micromed.ExternalCalculation.Hfo_annotate_testArgumentsExternalCalculation.dll
-C:\Users\Tomas Pastore\Desktop\builtPlugins\Micromed.ExternalCalculation.Hfo_annotate_testArgumentsExternalCalculation.pdb
-C:\Users\Tomas Pastore\Documents\plugIn\obj\Release\Micromed.ExternalCalculation.Hfo_annotate_testArgumentsExternalCalculation.csproj.CoreCompileInputs.cache
-C:\Users\Tomas Pastore\Documents\plugIn\obj\Release\Micromed.ExternalCalculation.Hfo_annotate_testArgumentsExternalCalculation.csproj.CopyComplete
-C:\Users\Tomas Pastore\Documents\plugIn\obj\Release\Micromed.ExternalCalculation.Hfo_annotate_testArgumentsExternalCalculation.dll
-C:\Users\Tomas Pastore\Documents\plugIn\obj\Release\Micromed.ExternalCalculation.Hfo_annotate_testArgumentsExternalCalculation.pdb

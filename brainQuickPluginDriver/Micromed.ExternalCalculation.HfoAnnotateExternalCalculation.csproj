@@ -7,8 +7,8 @@
     <ProjectGuid>{4F4E9C24-9737-4F26-8D49-414FF8A4BFC2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Micromed.ExternalCalculation.TestMontagesExternalCalculation</RootNamespace>
-    <AssemblyName>Micromed.ExternalCalculation.TestMontagesExternalCalculation</AssemblyName>
+    <RootNamespace>Micromed.ExternalCalculation.DemoIIExternalCalculation</RootNamespace>
+    <AssemblyName>Micromed.ExternalCalculation.DemoIIExternalCalculation</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

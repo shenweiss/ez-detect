@@ -35,7 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\Desktop\VS\</OutputPath>
+    <OutputPath>..\..\..\..\Desktop\builtPlugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,6 +52,18 @@
   <ItemGroup>
     <Reference Include="CommandLine, Version=2.3.0.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.3.0\lib\net45\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="Micromed.ExternalCalculation.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Micromed\BrainQuick\Plugins\Micromed.ExternalCalculation.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Micromed.ExternalCalculation.MicHfoExternalCalculation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Micromed\BrainQuick\Plugins\Micromed.ExternalCalculation.MicHfoExternalCalculation.dll</HintPath>
+    </Reference>
+    <Reference Include="Micromed.ExternalCalculation.MockExternalCalculation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Micromed\BrainQuick\Plugins\Micromed.ExternalCalculation.MockExternalCalculation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

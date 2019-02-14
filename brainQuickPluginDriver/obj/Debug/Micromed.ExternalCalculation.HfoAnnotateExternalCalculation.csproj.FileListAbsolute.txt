@@ -1,9 +1,0 @@
-C:\Users\Tomas Pastore\Documents\Micromed\plugIn\obj\Debug\Micromed.ExternalCalculation.HfoAnnotateExternalCalculation.csproj.CoreCompileInputs.cache
-C:\Users\Tomas Pastore\Documents\Micromed\plugIn\obj\Debug\Micromed.ExternalCalculation.HfoAnnotateExternalCalculation.csproj.CopyComplete
-C:\Users\Tomas Pastore\Documents\Micromed\plugIn\obj\Debug\Micromed.ExternalCalculation.HfoAnnotateExternalCalculation.csprojAssemblyReference.cache
-C:\Users\Tomas Pastore\Documents\Micromed\bin\Debug\Plugins\Micromed.ExternalCalculation.TestMontagesExternalCalculation.dll
-C:\Users\Tomas Pastore\Documents\Micromed\bin\Debug\Plugins\Micromed.ExternalCalculation.TestMontagesExternalCalculation.pdb
-C:\Users\Tomas Pastore\Documents\Micromed\plugIn\obj\Debug\Micromed.ExternalCalculation.TestMontagesExternalCalculation.dll
-C:\Users\Tomas Pastore\Documents\Micromed\plugIn\obj\Debug\Micromed.ExternalCalculation.TestMontagesExternalCalculation.pdb
-C:\Users\Tomas Pastore\Desktop\builtPlugins\Micromed.ExternalCalculation.TestMontagesExternalCalculation.dll
-C:\Users\Tomas Pastore\Desktop\builtPlugins\Micromed.ExternalCalculation.TestMontagesExternalCalculation.pdb

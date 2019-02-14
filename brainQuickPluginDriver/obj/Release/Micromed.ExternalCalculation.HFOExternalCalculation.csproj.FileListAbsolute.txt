@@ -1,9 +1,0 @@
-C:\Users\Tomas Pastore\Documents\Micromed.ExternalCalculation.MockExternalCalculation\obj\Release\Micromed.ExternalCalculation.HFOExternalCalculation.csproj.CoreCompileInputs.cache
-C:\Users\Tomas Pastore\Documents\bin\Release\Plugins\Micromed.ExternalCalculation.HFOExternalCalculation.dll
-C:\Users\Tomas Pastore\Documents\bin\Release\Plugins\Micromed.ExternalCalculation.HFOExternalCalculation.pdb
-C:\Users\Tomas Pastore\Documents\Micromed.ExternalCalculation.MockExternalCalculation\obj\Release\Micromed.ExternalCalculation.HFOExternalCalculation.csproj.CopyComplete
-C:\Users\Tomas Pastore\Documents\Micromed.ExternalCalculation.MockExternalCalculation\obj\Release\Micromed.ExternalCalculation.HFOExternalCalculation.dll
-C:\Users\Tomas Pastore\Documents\Micromed.ExternalCalculation.MockExternalCalculation\obj\Release\Micromed.ExternalCalculation.HFOExternalCalculation.pdb
-C:\Program Files (x86)\Micromed\BrainQuick\Plugins\Micromed.ExternalCalculation.HFOExternalCalculation.dll
-C:\Users\Tomas Pastore\Desktop\builtPlugins\Micromed.ExternalCalculation.HFOExternalCalculation.dll
-C:\Users\Tomas Pastore\Desktop\builtPlugins\Micromed.ExternalCalculation.HFOExternalCalculation.pdb

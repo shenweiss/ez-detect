@@ -4,4 +4,7 @@
     <ReferencePath>
     </ReferencePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>--trc=C:/TRCs/test.TRC --xml=C:/TRCs/testing.evt</StartArguments>
+  </PropertyGroup>
 </Project>

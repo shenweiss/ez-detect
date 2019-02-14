@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Micromed.ExternalCalculation.TestMontagesExternalCalculation
+namespace Micromed.ExternalCalculation.DemoIIExternalCalculation
 {
-    public class TestMontagesPlugin : IExternalCalculationPlugin
+    public class DemoIIPlugin : IExternalCalculationPlugin
     {
         public Guid Guid { get; private set; }
         public string Name { get; private set; }
@@ -20,28 +20,33 @@ namespace Micromed.ExternalCalculation.TestMontagesExternalCalculation
 
         private bool isRunning = false;
 
-        private void callHFOAnnotate(PluginParametersDto pluginParameters)
+        private void CallHFOAnnotate(PluginParametersDto pluginParameters)
         {
             //Cargo parametros
             //string trc_path = pluginParameters.ExchangeTraceFilePathList[0];
-            string trc_path = pluginParameters.TraceFilePathList[0];
-            string xml_out_path_real = pluginParameters.ExchangeEventFilePath; //donde lo voy a copiar despues por ssh
+            string trc_path = "\"" + (pluginParameters.TraceFilePathList[0]).Replace("\\","/") + "\"";
+            string xml_out_path_real = "\"" + (pluginParameters.ExchangeEventFilePath).Replace("\\","/") + "\""; //donde lo voy a copiar despues por ssh
+            string fullPath = "C:/Program Files (x86)/Micromed/BrainQuick/Plugins/EzDetectGUI.exe";
+            //string fullPath = @"%windir%\system32\notepad.exe";
+            string args = "--trc=" + trc_path + " --xml=" + xml_out_path_real;
+            string log_file = "C:/System98/temp/ez_detect_PLUG_LOG.txt";
+            string createText = args;
+            File.WriteAllText(log_file, createText);
 
-            //ProcessStartInfo cmdsi1 = new ProcessStartInfo("C:/Program Files (x86)/Micromed/BrainQuick/Plugins/HFOAnnotateGUI.exe", "-trc " + trc_path + " -xml " + xml_out_path_real);
-            string fullPath = "C:/Program Files (x86)/Micromed/BrainQuick/Plugins/HFOAnnotateGUI.exe";
-
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = Path.GetFileName(fullPath);
-            psi.WorkingDirectory = Path.GetDirectoryName(fullPath);
-            psi.Arguments = "-trc " + "C:/TRCs/test.TRC" + " -xml " + @xml_out_path_real;
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = Path.GetFileName(fullPath),
+                WorkingDirectory = Path.GetDirectoryName(fullPath),
+                Arguments = "--trc=" + trc_path + " --xml=" + xml_out_path_real
+            };
             Process cmd = Process.Start(psi);
             cmd.WaitForExit();
         }
 
-        public TestMontagesPlugin()
+        public DemoIIPlugin()
         {
             Guid = Guid.Parse("1BC8E16D-3C09-40BE-8EC2-F9D7E6F0117C");
-            Name = "Test Montages";
+            Name = "HFO Annotate - Demo II";
             Description = "HfoAnnotate Test | External Calculation plugin";
             Author = "TJU|UBA";
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -57,7 +62,7 @@ namespace Micromed.ExternalCalculation.TestMontagesExternalCalculation
 
             isRunning = true; //esto creo que deberia ir antes del run command, en el mock plugin estaba despues
 
-            callHFOAnnotate(pluginParameters);
+            CallHFOAnnotate(pluginParameters);
 
             OnProgress(100);
             return 0;

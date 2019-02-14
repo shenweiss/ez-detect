@@ -53,12 +53,12 @@ namespace EzDetectGUI
 
         private void RunOptionsAndReturnExitCode(Options opts)
         {
-            if (!string.IsNullOrEmpty(opts.TrcFile)) this.TrcFile = opts.TrcFile;
-            if (!string.IsNullOrEmpty(opts.EvtFile)) this.EvtFile = opts.EvtFile;
+            if (!string.IsNullOrEmpty(opts.TrcFile)) this.TrcFile = (opts.TrcFile).Replace("\\", "/");
+            if (!string.IsNullOrEmpty(opts.EvtFile)) this.EvtFile = (opts.EvtFile).Replace("\\", "/");
         }
 
         public void CopyTrc() {
-            this.TrcTempPath = "C:/Users/tpastore/Documents/TRCs/temp/" + Path.GetFileName(this.TrcFile);
+            this.TrcTempPath = "C:/System98/temp/" + Path.GetFileName(this.TrcFile); 
             System.IO.File.Copy(this.TrcFile, this.TrcTempPath, true);
         }
 
@@ -73,30 +73,32 @@ namespace EzDetectGUI
             string remote_trc_path = "/home/tpastore/TRCs/" + Path.GetFileName(this.TrcFile);
             string remote_xml_path = "/home/tpastore/evts/" + Path.GetFileNameWithoutExtension(this.TrcFile) + ".evt";
 
-            string log_file = "C:/Users/tpastore/Documents/ez_detect_gui/ez_detect_gui_log.txt";
+            string log_file = "C:/System98/temp/ez_detect_gui_log.txt";
             string createText = "Input trc_path: " + this.TrcFile + Environment.NewLine + 
                                 "Output xml_path: " + this.EvtFile + Environment.NewLine;
             File.WriteAllText(log_file, createText);
-
             //1)Copy TRC to the server
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("Copying TRC to the server..."); }
             ProcessStartInfo cmdsi_copy = new ProcessStartInfo("pscp", this.TrcTempPath + " " + "tpastore@grito.exp.dc.uba.ar:" + remote_trc_path);
             Process cmd_copy = Process.Start(cmdsi_copy);
-            cmd_copy.WaitForExit();
-
+            cmd_copy.WaitForExit(); 
+            //var wnd = App.Current.MainWindow as MainWindow;
             //MainWindow wnd = (MainWindow)this.MainWindow;
             //wnd.UpdateProgress(15);
-            
+
             //2)Exec through ssh
             //2.1 Create command file
-            string command_file = "C:/Users/tpastore/Documents/ez_detect_gui/hfoAnnotatePlugin_SSHcommand";
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("montages... "+ this.SuggestedMontage+ " " + this.BpMontage); }
+
+            string command_file = "C:/System98/temp/hfoAnnotatePlugin_SSHcommand";
             string command = "./hfo_annotate.sh" + " " +
-                              remote_trc_path + " " +
-                              remote_xml_path + " " +
-                              this.StartTime.ToString() + " " +
-                              this.StopTime.ToString() + " " +
-                              this.CycleTime.ToString() + " " +
-                              this.SuggestedMontage + " "+ this.BpMontage;
+                              remote_trc_path.Trim() + " " +
+                              remote_xml_path.Trim() + " " +
+                              this.StartTime.ToString().Trim() + " " +
+                              this.StopTime.ToString().Trim() + " " +
+                              this.CycleTime.ToString().Trim() + " " +
+                              this.SuggestedMontage.Trim() + " " + 
+                              this.BpMontage.Trim();
 
             File.WriteAllText(command_file, command);
             //2.2)Run
@@ -106,14 +108,22 @@ namespace EzDetectGUI
             cmd_run.WaitForExit();
 
             //wnd.UpdateProgress(98);
+        }
 
+        public void CopyEvt()
+        {
+            string log_file = "C:/System98/temp/ez_detect_gui_log.txt";
+            string remote_xml_path = "/home/tpastore/evts/" + Path.GetFileNameWithoutExtension(this.TrcFile) + ".evt";
+            string source_dest = "tpastore@grito.exp.dc.uba.ar:" + remote_xml_path + " " + "\"" + this.EvtFile + "\"";
             //3)After execution, fetch evt from remote_xml_path
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("Getting evt from remote server..."); }
-            ProcessStartInfo cmdsi_fetch_result = new ProcessStartInfo("pscp", "tpastore@grito.exp.dc.uba.ar:"+ remote_xml_path + " " + this.EvtFile);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine(source_dest); }
+
+            ProcessStartInfo cmdsi_fetch_result = new ProcessStartInfo("pscp", source_dest);
             Process cmd_fetch_result = Process.Start(cmdsi_fetch_result);
             cmd_fetch_result.WaitForExit();
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) {file.WriteLine("Exiting."); }
-
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("Exiting."); }
+            //wnd.CloseWithMessage("Calculation has finished. The events will automatically load to Brain Quick if the evt saving path was ok.");
         }
     }
 }
