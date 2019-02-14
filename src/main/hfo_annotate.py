@@ -38,6 +38,7 @@ import multiprocessing
 import time
 from datetime import datetime
 
+from memory_profiler import memory_usage
 '''
 Input:
     - paths: a Struct containing strings for every path is used in the project. 
@@ -175,7 +176,7 @@ def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name
     NO_BP_REF = 0
     sug_lines = montages[sug_montage_name]['lines']
     bp_lines = montages[bp_montage_name]['lines']
-    chanlist = [pair[1] for pair in montages[bp_montage_name]['inputs'][:sug_lines] ] 
+    chanlist = [pair[1] for pair in montages[sug_montage_name]['inputs'][:sug_lines] ] 
     bp_defined_channels = [pair[1] for pair in montages[bp_montage_name]['inputs'][:bp_lines]] 
     montage = []
     for i in range(sug_lines):
@@ -373,5 +374,11 @@ if __name__ == "__main__":
                                args.xml_output_path, args.swap_array_file_path)
 
     logger.info("XML will be written to "+ paths['xml_output_path'])
+    
+    #def test_mem():
     hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time, 
-                 args.suggested_montage, args.bipolar_montage)
+                     args.suggested_montage, args.bipolar_montage)
+        
+    #mem = max(memory_usage(proc=test_mem))
+    #print("Maximum memory used: {0} MiB".format(str(mem)))
+
