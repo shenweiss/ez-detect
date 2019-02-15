@@ -3,22 +3,6 @@ function [output_fname] = eztop_putou_e1(pathToData, montage, paths);
 disp("Entering eztop")
 load(pathToData) %, 'DSP_data_m' or 'DSP_data_bp'
 
-%recover cell structures after matlab engine
-%dims = metadata.montage_shape;
-%metadata.montage = reshape(metadata.montage, dims(1), dims(2));
-
-%dims = metadata.montage_shape;
-%fileData.metadata.montage = reshape(fileData.metadata.montage, dims(1), dims(2));
-
-%fileData.ripple_clip = recoverFormat(fileData.ripple_clip);
-%fileData.ripple_clip_abs_t = recoverFormat(fileData.ripple_clip_abs_t);
-%fileData.ripple_clip_event_t = recoverFormat(fileData.ripple_clip_event_t);
-
-%fileData.fripple_clip = recoverFormat(fileData.fripple_clip);
-%fileData.fripple_clip_abs_t = recoverFormat(fileData.fripple_clip_abs_t);
-%fileData.fripple_clip_event_t = recoverFormat(fileData.fripple_clip_event_t);
-%%%
-
 if montage == 0
     fname_var='_mp_';
     fileData = DSP_data_m
@@ -656,14 +640,3 @@ end;
 
 end %function
 
-%temp function to deal with matlab engine limitations
-function var = recoverFormat(aMat)
-
-    if isempty(aMat)
-        var = {};
-    else 
-        row_count = numel(aMat(:,1))
-        col_count = numel(aMat(1,:))
-        var = mat2cell(aMat, ones(1,row_count), ones(1, col_count)) 
-    end
-end    

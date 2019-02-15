@@ -12,41 +12,52 @@ START_TIME_DEFAULT = 1
 STOP_TIME_DEFAULT = 0  #If not given by user, this value is corrected once read the eeg.
 CYCLE_TIME_DEFAULT = 300 #300 seconds = 5 minutes
 
-def getPaths():
-    paths = {}
-    paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
-    paths['project_root']= '/home/tomas-pastore/ez-detect/'
-    #paths['matlab']= "C:/\"Program Files\"/MATLAB/R2017a/bin/matlab.exe"
-    #paths['project_root']= "C:/Users/Tomas Pastore/Documents/ez-detect/"
+desired_frec_hz = 2000
 
-    paths['hfo_engine']= paths['project_root']+'hfo_engine_1/'
-    
-    paths['temp_pythonToMatlab_dsp'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp/'
-    paths['temp_pythonToMatlab_dsp_MATLAB'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp_MATLAB/'
+#Montage constants
+REFERENTIAL = 1
+BIPOLAR = 0
+NO_BP_REF = 0
+EXCLUDE_CH = 1
+DONT_EXCLUDE_CH = 0
 
-    paths['xml_output_path']= paths['hfo_engine']+'xml_output/xml_out.evt'
-    paths['swap_array_file'] = "NOT_GIVEN"
-    paths['dsp_monopolar_out']= paths['hfo_engine']+'dsp_output/monopolar/'
-    paths['dsp_bipolar_out']= paths['hfo_engine']+'dsp_output/bipolar/'
+MP_ANNOTATIONS_FLAG = 0 
+BP_ANNOTATIONS_FLAG = 1
 
-    paths['ez_pac_out']= paths['hfo_engine']+'ez_pac_output/'
-    paths['ez_top_in']= paths['hfo_engine']+'ez_top/input/'
-    paths['ez_top_out']= paths['hfo_engine']+'ez_top/output/'
+#Working paths
 
-    paths['montages']= paths['hfo_engine']+'montages/'
-    paths['research']= paths['hfo_engine']+'research_matfiles/'
-    paths['executable']= paths['hfo_engine']+'executable/'
+paths = {}
+#paths['matlab']= '/home/tomas-pastore/matlab/bin/matlab'
+#paths['matlab']= "C:/\"Program Files\"/MATLAB/R2017a/bin/matlab.exe"
+paths['project_root']= '/home/tomas-pastore/ez-detect/'
+#paths['project_root']= "C:/Users/Tomas Pastore/Documents/ez-detect/"
 
-    paths['trc_out']= paths['hfo_engine']+'trc/output/'
-    paths['trc_tmp_monopolar']= paths['hfo_engine']+'trc/temp/monopolar/'
-    paths['trc_tmp_bipolar']= paths['hfo_engine']+'trc/temp/bipolar/'
+paths['hfo_engine']= paths['project_root']+'hfo_engine_1/'
 
-    paths['cudaica_dir']= paths['project_root']+'src/cudaica/'
-    paths['binica_sc']= paths['cudaica_dir']+'binica.sc'
-    paths['cudaica_bin']= paths['cudaica_dir']+'cudaica'
-    paths['misc_code']= paths['project_root']+'tools/misc_code/'
+paths['temp_pythonToMatlab_dsp'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp/'
+paths['temp_pythonToMatlab_dsp_MATLAB'] = paths['hfo_engine']+'temp_pythonToMatlab_dsp_MATLAB/'
 
-    return paths
+paths['xml_output_path']= paths['hfo_engine']+'xml_output/xml_out.evt'
+paths['swap_array_file'] = "NOT_GIVEN"
+paths['dsp_monopolar_out']= paths['hfo_engine']+'dsp_output/monopolar/'
+paths['dsp_bipolar_out']= paths['hfo_engine']+'dsp_output/bipolar/'
+
+paths['ez_pac_out']= paths['hfo_engine']+'ez_pac_output/'
+paths['ez_top_in']= paths['hfo_engine']+'ez_top/input/'
+paths['ez_top_out']= paths['hfo_engine']+'ez_top/output/'
+
+#paths['montages']= paths['hfo_engine']+'montages/'
+paths['research']= paths['hfo_engine']+'research_matfiles/'
+paths['executable']= paths['hfo_engine']+'executable/'
+
+paths['trc_out']= paths['hfo_engine']+'trc/output/'
+paths['trc_tmp_monopolar']= paths['hfo_engine']+'trc/temp/monopolar/'
+paths['trc_tmp_bipolar']= paths['hfo_engine']+'trc/temp/bipolar/'
+
+paths['cudaica_dir']= paths['project_root']+'src/cudaica/'
+paths['binica_sc']= paths['cudaica_dir']+'binica.sc'
+paths['cudaica_bin']= paths['cudaica_dir']+'cudaica'
+paths['misc_code']= paths['project_root']+'tools/misc_code/'
 
 def updatePaths(paths, trc_fname, project_dir_path, xml_output_path, swap_array_path):
     paths['trc_fname']= trc_fname
@@ -56,7 +67,6 @@ def updatePaths(paths, trc_fname, project_dir_path, xml_output_path, swap_array_
 
     return paths
 
-paths = getPaths()
 
 #Cleans previous execution outputs
 os.chdir(paths['hfo_engine']) 

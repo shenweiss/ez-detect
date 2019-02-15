@@ -18,6 +18,9 @@ Dependencies:
 Output: xml_output gets saved in the default directory or the one given as argument.
 
 '''
+import time
+start = time. time()
+
 import config
 from config import matlab_session as MATLAB
 
@@ -35,7 +38,7 @@ import hdf5storage
 import numpy as np
 import threading
 import multiprocessing
-import time
+#import time
 from datetime import datetime
 
 from memory_profiler import memory_usage
@@ -58,25 +61,30 @@ Input:
     - cycle_time: a number in seconds indicating the size of the blocks to cut 
       the data in blocks. This improves time performance since it can be 
       parallelized. Example: 300 (5 minutes)
+
+    - sug_montage: a string with the name of the suggested montage.
+
+    - bp_montage: a string with the name of the montage with bipolar definitions
+      in case ez-detect moves channels from referential to bipolar.
  
 Output: xml_output gets saved in the default directory or the one given as argument.
 '''
 def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_montage):
-    logger.info('Running EZ Detect\n')
+    logger.info('Running Ez Detect')
 
     raw_trc = read_raw_trc(paths['trc_fname'], preload=True, include=None)
     
     logger.info("Converting data from volts to microvolts...")
     raw_trc._data *= 1e06
+    sampling_rate = int(raw_trc.info['sfreq'])
     
     #Debug info
+    logger.info("TRC file: "+ paths['trc_fname'])
+    logger.info("XML will be written to "+ paths['xml_output_path'])
     logger.info("Number of channels {}".format(raw_trc.info['nchan']) ) 
     logger.info("First data in microvolts: {}".format(str(raw_trc._data[0][0])))
-    sampling_rate = int(raw_trc.info['sfreq'])
     logger.info('Sampling rate: {}'.format(str(sampling_rate)+'Hz'))
 
-    #chanlist = _updateChanlist(raw_trc.info['ch_names'], paths['swap_array_file']) #this will be removed. Ask later.
-    chanlist = np.array(raw_trc.info['ch_names'] ,dtype=object) 
     trc_fname = splitext(basename(paths['trc_fname']))[0] 
 
     #Note: The resampling was beeing made after getting the data and for each channel(process_batch.m)
@@ -84,23 +92,27 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     #especially if you want just a piece of the trc. Also npad='auto' may be faster cause gets to 
     #the next power of two size with padding but may affect data quality introducing artifacts,
     #this depends on the data.
-    desired_hz = 2000  #Why? Generate name to add to config.py 
-    if sampling_rate != desired_hz:
-        logger.info('Resampling data to ' +  str(desired_hz) + 'Hz')
-        raw_trc.resample(desired_hz, npad="auto") 
+     
+    if sampling_rate != config.desired_frec_hz:
+        logger.info('Resampling data to ' +  str(config.desired_frec_hz) + 'Hz')
+        raw_trc.resample(config.desired_frec_hz, npad="auto") 
         sampling_rate = int(raw_trc.info['sfreq'])
         logger.info('Sampling rate was updated to: ' + str(sampling_rate) +'Hz')
 
-    file_pointers = _getFilePointers(sampling_rate, start_time, stop_time, cycle_time, samples_num = len(raw_trc._data[0]) )
+    file_pointers = _getFilePointers(sampling_rate, start_time, stop_time, 
+                                     cycle_time, samples_num=len(raw_trc._data[0]))
+    
     blocks = _calculateBlockAmount(file_pointers, sampling_rate )     
 
     #Note need to add patch that limits second cycle if < 60 seconds. Ask what is this
     eeg_data, metadata = _computeEEGSegments(file_pointers, trc_fname, blocks, raw_trc) #TODO do this inside each thread
 
     #_saveResearchData(paths['research'], blocks, metadata, eeg_data, chanlist, trc_fname)
-    header = raw_trc._raw_extras[0]
-    montage = _buildMontageFromTRC(header['montages'], sug_montage_name=sug_montage, bp_montage_name=bp_montage)
+    montages = raw_trc._raw_extras[0]['montages']
+    montage = _buildMontageFromTRC(montages, raw_trc.info['ch_names'], sug_montage, bp_montage)
 
+    #chanlist = _updateChanlist(raw_trc.info['ch_names'], paths['swap_array_file']) #To ask
+    chanlist = np.array(raw_trc.info['ch_names'], dtype=object) #we need the np array for matlab engine for now
     useThreads = True
     if useThreads:
         _processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths)
@@ -109,19 +121,19 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
 
     rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
-    write_evt(paths['xml_output_path'], paths['trc_fname'], rec_start_time, raw_trc.info['ch_names'])
+    write_evt(paths['xml_output_path'], paths['trc_fname'], 
+              rec_start_time, raw_trc.info['ch_names'])
 
 
 ############  Private Funtions  #########
 
-def _updateChanlist(chan_names, swap_array_file):
-    chan_names = np.array(chan_names ,dtype=object) #because of matlab engine limitations
+def _updateChanlist(ch_names, swap_array_file):
+    ch_names = np.array(ch_names ,dtype=object) #for matlab engine
     if swap_array_file != 'NOT_GIVEN':
         swap_array = MATLAB.load(swap_array_file)
-        chan_names = [chan_names[i-1] for i in swap_array] 
-    return chan_names
+        ch_names = [ch_names[i-1] for i in swap_array] 
+    return ch_names
 
-#despues chequear que el start y stop esten en rango y que sea un bloque valido para ica
 def _getFilePointers(sampling_rate, start_time, stop_time, cycle_time, samples_num):
     file_pointers = {}
     seconds_to_jump = start_time - 1 #start_time_default is 1, meaning the first second
@@ -168,37 +180,47 @@ def _saveResearchData(contest_path, metadata, eeg_data, chanlist):
         MATLAB.save(full_path, 'metadata_i', 'eeg_data_i', 'chanlist')
         #ask if it is worthy to save the blocks or not
 
-def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name='Bipolar'):
+def _buildMontageFromTRC(montages, chanlist, sug_montage_name, bp_montage_name):
 
-    #TODO check that set(chanlist) == set(suggested_chanlist)
-    REFERENTIAL = 1
-    BIPOLAR = 0
-    NO_BP_REF = 0
     sug_lines = montages[sug_montage_name]['lines']
     bp_lines = montages[bp_montage_name]['lines']
-    chanlist = [pair[1] for pair in montages[sug_montage_name]['inputs'][:sug_lines] ] 
-    bp_defined_channels = [pair[1] for pair in montages[bp_montage_name]['inputs'][:bp_lines]] 
-    montage = []
-    for i in range(sug_lines):
-        suggestion = montages[sug_montage_name]['inputs'][i]       
-        chan_name = suggestion[1] #first col of montage.mat
-        suggested_mark = REFERENTIAL if suggestion[0] == 'AVG' else BIPOLAR #second col of montage.mat  
-        if suggested_mark == BIPOLAR: #third col of montage .mat
-            if suggestion[0] == chan_name: #for now I use this to exclude channels, substract with themselves
-                bp_ref = 0
-                exclude = 1
-            else: 
-                bp_ref  = chanlist.index(suggestion[0]) + 1
-                exclude = 0
-        else: ##el usuario sugirio que sea ref
-            try: 
-                chan_bp_idx = bp_defined_channels.index(chan_name)
-                bp_ref = chanlist.index(montages[bp_montage_name]['inputs'][chan_bp_idx][0]) + 1
-            except ValueError: #user didn't defined a bp pair for this channel
-                bp_ref = NO_BP_REF
-            exclude = 0
+    sug_defs = [def_pair for def_pair in montages[sug_montage_name]['inputs'][:sug_lines] ]
+    bp_defs = [def_pair for def_pair in montages[bp_montage_name]['inputs'][:bp_lines]]
+    def_ch_names_sug = [pair[1] for pair in sug_defs ] 
+    def_ch_names_bp = [pair[1] for pair in bp_defs ] 
+    
+    try:
+        assert(set(chanlist) == set(def_ch_names_sug))
+    except AssertionError:
+        logger.info("The 'Suggested montage' is badly formed, you must provide a definition" +
+              " for each channel name that appears in the 'Ref.'' montage.")
+        assert(False)
 
-        chan_montage_info = tuple([chan_name, suggested_mark, bp_ref, exclude])
+    montage = []
+    for ch_name in chanlist: #First col of montage.mat
+        sug_idx = def_ch_names_sug.index(ch_name)
+        suggestion = config.REFERENTIAL if sug_defs[sug_idx][0] == 'AVG' else config.BIPOLAR #Second col of montage.mat  
+
+        if suggestion == config.BIPOLAR: #Third col of montage .mat
+            if sug_defs[sug_idx][0] == ch_name: #For now we mean exclusion in this way
+                bp_ref = config.NO_BP_REF
+                exclude = config.EXCLUDE_CH
+            else: 
+                #Note that we know by the previous conditions that the index exists.
+                #That string is defined inside BQ and its value is 'AVG' or another
+                #ch_name that we have asserted that is in chanlist.
+                bp_ref = chanlist.index(sug_defs[sug_idx][0]) + 1 
+                exclude = config.DONT_EXCLUDE_CH
+
+        else: #suggestion == config.REFERENTIAL
+            exclude = 0
+            try: 
+                bp_idx = def_ch_names_bp.index(ch_name)
+                bp_ref = chanlist.index(bp_defs[bp_idx][0]) + 1
+            except ValueError: #user didn't defined a bp pair for this channel
+                bp_ref = config.NO_BP_REF
+
+        chan_montage_info = tuple([ch_name, suggestion, bp_ref, exclude])
         montage.append(chan_montage_info)
 
     return np.array(montage, dtype=object)
@@ -206,15 +228,17 @@ def _buildMontageFromTRC(montages, sug_montage_name='Suggested', bp_montage_name
 def _processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths):
     threads = []
     def startBlockThread(i):
-        thread = threading.Thread(target=_processParallelBlock, name='DSP_block_'+str(i),
+        thread = threading.Thread(target= _processParallelBlock, name='DSP_block_'+str(i),
                  args=(eeg_data[i], chanlist, metadata[i], montage, paths))
         thread.start()
         threads.append(thread)
         return
-    for i in range(blocks-1): #this launches a thread for all but the last block
-        logger.info('Starting a thread')
+    for i in range(blocks-1): #This launches a thread for all but the last block
+        logger.info('Starting a thread for block ' + str(i+1) )
         startBlockThread(i)
-    logger.info('Starting last thread')
+
+    #For the last one we use current thread.
+    logger.info('Starting a thread for block ' + str(blocks))
     startBlockThread(blocks-1)
 
     for t in threads:
@@ -233,10 +257,11 @@ def _processParallelBlocks_processes(blocks, eeg_data, chanlist, metadata, monta
 
 def _processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths):    
     #This is needed just cause matlab.engine doesnt support np arrays...
+    #TODO translate lfbad to avoid disk usage.
     args_fname = paths['temp_pythonToMatlab_dsp']+'lfbad_args_'+metadata['file_block']+'.mat' 
     scipy.io.savemat(args_fname, dict(eeg_data=eeg_data, chanlist=chanlist, metadata=metadata, ez_montage=ez_montage))
-
-    eeg_mp, eeg_bp, metadata = MATLAB.ez_lfbad(args_fname, paths['montages'], nargout=3)
+    eeg_mp, eeg_bp, metadata = MATLAB.ez_lfbad(args_fname, nargout=3)
+    
     #metadata.montage is a cell array of 1 * n 
     eeg_bp, metadata, hfo_ai, fr_ai = _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths)
     _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths)
@@ -245,18 +270,19 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
         
     if eeg_mp: #not empty
 
-        logger.info('Starting dsp monopolar block')
-        logger.info('Converting data from python to matlab (takes long).')
+        logger.info('Monopolar block. Converting data from python to matlab (takes long).')
         dsp_monopolar_out = MATLAB.ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata, paths)
         logger.info('Finished dsp monopolar block')
 
+        #TODO once ez top gets translated we can avoid using the disk for saving.
+        logger.info('Annotating Monopolar block')
         if dsp_monopolar_out['error_flag'] == 0: 
-            montage_type = 0
-            output_fname = MATLAB.eztop_putou_e1(dsp_monopolar_out['path_to_data'], montage_type, #the other ones are loaded inside because of matlab engine limitations
-                                                 paths) #dsp_monopolar_out['DSP_data_m'], 
-                                                        #dsp_monopolar_out['metadata'],
+            output_fname = MATLAB.eztop_putou_e1(dsp_monopolar_out['path_to_data'], 
+                                                 config.MP_ANNOTATIONS_FLAG,
+                                                 paths) 
             MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
 
+            #This doesn't annotate anything in the evts. comment for now.
             #MATLAB.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
             #                        dsp_monopolar_out['ez_fr_mp'], 
             #                        dsp_monopolar_out['ez_hfo_mp'], 
@@ -267,13 +293,13 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
             #                        nargout=0)
         else:
             logger.info('Error in process_dsp_output, error_flag != 0')
+        
         eeg_bp = dsp_monopolar_out['ez_bp']
         metadata = dsp_monopolar_out['metadata']
         hfo_ai = dsp_monopolar_out['hfo_ai']
         fr_ai = dsp_monopolar_out['fr_ai']
  
     else:  #eeg_mp is empty
-        
         hfo_ai = np.zeros(len(eeg_bp[0])).tolist()
         fr_ai = hfo_ai
 
@@ -282,17 +308,13 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
 def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
 
     if eeg_bp:
-        logger.info('Starting bipolar dsp block')
-        logger.info('Converting data from python to matlab (takes long).')
+        logger.info('Bipolar Block. Converting data from python to matlab (takes long).')
         dsp_bipolar_out = MATLAB.ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr_ai, paths)
         logger.info('Finished bipolar dsp block')
-        logger.info('Annotating bipolar block')
 
-        montage_type = 1; 
-        #dsp_bipolar_out['DSP_data_bp'], were parameters of ez_top before
-        #dsp_bipolar_out['metadata'],
+        logger.info('Annotating bipolar block')
         output_fname = MATLAB.eztop_putou_e1(dsp_bipolar_out['path_to_data'], 
-                                             montage_type, 
+                                             config.BP_ANNOTATIONS_FLAG, 
                                              paths)
         
         MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
@@ -306,13 +328,10 @@ def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
         #                        montage, 
         #                        paths, nargout=0)
 
-        logger.info('Finished annotating bipolar block')
     else:
         logger.info("Didn't enter dsp bipolar, eeg_bp was empty.")
 
-
-#TODO ADD RESTRICTIONS TO PARAMETERS EJ STARTIME >0 
-
+#TODO ADD RESTRICTIONS TO PARAMETERS 
 if __name__ == "__main__":
     import argparse
     
@@ -360,7 +379,6 @@ if __name__ == "__main__":
                         "want to allow to move from referential to bipolar montage .",
                         required=False, default= 'Bipolar')
 
-    #Will this be kept?
     parser.add_argument("-saf", "--swap_array_file_path", 
                         help="This optional file should contain a swap_array"+
                         " variable, which can be used to correct the channel"+
@@ -373,12 +391,13 @@ if __name__ == "__main__":
     paths = config.updatePaths(config.paths, args.trc_path, args.project_dir_path, 
                                args.xml_output_path, args.swap_array_file_path)
 
-    logger.info("XML will be written to "+ paths['xml_output_path'])
+    hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time, 
+                 args.suggested_montage, args.bipolar_montage)
+    end = time. time()
+    print("Execution time in seconds...")
+    print(end - start)
     
     #def test_mem():
-    hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time, 
-                     args.suggested_montage, args.bipolar_montage)
-        
     #mem = max(memory_usage(proc=test_mem))
     #print("Maximum memory used: {0} MiB".format(str(mem)))
-
+    #test_mem()

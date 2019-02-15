@@ -1,4 +1,4 @@
-function [eeg_data_m, eeg_data_bp, metadata] = ez_lfbad(input_args_fname, montage_dir)
+function [eeg_data_m, eeg_data_bp, metadata] = ez_lfbad(input_args_fname)
   
 load(input_args_fname); % loads variables: eeg_data, chanlist, metadata and ez_montage
 disp('Entering ez_lfbad')
@@ -7,17 +7,8 @@ metadata.lf_bad={''}; % start building metadata
 metadata.bp_chanlist={''};
 metadata.m_chanlist={''};
 
-%%TEMP UNTIL WE GET MONTAGE FROM TRC 
-%file_name=strcat(metadata.file_id, '_montage');
-%file_name=[montage_dir file_name];
-%disp(['loading montage: ' file_name])
-%load(file_name,'montage');
-%ez_montage = montage;
-
 metadata.montage_shape = [numel(ez_montage(:,1)),numel(ez_montage(1,:))];
 metadata.montage= reshape(ez_montage,1,[]); %matlab engine can only return 1*n cell arrays. I changed the data structure to get mlarray.
-
-
 
 t.Data=ez_montage; 
 
@@ -40,11 +31,6 @@ zsixty_cycle=zscore_2(sixty_cycle);
 imp=unique(imp);
 
   t.Data=ez_montage;
-
-  %I think this is not necesary and can be removed
-  %NEW save original id of referential channels to do annotations later
-  %metadata.original_chanlist = string(montage(:,1))
-  %not supported by matlab engine
 
   eeg_bp=[];
   eeg_mp=[];
