@@ -388,8 +388,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    paths = config.updatePaths(config.paths, args.trc_path, args.project_dir_path, 
-                               args.xml_output_path, args.swap_array_file_path)
+    paths = config.resolvePaths(args.trc_path, args.xml_output_path,  
+                               args.project_dir_path, args.swap_array_file_path)
 
     hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time, 
                  args.suggested_montage, args.bipolar_montage)

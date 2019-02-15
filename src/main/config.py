@@ -59,7 +59,7 @@ paths['binica_sc']= paths['cudaica_dir']+'binica.sc'
 paths['cudaica_bin']= paths['cudaica_dir']+'cudaica'
 paths['misc_code']= paths['project_root']+'tools/misc_code/'
 
-def updatePaths(paths, trc_fname, project_dir_path, xml_output_path, swap_array_path):
+def resolvePaths(trc_fname, xml_output_path, project_dir_path, swap_array_path):
     paths['trc_fname']= trc_fname
     paths['project_root']= project_dir_path
     paths['xml_output_path']= xml_output_path
@@ -69,6 +69,7 @@ def updatePaths(paths, trc_fname, project_dir_path, xml_output_path, swap_array_
 
 
 #Cleans previous execution outputs
+cwd = os.getcwd()
 os.chdir(paths['hfo_engine']) 
 running_os = platform.system()
 if running_os == 'Windows':
@@ -80,7 +81,7 @@ elif running_os == 'Linux':
 os.chdir(paths['misc_code']) #to find tryAddPaths
 matlab_session = matlab.engine.start_matlab() 
 matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
-
+os.chdir(cwd)
 
 #### XML CONFIGURATION
 

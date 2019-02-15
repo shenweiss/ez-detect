@@ -5,10 +5,10 @@
 
 import unittest
 import sys
-import os
+from pathlib import Path
 import argparse
-from math import inf as INFINITY
-sys.path.insert(0, os.path.abspath('../src/evtio'))
+test_folder_dir = str(Path(sys.argv[0]).parent)
+sys.path.insert(0, str(Path(test_folder_dir +'/../src/evtio').expanduser().resolve()) ) 
 import evt_metrics as evt_metrics
 from evtio import read_events
 
@@ -18,7 +18,7 @@ class eventFilesTest(unittest.TestCase):
         self.E_events = read_events(self.expected_fn)
 
     def test_similar_event_files(self):
-        self.assertTrue( evt_metrics.distance(self.O_events, self.E_events) <= self.delta- self.delta/4) 
+        self.assertTrue( evt_metrics.distance(self.O_events, self.E_events) <= self.delta-self.delta/4) 
 
     def test_obtained_is_subset(self):
         self.assertTrue( evt_metrics.subset(self.O_events, self.E_events, self.delta) )
@@ -64,9 +64,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    eventFilesTest.expected_fn = args.expected
-    eventFilesTest.obtained_fn = args.obtained
-    eventFilesTest.trc_fname = args.trc_fname
+    eventFilesTest.expected_fn = str(Path(args.expected).expanduser().resolve())
+    eventFilesTest.obtained_fn = str(Path(args.obtained).expanduser().resolve())
+    eventFilesTest.trc_fname = str(Path(args.trc_fname).expanduser().resolve())
     eventFilesTest.delta = float(args.delta)
 
     while(len(sys.argv) > 1):
