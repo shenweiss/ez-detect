@@ -3,10 +3,10 @@
 
 import unittest
 import argparse
-#from math import inf as INFINITY
 import sys
-import os
-sys.path.insert(0, os.path.abspath('../src/main'))
+from pathlib import Path
+test_folder_dir = str(Path(sys.argv[0]).parent)
+sys.path.insert(0, str(Path(test_folder_dir +'/../src/main').expanduser().resolve()) ) 
 from hfo_annotate import _getFilePointers, _calculateBlockAmount
 import config
 

@@ -29,9 +29,8 @@ from os.path import basename, splitext, expanduser, abspath
 
 from trcio import read_raw_trc
 from mne.utils import verbose, logger
-sys.path.insert(0, abspath(config.paths['project_root']+'src/evtio'))
+sys.path.insert(0, config.paths['project_root']+'/src/evtio')
 from evtio import write_evt
-
 import scipy.io
 import hdf5storage
 
@@ -93,9 +92,9 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     #the next power of two size with padding but may affect data quality introducing artifacts,
     #this depends on the data.
      
-    if sampling_rate != config.desired_frec_hz:
-        logger.info('Resampling data to ' +  str(config.desired_frec_hz) + 'Hz')
-        raw_trc.resample(config.desired_frec_hz, npad="auto") 
+    if sampling_rate != config.DESIRED_FREC_HZ:
+        logger.info('Resampling data to ' +  str(config.DESIRED_FREC_HZ) + 'Hz')
+        raw_trc.resample(config.DESIRED_FREC_HZ, npad="auto") 
         sampling_rate = int(raw_trc.info['sfreq'])
         logger.info('Sampling rate was updated to: ' + str(sampling_rate) +'Hz')
 
@@ -397,7 +396,7 @@ if __name__ == "__main__":
     print("Execution time in seconds...")
     print(end - start)
     
-    #def test_mem():
+    #def test_mem()
     #mem = max(memory_usage(proc=test_mem))
     #print("Maximum memory used: {0} MiB".format(str(mem)))
     #test_mem()

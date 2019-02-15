@@ -1,7 +1,7 @@
 import os
 import sys
-from os.path import expanduser
-sys.path.insert(0, os.path.expanduser("~") + '/ez-detect/src/main')
+from pathlib import Path
+sys.path.insert(0, str(Path.home()) + '/ez-detect/src/main') #ask how to solve this well
 import config
 import scipy.io
 from lxml import etree as eTree
