@@ -282,14 +282,14 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
             MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
 
             #This doesn't annotate anything in the evts. comment for now.
-            #MATLAB.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
-            #                        dsp_monopolar_out['ez_fr_mp'], 
-            #                        dsp_monopolar_out['ez_hfo_mp'], 
-            #                        output_fname,
-            #                        dsp_monopolar_out['metadata'],
-            #                        montage,
-            #                        paths, 
-            #                        nargout=0)
+            MATLAB.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
+                                    dsp_monopolar_out['ez_fr_mp'], 
+                                    dsp_monopolar_out['ez_hfo_mp'], 
+                                    output_fname,
+                                    dsp_monopolar_out['metadata'],
+                                    config.MP_ANNOTATIONS_FLAG,
+                                    paths, 
+                                    nargout=0)
         else:
             logger.info('Error in process_dsp_output, error_flag != 0')
         
@@ -319,13 +319,13 @@ def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
         MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
         
 
-        #MATLAB.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
-        #                        dsp_bipolar_out['ez_fr_bp'], 
-        #                        dsp_bipolar_out['ez_hfo_bp'], 
-        #                        output_fname, 
-        #                        dsp_bipolar_out['metadata'], 
-        #                        montage, 
-        #                        paths, nargout=0)
+        MATLAB.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
+                                dsp_bipolar_out['ez_fr_bp'], 
+                                dsp_bipolar_out['ez_hfo_bp'], 
+                                output_fname, 
+                                dsp_bipolar_out['metadata'], 
+                                config.BP_ANNOTATIONS_FLAG, 
+                                paths, nargout=0)
 
     else:
         logger.info("Didn't enter dsp bipolar, eeg_bp was empty.")

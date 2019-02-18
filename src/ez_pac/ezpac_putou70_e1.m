@@ -6,7 +6,7 @@ function ezpac_putou_e1(eeg_data, fr, hfo, output_fname, metadata, montage, path
 % UC-2016-158-2-PCT, US provisional #62429461
 
 
-disp("entering ezpac")
+disp("Entering ezpac")
 %%only for matlab engine for python, to be removed
 %recover cell structure after matlab engine
 dims = metadata.montage_shape;

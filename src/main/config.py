@@ -74,7 +74,7 @@ def resolvePath(path_str):
 def resolvePaths(trc_fname, xml_output_path, project_dir_path, swap_array_path):
     paths['trc_fname']= resolvePath(trc_fname)
     paths['project_root']= resolvePath(project_dir_path)
-    paths['xml_output_path']= resolvePath(xml_output_path)
+    paths['xml_output_path']= str(Path(xml_output_path).expanduser().absolute())
     if paths['swap_array_file'] != "NOT_GIVEN":
         paths['swap_array_file'] = resolvePath(swap_array_path)
 
