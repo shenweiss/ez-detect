@@ -31,6 +31,8 @@ from trcio import read_raw_trc
 from mne.utils import verbose, logger
 sys.path.insert(0, config.paths['project_root']+'/src/evtio')
 from evtio import write_evt
+sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
+from profiling import profile_time, profile_memory
 import scipy.io
 import hdf5storage
 
@@ -68,6 +70,8 @@ Input:
  
 Output: xml_output gets saved in the default directory or the one given as argument.
 '''
+#@profile_memory
+@profile_time
 def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_montage):
     logger.info('Running Ez Detect')
 
@@ -282,6 +286,7 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
             MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
 
             #This doesn't annotate anything in the evts. comment for now.
+            '''
             MATLAB.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
                                     dsp_monopolar_out['ez_fr_mp'], 
                                     dsp_monopolar_out['ez_hfo_mp'], 
@@ -290,6 +295,7 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
                                     config.MP_ANNOTATIONS_FLAG,
                                     paths, 
                                     nargout=0)
+            '''
         else:
             logger.info('Error in process_dsp_output, error_flag != 0')
         
@@ -318,7 +324,7 @@ def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
         
         MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
         
-
+        '''
         MATLAB.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
                                 dsp_bipolar_out['ez_fr_bp'], 
                                 dsp_bipolar_out['ez_hfo_bp'], 
@@ -326,7 +332,7 @@ def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
                                 dsp_bipolar_out['metadata'], 
                                 config.BP_ANNOTATIONS_FLAG, 
                                 paths, nargout=0)
-
+        '''
     else:
         logger.info("Didn't enter dsp bipolar, eeg_bp was empty.")
 
@@ -393,7 +399,7 @@ if __name__ == "__main__":
     hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time, 
                  args.suggested_montage, args.bipolar_montage)
     end = time. time()
-    print("Execution time in seconds...")
+    print("Whole execution time in seconds...")
     print(end - start)
     
     #def test_mem()

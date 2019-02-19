@@ -14,11 +14,11 @@ dataset=$1
 xml_output_path=$2
 cycle_duration=$3
 blocks=$4
-clean_hfo_engine_afterwards=$5
+clean_disk_dumps_afterwards=$5
 
 #Configure these if you change working directory
 dataset_path='/home/tomas-pastore/TRCs/'$dataset
-hfo_engine_path='/home/tomas-pastore/hfo_engine_1/'
+disk_dumps_path='/home/tomas-pastore/ez-detect/disk_dumps/'
 
 echo "Input configuration:"
 
@@ -26,7 +26,7 @@ echo "Dataset: "$dataset_path
 echo "Xml filename:" $xml_output_path
 echo "Cycle duration:" $cycle_duration "(seconds)"
 echo "Number of blocks:" $blocks
-echo "Clean hfo_engine afterwards:" $clean_hfo_engine_afterwards
+echo "Clean disk_dumps afterwards:" $clean_disk_dumps_afterwards
 
 start_time=1
 stop_time=$(($cycle_duration * $blocks))
@@ -35,11 +35,11 @@ SECONDS=0 #timestamp
 python hfo_annotate.py -in=$dataset_path -out=$xml_output_path -str_t=$start_time -stp_t=$stop_time -c=$cycle_duration
 wait
 
-if [ $clean_hfo_engine_afterwards == "--cleanAfter=yes" ]
+if [ $clean_disk_dumps_afterwards == "--cleanAfter=yes" ]
 then
 	echo "Cleaning outputs after execution..."
 	rm -r -f __pycache__
-	cd $hfo_engine_path
+	cd $disk_dumps_path
 	./clean.sh 
 fi
 

@@ -45,28 +45,28 @@ fripple_off_offset = + timedelta(milliseconds=2.5)
 
 paths = {}
 paths['project_root']= str( Path(Path.home(), 'ez-detect'))
-paths['hfo_engine']= str( Path(paths['project_root'], 'hfo_engine_1')) + '/'
+paths['disk_dumps']= str( Path(paths['project_root'], 'disk_dumps')) + '/'
 
-paths['xml_output_path']= str( Path(paths['hfo_engine'], 'xml_output/xml_out.evt'))
+paths['xml_output_path']= str( Path(paths['disk_dumps'], 'xml_output/xml_out.evt'))
 paths['swap_array_file'] = "NOT_GIVEN"
 
-paths['dsp_monopolar_out']= str( Path(paths['hfo_engine'], 'dsp_output/monopolar')) + '/'
-paths['dsp_bipolar_out']= str( Path(paths['hfo_engine'], 'dsp_output/bipolar')) + '/'
+#paths['dsp_monopolar_out']= str( Path(paths['disk_dumps'], 'dsp_output/monopolar')) + '/'
+#paths['dsp_bipolar_out']= str( Path(paths['disk_dumps'], 'dsp_output/bipolar')) + '/'
 
-paths['ez_top_in']= str( Path(paths['hfo_engine'], 'ez_top/input')) + '/'
-paths['ez_top_out']= str( Path(paths['hfo_engine'], 'ez_top/output')) + '/'
-paths['ez_pac_out']= str( Path(paths['hfo_engine'], 'ez_pac_output')) + '/'
+paths['ez_top_in']= str( Path(paths['disk_dumps'], 'ez_top/input')) + '/'
+paths['ez_top_out']= str( Path(paths['disk_dumps'], 'ez_top/output')) + '/'
+paths['ez_pac_out']= str( Path(paths['disk_dumps'], 'ez_pac_output')) + '/'
 
-paths['research']= str( Path(paths['hfo_engine'], 'research_matfiles')) + '/'
+paths['research']= str( Path(paths['disk_dumps'], 'research_matfiles')) + '/'
 
-paths['trc_tmp_monopolar']= paths['hfo_engine']+'trc/temp/monopolar/'
-paths['trc_tmp_bipolar']= paths['hfo_engine']+'trc/temp/bipolar/'
+#paths['trc_tmp_monopolar']= paths['disk_dumps']+'trc/temp/monopolar/'
+#paths['trc_tmp_bipolar']= paths['disk_dumps']+'trc/temp/bipolar/'
 
 paths['cudaica_dir']= str( Path(paths['project_root'], 'src/cudaica')) + '/'
 paths['binica_sc']= str( Path(paths['cudaica_dir'], 'binica.sc'))
 paths['cudaica_bin']= str( Path(paths['cudaica_dir'], 'cudaica'))
 paths['misc_code']= str( Path(paths['project_root'], 'tools/misc_code')) + '/'
-paths['temp_pythonToMatlab_dsp'] = str(Path(paths['hfo_engine'], 'temp_pythonToMatlab_dsp')) + '/'
+paths['temp_pythonToMatlab_dsp'] = str(Path(paths['disk_dumps'], 'temp_pythonToMatlab_dsp')) + '/'
 
 def resolvePath(path_str):
     return str(Path(path_str).expanduser().resolve())
@@ -83,7 +83,7 @@ def resolvePaths(trc_fname, xml_output_path, project_dir_path, swap_array_path):
 
 #Cleans previous execution outputs
 cwd = os.getcwd()
-os.chdir(paths['hfo_engine']) 
+os.chdir(paths['disk_dumps']) 
 running_os = platform.system()
 if running_os == 'Windows':
     os.system('clean') 

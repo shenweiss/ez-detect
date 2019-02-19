@@ -1,6 +1,9 @@
 import time
 import timeit
 import cProfile
+from memory_profiler import profile as profile_memory
+
+#profile_memory is a decorator
 
 #timeit module usage example 
 #>>> timeit.timeit('"-".join(str(n) for n in range(100))', number=10000)
@@ -46,7 +49,7 @@ class timer_for():
         pass
 
 #decorator for recursive profiling
-def recursive_profiling(func):
+def profile_time(func):
     def profiled_func(*args, **kwargs):
         profile = cProfile.Profile()
         try:
@@ -62,7 +65,7 @@ def recursive_profiling(func):
 try:
     from line_profiler import LineProfiler
 
-    def do_profile(follow=[]):
+    def profile_time_by_line(follow=[]):
         def inner(func):
             def profiled_func(*args, **kwargs):
                 try:
@@ -78,7 +81,7 @@ try:
         return inner
 
 except ImportError:
-    def do_profile(follow=[]):
+    def profile_time_by_line(follow=[]):
         "Helpful if you accidentally leave in production!"
         def inner(func):
             def nothing(*args, **kwargs):

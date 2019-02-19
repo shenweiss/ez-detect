@@ -86,12 +86,12 @@ function [wts, sph, tmpint, error_flag] = ez_cudaica(data,var2,var3,var4,var5,va
 disp('ENTERING CUDAICA.M')
 
 %to be removed in future refactoring, once fixed the arguments...
-hfo_engine='/home/tomas-pastore/ez-detect/hfo_engine_1/';
+disk_dumps='/home/tomas-pastore/ez-detect/disk_dumps/';
 binica_sc='/home/tomas-pastore/ez-detect/src/cudaica/binica.sc';
 cudaica_bin='/home/tomas-pastore/ez-detect/src/cudaica/cudaica';
 
 if ~isdeployed
-    addpath(hfo_engine);
+    addpath(disk_dumps);
 end
 
 if nargin < 1 | nargin > 25
@@ -201,10 +201,10 @@ end
 % make sure no such script file already exists in the pwd
 %
 %scriptfile = ['cudaica' tmpint '.sc'];
-%scriptfile =  [hfo_engine scriptfile];
+%scriptfile =  [disk_dumps scriptfile];
 tmpint = int2str(round(rand*10000));
 scriptfile = ['cudaica' tmpint '.sc'];
-scriptfile =  [hfo_engine scriptfile];
+scriptfile =  [disk_dumps scriptfile];
 fprintf('scriptfile = %s\n',scriptfile);
 
 nchans = 0;
@@ -216,7 +216,7 @@ if ~ischar(data) % data variable given
   end
   nchans = size(data,1);
   nframes = size(data,2);
-  tmpdata = [hfo_engine 'cudaica' tmpint '.fdt'];
+  tmpdata = [disk_dumps 'cudaica' tmpint '.fdt'];
   if strcmpi(computer, 'MAC')
       floatwrite(data,tmpdata,'ieee-be');
   else
@@ -254,15 +254,15 @@ for x=1:length(flags)
      args{x} = datafile;
   elseif strcmp(flags{x},'WeightsOutFile')
      weightsfile = ['cudaica' tmpint '.wts'];
-     weightsfile =  [hfo_engine weightsfile];
+     weightsfile =  [disk_dumps weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'WeightsTempFile')
      weightsfile = ['cudaicatmp' tmpint '.wts'];
-     weightsfile =  [hfo_engine weightsfile];
+     weightsfile =  [disk_dumps weightsfile];
      args{x} = weightsfile;
   elseif strcmp(flags{x},'SphereFile')
      spherefile = ['cudaica' tmpint '.sph'];
-     spherefile =  [hfo_engine spherefile];
+     spherefile =  [disk_dumps spherefile];
      args{x} = spherefile;
   elseif strcmp(flags{x},'chans')
      args{x} = int2str(nchans);
@@ -284,7 +284,7 @@ if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
      if exist('wtsin') == 1 % variable
        disp('cudaica line 291 tmpint class:')
        disp(class(tmpint) )
-       winfn = [hfo_engine tmpint '.inwts'];
+       winfn = [disk_dumps tmpint '.inwts'];
        if strcmpi(computer, 'MAC')
            floatwrite(wtsin,winfn,'ieee-be');
        else
@@ -294,7 +294,7 @@ if exist('wtsin') % specify WeightsInfile from 'weightsin' flag, arg
        weightsinfile = winfn; % weights in file name
      elseif exist(wtsin) == 2 % file
        weightsinfile = wtsin;
-       weightsinfile =  [hfo_engine weightsinfile];
+       weightsinfile =  [disk_dumps weightsinfile];
      else
        fprintf('cudaica(): weightsin file|variable not found.\n');
        return
@@ -310,7 +310,7 @@ if ~exist(scriptfile)
 end
 
 fprintf('\ncudaica(): ica script file %s data %s pwd %s.\n',...
-        scriptfile, datafile, hfo_engine);
+        scriptfile, datafile, disk_dumps);
 %
 % %%%%%%%%%%%%%%%%%%%%%% run binary ica %%%%%%%%%%%%%%%%%%%%%%%%%
 %

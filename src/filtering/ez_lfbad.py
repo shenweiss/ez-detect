@@ -1,7 +1,11 @@
-function [eeg_data_m, eeg_data_bp, metadata] = ez_lfbad(input_args_fname)
-  
-load(input_args_fname); % loads variables: eeg_data, chanlist, metadata and ez_montage
-disp('Entering ez_lfbad')
+from mne.utils import verbose, logger
+
+def ez_lfbad(eeg_data, chan_list, metadata, montage):
+
+  logger.info('Entering ez_lfbad')
+  metadata['']
+
+
 
 metadata.lf_bad={''}; % start building metadata
 metadata.bp_chanlist={''};
@@ -12,23 +16,25 @@ metadata.montage= reshape(ez_montage,1,[]); %matlab engine can only return 1*n c
 
 t.Data=ez_montage; 
 
-fprintf('impedence check\r')
-sixty_cycle=[];
-for j=1:numel(eeg_data(:,1))
-    gpu_eeg_data=eeg_data(j,:);
-    transformedSignal = fft(gpu_eeg_data);
-    frequencyVector = 2000/2 * linspace( 0, 1, numel(eeg_data(1,:))/2 + 1 );
-    powerSpectrum = transformedSignal .* conj(transformedSignal) ./ numel(eeg_data(1,:));
-    if j==1
-        [a,b]=find((frequencyVector>58)&(frequencyVector<62));
-        start_index=min(b);
-        end_index=max(b);
-    end;
-    sixty_cycle(j)=sum(real(powerSpectrum(start_index:end_index)));
-end;
-zsixty_cycle=zscore_2(sixty_cycle);
-[a,imp]=find((sixty_cycle>1e9)&(zsixty_cycle>0.3));
-imp=unique(imp);
+def impedence_check():
+  logger.info('Performing impedance check.')
+
+  sixty_cycle=[]
+  for j in range(len(eeg_data))
+      channel = eeg_data[j]
+      transformed_signal = fft(channel) #Fast Fourier transform
+      frequencyVector = 2000/2 * linspace( 0, 1, numel(eeg_data(1,:))/2 + 1 );
+      powerSpectrum = transformedSignal .* conj(transformedSignal) ./ numel(eeg_data(1,:));
+      if j==1
+          [a,b]=find((frequencyVector>58)&(frequencyVector<62));
+          start_index=min(b);
+          end_index=max(b);
+      end;
+      sixty_cycle(j)=sum(real(powerSpectrum(start_index:end_index)));
+  end;
+  zsixty_cycle=zscore_2(sixty_cycle);
+  [a,imp]=find((sixty_cycle>1e9)&(zsixty_cycle>0.3));
+  imp=unique(imp);
 
   t.Data=ez_montage;
 
