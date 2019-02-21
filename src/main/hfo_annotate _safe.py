@@ -71,44 +71,56 @@ Input:
 Output: xml_output gets saved in the default directory or the one given as argument.
 '''
 #@profile_memory
-#@profile_time
-#TODO modify plugin to take start_time from 0 instead of 1
-#TODO stop add 1 to stop_time
+@profile_time
 def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_montage):
     logger.info('Running Ez Detect')
 
-    raw_trc = read_raw_trc(paths['trc_fname'], include=None)
-    stop_time = stop_time if stop_time != config.STOP_TIME_DEFAULT else None
-    raw_trc.crop(start_time, stop_time).load_data()  
-
+    raw_trc = read_raw_trc(paths['trc_fname'], preload=True, include=None)
+    
     logger.info("Converting data from volts to microvolts...")
     raw_trc._data *= 1e06
+    sampling_rate = int(raw_trc.info['sfreq'])
+    
     #Debug info
     logger.info("TRC file: "+ paths['trc_fname'])
     logger.info("XML will be written to "+ paths['xml_output_path'])
     logger.info("Number of channels {}".format(raw_trc.info['nchan']) ) 
     logger.info("First data in microvolts: {}".format(str(raw_trc._data[0][0])))
-    logger.info('Sampling rate: {}'.format(str(int(raw_trc.info['sfreq']))+'Hz'))
+    logger.info('Sampling rate: {}'.format(str(sampling_rate)+'Hz'))
 
-    #this was being done after creating blocks, ask if doesnt loose precision for event detection
-    #mne.filter.resample(array) is too expensive in comparison
-    logger.info('Resampling data to: {} Hz'.format(str(config.DESIRED_FREC_HZ)) )
-    raw_trc.resample(config.DESIRED_FREC_HZ, npad = 'auto') 
- 
-    n_samples = len(raw_trc._data[0])
-    sampling_rate = int(raw_trc.info['sfreq'])
+    trc_fname = splitext(basename(paths['trc_fname']))[0] 
+
+    #Note: The resampling was beeing made after getting the data and for each channel(process_batch.m)
+    #so file pointers were being calculated with old sampling rate before, this may affect performance, 
+    #especially if you want just a piece of the trc. Also npad='auto' may be faster cause gets to 
+    #the next power of two size with padding but may affect data quality introducing artifacts,
+    #this depends on the data.
+     
+    if sampling_rate != config.DESIRED_FREC_HZ:
+        logger.info('Resampling data to ' +  str(config.DESIRED_FREC_HZ) + 'Hz')
+        raw_trc.resample(config.DESIRED_FREC_HZ, npad="auto") 
+        sampling_rate = int(raw_trc.info['sfreq'])
+        logger.info('Sampling rate was updated to: ' + str(sampling_rate) +'Hz')
+
+    file_pointers = _getFilePointers(sampling_rate, start_time, stop_time, 
+                                     cycle_time, samples_num=len(raw_trc._data[0]))
+    
+    blocks = _calculateBlockAmount(file_pointers, sampling_rate )     
+
+    #Note need to add patch that limits second cycle if < 60 seconds. Ask what is this
+    eeg_data, metadata = _computeEEGSegments(file_pointers, trc_fname, blocks, raw_trc) #TODO do this inside each thread
+
+    #_saveResearchData(paths['research'], blocks, metadata, eeg_data, chanlist, trc_fname)
     montages = raw_trc._raw_extras[0]['montages']
-    metadata = {
-        'file_id' : splitext(basename(paths['trc_fname']))[0],
-        'ch_names' : np.array(raw_trc.info['ch_names'], dtype=object), #we need the np array for matlab engine for now
-        'montage' : _buildMontageFromTRC(montages, raw_trc.info['ch_names'],
-                                         sug_montage, bp_montage),
-        'n_blocks' : _calculateBlockAmount(n_samples, sampling_rate, cycle_time),
-        'block_size' : sampling_rate * cycle_time
+    montage = _buildMontageFromTRC(montages, raw_trc.info['ch_names'], sug_montage, bp_montage)
 
-    }
-
-    _processParallelBlocks_threads(raw_trc, metadata, paths)
+    #chanlist = _updateChanlist(raw_trc.info['ch_names'], paths['swap_array_file']) #To ask
+    chanlist = np.array(raw_trc.info['ch_names'], dtype=object) #we need the np array for matlab engine for now
+    useThreads = True
+    if useThreads:
+        _processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths)
+    else:
+        _processParallelBlocks_processes(blocks, eeg_data, chanlist, metadata, montage, paths)
 
     rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
@@ -118,7 +130,6 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
 
 ############  Private Funtions  #########
 
-#Unused for now
 def _updateChanlist(ch_names, swap_array_file):
     ch_names = np.array(ch_names ,dtype=object) #for matlab engine
     if swap_array_file != 'NOT_GIVEN':
@@ -126,27 +137,53 @@ def _updateChanlist(ch_names, swap_array_file):
         ch_names = [ch_names[i-1] for i in swap_array] 
     return ch_names
 
-def _calculateBlockAmount(n_samples, sampling_rate, cycle_time):
-    block_size = sampling_rate * cycle_time
-    full_blocks = int(n_samples / block_size)
-    images_remaining = n_samples % block_size
-    seconds_remaining = images_remaining / sampling_rate
-    n_blocks = full_blocks+1 if seconds_remaining >= config.BLOCK_MIN_DUR else full_blocks #Ask about this line later.
-    logger.info("Amount of blocks {}".format(str(n_blocks)))
-    return n_blocks
+def _getFilePointers(sampling_rate, start_time, stop_time, cycle_time, samples_num):
+    file_pointers = {}
+    seconds_to_jump = start_time - 1 #start_time_default is 1, meaning the first second
+    file_pointers['start'] = seconds_to_jump * sampling_rate
+    file_pointers['end'] = samples_num if stop_time == config.STOP_TIME_DEFAULT else int((stop_time-1)*sampling_rate)
+    file_pointers['block_size'] = cycle_time * sampling_rate
+    return file_pointers
 
-#Unused for now
-def _saveResearchData(contest_path, metadata, eeg_data, ch_names):
-    MATLAB.workspace['ch_names'] = ch_names
+def _calculateBlockAmount(file_pointers, sampling_rate):
+    images_number = file_pointers['end'] - file_pointers['start'] + 1
+    full_blocks = int(images_number / file_pointers['block_size'])
+    images_remaining = images_number % file_pointers['block_size']
+    seconds_remaining = int(images_remaining / sampling_rate)
+    blocks = full_blocks+1 if seconds_remaining >= 100 else full_blocks #Ask about this line later.
+    logger.info("Amount of blocks {}".format(str(blocks)))
+    return blocks
+
+def _computeEEGSegments(file_pointers, trc_fname, blocks, raw_trc):
+    base_pointer = file_pointers['start']
+    stop_pointer = file_pointers['end']
+    block_size = file_pointers['block_size']
+    eeg_data = []
+    metadata = []
+    
+    for i in range(blocks):
+        blocks_done = i
+        block_start_ptr = base_pointer + blocks_done * block_size
+        block_stop_ptr = min(block_start_ptr + block_size, stop_pointer)
+        block_data = raw_trc.get_data( start=block_start_ptr, stop=block_stop_ptr) 
+        metadata_i = {'file_id':trc_fname, 'file_block':str(i+1)}
+        
+        eeg_data.append(block_data)
+        metadata.append(metadata_i)
+
+    return eeg_data, metadata
+
+def _saveResearchData(contest_path, metadata, eeg_data, chanlist):
+    MATLAB.workspace['chanlist'] = chanlist
     for i in range(len(metadata)):
         MATLAB.workspace['eeg_data_i'] = eeg_data[i]
         MATLAB.workspace['metadata_i'] = metadata[i]
         trc_fname = metadata.file_id
         full_path = contest_path+trc_fname+'_'+str(i)+'.mat' 
-        MATLAB.save(full_path, 'metadata_i', 'eeg_data_i', 'ch_names')
+        MATLAB.save(full_path, 'metadata_i', 'eeg_data_i', 'chanlist')
         #ask if it is worthy to save the blocks or not
 
-def _buildMontageFromTRC(montages, ch_names, sug_montage_name, bp_montage_name):
+def _buildMontageFromTRC(montages, chanlist, sug_montage_name, bp_montage_name):
 
     sug_lines = montages[sug_montage_name]['lines']
     bp_lines = montages[bp_montage_name]['lines']
@@ -156,14 +193,14 @@ def _buildMontageFromTRC(montages, ch_names, sug_montage_name, bp_montage_name):
     def_ch_names_bp = [pair[1] for pair in bp_defs ] 
     
     try:
-        assert(set(ch_names) == set(def_ch_names_sug))
+        assert(set(chanlist) == set(def_ch_names_sug))
     except AssertionError:
         logger.info("The 'Suggested montage' is badly formed, you must provide a definition" +
-                    " for each channel name that appears in the 'Ref.'' montage.")
+              " for each channel name that appears in the 'Ref.'' montage.")
         assert(False)
 
     montage = []
-    for ch_name in ch_names: #First col of montage.mat
+    for ch_name in chanlist: #First col of montage.mat
         sug_idx = def_ch_names_sug.index(ch_name)
         suggestion = config.REFERENTIAL if sug_defs[sug_idx][0] == 'AVG' else config.BIPOLAR #Second col of montage.mat  
 
@@ -174,15 +211,15 @@ def _buildMontageFromTRC(montages, ch_names, sug_montage_name, bp_montage_name):
             else: 
                 #Note that we know by the previous conditions that the index exists.
                 #That string is defined inside BQ and its value is 'AVG' or another
-                #ch_name that we have asserted that is in ch_names.
-                bp_ref = ch_names.index(sug_defs[sug_idx][0]) + 1 
+                #ch_name that we have asserted that is in chanlist.
+                bp_ref = chanlist.index(sug_defs[sug_idx][0]) + 1 
                 exclude = config.DONT_EXCLUDE_CH
 
         else: #suggestion == config.REFERENTIAL
             exclude = 0
             try: 
                 bp_idx = def_ch_names_bp.index(ch_name)
-                bp_ref = ch_names.index(bp_defs[bp_idx][0]) + 1
+                bp_ref = chanlist.index(bp_defs[bp_idx][0]) + 1
             except ValueError: #user didn't defined a bp pair for this channel
                 bp_ref = config.NO_BP_REF
 
@@ -191,54 +228,41 @@ def _buildMontageFromTRC(montages, ch_names, sug_montage_name, bp_montage_name):
 
     return np.array(montage, dtype=object)
 
-def _processParallelBlocks_threads(raw_trc, metadata, paths):
-     
+def _processParallelBlocks_threads(blocks, eeg_data, chanlist, metadata, montage, paths):
     threads = []
-    n_samples = len(raw_trc._data[0])
-
-    def _get_block_data(i):
-        logger.info('Creating thread {}'.format(i+1) )
-        block_start = i * metadata['block_size']    
-        block_stop = min(block_start + metadata['block_size'], n_samples)
-        return raw_trc.get_data( start=block_start, stop=block_stop) 
-        
-    for i in range(metadata['n_blocks']-1): #This starts a thread for all but the last block
-        metadata['file_block'] = str(i+1)
-        thread = threading.Thread(target= _processParallelBlock, 
-                                  name='DSP_block_{}'.format(i+1),
-                                  args=(_get_block_data(i), metadata, paths))
+    def startBlockThread(i):
+        thread = threading.Thread(target= _processParallelBlock, name='DSP_block_'+str(i),
+                 args=(eeg_data[i], chanlist, metadata[i], montage, paths))
+        thread.start()
         threads.append(thread)
+        return
+    for i in range(blocks-1): #This launches a thread for all but the last block
+        logger.info('Starting a thread for block ' + str(i+1) )
+        startBlockThread(i)
 
-    #For the last block we will use current thread.
-    block_data = _get_block_data(metadata['n_blocks']-1)
-    metadata['file_block'] = str(metadata['n_blocks'])
-    
-    for t in threads:
-        t.start() 
-
-    _processParallelBlock(block_data, metadata, paths) #process last block 
+    #For the last one we use current thread.
+    logger.info('Starting a thread for block ' + str(blocks))
+    startBlockThread(blocks-1)
 
     for t in threads:
         t.join()
 
-'''
-def _processParallelBlocks_processes(blocks, eeg_data, ch_names, metadata, montage, paths):
+def _processParallelBlocks_processes(blocks, eeg_data, chanlist, metadata, montage, paths):
     #Ask pool vs independent processes
     def multi_run_wrapper(args):
       return _processParallelBlock(*args)
 
     pool = Pool(blocks)
-    arg_list = [(eeg_data[i], ch_names, metadata[i], montage, paths) for i in range(blocks)]
+    arg_list = [(eeg_data[i], chanlist, metadata[i], montage, paths) for i in range(blocks)]
     pool.map(multi_run_wrapper, arg_list)
     pool.close()
     pool.join()
-'''
-def _processParallelBlock(eeg_data, metadata, paths):    
+
+def _processParallelBlock(eeg_data, chanlist, metadata, ez_montage, paths):    
     #This is needed just cause matlab.engine doesnt support np arrays...
     #TODO translate lfbad to avoid disk usage.
     args_fname = paths['temp_pythonToMatlab_dsp']+'lfbad_args_'+metadata['file_block']+'.mat' 
-    scipy.io.savemat(args_fname, dict(eeg_data=eeg_data, ch_names=metadata['ch_names'], 
-                                      metadata=metadata, ez_montage=metadata['montage']))
+    scipy.io.savemat(args_fname, dict(eeg_data=eeg_data, chanlist=chanlist, metadata=metadata, ez_montage=ez_montage))
     eeg_mp, eeg_bp, metadata = MATLAB.ez_lfbad(args_fname, nargout=3)
     
     #metadata.montage is a cell array of 1 * n 

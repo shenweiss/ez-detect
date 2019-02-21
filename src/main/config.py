@@ -8,11 +8,12 @@ from pathlib import Path
 import platform
 from datetime import timedelta
 
-START_TIME_DEFAULT = 1
+START_TIME_DEFAULT = 0
 STOP_TIME_DEFAULT = 0  #If not given by user, this value is corrected once read the eeg.
 CYCLE_TIME_DEFAULT = 600 #600 seconds = 10 minutes
 
 DESIRED_FREC_HZ = 2000
+BLOCK_MIN_DUR = 100 #In seconds
 
 #MONTAGE CONSTANTS
 REFERENTIAL = 1

@@ -1,6 +1,6 @@
 function [eeg_data_m, eeg_data_bp, metadata] = ez_lfbad(input_args_fname)
   
-load(input_args_fname); % loads variables: eeg_data, chanlist, metadata and ez_montage
+load(input_args_fname); % loads variables: eeg_data, ch_names, metadata and ez_montage
 disp('Entering ez_lfbad')
 
 metadata.lf_bad={''}; % start building metadata
@@ -41,13 +41,13 @@ imp=unique(imp);
   counter_3=0;
  
  %Ask, if CHAN_NAME 1 2 0 is marked as ref and bipolar... 449_correct_montage.mat
- for j=1:numel(chanlist)
+ for j=1:numel(ch_names)
     if t.Data{j,3}~=0
         if t.Data{j,4}~=1
           if isempty(intersect(imp,j))    
             counter_1=counter_1+1;
             eeg_bp.eeg_data(counter_1,:)=eeg_data(j,:)-eeg_data(t.Data{j,3},:);
-            eeg_bp.chanlist(counter_1)=chanlist(j);
+            eeg_bp.chanlist(counter_1)=ch_names(j);
           end;
         end;
     end;   
@@ -56,7 +56,7 @@ imp=unique(imp);
          if isempty(intersect(imp,j))
            counter_2=counter_2+1;
            eeg_mp.eeg_data(counter_2,:)=eeg_data(j,:);  
-           eeg_mp.chanlist(counter_2)=chanlist(j);
+           eeg_mp.chanlist(counter_2)=ch_names(j);
          end;
        end;    
      else
@@ -65,7 +65,7 @@ imp=unique(imp);
            if isempty(intersect(imp,j))   
              counter_3=counter_3+1;
              eeg_bps.eeg_data(counter_3,:)=eeg_data(j,:)-eeg_data(t.Data{j,3},:);
-             eeg_bps.chanlist(counter_3)=chanlist(j);
+             eeg_bps.chanlist(counter_3)=ch_names(j);
            end;
           end;
          end;
@@ -137,7 +137,7 @@ end;
   counter_lf=0;
   for j=1:numel(a)
     counter_lf=counter_lf+1;
-    lf_bad(counter_lf)=chanlist(a(j));
+    lf_bad(counter_lf)=ch_names(a(j));
     [C, IA, IB]=intersect(eeg_bps.chanlist, lf_bad(counter_lf));
     if numel(IA)>0
         eeg_bps.eeg_data(IA,:)=[];
