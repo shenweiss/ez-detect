@@ -4,4 +4,4 @@
 PY='python'
 APP='/home/tomas-pastore/ez-detect/src/main/hfo_annotate.py'
 
-$PY $APP -in=/home/tomas-pastore/TRCs/EEG_2080.TRC -out=/home/tomas-pastore/sprint_3_8.evt -c=600 -str_t=0 -stp_t=600 -sug=Suggested -bp=Bipolar
+$PY $APP -in=/home/tomas-pastore/TRCs/EEG_2080.TRC -out=/home/tomas-pastore/sprint_4.evt -c=600 -str_t=0 -stp_t=600 -sug=Suggested -bp=Bipolar

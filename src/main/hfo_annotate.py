@@ -33,6 +33,10 @@ sys.path.insert(0, config.paths['project_root']+'/src/evtio')
 from evtio import write_evt
 sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
 from profiling import profile_time, profile_memory
+sys.path.insert(0, config.paths['project_root']+'/src/')
+from montage import build_montage_from_trc
+sys.path.insert(0, config.paths['project_root']+'/src/preprocessing')
+from preprocessing import ez_lfbad
 import scipy.io
 import hdf5storage
 
@@ -98,14 +102,15 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     n_samples = len(raw_trc._data[0])
     sampling_rate = int(raw_trc.info['sfreq'])
     montages = raw_trc._raw_extras[0]['montages']
-    metadata = {
+    metadata = { #is it ok to consider ch_names and montage part of metadata? if not, extract as parameters.
         'file_id' : splitext(basename(paths['trc_fname']))[0],
-        'ch_names' : np.array(raw_trc.info['ch_names'], dtype=object), #we need the np array for matlab engine for now
-        'montage' : _buildMontageFromTRC(montages, raw_trc.info['ch_names'],
-                                         sug_montage, bp_montage),
+        'montage' : build_montage_from_trc(montages, raw_trc.info['ch_names'],
+                                           sug_montage, bp_montage), #temporary
+        'old_montage': _buildMontageFromTRC(montages, raw_trc.info['ch_names'],
+                                           sug_montage, bp_montage),
         'n_blocks' : _calculateBlockAmount(n_samples, sampling_rate, cycle_time),
-        'block_size' : sampling_rate * cycle_time
-
+        'block_size' : sampling_rate * cycle_time,
+        'srate' : sampling_rate
     }
 
     _processParallelBlocks_threads(raw_trc, metadata, paths)
@@ -146,6 +151,7 @@ def _saveResearchData(contest_path, metadata, eeg_data, ch_names):
         MATLAB.save(full_path, 'metadata_i', 'eeg_data_i', 'ch_names')
         #ask if it is worthy to save the blocks or not
 
+#temporary
 def _buildMontageFromTRC(montages, ch_names, sug_montage_name, bp_montage_name):
 
     sug_lines = montages[sug_montage_name]['lines']
@@ -195,6 +201,7 @@ def _processParallelBlocks_threads(raw_trc, metadata, paths):
      
     threads = []
     n_samples = len(raw_trc._data[0])
+    ch_names = np.array(raw_trc.info['ch_names'], dtype=object), #we need the np array for matlab engine for now
 
     def _get_block_data(i):
         logger.info('Creating thread {}'.format(i+1) )
@@ -206,7 +213,7 @@ def _processParallelBlocks_threads(raw_trc, metadata, paths):
         metadata['file_block'] = str(i+1)
         thread = threading.Thread(target= _processParallelBlock, 
                                   name='DSP_block_{}'.format(i+1),
-                                  args=(_get_block_data(i), metadata, paths))
+                                  args=(_get_block_data(i), ch_names, metadata, paths))
         threads.append(thread)
 
     #For the last block we will use current thread.
@@ -216,7 +223,7 @@ def _processParallelBlocks_threads(raw_trc, metadata, paths):
     for t in threads:
         t.start() 
 
-    _processParallelBlock(block_data, metadata, paths) #process last block 
+    _processParallelBlock(block_data, ch_names, metadata, paths) #process last block 
 
     for t in threads:
         t.join()
@@ -233,24 +240,17 @@ def _processParallelBlocks_processes(blocks, eeg_data, ch_names, metadata, monta
     pool.close()
     pool.join()
 '''
-def _processParallelBlock(eeg_data, metadata, paths):    
-    #This is needed just cause matlab.engine doesnt support np arrays...
-    #TODO translate lfbad to avoid disk usage.
-    args_fname = paths['temp_pythonToMatlab_dsp']+'lfbad_args_'+metadata['file_block']+'.mat' 
-    scipy.io.savemat(args_fname, dict(eeg_data=eeg_data, ch_names=metadata['ch_names'], 
-                                      metadata=metadata, ez_montage=metadata['montage']))
-    eeg_mp, eeg_bp, metadata = MATLAB.ez_lfbad(args_fname, nargout=3)
-    
-    #metadata.montage is a cell array of 1 * n 
-    eeg_bp, metadata, hfo_ai, fr_ai = _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths)
-    _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths)
+def _processParallelBlock(eeg_data, ch_names, metadata, paths):    
+    data, metadata = ez_lfbad(eeg_data, ch_names, metadata)
+    data['bp_channels'], metadata, hfo_ai, fr_ai = _monopolarAnnotations(data, metadata, paths)
+    _bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths)
 
-def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
-        
-    if eeg_mp: #not empty
+def _monopolarAnnotations(data, metadata, paths):
+    
+    if data['mp_channels']: #not empty
 
         logger.info('Monopolar block. Converting data from python to matlab (takes long).')
-        dsp_monopolar_out = MATLAB.ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata, paths)
+        dsp_monopolar_out = MATLAB.ez_detect_dsp_monopolar(data['mp_channels'], data['bp_channels'], metadata, paths)
         logger.info('Finished dsp monopolar block')
 
         #TODO once ez top gets translated we can avoid using the disk for saving.
@@ -275,22 +275,22 @@ def _monopolarAnnotations(eeg_mp, eeg_bp, metadata, paths):
         else:
             logger.info('Error in process_dsp_output, error_flag != 0')
         
-        eeg_bp = dsp_monopolar_out['ez_bp']
+        data['bp_channels'] = dsp_monopolar_out['ez_bp']
         metadata = dsp_monopolar_out['metadata']
         hfo_ai = dsp_monopolar_out['hfo_ai']
         fr_ai = dsp_monopolar_out['fr_ai']
  
-    else:  #eeg_mp is empty
-        hfo_ai = np.zeros(len(eeg_bp[0])).tolist()
+    else:  #data['mp_channels'] is empty
+        hfo_ai = np.zeros(len(data['bp_channels'][0])).tolist()
         fr_ai = hfo_ai
 
-    return eeg_bp, metadata, hfo_ai, fr_ai 
+    return data['bp_channels'], metadata, hfo_ai, fr_ai 
 
-def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
+def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths):
 
-    if eeg_bp:
+    if bp_data:
         logger.info('Bipolar Block. Converting data from python to matlab (takes long).')
-        dsp_bipolar_out = MATLAB.ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr_ai, paths)
+        dsp_bipolar_out = MATLAB.ez_detect_dsp_bipolar(bp_data, metadata, hfo_ai, fr_ai, paths)
         logger.info('Finished bipolar dsp block')
 
         logger.info('Annotating bipolar block')
@@ -310,7 +310,7 @@ def _bipolarAnnotations(eeg_bp, metadata, hfo_ai, fr_ai, paths):
                                 paths, nargout=0)
         '''
     else:
-        logger.info("Didn't enter dsp bipolar, eeg_bp was empty.")
+        logger.info("Didn't enter dsp bipolar, bp_data was empty.")
 
 #TODO ADD RESTRICTIONS TO PARAMETERS 
 if __name__ == "__main__":

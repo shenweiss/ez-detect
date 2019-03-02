@@ -51,17 +51,11 @@ paths['disk_dumps']= str( Path(paths['project_root'], 'disk_dumps')) + '/'
 paths['xml_output_path']= str( Path(paths['disk_dumps'], 'xml_output/xml_out.evt'))
 paths['swap_array_file'] = "NOT_GIVEN"
 
-#paths['dsp_monopolar_out']= str( Path(paths['disk_dumps'], 'dsp_output/monopolar')) + '/'
-#paths['dsp_bipolar_out']= str( Path(paths['disk_dumps'], 'dsp_output/bipolar')) + '/'
-
 paths['ez_top_in']= str( Path(paths['disk_dumps'], 'ez_top/input')) + '/'
 paths['ez_top_out']= str( Path(paths['disk_dumps'], 'ez_top/output')) + '/'
 paths['ez_pac_out']= str( Path(paths['disk_dumps'], 'ez_pac_output')) + '/'
 
 paths['research']= str( Path(paths['disk_dumps'], 'research_matfiles')) + '/'
-
-#paths['trc_tmp_monopolar']= paths['disk_dumps']+'trc/temp/monopolar/'
-#paths['trc_tmp_bipolar']= paths['disk_dumps']+'trc/temp/bipolar/'
 
 paths['cudaica_dir']= str( Path(paths['project_root'], 'src/cudaica')) + '/'
 paths['binica_sc']= str( Path(paths['cudaica_dir'], 'binica.sc'))
