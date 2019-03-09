@@ -1,4 +1,53 @@
+import config
+import numpy as np #temp for the temp function
 
+#temporary while translating from matlab to python, the final one is build_montage_from_trc
+def build_montage_mat_from_trc(montages, ch_names, sug_montage_name, bp_montage_name):
+
+    sug_lines = montages[sug_montage_name]['lines']
+    bp_lines = montages[bp_montage_name]['lines']
+    sug_defs = [def_pair for def_pair in montages[sug_montage_name]['inputs'][:sug_lines] ]
+    bp_defs = [def_pair for def_pair in montages[bp_montage_name]['inputs'][:bp_lines]]
+    def_ch_names_sug = [pair[1] for pair in sug_defs ] 
+    def_ch_names_bp = [pair[1] for pair in bp_defs ] 
+    
+    try:
+        assert(set(ch_names) == set(def_ch_names_sug))
+    except AssertionError:
+        logger.info("The 'Suggested montage' is badly formed, you must provide a definition" +
+                    " for each channel name that appears in the 'Ref.'' montage.")
+        assert(False)
+
+    montage = []
+    for ch_name in ch_names: #First col of montage.mat
+        sug_idx = def_ch_names_sug.index(ch_name)
+        suggestion = config.REFERENTIAL if sug_defs[sug_idx][0] == 'AVG' else config.BIPOLAR #Second col of montage.mat  
+
+        if suggestion == config.BIPOLAR: #Third col of montage .mat
+            if sug_defs[sug_idx][0] == ch_name: #For now we mean exclusion in this way
+                bp_ref = config.NO_BP_REF
+                exclude = config.EXCLUDE_CH
+            else: 
+                #Note that we know by the previous conditions that the index exists.
+                #That string is defined inside BQ and its value is 'AVG' or another
+                #ch_name that we have asserted that is in ch_names.
+                bp_ref = ch_names.index(sug_defs[sug_idx][0]) + 1 
+                exclude = config.DONT_EXCLUDE_CH
+
+        else: #suggestion == config.REFERENTIAL
+            exclude = 0
+            try: 
+                bp_idx = def_ch_names_bp.index(ch_name)
+                bp_ref = ch_names.index(bp_defs[bp_idx][0]) + 1
+            except ValueError: #user didn't defined a bp pair for this channel
+                bp_ref = config.NO_BP_REF
+
+        chan_montage_info = tuple([ch_name, suggestion, bp_ref, exclude])
+        montage.append(chan_montage_info)
+
+    return np.array(montage, dtype=object)
+
+#Returns an object of EzMontage class
 def build_montage_from_trc(montages, ch_names, sug_montage_name, bp_montage_name):
 
     sug_lines = montages[sug_montage_name]['lines']

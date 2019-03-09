@@ -5,12 +5,14 @@
 %            read into Matlab, and so may be larger than Matlab
 %            can handle owing to memory limitations.
 % Usage:
-%  >> [wts,sph] = cudaica( datavar,  'key1', arg1, 'key2', arg2 ...);
+%  >> [wts,sph] = cudaica( datavar, paths, 'key1', arg1, 'key2', arg2 ...);
 % else
-%  >> [wts,sph] = cudaica('datafile', chans, frames, 'key1', arg1, ...);
+%  >> [wts,sph] = cudaica('datafile', paths, chans, frames, 'key1', arg1, ...);
 %
 % Inputs:
 %   datavar       - (chans,frames) data matrix in the Matlab workspace
+%   paths         - structs with the paths where to save temp files, binica_sc and cudaica binary
+
 %   datafile      - quoted 'filename' of float data file multiplexed by channel
 %     channels    -   number of channels in datafile (not needed for datavar)
 %     frames      -   number of frames (time points) in datafile (only)
@@ -81,20 +83,24 @@
 % 11/06/01 add absolute path of files (lines 157-170 & 198) -ad
 % 01-25-02 reformated help & license, added links -ad 
  
-function [wts, sph, tmpint, error_flag] = ez_cudaica(data,var2,var3,var4,var5,var6,var7,var8,var9,var10,var11,var12,var13,var14,var15,var16,var17,var18,var19,var20,var21,var22,var23,var24,var25)
+function [wts, sph, tmpint, error_flag] = ez_cudaica(data, paths, var3,var4,var5,var6,var7,var8,var9,var10,var11,var12,var13,var14,var15,var16,var17,var18,var19,var20,var21,var22,var23,var24,var25, var26)
 
 disp('ENTERING CUDAICA.M')
 
 %to be removed in future refactoring, once fixed the arguments...
-disk_dumps='/home/tomas-pastore/ez-detect/disk_dumps/';
-binica_sc='/home/tomas-pastore/ez-detect/src/cudaica/binica.sc';
-cudaica_bin='/home/tomas-pastore/ez-detect/src/cudaica/cudaica';
+%disk_dumps='/home/tpastore/Documents/ez-detect/disk_dumps/';
+%binica_sc='/home/tpastore/Documents/ez-detect/src/cudaica/binica.sc';
+%cudaica_bin='/home/tpastore/Documents/ez-detect/src/cudaica/cudaica';
+
+disk_dumps = paths.disk_dumps
+binica_sc = paths.binica_sc
+cudaica_bin = paths.cudaica_bin
 
 if ~isdeployed
     addpath(disk_dumps);
 end
 
-if nargin < 1 | nargin > 25
+if nargin < 1 | nargin > 26
     more on
     help cudaica
     more off
@@ -131,9 +137,9 @@ end
 tmpint=[];
 
 if ~ischar(data) % data variable given
-  firstarg = 2;
+  firstarg = 3;
 else % data filename given
-  firstarg = 4;
+  firstarg = 5;
 end
 
 arg = firstarg;
@@ -193,6 +199,7 @@ else
        fprintf('   setting %s, %s\n',flags{f},args{f});
     end
   end
+ 
  end
 end
 
@@ -230,13 +237,13 @@ else % data filename given
     return
   end
   datafile = data;
-  if nargin<3
+  if nargin<4
     fprintf(...
 '\ncudaica(): Data file name must be followed by chans, frames\n');
     return
   end
-  nchans = var2;
-  nframes = var3;
+  nchans = var3;
+  nframes = var4;
   if ischar(nchans) | ischar(nframes)
     fprintf(...
 '\ncudaica(): chans, frames args must be given after data file name\n');

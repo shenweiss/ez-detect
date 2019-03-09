@@ -5,18 +5,6 @@
 Usage && INPUT arguments: type 'python3 hfo_annotate.py --help' in the shell
 Example with defaults: python3 hfo_annotate.py --trc_path=449.TRC
 
-Dependencies: 
-
-1)In order to have support for matlab.engine module:
- 1.1) Python 3.5
- 1.2) In shell... 'cd matlabroot/extern/engines/python'
- 1.3) Install the extern module: 'python3 setup.py install' (may require sudo) 
-
-2) trcio python module
-3) mne dev python module.
-
-Output: xml_output gets saved in the default directory or the one given as argument.
-
 '''
 import time
 start = time. time()
@@ -31,22 +19,17 @@ from trcio import read_raw_trc
 from mne.utils import verbose, logger
 sys.path.insert(0, config.paths['project_root']+'/src/evtio')
 from evtio import write_evt
-sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
-from profiling import profile_time, profile_memory
-sys.path.insert(0, config.paths['project_root']+'/src/')
-from montage import build_montage_from_trc
-sys.path.insert(0, config.paths['project_root']+'/src/preprocessing')
+#sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
+#from profiling import profile_time, profile_memory
+from montage import build_montage_from_trc, build_montage_mat_from_trc
 from preprocessing import ez_lfbad
-import scipy.io
-import hdf5storage
 
 import numpy as np
 import threading
-import multiprocessing
+#import multiprocessing
 #import time
 from datetime import datetime
 
-from memory_profiler import memory_usage
 '''
 Input:
     - paths: a Struct containing strings for every path is used in the project. 
@@ -106,7 +89,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
         'file_id' : splitext(basename(paths['trc_fname']))[0],
         'montage' : build_montage_from_trc(montages, raw_trc.info['ch_names'],
                                            sug_montage, bp_montage), #temporary
-        'old_montage': _buildMontageFromTRC(montages, raw_trc.info['ch_names'],
+        'old_montage': build_montage_mat_from_trc(montages, raw_trc.info['ch_names'],
                                            sug_montage, bp_montage),
         'n_blocks' : _calculateBlockAmount(n_samples, sampling_rate, cycle_time),
         'block_size' : sampling_rate * cycle_time,
@@ -151,51 +134,6 @@ def _saveResearchData(contest_path, metadata, eeg_data, ch_names):
         MATLAB.save(full_path, 'metadata_i', 'eeg_data_i', 'ch_names')
         #ask if it is worthy to save the blocks or not
 
-#temporary
-def _buildMontageFromTRC(montages, ch_names, sug_montage_name, bp_montage_name):
-
-    sug_lines = montages[sug_montage_name]['lines']
-    bp_lines = montages[bp_montage_name]['lines']
-    sug_defs = [def_pair for def_pair in montages[sug_montage_name]['inputs'][:sug_lines] ]
-    bp_defs = [def_pair for def_pair in montages[bp_montage_name]['inputs'][:bp_lines]]
-    def_ch_names_sug = [pair[1] for pair in sug_defs ] 
-    def_ch_names_bp = [pair[1] for pair in bp_defs ] 
-    
-    try:
-        assert(set(ch_names) == set(def_ch_names_sug))
-    except AssertionError:
-        logger.info("The 'Suggested montage' is badly formed, you must provide a definition" +
-                    " for each channel name that appears in the 'Ref.'' montage.")
-        assert(False)
-
-    montage = []
-    for ch_name in ch_names: #First col of montage.mat
-        sug_idx = def_ch_names_sug.index(ch_name)
-        suggestion = config.REFERENTIAL if sug_defs[sug_idx][0] == 'AVG' else config.BIPOLAR #Second col of montage.mat  
-
-        if suggestion == config.BIPOLAR: #Third col of montage .mat
-            if sug_defs[sug_idx][0] == ch_name: #For now we mean exclusion in this way
-                bp_ref = config.NO_BP_REF
-                exclude = config.EXCLUDE_CH
-            else: 
-                #Note that we know by the previous conditions that the index exists.
-                #That string is defined inside BQ and its value is 'AVG' or another
-                #ch_name that we have asserted that is in ch_names.
-                bp_ref = ch_names.index(sug_defs[sug_idx][0]) + 1 
-                exclude = config.DONT_EXCLUDE_CH
-
-        else: #suggestion == config.REFERENTIAL
-            exclude = 0
-            try: 
-                bp_idx = def_ch_names_bp.index(ch_name)
-                bp_ref = ch_names.index(bp_defs[bp_idx][0]) + 1
-            except ValueError: #user didn't defined a bp pair for this channel
-                bp_ref = config.NO_BP_REF
-
-        chan_montage_info = tuple([ch_name, suggestion, bp_ref, exclude])
-        montage.append(chan_montage_info)
-
-    return np.array(montage, dtype=object)
 
 def _processParallelBlocks_threads(raw_trc, metadata, paths):
      

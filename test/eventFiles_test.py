@@ -60,7 +60,7 @@ if __name__ == "__main__":
                         "with a delta tolerance, meaning that at most 100*delta percent of "+
                         "the events in one set may not match with an "+
                         "event in the other set.",
-                        required=False, default= 0.1, type=float)   
+                        required=False, default= 0.15, type=float)   
 
     args = parser.parse_args()
     

@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 test_folder_dir = str(Path(sys.argv[0]).parent)
-sys.path.insert(0, str(Path(test_folder_dir +'/../src/main').expanduser().resolve()) ) 
+sys.path.insert(0, str(Path(test_folder_dir +'/../src').expanduser().resolve()) ) 
 from hfo_annotate import _getFilePointers, _calculateBlockAmount
 import config
 

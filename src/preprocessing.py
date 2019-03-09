@@ -3,13 +3,12 @@ import numpy as np
 import numpy.fft as fft_pack
 from scipy.stats import zscore
 from mne.filter import resample
-from spectrum import pmtm
+#from spectrum import pmtm
 
-import sys
-sys.path.insert(0, 'home/tomas-pastore/ez-detect/src/main')
 from config import matlab_session as MATLAB
+from config import TEMPORARY_DUE_TRANSLATION
 import scipy.io
-import hdf5storage
+#import hdf5storage
 
 def _impedance_check(eeg_data):
     logger.info('Performing impedance check.')
@@ -59,7 +58,7 @@ def ez_lfbad(eeg_data, ch_names, metadata):
     support_bipolar = eeg_data[ ch_ids ] - eeg_data [ pairs ]
 
     del metadata['montage'] 
-    args_fname = '/home/tomas-pastore/ez-detect/disk_dumps/temp_pythonToMatlab_dsp/'+'bad_chans_args_'+metadata['file_block']+'.mat' 
+    args_fname = TEMPORARY_DUE_TRANSLATION +metadata['file_block']+'.mat' 
     scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
     data, metadata = MATLAB.ez_bad_channel_temp(args_fname, nargout=2)
     #data, metadata = _bad_channels_nn(data, metadatam ch_names, support_bipolar)

@@ -100,4 +100,4 @@ metadata.lf_bad=lf_bad;
 
 
 
-save('/home/tomas-pastore/ez-detect/disk_dumps/lfbad_metadata.mat','-v7.3')
+%save('/home/tpastore/Documents/ez-detect/disk_dumps/lfbad_metadata.mat','-v7.3')

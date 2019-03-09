@@ -241,7 +241,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
                     [hfo_times, ~] = mp_toolbox.convRippleClips_timeToIndices(num_of_data_rows, ripple_data.clip_t, ic1, ripple_data.total_count);
                     %check I think hfo_times is not used after this
                 else % error_flag 1 i.e. CUDAICA exploded ICA #2 
-                    dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
+                    dsp_monopolar_output = mp_toolbox.cudaica_failure_handle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
                     DSP_data_m = dsp_monopolar_output.DSP_data_m;
                     ez_mp = dsp_monopolar_output.ez_mp;
                     ez_bp = dsp_monopolar_output.ez_bp;
@@ -444,11 +444,11 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
             );
 
         else % error_flag 1 i.e. CUDAICA exploded ICA #3
-            dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
+            dsp_monopolar_output = mp_toolbox.cudaica_failure_handle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
         end    
         
     else % error_flag 1 i.e. CUDAICA exploded ICA #1
-        dsp_monopolar_output = mp_toolbox.cudaicaFailureHandle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
+        dsp_monopolar_output = mp_toolbox.cudaica_failure_handle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
     end %end of enormous if else
 
     % OR MATLAB ENGINE only

@@ -58,7 +58,7 @@ function dsp_monopolar_output = cudaica_failure_handle_(eeg_mp, eeg_bp, metadata
     fprintf('CUDAICA exploded moving channels to bipolar montage \r');
     chan_indexes = 1:numel(metadata.m_chanlist);
     metadata.hf_bad_m2 = metadata.m_chanlist(chan_indexes);
-    [eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage(eeg_mp, eeg_bp, metadata, chan_indexes);
+    [eeg_mp, eeg_bp, metadata] = removeBadChannelsFromMonopolarMontage_(eeg_mp, eeg_bp, metadata, chan_indexes);
 
     %ask if this will be used, otherwise remove 
     cudaica_failure_ai = zeros(numel(eeg_bp(1,:)),1);
