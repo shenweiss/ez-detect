@@ -20,7 +20,7 @@ function [hfo, ic1, EEG, error_flag] = ez_cudaica_ripple(eeg_data, low, high, sa
 	eeg_data = ez_eegfilter(eeg_data, low, high, samplingrate);
 	%start = 1; %not used?
 	EEG = pop_importdata('setname','temp','data',eeg_data,'dataformat','matlab','srate',sampling_rate); % load data in to eeglab
-	[EEG.icaweights, EEG.icasphere, mods, error_flag] = ez_cudaica(EEG.data(:,:), 'lrate', 0.001)
+	[EEG.icaweights, EEG.icasphere, mods, error_flag] = ez_cudaica(EEG.data(:,:), paths, 'lrate', 0.001)
 	
 	cudaica_succeeded = error_flag == 0;
 	if cudaica_succeeded

@@ -1,60 +1,20 @@
 import os
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path.home()) + '/Documents/ez-detect/src') #ask how to solve this well
-import config
-import scipy.io
+import evt_config
+import scipy.io #temporal, bottom of file
 from lxml import etree as eTree
 import uuid
 import time
 from datetime import datetime, timedelta
 from dateutil import parser as dateutil_parser
-from trcio import read_raw_trc
 
-def _newGuidString():
+def _new_guid_string():
     return str(uuid.uuid4())
 
-def _fixFormat(aDateTime):
+def _fix_format(aDateTime):
     #Format requiered by Micromed acording to documentation examples.
     return aDateTime.strftime('%Y-%m-%dT%H:%M:%S') + aDateTime.strftime('.%f')[:7] + 'Z'
 
-def _buildEventTree():
-    
-    now = _fixFormat(datetime.utcnow())  
-    root = eTree.Element("EventFile", Version="1.00", 
-                         CreationDate=now, Guid=_newGuidString())
-    evt_types = eTree.SubElement(root, "EventTypes")
-    category = eTree.SubElement(evt_types, "Category", Name="HFO")
-    
-    eTree.SubElement(category, "Description").text = "HFO Category"
-    eTree.SubElement(category, "IsPredefined").text = "true"
-    eTree.SubElement(category, "Guid").text = config.HFO_CATEGORY_GUID
-    hfoCategory = eTree.SubElement(category, "SubCategory", Name="HFO")
-    
-    eTree.SubElement(hfoCategory, "Description").text = "HFO Subcategory"
-    eTree.SubElement(hfoCategory, "IsPredefined").text = "true"
-    eTree.SubElement(hfoCategory, "Guid").text = config.HFO_SUBCATEGORY_GUID
-
-    _defineHFOType(parentElem=hfoCategory, name="HFO Spike", 
-                  type_guid=config.DEF_HFO_SPIKE_GUID, description="HFO Spike Event Definition", 
-                  text_color="4294901760", graph_color="805306623")
-
-
-    _defineHFOType(parentElem=hfoCategory, name="HFO Ripple", 
-                  type_guid=config.DEF_HFO_RIPPLE_GUID, description="HFO Ripple Event Definition",
-                  text_color="4294901760", graph_color="822018048")
-
-    
-    _defineHFOType(parentElem=hfoCategory, name="HFO FastRipple",
-                  type_guid=config.DEF_HFO_FASTRIPPLE_GUID, description="HFO FastRipple Event Definition",
-                  text_color="4294901760", graph_color="805371648")
-
-    #Create Events label empty to append annotations later.
-    events = eTree.SubElement(root, "Events")
-
-    return eTree.ElementTree(root)
-
-def _defineHFOType(parentElem, name, type_guid, description, text_color, graph_color):
+def _define_hfo_type(parentElem, name, type_guid, description, text_color, graph_color):
 
     anHFOtype = eTree.SubElement(parentElem, "Definition", Name=name)
     
@@ -82,140 +42,204 @@ def _defineHFOType(parentElem, name, type_guid, description, text_color, graph_c
     eTree.SubElement(anHFOtype, "FontItalic").text = "false"
     eTree.SubElement(anHFOtype, "FontBold").text = "false"
 
+def _build_tree():
+    
+    now = _fix_format(datetime.utcnow())  
+    root = eTree.Element("EventFile", Version="1.00", 
+                         CreationDate=now, Guid=_new_guid_string())
+    evt_types = eTree.SubElement(root, "EventTypes")
+    category = eTree.SubElement(evt_types, "Category", Name="HFO")
+    
+    eTree.SubElement(category, "Description").text = "HFO Category"
+    eTree.SubElement(category, "IsPredefined").text = "true"
+    eTree.SubElement(category, "Guid").text = evt_config.HFO_CATEGORY_GUID
+    hfoCategory = eTree.SubElement(category, "SubCategory", Name="HFO")
+    
+    eTree.SubElement(hfoCategory, "Description").text = "HFO Subcategory"
+    eTree.SubElement(hfoCategory, "IsPredefined").text = "true"
+    eTree.SubElement(hfoCategory, "Guid").text = evt_config.HFO_SUBCATEGORY_GUID
+
+    _define_hfo_type( parentElem=hfoCategory, name="HFO Spike", 
+                      type_guid=evt_config.DEF_HFO_SPIKE_GUID, 
+                      description="HFO Spike Event Definition", 
+                      text_color="4294901760", graph_color="805306623")
+
+
+    _define_hfo_type( parentElem=hfoCategory, name="HFO Ripple", 
+                      type_guid=evt_config.DEF_HFO_RIPPLE_GUID,
+                      description="HFO Ripple Event Definition",
+                      text_color="4294901760", graph_color="822018048")
+
+    _define_hfo_type( parentElem=hfoCategory, name="HFO FastRipple",
+                      type_guid=evt_config.DEF_HFO_FASTRIPPLE_GUID, 
+                      description="HFO FastRipple Event Definition",
+                      text_color="4294901760", graph_color="805371648")
+
+    #Create Events label empty to append annotations later.
+    events = eTree.SubElement(root, "Events")
+
+    return eTree.ElementTree(root)
+
 #Why some kinds are marked as spike and ripple or spike and fripple at the same time?.
-def _append_annotations(eventsElem, events_matfile, rec_start_time, original_chanlist):
 
-    if '_mp_' in events_matfile:
-        chanlist_varname = 'monopolar_chanlist'
-    elif '_bp_' in events_matfile:
-        chanlist_varname = 'bipolar_chanlist'
-    else:
-        print("Error in xml_writer xml_append_annotations") #temporal
-    #, variable_names=[chanlist_varname]
-    modified_chanlist_dic = scipy.io.loadmat(events_matfile, variable_names=[chanlist_varname])
-    modified_chanlist = modified_chanlist_dic[chanlist_varname] 
-
-    _append_events(eventsElem, events_matfile, rec_start_time, ["TRonS", "ftTRonS", "FRonS", "ftFRonS"], 
-                   config.DEF_HFO_SPIKE_GUID, config.spike_on_offset, config.spike_off_offset, 
-                   original_chanlist, modified_chanlist)
-
-    _append_events(eventsElem, events_matfile, rec_start_time, ["RonO", "TRonS"], 
-                   config.DEF_HFO_RIPPLE_GUID, config.ripple_on_offset, config.ripple_off_offset, 
-                   original_chanlist, modified_chanlist)
-
-    _append_events(eventsElem, events_matfile, rec_start_time, ["ftRonO", "ftTRonS"], 
-                   config.DEF_HFO_FASTRIPPLE_GUID, config.fripple_on_offset, config.fripple_off_offset,
-                   original_chanlist, modified_chanlist)
+class Event():
     
-def _append_events(eventsElem, events_matfile, rec_start_time, evt_type_vars, evt_type_guid,
-                   on_offset, off_offset, original_chanlist, modified_chanlist):
-    
-    events = scipy.io.loadmat(events_matfile, variable_names=evt_type_vars)
-    now = _fixFormat(datetime.utcnow())  
-    for key in evt_type_vars:
-        _appendEventsOfKind(key, events, rec_start_time, eventsElem, evt_type_guid, 
-                            on_offset, off_offset, now, original_chanlist, modified_chanlist)
+    def __init__(self, kind, ch_id, begin, end):
+        self._kind = kind
+        self._ch_id = ch_id
+        self._begin = begin
+        self._end = end
 
-def _appendEventsOfKind(aKindOfEvent, events, rec_start_time, eventsElem, evt_def_guid, 
-                        on_offset, off_offset, now, original_chanlist, modified_chanlist):
-    #(Pdb) events['TRonS']  
-    # import pdb; pdb.set_trace()
-    #array([[(array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8))]],
-    #dtype=[('channel', 'O'), ('freq_av', 'O'), ('freq_pk', 'O'), ('power_av', 'O'), ('power_pk', 'O'), ('duration', 'O'), ('start_t', 'O'), ('finish_t', 'O')])
-    #Para acceder al arreglo de freq_pk tenes que hacer events[0][0][2] 
-    channels = events[aKindOfEvent][0][0][0]
-    if len(channels) > 0:
+    def kind(self):
+        return self._kind
 
-        for i in range(len(channels)):
-            modified_channel_idx = channels[i][0] #index in modified_chanlist
-            chan_name = modified_chanlist[0][modified_channel_idx - 1][0]
-            channel_id = original_chanlist.index(chan_name) + 1 #assuming that start by 1 
-            start_t = events[aKindOfEvent][0][0][6][i][0]
-            finish_t = events[aKindOfEvent][0][0][7][i][0]
-            begin = _fixFormat(rec_start_time + timedelta(seconds=start_t)+on_offset)
-            end = _fixFormat(rec_start_time + timedelta(seconds=finish_t)+off_offset)
+    def ch_id(self):
+        return self._ch_id
 
-            evt = eTree.SubElement(eventsElem, "Event", Guid=_newGuidString() )
-            eTree.SubElement(evt, "EventDefinitionGuid").text = evt_def_guid
-            eTree.SubElement(evt, "Begin").text = begin
-            eTree.SubElement(evt, "End").text = end
-            eTree.SubElement(evt, "Value").text = "0"
-            eTree.SubElement(evt, "ExtraValue").text = "0"
-            eTree.SubElement(evt, "DerivationInvID").text = str(channel_id) #Channel number. Starting from 0 or 1? Guess that from 1. 
-            eTree.SubElement(evt, "DerivationNotInvID").text = "0" #0 is referential. Channel num if bipolar. 
-            eTree.SubElement(evt, "CreatedBy").text = "Shennan Weiss"
-            eTree.SubElement(evt, "CreatedDate").text = now
-            eTree.SubElement(evt, "UpdatedBy").text = "Shennan Weiss"
-            eTree.SubElement(evt, "UpdatedDate").text = now
+    def begin(self):
+        return self._begin
+
+    def end(self):
+        return self._end
 
 class EventFile():
 
-    def __init__(self, fname):
+    def __init__(self, fname, rec_start_time=datetime.today(), tree=_build_tree(), events=set(), username='Username' ):
         self.fname = fname
-        self.xml_tree = _buildEventTree()
+        self.rec_start_time = rec_start_time
+        self.tree = tree
+        self.append_events(events, username)
 
     def rename(self, new_fname):
         self.fname = new_fname
 
-    def change_xml_tree(self, new_xml_tree):
-        self.xml_tree = new_xml_tree
+    def set_rec_start_time(self, rec_start_time):
+        self.rec_start_time = rec_start_time
+
+    def change_tree(self, new_tree):
+        self.tree = new_tree
 
     def name(self):
         return self.fname
 
-    def event_tree(self):
-        return self.xml_tree
+    def events(self):
+        eventsElem = self.tree.find('Events')
+        xml_events = eventsElem.findall('Event')
+        events = set()
+        for event in xml_events:
+            begin = dateutil_parser.parse( event.findtext('Begin') )
+            end = dateutil_parser.parse( event.findtext('End') )
+            ch_id = int( event.findtext('DerivationInvID') )
+            kind = evt_config.event_kind_by_guid[ event.findtext('EventDefinitionGuid') ]
+            events.add( Event(kind, ch_id, begin, end) )
 
-    # event is a dictionary with the following content
-    #   begin: must have the format of _fixFormat function (standard UTC)
-    #   end: must have the format of _fixFormat function (standard UTC)
-    #   value: TODO
-    #   extra_value: TODO
-    #   derivationInvId: Channel number in original montage, starting by 1.
-    #   derivationNotInvID: 0 for referential. A channel number if bipolar.
-    #   createdBy: a username
-    #   createdDate: a date in the same format as the other times.
-    #   updatedBy: a username
-    #   updatedDate: a date in the same format as the other times.
-    def append_event(self, event):
-        return
-        #TODO when events come from python structures
+        return events
 
-def read_raw_evt(evt_fname):
-    evt_file = EventFile(evt_fname)
+    def append_events(self, events, username):
+        for e in events:
+            self.append_event(e, username)
+
+    def append_event(self, anEvent, username):
+
+        anEvent.kind()
+        eventsElem = self.tree.getroot().find("Events")
+        evt = eTree.SubElement(eventsElem, "Event", Guid=_new_guid_string() )
+        now = _fix_format(datetime.utcnow())  
+        
+        eTree.SubElement(evt, "EventDefinitionGuid").text = evt_config.event_guid_by_kind[ anEvent.kind() ]
+        eTree.SubElement(evt, "Begin").text = anEvent.begin()
+        eTree.SubElement(evt, "End").text = anEvent.end()
+        eTree.SubElement(evt, "Value").text = "0"
+        eTree.SubElement(evt, "ExtraValue").text = "0"
+        eTree.SubElement(evt, "DerivationInvID").text = str( anEvent.ch_id() ) #Starting from 1. 
+        eTree.SubElement(evt, "DerivationNotInvID").text = "0" #0 is referential. Channel num if bipolar. 
+        eTree.SubElement(evt, "CreatedBy").text = username
+        eTree.SubElement(evt, "CreatedDate").text = now
+        eTree.SubElement(evt, "UpdatedBy").text = username
+        eTree.SubElement(evt, "UpdatedDate").text = now
+
+    def save(self):
+        write_evt(self)
+
+def read_evt(evt_fname):
     parser = eTree.XMLParser(remove_blank_text=True)
-    xml_tree = eTree.parse(evt_fname, parser)
-    evt_file.change_xml_tree(xml_tree)
+    return EventFile(evt_fname, tree = eTree.parse(evt_fname, parser) )
 
-    return evt_file
-
+#temporary
 def read_events(evt_fname):
-    raw_evt = read_raw_evt(evt_fname)
-    root = raw_evt.event_tree().getroot()
-    eventsElem = root.find('Events')
-    xml_events = eventsElem.findall('Event')
-    events = dict()
-    for event in xml_events:
-        begin = dateutil_parser.parse( event.findtext('Begin') )
-        end = dateutil_parser.parse( event.findtext('End') )
-        channel = int( event.findtext('DerivationInvID') )
-        if channel not in events.keys():
-            events[channel] = [ (begin, end) ]
+    evt_file = read_evt(evt_fname)
+    events_by_chan = {}
+
+    for e in evt_file.events():
+
+        if e.ch_id() not in events_by_chan.keys():
+            events_by_chan[e.ch_id()] = [ (e.begin(), e.end()) ]
         else:
-            events[channel].append( (begin, end) )
-    
+            events_by_chan[e.ch_id()].append( (e.begin(), e.end()) )
+    return events_by_chan    
+
+
+def write_evt(evt_file):
+    evt_file.tree.write(evt_file.name(), encoding="utf-8", xml_declaration=True, pretty_print=True)
+
+
+#################  TEMPORARY FUNCITONS FOR TRANSLATION FROM MATLAB ##############
+
+#Temporary due to translation, to load events from matfiles
+def _add_events(events, matfile_vars, kind, subkinds, modified_chanlist, 
+                original_chanlist, rec_start_time, on_offset, off_offset):
+    for subkind in subkinds:
+        #(Pdb) events['TRonS']  
+        # import pdb; pdb.set_trace()
+        #array([[(array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8), array([], shape=(0, 0), dtype=uint8))]],
+        #dtype=[('channel', 'O'), ('freq_av', 'O'), ('freq_pk', 'O'), ('power_av', 'O'), ('power_pk', 'O'), ('duration', 'O'), ('start_t', 'O'), ('finish_t', 'O')])
+        #Para acceder al arreglo de freq_pk tenes que hacer events[0][0][2] 
+        channels = matfile_vars[subkind][0][0][0]
+        if len(channels) > 0:
+            for i in range(len(channels)):
+                modified_channel_idx = channels[i][0] #index in modified_chanlist
+                ch_name = modified_chanlist[0][modified_channel_idx - 1][0]
+                ch_id = original_chanlist.index(ch_name) + 1 #assuming that start by 1 
+                
+                start_t = matfile_vars[subkind][0][0][6][i][0]
+                finish_t = matfile_vars[subkind][0][0][7][i][0]
+                begin = _fix_format(rec_start_time + timedelta(seconds=start_t)+on_offset)
+                end = _fix_format(rec_start_time + timedelta(seconds=finish_t)+off_offset)
+
+                events.add( Event(kind, ch_id, begin, end) )
+
+#loads events from matlab structures and returns a set of Events
+def _load_events_from_matfiles(ez_top_out_dir, original_chanlist, rec_start_time):
+    events = set()
+    for filename in os.listdir(ez_top_out_dir):
+        if filename != '.keep':
+            events_matfile = ez_top_out_dir + filename
+            if '_mp_' in events_matfile:
+                chanlist_varname = 'monopolar_chanlist'
+            elif '_bp_' in events_matfile:
+                chanlist_varname = 'bipolar_chanlist'
+            else:
+                print("Error in xml_writer xml_append_annotations") #temporal
+            ripple_subkinds = ["RonO", "TRonS"]
+            fripple_subkinds = ["ftRonO", "ftTRonS"]
+            spike_subkinds = ["TRonS", "ftTRonS", "FRonS", "ftFRonS"]
+            subkinds =  ripple_subkinds + fripple_subkinds + spike_subkinds
+            var_names = subkinds.append(chanlist_varname)
+            matfile_vars = scipy.io.loadmat(events_matfile, variable_names=var_names)
+            modified_chanlist = matfile_vars[chanlist_varname] 
+
+            _add_events(events, matfile_vars, evt_config.ripple_kind, ripple_subkinds, 
+                        modified_chanlist, original_chanlist, rec_start_time, 
+                        evt_config.ripple_on_offset, evt_config.ripple_off_offset)
+           
+            _add_events(events, matfile_vars, evt_config.fastRipple_kind, fripple_subkinds, 
+                        modified_chanlist, original_chanlist, rec_start_time, 
+                        evt_config.fripple_on_offset, evt_config.fripple_off_offset)
+           
+            _add_events(events, matfile_vars, evt_config.spike_kind, spike_subkinds, 
+                        modified_chanlist, original_chanlist, rec_start_time, 
+                        evt_config.spike_on_offset, evt_config.spike_off_offset)
+
     return events
 
-def write_evt(output_filename, trc_path, rec_start_time, original_chanlist):
-    
-    print(original_chanlist)
-    
-    evt_file = EventFile(output_filename)
-    evt_tree = evt_file.event_tree()
-    eventsElem = evt_tree.getroot().find("Events")
-    for filename in os.listdir(config.paths['ez_top_out']):
-        if filename != '.keep':
-            _append_annotations(eventsElem, config.paths['ez_top_out']+filename, 
-                                rec_start_time, original_chanlist)
 
-    evt_tree.write(evt_file.name(), encoding="utf-8", xml_declaration=True, pretty_print=True)

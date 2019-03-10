@@ -18,7 +18,7 @@ from os.path import basename, splitext, expanduser, abspath
 from trcio import read_raw_trc
 from mne.utils import verbose, logger
 sys.path.insert(0, config.paths['project_root']+'/src/evtio')
-from evtio import write_evt
+from evtio import _load_events_from_matfiles, EventFile, write_evt
 #sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
 #from profiling import profile_time, profile_memory
 from montage import build_montage_from_trc, build_montage_mat_from_trc
@@ -76,16 +76,14 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     logger.info("Number of channels {}".format(raw_trc.info['nchan']) ) 
     logger.info("First data in microvolts: {}".format(str(raw_trc._data[0][0])))
     logger.info('Sampling rate: {}'.format(str(int(raw_trc.info['sfreq']))+'Hz'))
-
-    #this was being done after creating blocks, ask if doesnt loose precision for event detection
-    #mne.filter.resample(array) is too expensive in comparison
+    '''
     logger.info('Resampling data to: {} Hz'.format(str(config.DESIRED_FREC_HZ)) )
     raw_trc.resample(config.DESIRED_FREC_HZ, npad = 'auto') 
  
     n_samples = len(raw_trc._data[0])
     sampling_rate = int(raw_trc.info['sfreq'])
     montages = raw_trc._raw_extras[0]['montages']
-    metadata = { #is it ok to consider ch_names and montage part of metadata? if not, extract as parameters.
+    metadata = { 
         'file_id' : splitext(basename(paths['trc_fname']))[0],
         'montage' : build_montage_from_trc(montages, raw_trc.info['ch_names'],
                                            sug_montage, bp_montage), #temporary
@@ -97,11 +95,21 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     }
 
     _processParallelBlocks_threads(raw_trc, metadata, paths)
-
+    '''
+    
     rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
-    write_evt(paths['xml_output_path'], paths['trc_fname'], 
-              rec_start_time, raw_trc.info['ch_names'])
+    
+    #write_evt(paths['xml_output_path'], paths['trc_fname'], 
+    #         rec_start_time, raw_trc.info['ch_names'])
+
+    events = _load_events_from_matfiles(paths['ez_top_out'], raw_trc.info['ch_names'], rec_start_time)
+   
+    if not events:
+        raise(ValueError("Nos has salvado estamos agradecidos."))
+
+    evt_file = EventFile(paths['xml_output_path'], rec_start_time, events=events, username='USERNAME') #TODO bring username from execution
+    write_evt(evt_file)
 
 
 ############  Private Funtions  #########
@@ -250,6 +258,7 @@ def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths):
     else:
         logger.info("Didn't enter dsp bipolar, bp_data was empty.")
 
+
 #TODO ADD RESTRICTIONS TO PARAMETERS 
 if __name__ == "__main__":
     import argparse
@@ -268,9 +277,6 @@ if __name__ == "__main__":
                         help="Path to the root directory of the project. This is"+
                         " used to set relative paths of saving directories.",
                         required=False, default= config.paths['project_root'])
-
-    #Is it worthy to support taking minutes in the 3 following args instead of just seconds?
-    #I think Brain Quick will just call the program to analize the whole eeg.
 
     parser.add_argument("-str_t", "--start_time", 
                         help="An integer in seconds indicating from when, "+ 
@@ -310,13 +316,11 @@ if __name__ == "__main__":
     paths = config.resolvePaths(args.trc_path, args.xml_output_path,  
                                args.project_dir_path, args.swap_array_file_path)
 
+    #config.clean_previous_execution()
     hfo_annotate(paths, args.start_time, args.stop_time, args.cycle_time, 
                  args.suggested_montage, args.bipolar_montage)
+
     end = time. time()
     print("Whole execution time in seconds...")
     print(end - start)
-    
-    #def test_mem()
-    #mem = max(memory_usage(proc=test_mem))
-    #print("Maximum memory used: {0} MiB".format(str(mem)))
-    #test_mem()
+
