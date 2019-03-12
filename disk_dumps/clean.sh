@@ -8,3 +8,5 @@ rm -f ./cudaica*.wts
 rm -f ./cudaica*.sph
 rm -f ./cudaica*.sc
 rm -f ./cudaica*.fdt
+rm -fr ../src/evtio/__pycache__
+rm -fr ../src/__pycache__

@@ -165,20 +165,6 @@ def read_evt(evt_fname):
     parser = eTree.XMLParser(remove_blank_text=True)
     return EventFile(evt_fname, tree = eTree.parse(evt_fname, parser) )
 
-#temporary
-def read_events(evt_fname):
-    evt_file = read_evt(evt_fname)
-    events_by_chan = {}
-
-    for e in evt_file.events():
-
-        if e.ch_id() not in events_by_chan.keys():
-            events_by_chan[e.ch_id()] = [ (e.begin(), e.end()) ]
-        else:
-            events_by_chan[e.ch_id()].append( (e.begin(), e.end()) )
-    return events_by_chan    
-
-
 def write_evt(evt_file):
     evt_file.tree.write(evt_file.name(), encoding="utf-8", xml_declaration=True, pretty_print=True)
 

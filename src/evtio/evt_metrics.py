@@ -57,8 +57,9 @@ import os
 import io
 from contextlib import redirect_stdout
 #sys.path.insert(0, os.path.abspath('../src/main'))
-from evtio import read_events
+from evtio import read_evt
 from trcio import read_raw_trc
+import evt_config
 
 MIN_DATETIME = datetime.min.replace(tzinfo=tzutc())
 MAX_DATETIME = datetime.max.replace(tzinfo=tzutc())
@@ -107,11 +108,20 @@ def binary_match(w, I):
         prev = I[index -1]
         next = I[index]
     res = w[begin_idx]<= prev[end_idx] or w[end_idx] >= next[begin_idx]
-    #print("does it match?")
-    #print(res)
-    #import pdb; pdb.set_trace()
 
     return res
+
+def add_prop_id_and_kind(rows, ch_id, kind, A, B): 
+    matches = 0
+    A_events = filter_id_and_kind(A, ch_id, kind)
+    B_rip_times = [(e.begin(), e.end()) for e in filter_id_and_kind(B, ch_id, kind)]
+    B_rip_times.sort() #order them by begin time
+    for e in A_events:
+        e_time = (e.begin(), e.end())
+        if binary_match( e_time, B_rip_times): 
+            matches+= 1
+
+    rows[ch_id][kind] = (matches, len(A_events)) if len(A_events) > 0 else (1, 1)
 
 #Input: A and B are dictionaries {channel_name: [(begin,end)]}  
 #Output: Gives an idea of what proportion of A is in B. 
@@ -121,73 +131,27 @@ def binary_match(w, I):
 #Time Complexity: O(C* E_ci* log(E_ci)): for each channel takes n log n
 #regarding the amount of events of the channel 
 def proportion_of(A, B):
-    proportions = dict()
+    props = dict()
     
-    for chan, A_events in A.items():
-        matches = 0
-        tot = len(A_events)
+    for i in range( max([e.ch_id() for e in A])):
+        ch_id = i+1
+        props[ch_id] = dict()
+        add_prop_id_and_kind(props, ch_id, evt_config.ripple_kind, A, B)
+        add_prop_id_and_kind(props, ch_id, evt_config.fastRipple_kind, A, B) 
+        add_prop_id_and_kind(props, ch_id, evt_config.spike_kind, A, B) 
 
-        if chan not in B.keys():
-            proportions[chan] = matches, tot
-            continue #0 matches for this key
-        
-        B_events = B[chan]
-        B_events.sort() #order them by begin time  
-        for evt in A_events:
-            if binary_match(evt, B_events): 
-                matches+= 1
-
-        proportions[chan] = matches, tot
-    
-    return proportions    
-
-#'Naives' will be removed after some time testing binary match
-
-#Returns true if the interval w overlaps with any interval in I
-#Time Complexity: O(N) with N = number of intervals to review
-def match_naive(w, I):
-    begin_idx = 0
-    end_idx = 1
-    for w_i in I:
-        w_begin_overlap = w_i[begin_idx] <= w[begin_idx] <= w_i[end_idx]
-        w_end_overlap = w_i[begin_idx] <= w[end_idx] <= w_i[end_idx]
-        w_contains_w_i = w[begin_idx]<=w_i[begin_idx]<=w_i[end_idx]<=w[end_idx]
-        if w_begin_overlap or w_end_overlap or w_contains_w_i:
-            return True
-        
-    return False
-
-def proportion_of_naive(A, B):
-    proportions = dict()
-    
-    for chan, A_events in A.items():
-        matches = 0
-        tot = len(A_events)
-
-        if chan not in B.keys():
-            proportions[chan] = matches, tot
-            continue #0 matches for this key
-        
-        B_events = B[chan]
-        for evt in A_events:
-            if match_naive(evt, B_events): 
-                matches+= 1
-
-        proportions[chan] = matches, tot
-    
-    return proportions    
-
-
+    return props
 #Requieres input is not empty
 #min_chan_tot is because it makes no sense to use proportions if total is too low.
 #for example 3 events of 6 is 0.5 and the test would fail, but its just because the
 #total amount is too low.
-def min_proportion(proportions_by_chan, min_chan_tot=1):
+def min_proportion(props, min_chan_tot=1):
     min_m, min_tot = INFINITY, 1 #the first will replace it
-    for chan, p in proportions_by_chan.items():
-        matches, tot = p
-        if tot >= min_chan_tot and matches/tot < min_m/min_tot:
-            min_m, min_tot = matches, tot
+    for ch_id in props.keys():
+        for kind in props[ch_id]:
+            matches, tot = props[ch_id][kind]
+            if tot >= min_chan_tot and matches/tot < min_m/min_tot:
+                min_m, min_tot = matches, tot
 
     return min_m, min_tot
 
@@ -198,7 +162,7 @@ def min_proportion(proportions_by_chan, min_chan_tot=1):
 def subset(A, B, delta=0.1):
     if len(A) == 0:
         return True
-    proportions_by_chan = proportion_of(A, B,)
+    proportions_by_chan = proportion_of(A, B)
     matches, tot = min_proportion(proportions_by_chan, min_chan_tot=50)
 
     return 1 - matches/tot <= delta
@@ -228,64 +192,75 @@ def highlight_max(n, m):
 
     return n_str, m_str
 
+def filter_id_and_kind(events, ch_id, kind):
+    return [ e for e in events if e.ch_id() == ch_id and e.kind() == kind ]
+
+def append_count_row(rows, O_events, E_events, ch_name, ch_id, kind):
+    o_evt_count = len( filter_id_and_kind(O_events, ch_id, kind))
+    e_evt_count = len( filter_id_and_kind(E_events, ch_id, kind))
+    o_evt_count_str, e_evt_count_str = highlight_max(o_evt_count, e_evt_count)           
+    ch_count = [ch_name, str(ch_id) if kind == evt_config.fastRipple_kind else '', kind, o_evt_count_str, e_evt_count_str ]
+    rows.append(ch_count)
+
 def print_count_by_channel(O_events, E_events, original_chanlist, obtained_basename, expected_basename):
     
-    opened_by_chan= ['Channel Name', 
-                     'Channel ID', 
-                     'Event count in ' + obtained_basename,
-                     'Event count in ' + expected_basename]
-    rows_chan_count = []
+    opened_by_chan= ['Ch Name', 
+                     'Ch ID', 
+                     'HFO kind',
+                     '# in ' + obtained_basename,
+                     '# in ' + expected_basename]
+    rows = []
     for i in range(len(original_chanlist)):
-        chan_name = original_chanlist[i]
-        chan_id = i+1
-        o_evt_count = 0 if chan_id not in O_events.keys() else len(O_events[chan_id]) 
-        e_evt_count = 0 if chan_id not in E_events.keys() else len(E_events[chan_id])
-        o_evt_count_str, e_evt_count_str = highlight_max(o_evt_count, e_evt_count)           
-        r_i_chan_count = [chan_name, str(chan_id), o_evt_count_str, e_evt_count_str ]
-        rows_chan_count.append(r_i_chan_count)
+        ch_name = original_chanlist[i]
+        ch_id = i+1
+        append_count_row(rows, O_events, E_events, '', ch_id, evt_config.ripple_kind)
+        append_count_row(rows, O_events, E_events, ch_name, ch_id, evt_config.fastRipple_kind)        
+        append_count_row(rows, O_events, E_events, '', ch_id, evt_config.spike_kind)        
+        s = '-'
+        rows.append([s*7, s*7, s*10, s*10, s*10])
 
-    sep = '---------------------'
-    rows_chan_count.append([sep, sep, sep, sep])
-
-    O_tot = sum([len(evts) for evts in O_events.values()])
-    E_tot = sum([len(evts) for evts in E_events.values()])
-    o_tot_str, e_tot_str = highlight_max(O_tot, E_tot)
-    rows_chan_count.append(['Total count', str(" "), o_tot_str, e_tot_str])
+    o_tot_str, e_tot_str = highlight_max( len(O_events), len(E_events))
+    rows.append(['Total count', '', '', o_tot_str, e_tot_str])
 
     print("\nEvent count by channel...")
-    print("\n"+tabulate( rows_chan_count, headers=opened_by_chan, tablefmt='orgtbl'))
+    print("\n"+tabulate( rows, headers=opened_by_chan, tablefmt='orgtbl'))
+
+def prop(props, ch_id, kind):
+    if ch_id not in props.keys() or kind not in props[ch_id].keys():
+        return 100.0
+    else:
+        return props[ch_id][kind][0] / props[ch_id][kind][1] * 100
+
+def append_prop_row(rows, O_prop, E_prop, ch_name, ch_id, kind):
+    o_prop = prop(O_prop, ch_id, kind)
+    e_prop = prop(E_prop, ch_id, kind)
+    o_prop, e_prop = highlight_max(o_prop, e_prop)
+    r = [ch_name, str(ch_id) if kind == evt_config.fastRipple_kind else '', kind, o_prop, e_prop ]
+    rows.append(r)
+
 
 def print_proportions(O_events, E_events, original_chanlist, obtained_basename, expected_basename):
 
     proportions= ['Channel Name', 
-                  'Channel ID', 
+                  'Ch ID', 
+                  'Kind',
                   'Proportion of ' + obtained_basename + " events\n that are also in "+ expected_basename,
                   'Proportion of ' + expected_basename + " events\n that are also in "+ obtained_basename]
     
-    O_prop_by_chan = proportion_of(O_events, E_events)
-    E_prop_by_chan = proportion_of(E_events, O_events)
-    rows_chan_prop = []
+    O_prop = proportion_of(O_events, E_events)
+    E_prop = proportion_of(E_events, O_events)
+    rows= []
     for i in range(len(original_chanlist)):
-        chan_name = original_chanlist[i]
-        chan_id = i+1
-        o_evt_prop = 100.0 if chan_id not in O_events.keys() else (O_prop_by_chan[chan_id][0]/O_prop_by_chan[chan_id][1]) * 100 
-        e_evt_prop = 100.0 if chan_id not in E_events.keys() else (E_prop_by_chan[chan_id][0]/E_prop_by_chan[chan_id][1]) * 100
-        o_evt_prop_str, e_evt_prop_str = highlight_max(o_evt_prop, e_evt_prop)
-        r_i_chan_prop = [chan_name, str(chan_id), o_evt_prop_str, e_evt_prop_str ]
-        rows_chan_prop.append(r_i_chan_prop)
-
-    sep = '---------------------'
-    rows_chan_prop.append([sep, sep, sep, sep])
+        ch_name = original_chanlist[i]
+        ch_id = i+1
+        append_prop_row(rows, O_prop, E_prop, '', ch_id, evt_config.ripple_kind)
+        append_prop_row(rows, O_prop, E_prop, ch_name, ch_id, evt_config.fastRipple_kind)        
+        append_prop_row(rows, O_prop, E_prop, '', ch_id, evt_config.spike_kind) 
+        s = '-'
+        rows.append([s*7, s*7, s*10, s*10, s*10])
    
-    O_matches, O_chan_events = min_proportion(O_prop_by_chan, min_chan_tot=1)
-    E_matches, E_chan_events = min_proportion(E_prop_by_chan, min_chan_tot=1)
-    obt_prop_exp_min = O_matches/O_chan_events
-    exp_prop_obt_min = E_matches/E_chan_events
-    obt_prop_exp_str, exp_prop_obt_str = highlight_max(obt_prop_exp_min, exp_prop_obt_min) 
-    rows_chan_prop.append(['Minimum proportion', str(" "), obt_prop_exp_str, exp_prop_obt_str])
-
     print("\nProportions of one in the other...")
-    print("\n"+tabulate( rows_chan_prop, headers=proportions, tablefmt='orgtbl'))
+    print("\n"+tabulate( rows, headers=proportions, tablefmt='orgtbl'))
 
 #INPUT: Two evt filenames, O is obtained and E is expected,
 # The trc_fname where to get the channel names
@@ -300,8 +275,8 @@ def print_metrics(obtained_fn, expected_fn, trc_fname, delta=0.1):
         original_chanlist = read_raw_trc(trc_fname, preload=False).info['ch_names']
     out = f.getvalue()
 
-    O_events = read_events(obtained_fn)
-    E_events = read_events(expected_fn)
+    O_events = read_evt(obtained_fn).events()
+    E_events = read_evt(expected_fn).events()
     print_count_by_channel(O_events, E_events, original_chanlist, obtained_basename, expected_basename)
     print_proportions(O_events, E_events, original_chanlist, obtained_basename, expected_basename)
 

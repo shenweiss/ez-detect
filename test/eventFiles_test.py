@@ -9,13 +9,13 @@ from pathlib import Path
 import argparse
 test_folder_dir = str(Path(sys.argv[0]).parent)
 sys.path.insert(0, str(Path(test_folder_dir +'/../src/evtio').expanduser().resolve()) ) 
-import evt_metrics as evt_metrics
-from evtio import read_events
+import evt_metrics
+from evtio import read_evt
 
 class eventFilesTest(unittest.TestCase):
     def setUp(self):
-        self.O_events = read_events(self.obtained_fn)
-        self.E_events = read_events(self.expected_fn)
+        self.O_events = read_evt(self.obtained_fn).events()
+        self.E_events = read_evt(self.expected_fn).events()
 
     def test_similar_event_files(self):
         self.assertTrue( evt_metrics.distance(self.O_events, self.E_events) <= self.delta-self.delta/4) 
@@ -25,13 +25,6 @@ class eventFilesTest(unittest.TestCase):
 
     def test_expected_is_subset(self):
         self.assertTrue( evt_metrics.subset(self.E_events, self.O_events, self.delta) )
-
-    #Will be removed after some time
-    #def test_binary_match(self):
-    #    self.assertEqual(evt_metrics.proportion_of_naive(self.O_events, self.E_events),
-    #                     evt_metrics.proportion_of(self.O_events, self.E_events))
-    #    self.assertEqual(evt_metrics.proportion_of_naive(self.E_events, self.O_events),
-    #                      evt_metrics.proportion_of(self.E_events, self.O_events))
 
     def test_print_metrics(self):
         if self.trc_fname != 'NOT_GIVEN':
