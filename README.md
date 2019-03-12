@@ -21,6 +21,7 @@ Requirements
   2) Matlab 2017a or later. 
   3) Cudaica binary for the current running device.
   4) trcio module: http://gitlab.liaa.dc.uba.ar/tju-uba/io_trc.git
+  5) evtio module: 
 
 
 Installation and configuration instructions:
@@ -38,7 +39,10 @@ Installation and configuration instructions:
     Find further instructions for this step in the README of cudaica located at ez-detect/src/cudaica/README_cudaica.md
     
   4) Download and install trcio module
-    4.1) Download from: 
+    4.1) Download from: http://gitlab.liaa.dc.uba.ar/tju-uba/io_trc.git
+    4.2) Install using python setup.py develop (or install if you are not going to modify the package) 
+  5) Download and install evtio module
+    4.1) Download from: http://gitlab.liaa.dc.uba.ar/tju-uba/io_evt.git
     4.2) Install using python setup.py develop (or install if you are not going to modify the package) 
 
   5) Go to src/main/config.py and manually edit the path to the project folder. You can alternatively run the app using the optional parameter "-pdir" / "--project_dir_path" to indicate this path. 

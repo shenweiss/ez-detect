@@ -1,11 +1,33 @@
 import os
-import evt_config
+from . import config
 import scipy.io #temporal, bottom of file
 from lxml import etree as eTree
 import uuid
 import time
 from datetime import datetime, timedelta
 from dateutil import parser as dateutil_parser
+
+class Event():
+    
+    def __init__(self, kind, ch_id, begin, end):
+        self._kind = kind
+        self._ch_id = ch_id
+        self._begin = begin
+        self._end = end
+
+    def kind(self):
+        return self._kind
+
+    def ch_id(self):
+        return self._ch_id
+
+    def begin(self):
+        return self._begin
+
+    def end(self):
+        return self._end
+
+#####################################
 
 def _new_guid_string():
     return str(uuid.uuid4())
@@ -52,26 +74,26 @@ def _build_tree():
     
     eTree.SubElement(category, "Description").text = "HFO Category"
     eTree.SubElement(category, "IsPredefined").text = "true"
-    eTree.SubElement(category, "Guid").text = evt_config.HFO_CATEGORY_GUID
+    eTree.SubElement(category, "Guid").text = config.HFO_CATEGORY_GUID
     hfoCategory = eTree.SubElement(category, "SubCategory", Name="HFO")
     
     eTree.SubElement(hfoCategory, "Description").text = "HFO Subcategory"
     eTree.SubElement(hfoCategory, "IsPredefined").text = "true"
-    eTree.SubElement(hfoCategory, "Guid").text = evt_config.HFO_SUBCATEGORY_GUID
+    eTree.SubElement(hfoCategory, "Guid").text = config.HFO_SUBCATEGORY_GUID
 
     _define_hfo_type( parentElem=hfoCategory, name="HFO Spike", 
-                      type_guid=evt_config.DEF_HFO_SPIKE_GUID, 
+                      type_guid=config.DEF_HFO_SPIKE_GUID, 
                       description="HFO Spike Event Definition", 
                       text_color="4294901760", graph_color="805306623")
 
 
     _define_hfo_type( parentElem=hfoCategory, name="HFO Ripple", 
-                      type_guid=evt_config.DEF_HFO_RIPPLE_GUID,
+                      type_guid=config.DEF_HFO_RIPPLE_GUID,
                       description="HFO Ripple Event Definition",
                       text_color="4294901760", graph_color="822018048")
 
     _define_hfo_type( parentElem=hfoCategory, name="HFO FastRipple",
-                      type_guid=evt_config.DEF_HFO_FASTRIPPLE_GUID, 
+                      type_guid=config.DEF_HFO_FASTRIPPLE_GUID, 
                       description="HFO FastRipple Event Definition",
                       text_color="4294901760", graph_color="805371648")
 
@@ -81,26 +103,6 @@ def _build_tree():
     return eTree.ElementTree(root)
 
 #Why some kinds are marked as spike and ripple or spike and fripple at the same time?.
-
-class Event():
-    
-    def __init__(self, kind, ch_id, begin, end):
-        self._kind = kind
-        self._ch_id = ch_id
-        self._begin = begin
-        self._end = end
-
-    def kind(self):
-        return self._kind
-
-    def ch_id(self):
-        return self._ch_id
-
-    def begin(self):
-        return self._begin
-
-    def end(self):
-        return self._end
 
 class EventFile():
 
@@ -130,7 +132,7 @@ class EventFile():
             begin = dateutil_parser.parse( event.findtext('Begin') )
             end = dateutil_parser.parse( event.findtext('End') )
             ch_id = int( event.findtext('DerivationInvID') )
-            kind = evt_config.event_kind_by_guid[ event.findtext('EventDefinitionGuid') ]
+            kind = config.event_kind_by_guid[ event.findtext('EventDefinitionGuid') ]
             events.add( Event(kind, ch_id, begin, end) )
 
         return events
@@ -146,7 +148,7 @@ class EventFile():
         evt = eTree.SubElement(eventsElem, "Event", Guid=_new_guid_string() )
         now = _fix_format(datetime.utcnow())  
         
-        eTree.SubElement(evt, "EventDefinitionGuid").text = evt_config.event_guid_by_kind[ anEvent.kind() ]
+        eTree.SubElement(evt, "EventDefinitionGuid").text = config.event_guid_by_kind[ anEvent.kind() ]
         eTree.SubElement(evt, "Begin").text = anEvent.begin()
         eTree.SubElement(evt, "End").text = anEvent.end()
         eTree.SubElement(evt, "Value").text = "0"
@@ -160,6 +162,8 @@ class EventFile():
 
     def save(self):
         write_evt(self)
+
+####################################
 
 def read_evt(evt_fname):
     parser = eTree.XMLParser(remove_blank_text=True)
@@ -195,7 +199,7 @@ def _add_events(events, matfile_vars, kind, subkinds, modified_chanlist,
                 events.add( Event(kind, ch_id, begin, end) )
 
 #loads events from matlab structures and returns a set of Events
-def _load_events_from_matfiles(ez_top_out_dir, original_chanlist, rec_start_time):
+def load_events_from_matfiles(ez_top_out_dir, original_chanlist, rec_start_time):
     events = set()
     for filename in os.listdir(ez_top_out_dir):
         if filename != '.keep':
@@ -214,17 +218,17 @@ def _load_events_from_matfiles(ez_top_out_dir, original_chanlist, rec_start_time
             matfile_vars = scipy.io.loadmat(events_matfile, variable_names=var_names)
             modified_chanlist = matfile_vars[chanlist_varname] 
 
-            _add_events(events, matfile_vars, evt_config.ripple_kind, ripple_subkinds, 
+            _add_events(events, matfile_vars, config.ripple_kind, ripple_subkinds, 
                         modified_chanlist, original_chanlist, rec_start_time, 
-                        evt_config.ripple_on_offset, evt_config.ripple_off_offset)
+                        config.ripple_on_offset, config.ripple_off_offset)
            
-            _add_events(events, matfile_vars, evt_config.fastRipple_kind, fripple_subkinds, 
+            _add_events(events, matfile_vars, config.fastRipple_kind, fripple_subkinds, 
                         modified_chanlist, original_chanlist, rec_start_time, 
-                        evt_config.fripple_on_offset, evt_config.fripple_off_offset)
+                        config.fripple_on_offset, config.fripple_off_offset)
            
-            _add_events(events, matfile_vars, evt_config.spike_kind, spike_subkinds, 
+            _add_events(events, matfile_vars, config.spike_kind, spike_subkinds, 
                         modified_chanlist, original_chanlist, rec_start_time, 
-                        evt_config.spike_on_offset, evt_config.spike_off_offset)
+                        config.spike_on_offset, config.spike_off_offset)
 
     return events
 

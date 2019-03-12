@@ -7,10 +7,7 @@ import unittest
 import sys
 from pathlib import Path
 import argparse
-test_folder_dir = str(Path(sys.argv[0]).parent)
-sys.path.insert(0, str(Path(test_folder_dir +'/../src/evtio').expanduser().resolve()) ) 
-import evt_metrics
-from evtio import read_evt
+from evtio import read_evt, metrics as evt_metrics
 
 class eventFilesTest(unittest.TestCase):
     def setUp(self):

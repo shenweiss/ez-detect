@@ -87,11 +87,6 @@ function [wts, sph, tmpint, error_flag] = ez_cudaica(data, paths, var3,var4,var5
 
 disp('ENTERING CUDAICA.M')
 
-%to be removed in future refactoring, once fixed the arguments...
-%disk_dumps='/home/tpastore/Documents/ez-detect/disk_dumps/';
-%binica_sc='/home/tpastore/Documents/ez-detect/src/cudaica/binica.sc';
-%cudaica_bin='/home/tpastore/Documents/ez-detect/src/cudaica/cudaica';
-
 disk_dumps = paths.disk_dumps
 binica_sc = paths.binica_sc
 cudaica_bin = paths.cudaica_bin

@@ -54,12 +54,10 @@ from tabulate import tabulate
 
 import sys
 import os
-import io
 from contextlib import redirect_stdout
-#sys.path.insert(0, os.path.abspath('../src/main'))
-from evtio import read_evt
+import io as IO
+from evtio import read_evt, config
 from trcio import read_raw_trc
-import evt_config
 
 MIN_DATETIME = datetime.min.replace(tzinfo=tzutc())
 MAX_DATETIME = datetime.max.replace(tzinfo=tzutc())
@@ -69,13 +67,13 @@ MAX_DATETIME = datetime.max.replace(tzinfo=tzutc())
 # OUTPUT: The index where an interval with begin == aBegin 
 # can be inserted to mantain the order of the list of intervals.
 # Time Complexity: O(Log(N)) with N = number of intervals to review     
-def binary_search(interval, intervals):
+def _binary_search(interval, intervals):
     if len(intervals) == 0 : 
         return 0
 
-    return binary_search_rec(interval, intervals, 0, len(intervals)-1)
+    return _binary_search_rec(interval, intervals, 0, len(intervals)-1)
 
-def binary_search_rec(interval, intervals, low, high):
+def _binary_search_rec(interval, intervals, low, high):
     if high <= low: 
         return low+1 if (interval >= intervals[low]) else low 
   
@@ -85,19 +83,19 @@ def binary_search_rec(interval, intervals, low, high):
     if(interval == otherInterval ): 
         return mid+1 
     elif(interval > otherInterval): 
-        return binary_search_rec(interval, intervals, mid+1, high)
+        return _binary_search_rec(interval, intervals, mid+1, high)
     else: 
-        return binary_search_rec(interval, intervals, low, mid-1)
+        return _binary_search_rec(interval, intervals, low, mid-1)
 
 #Returns true if the interval w overlaps with any interval in I
 #Time Complexity: O(Log(N)) with N = number of intervals to review 
-def binary_match(w, I):
+def _binary_match(w, I):
     if len(I) == 0 :
         return False
 
     begin_idx = 0
     end_idx = 1
-    index = binary_search(w, I)
+    index = _binary_search(w, I)
     if index == 0:
         prev = ( MIN_DATETIME, MIN_DATETIME) #If there is no prev, makes that match fail
         next = I[index]
@@ -111,14 +109,14 @@ def binary_match(w, I):
 
     return res
 
-def add_prop_id_and_kind(rows, ch_id, kind, A, B): 
+def _add_prop_id_and_kind(rows, ch_id, kind, A, B): 
     matches = 0
-    A_events = filter_id_and_kind(A, ch_id, kind)
-    B_rip_times = [(e.begin(), e.end()) for e in filter_id_and_kind(B, ch_id, kind)]
+    A_events = _filter_id_and_kind(A, ch_id, kind)
+    B_rip_times = [(e.begin(), e.end()) for e in _filter_id_and_kind(B, ch_id, kind)]
     B_rip_times.sort() #order them by begin time
     for e in A_events:
         e_time = (e.begin(), e.end())
-        if binary_match( e_time, B_rip_times): 
+        if _binary_match( e_time, B_rip_times): 
             matches+= 1
 
     rows[ch_id][kind] = (matches, len(A_events)) if len(A_events) > 0 else (1, 1)
@@ -130,15 +128,15 @@ def add_prop_id_and_kind(rows, ch_id, kind, A, B):
 #Expressed as a tuple (m, tot) meaning matches over total of channel 
 #Time Complexity: O(C* E_ci* log(E_ci)): for each channel takes n log n
 #regarding the amount of events of the channel 
-def proportion_of(A, B):
+def _proportion_of(A, B):
     props = dict()
     
     for i in range( max([e.ch_id() for e in A])):
         ch_id = i+1
         props[ch_id] = dict()
-        add_prop_id_and_kind(props, ch_id, evt_config.ripple_kind, A, B)
-        add_prop_id_and_kind(props, ch_id, evt_config.fastRipple_kind, A, B) 
-        add_prop_id_and_kind(props, ch_id, evt_config.spike_kind, A, B) 
+        _add_prop_id_and_kind(props, ch_id, config.ripple_kind, A, B)
+        _add_prop_id_and_kind(props, ch_id, config.fastRipple_kind, A, B) 
+        _add_prop_id_and_kind(props, ch_id, config.spike_kind, A, B) 
 
     return props
 #Requieres input is not empty
@@ -162,15 +160,15 @@ def min_proportion(props, min_chan_tot=1):
 def subset(A, B, delta=0.1):
     if len(A) == 0:
         return True
-    proportions_by_chan = proportion_of(A, B)
+    proportions_by_chan = _proportion_of(A, B)
     matches, tot = min_proportion(proportions_by_chan, min_chan_tot=50)
 
     return 1 - matches/tot <= delta
 
 #Requiere neither A nor B are empty
 def distance(A, B):
-    A_prop_by_chan = proportion_of(A, B)
-    B_prop_by_chan = proportion_of(B, A)
+    A_prop_by_chan = _proportion_of(A, B)
+    B_prop_by_chan = _proportion_of(B, A)
 
     matches_A, tot_A = min_proportion(A_prop_by_chan, min_chan_tot=50)
     matches_B, tot_B = min_proportion(B_prop_by_chan,  min_chan_tot=50)
@@ -179,7 +177,11 @@ def distance(A, B):
    
     return 1 - (A_min_p + B_min_p) / 2 
  
-def highlight_max(n, m):
+
+###########################################
+
+
+def _highlight_max(n, m):
     if(n > m): 
         n_str = '\x1b[6;30;42m' + str(n) + '\x1b[0m'
     else:
@@ -192,14 +194,14 @@ def highlight_max(n, m):
 
     return n_str, m_str
 
-def filter_id_and_kind(events, ch_id, kind):
+def _filter_id_and_kind(events, ch_id, kind):
     return [ e for e in events if e.ch_id() == ch_id and e.kind() == kind ]
 
-def append_count_row(rows, O_events, E_events, ch_name, ch_id, kind):
-    o_evt_count = len( filter_id_and_kind(O_events, ch_id, kind))
-    e_evt_count = len( filter_id_and_kind(E_events, ch_id, kind))
-    o_evt_count_str, e_evt_count_str = highlight_max(o_evt_count, e_evt_count)           
-    ch_count = [ch_name, str(ch_id) if kind == evt_config.fastRipple_kind else '', kind, o_evt_count_str, e_evt_count_str ]
+def _append_count_row(rows, O_events, E_events, ch_name, ch_id, kind):
+    o_evt_count = len( _filter_id_and_kind(O_events, ch_id, kind))
+    e_evt_count = len( _filter_id_and_kind(E_events, ch_id, kind))
+    o_evt_count_str, e_evt_count_str = _highlight_max(o_evt_count, e_evt_count)           
+    ch_count = [ch_name, str(ch_id) if kind == config.fastRipple_kind else '', kind, o_evt_count_str, e_evt_count_str ]
     rows.append(ch_count)
 
 def print_count_by_channel(O_events, E_events, original_chanlist, obtained_basename, expected_basename):
@@ -213,31 +215,32 @@ def print_count_by_channel(O_events, E_events, original_chanlist, obtained_basen
     for i in range(len(original_chanlist)):
         ch_name = original_chanlist[i]
         ch_id = i+1
-        append_count_row(rows, O_events, E_events, '', ch_id, evt_config.ripple_kind)
-        append_count_row(rows, O_events, E_events, ch_name, ch_id, evt_config.fastRipple_kind)        
-        append_count_row(rows, O_events, E_events, '', ch_id, evt_config.spike_kind)        
+        _append_count_row(rows, O_events, E_events, '', ch_id, config.ripple_kind)
+        _append_count_row(rows, O_events, E_events, ch_name, ch_id, config.fastRipple_kind)        
+        _append_count_row(rows, O_events, E_events, '', ch_id, config.spike_kind)        
         s = '-'
         rows.append([s*7, s*7, s*10, s*10, s*10])
 
-    o_tot_str, e_tot_str = highlight_max( len(O_events), len(E_events))
+    o_tot_str, e_tot_str = _highlight_max( len(O_events), len(E_events))
     rows.append(['Total count', '', '', o_tot_str, e_tot_str])
 
     print("\nEvent count by channel...")
     print("\n"+tabulate( rows, headers=opened_by_chan, tablefmt='orgtbl'))
 
-def prop(props, ch_id, kind):
+
+
+def _prop(props, ch_id, kind):
     if ch_id not in props.keys() or kind not in props[ch_id].keys():
         return 100.0
     else:
         return props[ch_id][kind][0] / props[ch_id][kind][1] * 100
 
-def append_prop_row(rows, O_prop, E_prop, ch_name, ch_id, kind):
-    o_prop = prop(O_prop, ch_id, kind)
-    e_prop = prop(E_prop, ch_id, kind)
-    o_prop, e_prop = highlight_max(o_prop, e_prop)
-    r = [ch_name, str(ch_id) if kind == evt_config.fastRipple_kind else '', kind, o_prop, e_prop ]
+def _append_prop_row(rows, O_prop, E_prop, ch_name, ch_id, kind):
+    o_prop = _prop(O_prop, ch_id, kind)
+    e_prop = _prop(E_prop, ch_id, kind)
+    o_prop, e_prop = _highlight_max(o_prop, e_prop)
+    r = [ch_name, str(ch_id) if kind == config.fastRipple_kind else '', kind, o_prop, e_prop ]
     rows.append(r)
-
 
 def print_proportions(O_events, E_events, original_chanlist, obtained_basename, expected_basename):
 
@@ -247,20 +250,21 @@ def print_proportions(O_events, E_events, original_chanlist, obtained_basename, 
                   'Proportion of ' + obtained_basename + " events\n that are also in "+ expected_basename,
                   'Proportion of ' + expected_basename + " events\n that are also in "+ obtained_basename]
     
-    O_prop = proportion_of(O_events, E_events)
-    E_prop = proportion_of(E_events, O_events)
+    O_prop = _proportion_of(O_events, E_events)
+    E_prop = _proportion_of(E_events, O_events)
     rows= []
     for i in range(len(original_chanlist)):
         ch_name = original_chanlist[i]
         ch_id = i+1
-        append_prop_row(rows, O_prop, E_prop, '', ch_id, evt_config.ripple_kind)
-        append_prop_row(rows, O_prop, E_prop, ch_name, ch_id, evt_config.fastRipple_kind)        
-        append_prop_row(rows, O_prop, E_prop, '', ch_id, evt_config.spike_kind) 
+        _append_prop_row(rows, O_prop, E_prop, '', ch_id, config.ripple_kind)
+        _append_prop_row(rows, O_prop, E_prop, ch_name, ch_id, config.fastRipple_kind)        
+        _append_prop_row(rows, O_prop, E_prop, '', ch_id, config.spike_kind) 
         s = '-'
         rows.append([s*7, s*7, s*10, s*10, s*10])
    
     print("\nProportions of one in the other...")
     print("\n"+tabulate( rows, headers=proportions, tablefmt='orgtbl'))
+
 
 #INPUT: Two evt filenames, O is obtained and E is expected,
 # The trc_fname where to get the channel names
@@ -270,7 +274,7 @@ def print_metrics(obtained_fn, expected_fn, trc_fname, delta=0.1):
     obtained_basename = splitext(basename(obtained_fn))[0] 
     expected_basename = splitext(basename(expected_fn))[0] 
     
-    f = io.StringIO()
+    f = IO.StringIO()
     with redirect_stdout(f):
         original_chanlist = read_raw_trc(trc_fname, preload=False).info['ch_names']
     out = f.getvalue()
