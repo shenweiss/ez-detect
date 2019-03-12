@@ -1,9 +1,0 @@
-setup.py
-evtio/__init__.py
-evtio/config.py
-evtio/io.py
-evtio/metrics.py
-evtio.egg-info/PKG-INFO
-evtio.egg-info/SOURCES.txt
-evtio.egg-info/dependency_links.txt
-evtio.egg-info/top_level.txt
