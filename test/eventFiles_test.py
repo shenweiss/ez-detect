@@ -5,33 +5,23 @@
 
 import unittest
 import sys
-import os
+from pathlib import Path
 import argparse
-from math import inf as INFINITY
-sys.path.insert(0, os.path.abspath('../src/evtio'))
-import evt_metrics as evt_metrics
-from evtio import read_events
+from evtio import read_evt, metrics as evt_metrics
 
 class eventFilesTest(unittest.TestCase):
     def setUp(self):
-        self.O_events = read_events(self.obtained_fn)
-        self.E_events = read_events(self.expected_fn)
+        self.O_events = read_evt(self.obtained_fn).events()
+        self.E_events = read_evt(self.expected_fn).events()
 
     def test_similar_event_files(self):
-        self.assertTrue( evt_metrics.distance(self.O_events, self.E_events) <= self.delta- self.delta/4) 
+        self.assertTrue( evt_metrics.distance(self.O_events, self.E_events) <= self.delta-self.delta/4) 
 
     def test_obtained_is_subset(self):
         self.assertTrue( evt_metrics.subset(self.O_events, self.E_events, self.delta) )
 
     def test_expected_is_subset(self):
         self.assertTrue( evt_metrics.subset(self.E_events, self.O_events, self.delta) )
-
-    #Will be removed after some time
-    #def test_binary_match(self):
-    #    self.assertEqual(evt_metrics.proportion_of_naive(self.O_events, self.E_events),
-    #                     evt_metrics.proportion_of(self.O_events, self.E_events))
-    #    self.assertEqual(evt_metrics.proportion_of_naive(self.E_events, self.O_events),
-    #                      evt_metrics.proportion_of(self.E_events, self.O_events))
 
     def test_print_metrics(self):
         if self.trc_fname != 'NOT_GIVEN':
@@ -60,13 +50,13 @@ if __name__ == "__main__":
                         "with a delta tolerance, meaning that at most 100*delta percent of "+
                         "the events in one set may not match with an "+
                         "event in the other set.",
-                        required=False, default= 0.1, type=float)   
+                        required=False, default= 0.15, type=float)   
 
     args = parser.parse_args()
     
-    eventFilesTest.expected_fn = args.expected
-    eventFilesTest.obtained_fn = args.obtained
-    eventFilesTest.trc_fname = args.trc_fname
+    eventFilesTest.expected_fn = str(Path(args.expected).expanduser().resolve())
+    eventFilesTest.obtained_fn = str(Path(args.obtained).expanduser().resolve())
+    eventFilesTest.trc_fname = str(Path(args.trc_fname).expanduser().resolve())
     eventFilesTest.delta = float(args.delta)
 
     while(len(sys.argv) > 1):

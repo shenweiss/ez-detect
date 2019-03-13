@@ -1,0 +1,11 @@
+rm -f ./ez_pac_output/*
+rm -f ./ez_top/input/*
+rm -f ./ez_top/output/*
+rm -f ./research_matfiles/*
+rm -f ./temp_pythonToMatlab_dsp/*
+rm -f ./xml_output/*
+rm -f ./cudaica*.wts
+rm -f ./cudaica*.sph
+rm -f ./cudaica*.sc
+rm -f ./cudaica*.fdt
+rm -fr ../src/__pycache__

@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<EventFile CreationDate="2019-02-18T18:28:10.833848Z" Guid="840b13d8-59fc-482c-af18-72c1cc2550c9" Version="1.00">
+  <EventTypes>
+    <Category Name="HFO">
+      <Description>HFO Category</Description>
+      <IsPredefined>true</IsPredefined>
+      <Guid>27e2727f-e49d-4113-aa8c-4944ef8f2588</Guid>
+      <SubCategory Name="HFO">
+        <Description>HFO Subcategory</Description>
+        <IsPredefined>true</IsPredefined>
+        <Guid>c142e214-826e-4dfe-965a-110246492c9e</Guid>
+        <Definition Name="HFO Spike">
+          <Guid>bf513752-2cb7-43bc-93f5-370def800b93</Guid>
+          <Description>HFO Spike Event Definition</Description>
+          <IsPredefined>true</IsPredefined>
+          <IsDefinitionAdjustable>false</IsDefinitionAdjustable>
+          <CanInsert>true</CanInsert>
+          <CanDelete>true</CanDelete>
+          <CanUpdateText>true</CanUpdateText>
+          <CanUpdatePosition>true</CanUpdatePosition>
+          <CanReassign>false</CanReassign>
+          <InsertionType>ClickAndDrag</InsertionType>
+          <FixedInsertionDuration>PT1S</FixedInsertionDuration>
+          <TextType>FromDefinitionDescription</TextType>
+          <ReferenceType>SingleLine</ReferenceType>
+          <DurationType>Interval</DurationType>
+          <TextArgbColor>4294901760</TextArgbColor>
+          <GraphicArgbColor>805306623</GraphicArgbColor>
+          <GraphicType>FillRectangle</GraphicType>
+          <TextPositionType>Top</TextPositionType>
+          <VisualizationType>TextAndGraphic</VisualizationType>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>11</FontSize>
+          <FontItalic>false</FontItalic>
+          <FontBold>false</FontBold>
+        </Definition>
+        <Definition Name="HFO Ripple">
+          <Guid>167b6fad-f95a-4880-a9c6-968f468a1297</Guid>
+          <Description>HFO Ripple Event Definition</Description>
+          <IsPredefined>true</IsPredefined>
+          <IsDefinitionAdjustable>false</IsDefinitionAdjustable>
+          <CanInsert>true</CanInsert>
+          <CanDelete>true</CanDelete>
+          <CanUpdateText>true</CanUpdateText>
+          <CanUpdatePosition>true</CanUpdatePosition>
+          <CanReassign>false</CanReassign>
+          <InsertionType>ClickAndDrag</InsertionType>
+          <FixedInsertionDuration>PT1S</FixedInsertionDuration>
+          <TextType>FromDefinitionDescription</TextType>
+          <ReferenceType>SingleLine</ReferenceType>
+          <DurationType>Interval</DurationType>
+          <TextArgbColor>4294901760</TextArgbColor>
+          <GraphicArgbColor>822018048</GraphicArgbColor>
+          <GraphicType>FillRectangle</GraphicType>
+          <TextPositionType>Top</TextPositionType>
+          <VisualizationType>TextAndGraphic</VisualizationType>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>11</FontSize>
+          <FontItalic>false</FontItalic>
+          <FontBold>false</FontBold>
+        </Definition>
+        <Definition Name="HFO FastRipple">
+          <Guid>e0a58c9c-b3c0-4a7d-a3c3-d3ed6a57dc3a</Guid>
+          <Description>HFO FastRipple Event Definition</Description>
+          <IsPredefined>true</IsPredefined>
+          <IsDefinitionAdjustable>false</IsDefinitionAdjustable>
+          <CanInsert>true</CanInsert>
+          <CanDelete>true</CanDelete>
+          <CanUpdateText>true</CanUpdateText>
+          <CanUpdatePosition>true</CanUpdatePosition>
+          <CanReassign>false</CanReassign>
+          <InsertionType>ClickAndDrag</InsertionType>
+          <FixedInsertionDuration>PT1S</FixedInsertionDuration>
+          <TextType>FromDefinitionDescription</TextType>
+          <ReferenceType>SingleLine</ReferenceType>
+          <DurationType>Interval</DurationType>
+          <TextArgbColor>4294901760</TextArgbColor>
+          <GraphicArgbColor>805371648</GraphicArgbColor>
+          <GraphicType>FillRectangle</GraphicType>
+          <TextPositionType>Top</TextPositionType>
+          <VisualizationType>TextAndGraphic</VisualizationType>
+          <FontFamily>Segoe UI</FontFamily>
+          <FontSize>11</FontSize>
+          <FontItalic>false</FontItalic>
+          <FontBold>false</FontBold>
+        </Definition>
+      </SubCategory>
+    </Category>
+  </EventTypes>
+  <Events/>
+</EventFile>
