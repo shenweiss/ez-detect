@@ -54,16 +54,16 @@ namespace EzDetectGUI
         }
         public void GetMontages()
         {
-            string pythonPath = "C:/Users/Tomas Pastore/AppData/Local/Programs/Python/Python35/python.exe";
-            string scriptPath = "C:/Program Files (x86)/Micromed/BrainQuick/Plugins/montage_names.py"; //returns comma separated name list
+            string pythonPath = this.App.Python_path;
+            string scriptPath = this.App.Scripts_path + "montage_names.py"; //returns comma separated name list
             string args = this.App.TrcTempPath;
             string script_stream = RunPythonScript(pythonPath, scriptPath, args);
             this.MontageNames = script_stream.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
         public void GetTrcDuration()
         {
-            string pythonPath = "C:/Users/Tomas Pastore/AppData/Local/Programs/Python/Python35/python.exe";
-            string scriptPath = "C:/Program Files (x86)/Micromed/BrainQuick/Plugins/trc_duration.py";
+            string pythonPath = this.App.Python_path;
+            string scriptPath = this.App.Scripts_path + "trc_duration.py"; 
             string args = this.App.TrcTempPath;
             string duration_snds = RunPythonScript(pythonPath, scriptPath, args);
             this.Slider_start.Maximum = double.Parse(duration_snds, System.Globalization.CultureInfo.InvariantCulture);
@@ -279,6 +279,10 @@ namespace EzDetectGUI
             //CloseWithMessage("Calculation has finished. The events will automatically load to Brain Quick if the evt saving path was ok.");
         }
 
-
+        private void Config_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Window1 w1 = new Window1();
+            w1.Show();
+        }
     }
 }

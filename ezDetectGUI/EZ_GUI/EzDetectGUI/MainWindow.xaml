@@ -44,7 +44,7 @@
                 <TextBlock.Effect>
                     <DropShadowEffect/>
                 </TextBlock.Effect><Run Text="Start time (seconds)"/><LineBreak/><Run/></TextBlock>
-            <TextBlock x:Name="CycleTimeLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Height="35" FontSize="18" Margin="402,212,-211,0" Width="207">
+            <TextBlock x:Name="CycleTimeLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Height="35" FontSize="18" Margin="348,151,0,0" Width="207">
                 <TextBlock.Effect>
                     <DropShadowEffect/>
                 </TextBlock.Effect><Run Text="Cycle time (minutes)"/><LineBreak/><Run/></TextBlock>
@@ -66,7 +66,7 @@
             <Button x:Name="SearchEvtBtn" Content="Browse files" HorizontalAlignment="Left" Margin="475,4,0,0" VerticalAlignment="Top" Width="80" Height="23" Click="SearchEvt_Button_Click" RenderTransformOrigin="0.475,0.696"/>
         </Grid>
         <Label x:Name="TitleLabel" Content="EZ-DETECT TESTER" HorizontalAlignment="Left" Margin="40,31,0,0" VerticalAlignment="Top" FontSize="36" Height="62" Width="409" RenderTransformOrigin="0.684,0.654" Grid.ColumnSpan="2"/>
-        <Button x:Name="RunBtn" Content="Run" HorizontalAlignment="Left" Margin="406.294,473,0,0" VerticalAlignment="Top" Width="83" Height="40" Click="RunBtn_Click" FontSize="20" RenderTransformOrigin="0.518,-0.357" Grid.Column="1" Grid.ColumnSpan="5">
+        <Button x:Name="RunBtn" Content="Run" HorizontalAlignment="Left" Margin="83,535,0,0" VerticalAlignment="Top" Width="81" Height="29" Click="RunBtn_Click" FontSize="20" RenderTransformOrigin="0.518,-0.357" Grid.Column="5">
             <Button.LayoutTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleY="1" ScaleX="1"/>
@@ -76,14 +76,24 @@
                 </TransformGroup>
             </Button.LayoutTransform>
         </Button>
-        <ProgressBar x:Name="ProgressBarEZ" Height="15" Margin="93,559,114,0" VerticalAlignment="Top" Width="592" Grid.ColumnSpan="6" Minimum="0" Maximum="100" Value="{Binding WorkerState}" RenderTransformOrigin="0.498,0.4" ></ProgressBar>
-        <CheckBox x:Name="Chk_box_run_parallel" Content="Run in parallel&#xD;&#xA;" Grid.Column="1" HorizontalAlignment="Left" Margin="226,268,0,0" VerticalAlignment="Top" Height="40" Width="186" Checked="Chk_box_run_parallel_Checked" FontSize="18" Grid.ColumnSpan="5" FontWeight="Bold" Unchecked="Chk_box_run_parallel_Unchecked"/>
-        <Slider x:Name="Slider_start" AutoToolTipPlacement="BottomRight" Margin="52,404,143,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Cursor="Hand" Minimum="1" Maximum="100" ValueChanged="Slider_start_ValueChanged"/>
-        <RadioButton GroupName="CT" x:Name="c_time_1_rBtn" Content="5" Grid.Column="1" HorizontalAlignment="Left" Margin="295,371,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_1_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
-        <RadioButton GroupName="CT" x:Name="c_time_2_rBtn" Content="8" Grid.Column="1" HorizontalAlignment="Left" Margin="295,399,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_2_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
-        <RadioButton GroupName="CT" x:Name="c_time_3_rBtn" Content="10" Grid.Column="1" HorizontalAlignment="Left" Margin="295,427,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_3_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
-        <RadioButton GroupName="CT" x:Name="c_time_4_rBtn" Content="15" Grid.Column="1" HorizontalAlignment="Left" Margin="295,455,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_4_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
-        <Slider x:Name="Slider_stop" AutoToolTipPlacement="BottomRight" Margin="52,495,143,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Cursor="Hand" Minimum="1" Maximum="100" ValueChanged="Slider_stop_ValueChanged"/>
+        <ProgressBar x:Name="ProgressBarEZ" Height="15" Margin="52,559,119,0" VerticalAlignment="Top" Width="592" Grid.ColumnSpan="6" Minimum="0" Maximum="100" Value="{Binding WorkerState}" RenderTransformOrigin="0.498,0.4" ></ProgressBar>
+        <CheckBox x:Name="Chk_box_run_parallel" Content="Run in parallel&#xD;&#xA;" Grid.Column="1" HorizontalAlignment="Left" Margin="202,209,0,0" VerticalAlignment="Top" Height="40" Width="186" Checked="Chk_box_run_parallel_Checked" FontSize="18" FontWeight="Bold" Unchecked="Chk_box_run_parallel_Unchecked"/>
+        <Slider x:Name="Slider_start" AutoToolTipPlacement="BottomRight" Margin="40,404,88,0" VerticalAlignment="Top" Grid.ColumnSpan="6" Cursor="Hand" Minimum="1" Maximum="100" ValueChanged="Slider_start_ValueChanged"/>
+        <RadioButton GroupName="CT" x:Name="c_time_1_rBtn" Content="5" Grid.Column="1" HorizontalAlignment="Left" Margin="246,291,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_1_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
+        <RadioButton GroupName="CT" x:Name="c_time_2_rBtn" Content="8" Grid.Column="1" HorizontalAlignment="Left" Margin="246,319,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_2_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False" RenderTransformOrigin="0.5,0.5">
+            <RadioButton.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="4.574"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0.92"/>
+                </TransformGroup>
+            </RadioButton.RenderTransform>
+        </RadioButton>
+        <RadioButton GroupName="CT" x:Name="c_time_3_rBtn" Content="10" Grid.Column="1" HorizontalAlignment="Left" Margin="246,347,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_3_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
+        <RadioButton GroupName="CT" x:Name="c_time_4_rBtn" Content="15" Grid.Column="1" HorizontalAlignment="Left" Margin="246,375,0,0" VerticalAlignment="Top" Height="23" Width="83" Checked="RadioButton_4_Checked" FontSize="18" FontWeight="Bold" IsEnabled="False"/>
+        <Slider x:Name="Slider_stop" AutoToolTipPlacement="BottomRight" Margin="40,495,88,0" VerticalAlignment="Top" Grid.ColumnSpan="6" Cursor="Hand" Minimum="1" Maximum="100" ValueChanged="Slider_stop_ValueChanged"/>
+        <Button x:Name="confg_btn" Content="advanced settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="185" Grid.Column="1" Margin="369,31,0,0" Height="36" Click="Config_Button_Click" Grid.ColumnSpan="5"/>
 
     </Grid>
 </Window>

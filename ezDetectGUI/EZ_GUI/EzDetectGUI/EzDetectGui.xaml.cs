@@ -20,6 +20,21 @@ namespace EzDetectGUI
         public int StopTime { get; set; } = 1;
         public int CycleTime { get; set; } = -1;
 
+        public string Python_path { get; set; } = "C:/Users/Tomas Pastore/AppData/Local/Programs/Python/Python35/python.exe";
+        public string Scripts_path { get; set; } = "C:/Program Files (x86)/Micromed/BrainQuick/Plugins/";
+
+        public string Remote_trc_dir { get; set; } = "/home/tpastore/TRCs/";
+        public string Remote_evt_dir { get; set; } = "/home/tpastore/evts/";
+
+        public string Log_file { get; set; } = "C:/System98/temp/ez_detect_gui_log.txt";
+        public string Command_file { get; set; } = "C:/System98/temp/hfoAnnotatePlugin_SSHcommand";
+        public string TrcTempDir { get; set; } = "C:/System98/temp/";
+
+        public string Hostname { get; set; } = "grito.exp.dc.uba.ar";
+        public string Username { get; set; } = "tpastore";
+        public string Host_conf { get; set; } = "Grito";
+
+
         class Options
         {
             [CommandLine.Option('t', "trc", Required = false,
@@ -58,28 +73,25 @@ namespace EzDetectGUI
         }
 
         public void CopyTrc() {
-            this.TrcTempPath = "C:/System98/temp/" + Path.GetFileName(this.TrcFile); 
+            this.TrcTempPath = this.TrcTempDir + Path.GetFileName(this.TrcFile); 
             System.IO.File.Copy(this.TrcFile, this.TrcTempPath, true);
         }
 
         //TODO 
         //format strings
-        //IMPROVE LOGS
         //Change command .sh to .py
-        //make remote paths configurable, remote server and username
         public void RunEzDetect()
         {
             //Params
-            string remote_trc_path = "/home/tpastore/TRCs/" + Path.GetFileName(this.TrcFile);
-            string remote_xml_path = "/home/tpastore/evts/" + Path.GetFileNameWithoutExtension(this.TrcFile) + ".evt";
+            string remote_trc_path = this.Remote_trc_dir + Path.GetFileName(this.TrcFile);
+            string remote_xml_path = this.Remote_evt_dir + Path.GetFileNameWithoutExtension(this.TrcFile) + ".evt";
 
-            string log_file = "C:/System98/temp/ez_detect_gui_log.txt";
             string createText = "Input trc_path: " + this.TrcFile + Environment.NewLine + 
                                 "Output xml_path: " + this.EvtFile + Environment.NewLine;
-            File.WriteAllText(log_file, createText);
+            File.WriteAllText(this.Log_file, createText);
             //1)Copy TRC to the server
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("Copying TRC to the server..."); }
-            ProcessStartInfo cmdsi_copy = new ProcessStartInfo("pscp", this.TrcTempPath + " " + "tpastore@grito.exp.dc.uba.ar:" + remote_trc_path);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(this.Log_file, true)) { file.WriteLine("Copying TRC to the server..."); }
+            ProcessStartInfo cmdsi_copy = new ProcessStartInfo("pscp", this.TrcTempPath + " " + this.Username + "@"+ this.Hostname + ":" + remote_trc_path);
             Process cmd_copy = Process.Start(cmdsi_copy);
             cmd_copy.WaitForExit(); 
             //var wnd = App.Current.MainWindow as MainWindow;
@@ -88,9 +100,8 @@ namespace EzDetectGUI
 
             //2)Exec through ssh
             //2.1 Create command file
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("montages... "+ this.SuggestedMontage+ " " + this.BpMontage); }
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(this.Log_file, true)) { file.WriteLine("montages... "+ this.SuggestedMontage+ " " + this.BpMontage); }
 
-            string command_file = "C:/System98/temp/hfoAnnotatePlugin_SSHcommand";
             string command = "./hfo_annotate.sh" + " " +
                               remote_trc_path.Trim() + " " +
                               remote_xml_path.Trim() + " " +
@@ -100,10 +111,10 @@ namespace EzDetectGUI
                               this.SuggestedMontage.Trim() + " " + 
                               this.BpMontage.Trim();
 
-            File.WriteAllText(command_file, command);
+            File.WriteAllText(this.Command_file, command);
             //2.2)Run
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("Running HfoAnnotate App..."); }
-            ProcessStartInfo cmdsi_run = new ProcessStartInfo("putty", "-load Grito -m " + command_file);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(this.Log_file, true)) { file.WriteLine("Running HfoAnnotate App..."); }
+            ProcessStartInfo cmdsi_run = new ProcessStartInfo("putty", "-load "+ this.Host_conf + " -m " + this.Command_file);
             Process cmd_run = Process.Start(cmdsi_run);
             cmd_run.WaitForExit();
 
@@ -112,17 +123,16 @@ namespace EzDetectGUI
 
         public void CopyEvt()
         {
-            string log_file = "C:/System98/temp/ez_detect_gui_log.txt";
-            string remote_xml_path = "/home/tpastore/evts/" + Path.GetFileNameWithoutExtension(this.TrcFile) + ".evt";
-            string source_dest = "tpastore@grito.exp.dc.uba.ar:" + remote_xml_path + " " + "\"" + this.EvtFile + "\"";
+            string remote_xml_path = this.Remote_evt_dir + Path.GetFileNameWithoutExtension(this.TrcFile) + ".evt";
+            string source_dest = this.Username + "@" + this.Hostname+ ":" + remote_xml_path + " " + "\"" + this.EvtFile + "\"";
             //3)After execution, fetch evt from remote_xml_path
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("Getting evt from remote server..."); }
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine(source_dest); }
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(this.Log_file, true)) { file.WriteLine("Getting evt from remote server..."); }
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(this.Log_file, true)) { file.WriteLine(source_dest); }
 
             ProcessStartInfo cmdsi_fetch_result = new ProcessStartInfo("pscp", source_dest);
             Process cmd_fetch_result = Process.Start(cmdsi_fetch_result);
             cmd_fetch_result.WaitForExit();
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(log_file, true)) { file.WriteLine("Exiting."); }
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(this.Log_file, true)) { file.WriteLine("Exiting."); }
             //wnd.CloseWithMessage("Calculation has finished. The events will automatically load to Brain Quick if the evt saving path was ok.");
         }
     }
