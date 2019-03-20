@@ -19,7 +19,12 @@ namespace HFO_ENGINE
             EvtPath_txtBx.Text = Program.EvtFile;
         }
 
-        private void ExportEvtBtn_Click(object sender, EventArgs e)
+        private void Evt_save_btn_Click(object sender, EventArgs e)
+        {
+            Program.EvtFile = EvtPath_txtBx.Text;
+        }
+
+        private void exportEVTbtn_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Program.TrcFile))
             {
@@ -29,9 +34,17 @@ namespace HFO_ENGINE
             dialog.ShowDialog();
             EvtPath_txtBx.Text = dialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Program.TrcFile) + ".evt";
         }
-        private void Evt_save_btn_Click(object sender, EventArgs e)
+        private void exportEVTbtn_MouseLeave(object sender, EventArgs e)
         {
-            Program.EvtFile = EvtPath_txtBx.Text;
+            exportEVTbtn.Size = new Size(50, 50);
+            exportEVTbtn.Location = new Point(150, 50);
         }
+        private void exportEVTbtn_MouseEnter(object sender, EventArgs e)
+        {
+            exportEVTbtn.Size = new Size(60, 60);
+            exportEVTbtn.Location = new Point(145, 45);
+        }
+
+       
     }
 }

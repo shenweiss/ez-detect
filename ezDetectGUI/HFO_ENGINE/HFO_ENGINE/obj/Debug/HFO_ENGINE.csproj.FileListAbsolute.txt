@@ -40,7 +40,6 @@ C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\bin\Debug\System.Xml.XPath.
 C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\bin\Debug\CommandLine.dll
 C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\bin\Debug\CommandLine.xml
 C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.csproj.CopyComplete
-C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.csprojAssemblyReference.cache
 C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\bin\Debug\HFO_ENGINE.exe.config
 C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\bin\Debug\HFO_ENGINE.exe
 C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\bin\Debug\HFO_ENGINE.pdb
@@ -74,3 +73,5 @@ C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.c
 C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.exe
 C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.pdb
 C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.Progress.resources
+C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.exe.config
+C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.Progress.resources

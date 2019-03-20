@@ -54,6 +54,7 @@
             this.BtnEEG = new System.Windows.Forms.Button();
             this.StartBtn = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
+            this.icon = new System.Windows.Forms.PictureBox();
             this.BarraTitulo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).BeginInit();
@@ -61,11 +62,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.MenuVertical.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btninicio)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icon)).BeginInit();
             this.SuspendLayout();
             // 
             // BarraTitulo
             // 
             this.BarraTitulo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.BarraTitulo.Controls.Add(this.icon);
             this.BarraTitulo.Controls.Add(this.Title);
             this.BarraTitulo.Controls.Add(this.btnRestaurar);
             this.BarraTitulo.Controls.Add(this.btnMinimizar);
@@ -85,11 +88,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Title.AutoSize = true;
             this.Title.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Title.Font = new System.Drawing.Font("Franklin Gothic Medium", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Title.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.Title.Location = new System.Drawing.Point(290, 10);
+            this.Title.Location = new System.Drawing.Point(285, 11);
             this.Title.Name = "Title";
-            this.Title.Size = new System.Drawing.Size(104, 24);
+            this.Title.Size = new System.Drawing.Size(101, 20);
             this.Title.TabIndex = 0;
             this.Title.Text = "HFO Engine";
             this.Title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -170,13 +173,13 @@
             this.MenuVertical.Dock = System.Windows.Forms.DockStyle.Left;
             this.MenuVertical.Location = new System.Drawing.Point(0, 38);
             this.MenuVertical.Name = "MenuVertical";
-            this.MenuVertical.Size = new System.Drawing.Size(220, 512);
+            this.MenuVertical.Size = new System.Drawing.Size(220, 542);
             this.MenuVertical.TabIndex = 1;
             // 
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel8.Location = new System.Drawing.Point(0, 427);
+            this.panel8.Location = new System.Drawing.Point(0, 460);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(5, 73);
             this.panel8.TabIndex = 15;
@@ -195,17 +198,17 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel2.Location = new System.Drawing.Point(0, 280);
+            this.panel2.Location = new System.Drawing.Point(0, 300);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(5, 40);
+            this.panel2.Size = new System.Drawing.Size(3, 40);
             this.panel2.TabIndex = 4;
             // 
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel7.Location = new System.Drawing.Point(0, 370);
+            this.panel7.Location = new System.Drawing.Point(0, 400);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(5, 40);
+            this.panel7.Size = new System.Drawing.Size(3, 40);
             this.panel7.TabIndex = 14;
             // 
             // BtnAdvancedSettings
@@ -218,7 +221,7 @@
             this.BtnAdvancedSettings.ForeColor = System.Drawing.Color.White;
             this.BtnAdvancedSettings.Image = ((System.Drawing.Image)(resources.GetObject("BtnAdvancedSettings.Image")));
             this.BtnAdvancedSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnAdvancedSettings.Location = new System.Drawing.Point(17, 370);
+            this.BtnAdvancedSettings.Location = new System.Drawing.Point(17, 400);
             this.BtnAdvancedSettings.Name = "BtnAdvancedSettings";
             this.BtnAdvancedSettings.Size = new System.Drawing.Size(203, 40);
             this.BtnAdvancedSettings.TabIndex = 13;
@@ -229,9 +232,9 @@
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel6.Location = new System.Drawing.Point(0, 325);
+            this.panel6.Location = new System.Drawing.Point(0, 350);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(5, 40);
+            this.panel6.Size = new System.Drawing.Size(3, 40);
             this.panel6.TabIndex = 12;
             // 
             // BtnOutput
@@ -244,7 +247,7 @@
             this.BtnOutput.ForeColor = System.Drawing.Color.White;
             this.BtnOutput.Image = ((System.Drawing.Image)(resources.GetObject("BtnOutput.Image")));
             this.BtnOutput.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnOutput.Location = new System.Drawing.Point(15, 325);
+            this.BtnOutput.Location = new System.Drawing.Point(15, 350);
             this.BtnOutput.Name = "BtnOutput";
             this.BtnOutput.Size = new System.Drawing.Size(205, 40);
             this.BtnOutput.TabIndex = 11;
@@ -255,9 +258,9 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel5.Location = new System.Drawing.Point(0, 235);
+            this.panel5.Location = new System.Drawing.Point(0, 250);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(5, 40);
+            this.panel5.Size = new System.Drawing.Size(3, 40);
             this.panel5.TabIndex = 10;
             // 
             // BtnSSH
@@ -270,7 +273,7 @@
             this.BtnSSH.ForeColor = System.Drawing.Color.White;
             this.BtnSSH.Image = ((System.Drawing.Image)(resources.GetObject("BtnSSH.Image")));
             this.BtnSSH.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnSSH.Location = new System.Drawing.Point(15, 280);
+            this.BtnSSH.Location = new System.Drawing.Point(15, 300);
             this.BtnSSH.Name = "BtnSSH";
             this.BtnSSH.Size = new System.Drawing.Size(205, 40);
             this.BtnSSH.TabIndex = 9;
@@ -281,9 +284,9 @@
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel4.Location = new System.Drawing.Point(0, 190);
+            this.panel4.Location = new System.Drawing.Point(0, 200);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(5, 40);
+            this.panel4.Size = new System.Drawing.Size(3, 40);
             this.panel4.TabIndex = 8;
             // 
             // BtnMultiprocessing
@@ -296,20 +299,20 @@
             this.BtnMultiprocessing.ForeColor = System.Drawing.Color.White;
             this.BtnMultiprocessing.Image = ((System.Drawing.Image)(resources.GetObject("BtnMultiprocessing.Image")));
             this.BtnMultiprocessing.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnMultiprocessing.Location = new System.Drawing.Point(15, 235);
+            this.BtnMultiprocessing.Location = new System.Drawing.Point(15, 250);
             this.BtnMultiprocessing.Name = "BtnMultiprocessing";
             this.BtnMultiprocessing.Size = new System.Drawing.Size(205, 40);
             this.BtnMultiprocessing.TabIndex = 7;
-            this.BtnMultiprocessing.Text = "Multiprocessing";
+            this.BtnMultiprocessing.Text = "   Multiprocessing";
             this.BtnMultiprocessing.UseVisualStyleBackColor = false;
             this.BtnMultiprocessing.Click += new System.EventHandler(this.BtnMultiprocessing_Click);
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.panel3.Location = new System.Drawing.Point(0, 145);
+            this.panel3.Location = new System.Drawing.Point(0, 150);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(5, 40);
+            this.panel3.Size = new System.Drawing.Size(3, 40);
             this.panel3.TabIndex = 6;
             // 
             // BtnTimeWindow
@@ -322,7 +325,7 @@
             this.BtnTimeWindow.ForeColor = System.Drawing.Color.White;
             this.BtnTimeWindow.Image = ((System.Drawing.Image)(resources.GetObject("BtnTimeWindow.Image")));
             this.BtnTimeWindow.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnTimeWindow.Location = new System.Drawing.Point(17, 190);
+            this.BtnTimeWindow.Location = new System.Drawing.Point(17, 200);
             this.BtnTimeWindow.Name = "BtnTimeWindow";
             this.BtnTimeWindow.Size = new System.Drawing.Size(203, 40);
             this.BtnTimeWindow.TabIndex = 5;
@@ -340,7 +343,7 @@
             this.BtnMontage.ForeColor = System.Drawing.Color.White;
             this.BtnMontage.Image = ((System.Drawing.Image)(resources.GetObject("BtnMontage.Image")));
             this.BtnMontage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnMontage.Location = new System.Drawing.Point(15, 145);
+            this.BtnMontage.Location = new System.Drawing.Point(15, 150);
             this.BtnMontage.Name = "BtnMontage";
             this.BtnMontage.Size = new System.Drawing.Size(205, 40);
             this.BtnMontage.TabIndex = 3;
@@ -353,7 +356,7 @@
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
             this.panel1.Location = new System.Drawing.Point(0, 100);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(5, 40);
+            this.panel1.Size = new System.Drawing.Size(3, 40);
             this.panel1.TabIndex = 2;
             // 
             // BtnEEG
@@ -384,7 +387,7 @@
             this.StartBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StartBtn.ForeColor = System.Drawing.Color.White;
             this.StartBtn.Image = ((System.Drawing.Image)(resources.GetObject("StartBtn.Image")));
-            this.StartBtn.Location = new System.Drawing.Point(3, 427);
+            this.StartBtn.Location = new System.Drawing.Point(5, 460);
             this.StartBtn.Name = "StartBtn";
             this.StartBtn.Size = new System.Drawing.Size(214, 73);
             this.StartBtn.TabIndex = 16;
@@ -397,14 +400,26 @@
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContenedor.Location = new System.Drawing.Point(220, 38);
             this.panelContenedor.Name = "panelContenedor";
-            this.panelContenedor.Size = new System.Drawing.Size(480, 512);
+            this.panelContenedor.Size = new System.Drawing.Size(480, 542);
             this.panelContenedor.TabIndex = 2;
+            // 
+            // icon
+            // 
+            this.icon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.icon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.icon.Image = ((System.Drawing.Image)(resources.GetObject("icon.Image")));
+            this.icon.Location = new System.Drawing.Point(5, 6);
+            this.icon.Name = "icon";
+            this.icon.Size = new System.Drawing.Size(24, 24);
+            this.icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.icon.TabIndex = 4;
+            this.icon.TabStop = false;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(700, 550);
+            this.ClientSize = new System.Drawing.Size(700, 580);
             this.Controls.Add(this.panelContenedor);
             this.Controls.Add(this.MenuVertical);
             this.Controls.Add(this.BarraTitulo);
@@ -420,6 +435,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).EndInit();
             this.MenuVertical.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.btninicio)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -451,6 +467,7 @@
         private System.Windows.Forms.Button StartBtn;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Label Title;
+        private System.Windows.Forms.PictureBox icon;
     }
 }
 

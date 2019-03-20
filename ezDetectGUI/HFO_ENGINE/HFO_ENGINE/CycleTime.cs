@@ -97,6 +97,11 @@ namespace HFO_ENGINE
             }
 
         }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 
 

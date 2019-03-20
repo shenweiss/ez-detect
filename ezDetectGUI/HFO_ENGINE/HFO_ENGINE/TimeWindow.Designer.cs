@@ -89,10 +89,11 @@
             // TimeWindow_save_btn
             // 
             this.TimeWindow_save_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.TimeWindow_save_btn.FlatAppearance.BorderSize = 2;
             this.TimeWindow_save_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.TimeWindow_save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TimeWindow_save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.TimeWindow_save_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TimeWindow_save_btn.Location = new System.Drawing.Point(275, 215);
+            this.TimeWindow_save_btn.Location = new System.Drawing.Point(278, 286);
             this.TimeWindow_save_btn.Name = "TimeWindow_save_btn";
             this.TimeWindow_save_btn.Size = new System.Drawing.Size(82, 34);
             this.TimeWindow_save_btn.TabIndex = 8;
@@ -107,9 +108,9 @@
             this.panel2.Controls.Add(this.Stp_time_txt);
             this.panel2.Controls.Add(this.Str_time_txt);
             this.panel2.Controls.Add(this.StopTimeLabel);
-            this.panel2.Location = new System.Drawing.Point(55, 120);
+            this.panel2.Location = new System.Drawing.Point(55, 150);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(360, 250);
+            this.panel2.Size = new System.Drawing.Size(360, 320);
             this.panel2.TabIndex = 11;
             // 
             // TimeWindow

@@ -18,7 +18,13 @@ namespace HFO_ENGINE
             TrcPath_txtBx.Text = Program.TrcFile;
         }
 
-        private void ImportTRCbtn_Click(object sender, EventArgs e)
+        private void EEG_save_btn_Click(object sender, EventArgs e)
+        {
+            Program.TrcFile = (string)this.TrcPath_txtBx.Text;
+            Program.load_trc_data();
+        }
+
+        private void importBtn_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
@@ -34,12 +40,19 @@ namespace HFO_ENGINE
             {
                 TrcPath_txtBx.Text = openFileDialog1.FileName;
             }
+
         }
 
-        private void EEG_save_btn_Click(object sender, EventArgs e)
+        private void importTRCbtn_MouseLeave(object sender, EventArgs e)
         {
-            Program.TrcFile = (string)this.TrcPath_txtBx.Text;
-            Program.load_trc_data();
+            importTRCbtn.Size = new Size(50, 50);
+            importTRCbtn.Location = new Point(150, 50);
+        }
+
+        private void importTRCbtn_MouseEnter(object sender, EventArgs e)
+        {
+            importTRCbtn.Size = new Size(60, 60);
+            importTRCbtn.Location = new Point(145, 45);
         }
 
     }

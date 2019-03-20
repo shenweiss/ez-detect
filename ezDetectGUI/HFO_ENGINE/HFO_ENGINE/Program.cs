@@ -28,11 +28,11 @@ namespace HFO_ENGINE
 
         public static string EvtFile { get; set; } = "";
 
-        public static string Python_path { get; set; } = "C:/Users/Tomas Pastore/AppData/Local/Programs/Python/Python35/python.exe";
-        public static string Scripts_path { get; set; } = "C:/Users/Tomas Pastore/source/repos/HFO_ENGINE/";
-        public static string Log_file { get; set; } = "C:/Users/Tomas Pastore/source/repos/HFO_ENGINE/temp/ez_detect_gui_log.txt";
-        public static string Command_file { get; set; } = "C:/Users/Tomas Pastore/source/repos/HFO_ENGINE/temp/hfoAnnotatePlugin_SSHcommand";
-        public static string TrcTempDir { get; set; } = "C:/Users/Tomas Pastore/source/repos/HFO_ENGINE/temp/";
+        public static string Python_path { get; set; } = "C:/Users/tpastore/AppData/Local/Programs/Python/Python35/python.exe";
+        public static string Scripts_path { get; set; } = "C:/Users/tpastore/source/repos/HFO_ENGINE/scripts/";
+        public static string Log_file { get; set; } = "C:/Users/tpastore/source/repos/HFO_ENGINE/temp/ez_detect_gui_log.txt";
+        public static string Command_file { get; set; } = "C:/Users/tpastore/source/repos/HFO_ENGINE/temp/hfoAnnotatePlugin_SSHcommand";
+        public static string TrcTempDir { get; set; } = "C:/Users/tpastore/source/repos/HFO_ENGINE/temp/";
         public static string TrcTempPath { get; set; } = "";
         public static int Trc_duration { get; set; } = 0;
 

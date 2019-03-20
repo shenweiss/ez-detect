@@ -62,6 +62,9 @@
             // 
             // ComboBox_suggested_montage
             // 
+            this.ComboBox_suggested_montage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            this.ComboBox_suggested_montage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ComboBox_suggested_montage.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.ComboBox_suggested_montage.FormattingEnabled = true;
             this.ComboBox_suggested_montage.Location = new System.Drawing.Point(10, 50);
             this.ComboBox_suggested_montage.Name = "ComboBox_suggested_montage";
@@ -70,6 +73,9 @@
             // 
             // ComboBox_bipolar_montage
             // 
+            this.ComboBox_bipolar_montage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            this.ComboBox_bipolar_montage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ComboBox_bipolar_montage.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.ComboBox_bipolar_montage.FormattingEnabled = true;
             this.ComboBox_bipolar_montage.Location = new System.Drawing.Point(10, 153);
             this.ComboBox_bipolar_montage.Name = "ComboBox_bipolar_montage";
@@ -91,10 +97,11 @@
             // Montage_save_btn
             // 
             this.Montage_save_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Montage_save_btn.FlatAppearance.BorderSize = 2;
             this.Montage_save_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Montage_save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Montage_save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.Montage_save_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Montage_save_btn.Location = new System.Drawing.Point(275, 215);
+            this.Montage_save_btn.Location = new System.Drawing.Point(278, 286);
             this.Montage_save_btn.Name = "Montage_save_btn";
             this.Montage_save_btn.Size = new System.Drawing.Size(82, 34);
             this.Montage_save_btn.TabIndex = 6;
@@ -109,9 +116,9 @@
             this.panel2.Controls.Add(this.ComboBox_bipolar_montage);
             this.panel2.Controls.Add(this.SuggestedMontageLabel);
             this.panel2.Controls.Add(this.ComboBox_suggested_montage);
-            this.panel2.Location = new System.Drawing.Point(55, 120);
+            this.panel2.Location = new System.Drawing.Point(55, 150);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(360, 250);
+            this.panel2.Size = new System.Drawing.Size(360, 320);
             this.panel2.TabIndex = 10;
             // 
             // Montage
