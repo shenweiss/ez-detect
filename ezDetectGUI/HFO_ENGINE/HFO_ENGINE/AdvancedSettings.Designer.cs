@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedSettings));
             this.AdvancedSettings_save_btn = new System.Windows.Forms.Button();
             this.TrcTempDirLabel = new System.Windows.Forms.Label();
             this.CommandFileLabel = new System.Windows.Forms.Label();
@@ -36,6 +37,11 @@
             this.PythonPathLabel = new System.Windows.Forms.Label();
             this.Advanced_settings_title = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.line = new System.Windows.Forms.Label();
             this.PythonPath_txt = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -46,12 +52,11 @@
             this.CommandFile_txt = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.TrcTemp_txt = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
+            this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // AdvancedSettings_save_btn
@@ -75,13 +80,12 @@
             this.TrcTempDirLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TrcTempDirLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.TrcTempDirLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TrcTempDirLabel.Location = new System.Drawing.Point(2, 160);
+            this.TrcTempDirLabel.Location = new System.Drawing.Point(2, 189);
             this.TrcTempDirLabel.Name = "TrcTempDirLabel";
-            this.TrcTempDirLabel.Size = new System.Drawing.Size(104, 25);
+            this.TrcTempDirLabel.Size = new System.Drawing.Size(112, 25);
             this.TrcTempDirLabel.TabIndex = 27;
             this.TrcTempDirLabel.Text = "TRC temp dir:";
-            this.TrcTempDirLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.TrcTempDirLabel.Click += new System.EventHandler(this.TrcTempDirLabel_Click);
+            this.TrcTempDirLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // CommandFileLabel
             // 
@@ -89,12 +93,12 @@
             this.CommandFileLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CommandFileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.CommandFileLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.CommandFileLabel.Location = new System.Drawing.Point(3, 119);
+            this.CommandFileLabel.Location = new System.Drawing.Point(3, 148);
             this.CommandFileLabel.Name = "CommandFileLabel";
-            this.CommandFileLabel.Size = new System.Drawing.Size(132, 24);
+            this.CommandFileLabel.Size = new System.Drawing.Size(110, 24);
             this.CommandFileLabel.TabIndex = 24;
-            this.CommandFileLabel.Text = "Command file path:";
-            this.CommandFileLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.CommandFileLabel.Text = "Command file:";
+            this.CommandFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LogfileLabel
             // 
@@ -102,12 +106,12 @@
             this.LogfileLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LogfileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.LogfileLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.LogfileLabel.Location = new System.Drawing.Point(3, 78);
+            this.LogfileLabel.Location = new System.Drawing.Point(3, 107);
             this.LogfileLabel.Name = "LogfileLabel";
-            this.LogfileLabel.Size = new System.Drawing.Size(103, 23);
+            this.LogfileLabel.Size = new System.Drawing.Size(111, 23);
             this.LogfileLabel.TabIndex = 22;
             this.LogfileLabel.Text = "Log file:";
-            this.LogfileLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.LogfileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ScriptsPathLabel
             // 
@@ -115,13 +119,12 @@
             this.ScriptsPathLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ScriptsPathLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.ScriptsPathLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ScriptsPathLabel.Location = new System.Drawing.Point(2, 38);
+            this.ScriptsPathLabel.Location = new System.Drawing.Point(2, 59);
             this.ScriptsPathLabel.Name = "ScriptsPathLabel";
-            this.ScriptsPathLabel.Size = new System.Drawing.Size(104, 21);
+            this.ScriptsPathLabel.Size = new System.Drawing.Size(112, 31);
             this.ScriptsPathLabel.TabIndex = 20;
             this.ScriptsPathLabel.Text = "Scripts path:";
-            this.ScriptsPathLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.ScriptsPathLabel.Click += new System.EventHandler(this.ScriptsPathLabel_Click);
+            this.ScriptsPathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // PythonPathLabel
             // 
@@ -129,20 +132,20 @@
             this.PythonPathLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PythonPathLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.PythonPathLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.PythonPathLabel.Location = new System.Drawing.Point(3, 2);
+            this.PythonPathLabel.Location = new System.Drawing.Point(2, 26);
             this.PythonPathLabel.Name = "PythonPathLabel";
-            this.PythonPathLabel.Size = new System.Drawing.Size(103, 15);
+            this.PythonPathLabel.Size = new System.Drawing.Size(111, 22);
             this.PythonPathLabel.TabIndex = 18;
             this.PythonPathLabel.Text = "Python path:";
-            this.PythonPathLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.PythonPathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Advanced_settings_title
             // 
-            this.Advanced_settings_title.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Advanced_settings_title.Font = new System.Drawing.Font("Arial", 22F);
             this.Advanced_settings_title.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Advanced_settings_title.Location = new System.Drawing.Point(45, 55);
+            this.Advanced_settings_title.Location = new System.Drawing.Point(-5, 0);
             this.Advanced_settings_title.Name = "Advanced_settings_title";
-            this.Advanced_settings_title.Size = new System.Drawing.Size(258, 40);
+            this.Advanced_settings_title.Size = new System.Drawing.Size(269, 40);
             this.Advanced_settings_title.TabIndex = 29;
             this.Advanced_settings_title.Text = "Advanced Settings";
             // 
@@ -169,21 +172,65 @@
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.TrcTemp_txt);
             this.panel1.Controls.Add(this.CommandFileLabel);
-            this.panel1.Location = new System.Drawing.Point(55, 150);
+            this.panel1.Location = new System.Drawing.Point(60, 166);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(360, 320);
             this.panel1.TabIndex = 30;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // label5
+            // 
+            this.label5.BackColor = System.Drawing.Color.White;
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label5.Location = new System.Drawing.Point(3, 51);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(110, 2);
+            this.label5.TabIndex = 41;
+            // 
+            // label6
+            // 
+            this.label6.BackColor = System.Drawing.Color.White;
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label6.Location = new System.Drawing.Point(3, 90);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(110, 2);
+            this.label6.TabIndex = 42;
+            // 
+            // label7
+            // 
+            this.label7.BackColor = System.Drawing.Color.White;
+            this.label7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label7.Location = new System.Drawing.Point(3, 132);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(110, 2);
+            this.label7.TabIndex = 43;
+            // 
+            // label8
+            // 
+            this.label8.BackColor = System.Drawing.Color.White;
+            this.label8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label8.Location = new System.Drawing.Point(3, 174);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(110, 2);
+            this.label8.TabIndex = 44;
+            // 
+            // label9
+            // 
+            this.label9.BackColor = System.Drawing.Color.White;
+            this.label9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label9.Location = new System.Drawing.Point(3, 216);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(110, 2);
+            this.label9.TabIndex = 45;
+            // 
             // line
             // 
             this.line.BackColor = System.Drawing.Color.White;
             this.line.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.line.Location = new System.Drawing.Point(128, 22);
+            this.line.Location = new System.Drawing.Point(128, 51);
             this.line.Name = "line";
             this.line.Size = new System.Drawing.Size(232, 2);
             this.line.TabIndex = 32;
-            this.line.Click += new System.EventHandler(this.line_Click);
             // 
             // PythonPath_txt
             // 
@@ -192,7 +239,7 @@
             this.PythonPath_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.PythonPath_txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.PythonPath_txt.ForeColor = System.Drawing.SystemColors.Window;
-            this.PythonPath_txt.Location = new System.Drawing.Point(128, 0);
+            this.PythonPath_txt.Location = new System.Drawing.Point(128, 26);
             this.PythonPath_txt.Name = "PythonPath_txt";
             this.PythonPath_txt.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.PythonPath_txt.Size = new System.Drawing.Size(232, 17);
@@ -202,11 +249,10 @@
             // 
             this.label1.BackColor = System.Drawing.Color.White;
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(128, 64);
+            this.label1.Location = new System.Drawing.Point(128, 90);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(232, 2);
             this.label1.TabIndex = 34;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // ScriptsPath_txt
             // 
@@ -215,7 +261,7 @@
             this.ScriptsPath_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ScriptsPath_txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.ScriptsPath_txt.ForeColor = System.Drawing.SystemColors.Window;
-            this.ScriptsPath_txt.Location = new System.Drawing.Point(128, 42);
+            this.ScriptsPath_txt.Location = new System.Drawing.Point(128, 68);
             this.ScriptsPath_txt.Name = "ScriptsPath_txt";
             this.ScriptsPath_txt.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.ScriptsPath_txt.Size = new System.Drawing.Size(232, 17);
@@ -225,11 +271,10 @@
             // 
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(128, 106);
+            this.label2.Location = new System.Drawing.Point(128, 132);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(232, 2);
             this.label2.TabIndex = 36;
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // Logfile_txt
             // 
@@ -238,7 +283,7 @@
             this.Logfile_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Logfile_txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.Logfile_txt.ForeColor = System.Drawing.SystemColors.Window;
-            this.Logfile_txt.Location = new System.Drawing.Point(128, 84);
+            this.Logfile_txt.Location = new System.Drawing.Point(128, 110);
             this.Logfile_txt.Name = "Logfile_txt";
             this.Logfile_txt.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.Logfile_txt.Size = new System.Drawing.Size(232, 17);
@@ -248,11 +293,10 @@
             // 
             this.label3.BackColor = System.Drawing.Color.White;
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(131, 148);
+            this.label3.Location = new System.Drawing.Point(128, 174);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(229, 2);
+            this.label3.Size = new System.Drawing.Size(232, 2);
             this.label3.TabIndex = 38;
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // CommandFile_txt
             // 
@@ -261,17 +305,17 @@
             this.CommandFile_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.CommandFile_txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.CommandFile_txt.ForeColor = System.Drawing.SystemColors.Window;
-            this.CommandFile_txt.Location = new System.Drawing.Point(131, 126);
+            this.CommandFile_txt.Location = new System.Drawing.Point(149, 151);
             this.CommandFile_txt.Name = "CommandFile_txt";
             this.CommandFile_txt.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.CommandFile_txt.Size = new System.Drawing.Size(229, 17);
+            this.CommandFile_txt.Size = new System.Drawing.Size(211, 17);
             this.CommandFile_txt.TabIndex = 37;
             // 
             // label4
             // 
             this.label4.BackColor = System.Drawing.Color.White;
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(128, 190);
+            this.label4.Location = new System.Drawing.Point(128, 216);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(232, 2);
             this.label4.TabIndex = 40;
@@ -283,61 +327,32 @@
             this.TrcTemp_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TrcTemp_txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.TrcTemp_txt.ForeColor = System.Drawing.SystemColors.Window;
-            this.TrcTemp_txt.Location = new System.Drawing.Point(128, 168);
+            this.TrcTemp_txt.Location = new System.Drawing.Point(128, 194);
             this.TrcTemp_txt.Name = "TrcTemp_txt";
             this.TrcTemp_txt.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.TrcTemp_txt.Size = new System.Drawing.Size(232, 17);
             this.TrcTemp_txt.TabIndex = 39;
             // 
-            // label5
+            // panel4
             // 
-            this.label5.BackColor = System.Drawing.Color.White;
-            this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label5.Location = new System.Drawing.Point(3, 22);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 2);
-            this.label5.TabIndex = 41;
-            this.label5.Click += new System.EventHandler(this.label5_Click);
+            this.panel4.Controls.Add(this.Advanced_settings_title);
+            this.panel4.Controls.Add(this.pictureBox1);
+            this.panel4.Location = new System.Drawing.Point(31, 54);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(384, 95);
+            this.panel4.TabIndex = 31;
             // 
-            // label6
+            // pictureBox1
             // 
-            this.label6.BackColor = System.Drawing.Color.White;
-            this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label6.Location = new System.Drawing.Point(3, 64);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(110, 2);
-            this.label6.TabIndex = 42;
-            this.label6.Click += new System.EventHandler(this.label6_Click);
-            // 
-            // label7
-            // 
-            this.label7.BackColor = System.Drawing.Color.White;
-            this.label7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label7.Location = new System.Drawing.Point(3, 106);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(110, 2);
-            this.label7.TabIndex = 43;
-            this.label7.Click += new System.EventHandler(this.label7_Click);
-            // 
-            // label8
-            // 
-            this.label8.BackColor = System.Drawing.Color.White;
-            this.label8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label8.Location = new System.Drawing.Point(3, 148);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(110, 2);
-            this.label8.TabIndex = 44;
-            this.label8.Click += new System.EventHandler(this.label8_Click);
-            // 
-            // label9
-            // 
-            this.label9.BackColor = System.Drawing.Color.White;
-            this.label9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label9.Location = new System.Drawing.Point(3, 190);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(110, 2);
-            this.label9.TabIndex = 45;
-            this.label9.Click += new System.EventHandler(this.label9_Click);
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = null;
+            this.pictureBox1.Location = new System.Drawing.Point(289, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(95, 95);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
             // 
             // AdvancedSettings
             // 
@@ -346,13 +361,15 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
             this.ClientSize = new System.Drawing.Size(480, 512);
-            this.Controls.Add(this.Advanced_settings_title);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "AdvancedSettings";
             this.Text = "AdvancedSettings";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -382,5 +399,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

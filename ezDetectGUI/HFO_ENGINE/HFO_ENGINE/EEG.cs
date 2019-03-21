@@ -55,5 +55,14 @@ namespace HFO_ENGINE
             importTRCbtn.Location = new Point(145, 45);
         }
 
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EEG_title_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

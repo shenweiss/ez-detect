@@ -163,6 +163,7 @@ namespace HFO_ENGINE
                             Program.RunEzDetect();
                             Program.CopyEvt();
                             this.UpdateProgress(100);
+                            Program.ProgressScreen.Stop_timer();
                             Program.IsAnalizing = false;
                         };
                         _bgWorker.RunWorkerAsync();
@@ -176,5 +177,11 @@ namespace HFO_ENGINE
             }
 
         }
+
+        private void Stack_menu_btn_Click(object sender, EventArgs e)
+        {
+            Stack_menu.Visible = !Stack_menu.Visible;
+        }
+        
     }
 }

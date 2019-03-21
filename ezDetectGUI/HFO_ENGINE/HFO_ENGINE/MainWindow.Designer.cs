@@ -30,12 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.BarraTitulo = new System.Windows.Forms.Panel();
+            this.Stack_menu_btn = new System.Windows.Forms.PictureBox();
             this.Title = new System.Windows.Forms.Label();
             this.btnRestaurar = new System.Windows.Forms.PictureBox();
             this.btnMinimizar = new System.Windows.Forms.PictureBox();
             this.btnMaximizar = new System.Windows.Forms.PictureBox();
             this.btnCerrar = new System.Windows.Forms.PictureBox();
             this.MenuVertical = new System.Windows.Forms.Panel();
+            this.Stack_menu = new System.Windows.Forms.Panel();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.Convert_btn = new System.Windows.Forms.Button();
             this.panel8 = new System.Windows.Forms.Panel();
             this.btninicio = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -54,21 +58,21 @@
             this.BtnEEG = new System.Windows.Forms.Button();
             this.StartBtn = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            this.icon = new System.Windows.Forms.PictureBox();
             this.BarraTitulo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Stack_menu_btn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.MenuVertical.SuspendLayout();
+            this.Stack_menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btninicio)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icon)).BeginInit();
             this.SuspendLayout();
             // 
             // BarraTitulo
             // 
             this.BarraTitulo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.BarraTitulo.Controls.Add(this.icon);
+            this.BarraTitulo.Controls.Add(this.Stack_menu_btn);
             this.BarraTitulo.Controls.Add(this.Title);
             this.BarraTitulo.Controls.Add(this.btnRestaurar);
             this.BarraTitulo.Controls.Add(this.btnMinimizar);
@@ -80,6 +84,20 @@
             this.BarraTitulo.Size = new System.Drawing.Size(700, 38);
             this.BarraTitulo.TabIndex = 0;
             this.BarraTitulo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BarraTitulo_MouseDown);
+            // 
+            // Stack_menu_btn
+            // 
+            this.Stack_menu_btn.BackColor = System.Drawing.Color.Transparent;
+            this.Stack_menu_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Stack_menu_btn.Image = ((System.Drawing.Image)(resources.GetObject("Stack_menu_btn.Image")));
+            this.Stack_menu_btn.InitialImage = null;
+            this.Stack_menu_btn.Location = new System.Drawing.Point(5, 3);
+            this.Stack_menu_btn.Name = "Stack_menu_btn";
+            this.Stack_menu_btn.Size = new System.Drawing.Size(35, 32);
+            this.Stack_menu_btn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Stack_menu_btn.TabIndex = 10;
+            this.Stack_menu_btn.TabStop = false;
+            this.Stack_menu_btn.Click += new System.EventHandler(this.Stack_menu_btn_Click);
             // 
             // Title
             // 
@@ -153,6 +171,7 @@
             // MenuVertical
             // 
             this.MenuVertical.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(40)))));
+            this.MenuVertical.Controls.Add(this.Stack_menu);
             this.MenuVertical.Controls.Add(this.panel8);
             this.MenuVertical.Controls.Add(this.btninicio);
             this.MenuVertical.Controls.Add(this.panel2);
@@ -175,6 +194,46 @@
             this.MenuVertical.Name = "MenuVertical";
             this.MenuVertical.Size = new System.Drawing.Size(220, 542);
             this.MenuVertical.TabIndex = 1;
+            // 
+            // Stack_menu
+            // 
+            this.Stack_menu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(45)))), ((int)(((byte)(60)))));
+            this.Stack_menu.Controls.Add(this.panel9);
+            this.Stack_menu.Controls.Add(this.Convert_btn);
+            this.Stack_menu.Location = new System.Drawing.Point(0, 0);
+            this.Stack_menu.Name = "Stack_menu";
+            this.Stack_menu.Size = new System.Drawing.Size(220, 80);
+            this.Stack_menu.TabIndex = 0;
+            this.Stack_menu.Visible = false;
+            // 
+            // panel9
+            // 
+            this.panel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+            this.panel9.Location = new System.Drawing.Point(0, 0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(3, 55);
+            this.panel9.TabIndex = 3;
+            // 
+            // Convert_btn
+            // 
+            this.Convert_btn.BackColor = System.Drawing.Color.Transparent;
+            this.Convert_btn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Convert_btn.BackgroundImage")));
+            this.Convert_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Convert_btn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Convert_btn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Convert_btn.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.Convert_btn.FlatAppearance.BorderSize = 0;
+            this.Convert_btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Teal;
+            this.Convert_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Convert_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Convert_btn.ForeColor = System.Drawing.Color.White;
+            this.Convert_btn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Convert_btn.Location = new System.Drawing.Point(0, 0);
+            this.Convert_btn.Name = "Convert_btn";
+            this.Convert_btn.Size = new System.Drawing.Size(220, 55);
+            this.Convert_btn.TabIndex = 17;
+            this.Convert_btn.Text = "EDF to TRC conversor";
+            this.Convert_btn.UseVisualStyleBackColor = false;
             // 
             // panel8
             // 
@@ -403,18 +462,6 @@
             this.panelContenedor.Size = new System.Drawing.Size(480, 542);
             this.panelContenedor.TabIndex = 2;
             // 
-            // icon
-            // 
-            this.icon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.icon.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.icon.Image = ((System.Drawing.Image)(resources.GetObject("icon.Image")));
-            this.icon.Location = new System.Drawing.Point(5, 6);
-            this.icon.Name = "icon";
-            this.icon.Size = new System.Drawing.Size(24, 24);
-            this.icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.icon.TabIndex = 4;
-            this.icon.TabStop = false;
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -429,13 +476,14 @@
             this.Text = "Form1";
             this.BarraTitulo.ResumeLayout(false);
             this.BarraTitulo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Stack_menu_btn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).EndInit();
             this.MenuVertical.ResumeLayout(false);
+            this.Stack_menu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.btninicio)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -467,7 +515,10 @@
         private System.Windows.Forms.Button StartBtn;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Label Title;
-        private System.Windows.Forms.PictureBox icon;
+        private System.Windows.Forms.PictureBox Stack_menu_btn;
+        private System.Windows.Forms.Panel Stack_menu;
+        private System.Windows.Forms.Button Convert_btn;
+        private System.Windows.Forms.Panel panel9;
     }
 }
 

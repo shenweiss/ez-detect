@@ -45,6 +45,9 @@ namespace HFO_ENGINE
             exportEVTbtn.Location = new Point(145, 45);
         }
 
-       
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

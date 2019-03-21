@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EEG));
             this.trcImportLabel = new System.Windows.Forms.Label();
-            this.TrcPath_txtBx = new System.Windows.Forms.TextBox();
             this.EEG_title = new System.Windows.Forms.Label();
             this.EEG_save_btn = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -38,6 +37,7 @@
             this.line = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.TrcPath_txtBx = new System.Windows.Forms.TextBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.importTRCbtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -56,31 +56,18 @@
             this.trcImportLabel.TabIndex = 1;
             this.trcImportLabel.Text = "Import TRC file";
             // 
-            // TrcPath_txtBx
-            // 
-            this.TrcPath_txtBx.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.TrcPath_txtBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
-            this.TrcPath_txtBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TrcPath_txtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.TrcPath_txtBx.ForeColor = System.Drawing.SystemColors.Window;
-            this.TrcPath_txtBx.Location = new System.Drawing.Point(8, 150);
-            this.TrcPath_txtBx.Name = "TrcPath_txtBx";
-            this.TrcPath_txtBx.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.TrcPath_txtBx.Size = new System.Drawing.Size(350, 17);
-            this.TrcPath_txtBx.TabIndex = 2;
-            this.TrcPath_txtBx.UseWaitCursor = true;
-            // 
             // EEG_title
             // 
             this.EEG_title.BackColor = System.Drawing.Color.Transparent;
             this.EEG_title.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.EEG_title.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EEG_title.Font = new System.Drawing.Font("Arial", 22F);
             this.EEG_title.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.EEG_title.Location = new System.Drawing.Point(-3, 0);
+            this.EEG_title.Location = new System.Drawing.Point(0, 0);
             this.EEG_title.Name = "EEG_title";
-            this.EEG_title.Size = new System.Drawing.Size(148, 37);
+            this.EEG_title.Size = new System.Drawing.Size(230, 37);
             this.EEG_title.TabIndex = 4;
             this.EEG_title.Text = "Data source";
+            this.EEG_title.Click += new System.EventHandler(this.EEG_title_Click);
             // 
             // EEG_save_btn
             // 
@@ -89,21 +76,22 @@
             this.EEG_save_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EEG_save_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.EEG_save_btn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.EEG_save_btn.Location = new System.Drawing.Point(278, 286);
+            this.EEG_save_btn.Location = new System.Drawing.Point(280, 285);
             this.EEG_save_btn.Name = "EEG_save_btn";
-            this.EEG_save_btn.Size = new System.Drawing.Size(82, 34);
+            this.EEG_save_btn.Size = new System.Drawing.Size(80, 35);
             this.EEG_save_btn.TabIndex = 5;
             this.EEG_save_btn.Text = "Save";
             this.EEG_save_btn.UseVisualStyleBackColor = true;
+            this.EEG_save_btn.Click += new System.EventHandler(this.EEG_save_btn_Click);
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.EEG_save_btn);
+            this.panel2.Controls.Add(this.TrcPath_txtBx);
             this.panel2.Controls.Add(this.importTRCbtn);
             this.panel2.Controls.Add(this.line);
             this.panel2.Controls.Add(this.trcImportLabel);
-            this.panel2.Controls.Add(this.EEG_save_btn);
-            this.panel2.Controls.Add(this.TrcPath_txtBx);
-            this.panel2.Location = new System.Drawing.Point(55, 150);
+            this.panel2.Location = new System.Drawing.Point(60, 166);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(360, 320);
             this.panel2.TabIndex = 9;
@@ -137,21 +125,38 @@
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(270, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(295, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(95, 95);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.EEG_title);
             this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Location = new System.Drawing.Point(50, 55);
+            this.panel1.Location = new System.Drawing.Point(30, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(365, 95);
+            this.panel1.Size = new System.Drawing.Size(390, 95);
             this.panel1.TabIndex = 10;
+            // 
+            // TrcPath_txtBx
+            // 
+            this.TrcPath_txtBx.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.TrcPath_txtBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
+            this.TrcPath_txtBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TrcPath_txtBx.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.TrcPath_txtBx.Enabled = false;
+            this.TrcPath_txtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.TrcPath_txtBx.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.TrcPath_txtBx.HideSelection = false;
+            this.TrcPath_txtBx.Location = new System.Drawing.Point(8, 150);
+            this.TrcPath_txtBx.Name = "TrcPath_txtBx";
+            this.TrcPath_txtBx.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.TrcPath_txtBx.Size = new System.Drawing.Size(350, 17);
+            this.TrcPath_txtBx.TabIndex = 13;
             // 
             // EEG
             // 
@@ -181,10 +186,10 @@
         private System.Windows.Forms.Label EEG_title;
         private System.Windows.Forms.Button EEG_save_btn;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox TrcPath_txtBx;
         private System.Windows.Forms.Label line;
         private System.Windows.Forms.PictureBox importTRCbtn;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox TrcPath_txtBx;
     }
 }

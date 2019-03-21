@@ -33,11 +33,15 @@
             this.EVT_title = new System.Windows.Forms.Label();
             this.EVTExportLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.exportEVTbtn = new System.Windows.Forms.PictureBox();
             this.line = new System.Windows.Forms.Label();
             this.EvtPath_txtBx = new System.Windows.Forms.TextBox();
+            this.exportEVTbtn = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.exportEVTbtn)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // Evt_save_btn
@@ -61,7 +65,7 @@
             this.EVT_title.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EVT_title.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.EVT_title.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.EVT_title.Location = new System.Drawing.Point(45, 55);
+            this.EVT_title.Location = new System.Drawing.Point(0, 0);
             this.EVT_title.Name = "EVT_title";
             this.EVT_title.Size = new System.Drawing.Size(148, 37);
             this.EVT_title.TabIndex = 9;
@@ -81,15 +85,40 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.Evt_save_btn);
             this.panel2.Controls.Add(this.line);
             this.panel2.Controls.Add(this.EvtPath_txtBx);
             this.panel2.Controls.Add(this.exportEVTbtn);
-            this.panel2.Controls.Add(this.Evt_save_btn);
             this.panel2.Controls.Add(this.EVTExportLabel);
-            this.panel2.Location = new System.Drawing.Point(55, 150);
+            this.panel2.Location = new System.Drawing.Point(60, 166);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(360, 320);
             this.panel2.TabIndex = 11;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // line
+            // 
+            this.line.BackColor = System.Drawing.Color.White;
+            this.line.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.line.Location = new System.Drawing.Point(5, 172);
+            this.line.Name = "line";
+            this.line.Size = new System.Drawing.Size(350, 2);
+            this.line.TabIndex = 13;
+            // 
+            // EvtPath_txtBx
+            // 
+            this.EvtPath_txtBx.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.EvtPath_txtBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
+            this.EvtPath_txtBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.EvtPath_txtBx.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.EvtPath_txtBx.Enabled = false;
+            this.EvtPath_txtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.EvtPath_txtBx.ForeColor = System.Drawing.SystemColors.Window;
+            this.EvtPath_txtBx.Location = new System.Drawing.Point(5, 147);
+            this.EvtPath_txtBx.Name = "EvtPath_txtBx";
+            this.EvtPath_txtBx.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.EvtPath_txtBx.Size = new System.Drawing.Size(350, 17);
+            this.EvtPath_txtBx.TabIndex = 12;
             // 
             // exportEVTbtn
             // 
@@ -106,27 +135,26 @@
             this.exportEVTbtn.MouseEnter += new System.EventHandler(this.exportEVTbtn_MouseEnter);
             this.exportEVTbtn.MouseLeave += new System.EventHandler(this.exportEVTbtn_MouseLeave);
             // 
-            // line
+            // panel1
             // 
-            this.line.BackColor = System.Drawing.Color.White;
-            this.line.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.line.Location = new System.Drawing.Point(5, 172);
-            this.line.Name = "line";
-            this.line.Size = new System.Drawing.Size(350, 2);
-            this.line.TabIndex = 13;
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Controls.Add(this.EVT_title);
+            this.panel1.Location = new System.Drawing.Point(30, 50);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(390, 95);
+            this.panel1.TabIndex = 12;
             // 
-            // EvtPath_txtBx
+            // pictureBox1
             // 
-            this.EvtPath_txtBx.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.EvtPath_txtBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
-            this.EvtPath_txtBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.EvtPath_txtBx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.EvtPath_txtBx.ForeColor = System.Drawing.SystemColors.Window;
-            this.EvtPath_txtBx.Location = new System.Drawing.Point(5, 147);
-            this.EvtPath_txtBx.Name = "EvtPath_txtBx";
-            this.EvtPath_txtBx.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.EvtPath_txtBx.Size = new System.Drawing.Size(350, 17);
-            this.EvtPath_txtBx.TabIndex = 12;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = null;
+            this.pictureBox1.Location = new System.Drawing.Point(295, -3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(95, 95);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
             // 
             // EVT
             // 
@@ -134,14 +162,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(66)))), ((int)(((byte)(82)))));
             this.ClientSize = new System.Drawing.Size(480, 512);
-            this.Controls.Add(this.EVT_title);
             this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "EVT";
             this.Text = "EVT";
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.exportEVTbtn)).EndInit();
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -155,5 +185,7 @@
         private System.Windows.Forms.PictureBox exportEVTbtn;
         private System.Windows.Forms.Label line;
         private System.Windows.Forms.TextBox EvtPath_txtBx;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
