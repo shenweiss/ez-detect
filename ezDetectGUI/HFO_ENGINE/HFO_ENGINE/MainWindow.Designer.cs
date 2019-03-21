@@ -234,6 +234,7 @@
             this.Convert_btn.TabIndex = 17;
             this.Convert_btn.Text = "EDF to TRC conversor";
             this.Convert_btn.UseVisualStyleBackColor = false;
+            this.Convert_btn.Click += new System.EventHandler(this.Convert_btn_Click);
             // 
             // panel8
             // 

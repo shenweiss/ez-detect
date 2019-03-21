@@ -337,9 +337,9 @@
             // 
             this.panel4.Controls.Add(this.Advanced_settings_title);
             this.panel4.Controls.Add(this.pictureBox1);
-            this.panel4.Location = new System.Drawing.Point(31, 54);
+            this.panel4.Location = new System.Drawing.Point(30, 54);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(384, 95);
+            this.panel4.Size = new System.Drawing.Size(390, 95);
             this.panel4.TabIndex = 31;
             // 
             // pictureBox1
@@ -347,7 +347,7 @@
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(289, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(295, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(95, 95);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;

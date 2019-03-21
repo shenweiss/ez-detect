@@ -182,6 +182,10 @@ namespace HFO_ENGINE
         {
             Stack_menu.Visible = !Stack_menu.Visible;
         }
-        
+
+        private void Convert_btn_Click(object sender, EventArgs e)
+        {
+            AbrirFormHija(new Fastwave_conversor());
+        }
     }
 }

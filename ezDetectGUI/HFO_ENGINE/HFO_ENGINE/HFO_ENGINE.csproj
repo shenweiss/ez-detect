@@ -75,6 +75,12 @@
     <Compile Include="EVT.Designer.cs">
       <DependentUpon>EVT.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fastwave_conversor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fastwave_conversor.Designer.cs">
+      <DependentUpon>Fastwave_conversor.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +124,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EVT.resx">
       <DependentUpon>EVT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fastwave_conversor.resx">
+      <DependentUpon>Fastwave_conversor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>

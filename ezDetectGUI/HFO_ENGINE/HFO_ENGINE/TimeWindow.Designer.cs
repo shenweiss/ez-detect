@@ -34,26 +34,12 @@
             this.StopTimeLabel = new System.Windows.Forms.Label();
             this.TimeWindow_save_btn = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.skip_time = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
-            this.skip1_label_snds = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.skip1_label_mins = new System.Windows.Forms.Label();
-            this.skip1_label_hs = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.size1_label_hs = new System.Windows.Forms.Label();
-            this.size1_label_mins = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.size1_label_snds = new System.Windows.Forms.Label();
-            this.skip_label_hs = new System.Windows.Forms.TextBox();
-            this.skip_label_mins = new System.Windows.Forms.TextBox();
-            this.skip_label_snds = new System.Windows.Forms.TextBox();
-            this.size_label_hs = new System.Windows.Forms.TextBox();
-            this.size_label_mins = new System.Windows.Forms.TextBox();
-            this.size_label_snds = new System.Windows.Forms.TextBox();
+            this.w_size_time = new System.Windows.Forms.DateTimePicker();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -110,23 +96,9 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.size_label_snds);
-            this.panel2.Controls.Add(this.size_label_mins);
-            this.panel2.Controls.Add(this.size_label_hs);
-            this.panel2.Controls.Add(this.skip_label_snds);
-            this.panel2.Controls.Add(this.skip_label_mins);
-            this.panel2.Controls.Add(this.skip_label_hs);
-            this.panel2.Controls.Add(this.label7);
-            this.panel2.Controls.Add(this.size1_label_hs);
-            this.panel2.Controls.Add(this.size1_label_mins);
-            this.panel2.Controls.Add(this.label10);
-            this.panel2.Controls.Add(this.size1_label_snds);
-            this.panel2.Controls.Add(this.label5);
-            this.panel2.Controls.Add(this.skip1_label_hs);
-            this.panel2.Controls.Add(this.skip1_label_mins);
-            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.w_size_time);
+            this.panel2.Controls.Add(this.skip_time);
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.skip1_label_snds);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.TimeWindow_save_btn);
             this.panel2.Controls.Add(this.StartTimeLabel);
@@ -135,6 +107,19 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(388, 320);
             this.panel2.TabIndex = 11;
+            // 
+            // skip_time
+            // 
+            this.skip_time.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.skip_time.CustomFormat = "HH:mm:ss";
+            this.skip_time.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.skip_time.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.skip_time.Location = new System.Drawing.Point(174, 54);
+            this.skip_time.Name = "skip_time";
+            this.skip_time.ShowUpDown = true;
+            this.skip_time.Size = new System.Drawing.Size(98, 29);
+            this.skip_time.TabIndex = 67;
+            this.skip_time.Value = new System.DateTime(2019, 3, 21, 12, 1, 0, 0);
             // 
             // label2
             // 
@@ -148,20 +133,6 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "And ";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label2.Click += new System.EventHandler(this.label2_Click);
-            // 
-            // skip1_label_snds
-            // 
-            this.skip1_label_snds.BackColor = System.Drawing.Color.Ivory;
-            this.skip1_label_snds.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.skip1_label_snds.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.skip1_label_snds.Location = new System.Drawing.Point(312, 51);
-            this.skip1_label_snds.Margin = new System.Windows.Forms.Padding(0);
-            this.skip1_label_snds.Name = "skip1_label_snds";
-            this.skip1_label_snds.Size = new System.Drawing.Size(28, 40);
-            this.skip1_label_snds.TabIndex = 49;
-            this.skip1_label_snds.Text = "00";
-            this.skip1_label_snds.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1
             // 
@@ -196,200 +167,18 @@
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             // 
-            // label6
+            // w_size_time
             // 
-            this.label6.BackColor = System.Drawing.Color.White;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label6.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label6.Location = new System.Drawing.Point(302, 51);
-            this.label6.Margin = new System.Windows.Forms.Padding(0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(10, 40);
-            this.label6.TabIndex = 51;
-            this.label6.Text = ":";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // skip1_label_mins
-            // 
-            this.skip1_label_mins.BackColor = System.Drawing.Color.Ivory;
-            this.skip1_label_mins.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.skip1_label_mins.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.skip1_label_mins.Location = new System.Drawing.Point(274, 51);
-            this.skip1_label_mins.Margin = new System.Windows.Forms.Padding(0);
-            this.skip1_label_mins.Name = "skip1_label_mins";
-            this.skip1_label_mins.Size = new System.Drawing.Size(28, 40);
-            this.skip1_label_mins.TabIndex = 53;
-            this.skip1_label_mins.Text = "00";
-            this.skip1_label_mins.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // skip1_label_hs
-            // 
-            this.skip1_label_hs.BackColor = System.Drawing.Color.Ivory;
-            this.skip1_label_hs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.skip1_label_hs.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.skip1_label_hs.Location = new System.Drawing.Point(236, 51);
-            this.skip1_label_hs.Margin = new System.Windows.Forms.Padding(0);
-            this.skip1_label_hs.Name = "skip1_label_hs";
-            this.skip1_label_hs.Size = new System.Drawing.Size(28, 40);
-            this.skip1_label_hs.TabIndex = 54;
-            this.skip1_label_hs.Text = "00";
-            this.skip1_label_hs.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label5
-            // 
-            this.label5.BackColor = System.Drawing.Color.White;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label5.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label5.Location = new System.Drawing.Point(264, 51);
-            this.label5.Margin = new System.Windows.Forms.Padding(0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(10, 40);
-            this.label5.TabIndex = 55;
-            this.label5.Text = ":";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label7
-            // 
-            this.label7.BackColor = System.Drawing.Color.White;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label7.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label7.Location = new System.Drawing.Point(264, 178);
-            this.label7.Margin = new System.Windows.Forms.Padding(0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(10, 40);
-            this.label7.TabIndex = 60;
-            this.label7.Text = ":";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // size1_label_hs
-            // 
-            this.size1_label_hs.BackColor = System.Drawing.Color.Ivory;
-            this.size1_label_hs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.size1_label_hs.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.size1_label_hs.Location = new System.Drawing.Point(236, 178);
-            this.size1_label_hs.Margin = new System.Windows.Forms.Padding(0);
-            this.size1_label_hs.Name = "size1_label_hs";
-            this.size1_label_hs.Size = new System.Drawing.Size(28, 40);
-            this.size1_label_hs.TabIndex = 59;
-            this.size1_label_hs.Text = "00";
-            this.size1_label_hs.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // size1_label_mins
-            // 
-            this.size1_label_mins.BackColor = System.Drawing.Color.Ivory;
-            this.size1_label_mins.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.size1_label_mins.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.size1_label_mins.Location = new System.Drawing.Point(274, 178);
-            this.size1_label_mins.Margin = new System.Windows.Forms.Padding(0);
-            this.size1_label_mins.Name = "size1_label_mins";
-            this.size1_label_mins.Size = new System.Drawing.Size(28, 40);
-            this.size1_label_mins.TabIndex = 58;
-            this.size1_label_mins.Text = "00";
-            this.size1_label_mins.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label10
-            // 
-            this.label10.BackColor = System.Drawing.Color.White;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.label10.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label10.Location = new System.Drawing.Point(302, 178);
-            this.label10.Margin = new System.Windows.Forms.Padding(0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(10, 40);
-            this.label10.TabIndex = 57;
-            this.label10.Text = ":";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // size1_label_snds
-            // 
-            this.size1_label_snds.BackColor = System.Drawing.Color.Ivory;
-            this.size1_label_snds.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.size1_label_snds.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.size1_label_snds.Location = new System.Drawing.Point(312, 178);
-            this.size1_label_snds.Margin = new System.Windows.Forms.Padding(0);
-            this.size1_label_snds.Name = "size1_label_snds";
-            this.size1_label_snds.Size = new System.Drawing.Size(28, 40);
-            this.size1_label_snds.TabIndex = 56;
-            this.size1_label_snds.Text = "00";
-            this.size1_label_snds.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // skip_label_hs
-            // 
-            this.skip_label_hs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.skip_label_hs.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.skip_label_hs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.skip_label_hs.Location = new System.Drawing.Point(240, 61);
-            this.skip_label_hs.Name = "skip_label_hs";
-            this.skip_label_hs.Size = new System.Drawing.Size(24, 19);
-            this.skip_label_hs.TabIndex = 61;
-            this.skip_label_hs.Text = "00";
-            // 
-            // skip_label_mins
-            // 
-            this.skip_label_mins.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.skip_label_mins.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.skip_label_mins.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.skip_label_mins.Location = new System.Drawing.Point(277, 61);
-            this.skip_label_mins.Name = "skip_label_mins";
-            this.skip_label_mins.Size = new System.Drawing.Size(24, 19);
-            this.skip_label_mins.TabIndex = 62;
-            this.skip_label_mins.Text = "00";
-            // 
-            // skip_label_snds
-            // 
-            this.skip_label_snds.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.skip_label_snds.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.skip_label_snds.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.skip_label_snds.Location = new System.Drawing.Point(316, 61);
-            this.skip_label_snds.Name = "skip_label_snds";
-            this.skip_label_snds.Size = new System.Drawing.Size(24, 19);
-            this.skip_label_snds.TabIndex = 63;
-            this.skip_label_snds.Text = "00";
-            // 
-            // size_label_hs
-            // 
-            this.size_label_hs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.size_label_hs.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.size_label_hs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.size_label_hs.Location = new System.Drawing.Point(240, 188);
-            this.size_label_hs.Name = "size_label_hs";
-            this.size_label_hs.Size = new System.Drawing.Size(24, 19);
-            this.size_label_hs.TabIndex = 64;
-            this.size_label_hs.Text = "00";
-            // 
-            // size_label_mins
-            // 
-            this.size_label_mins.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.size_label_mins.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.size_label_mins.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.size_label_mins.Location = new System.Drawing.Point(277, 188);
-            this.size_label_mins.Name = "size_label_mins";
-            this.size_label_mins.Size = new System.Drawing.Size(24, 19);
-            this.size_label_mins.TabIndex = 65;
-            this.size_label_mins.Text = "00";
-            // 
-            // size_label_snds
-            // 
-            this.size_label_snds.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.size_label_snds.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.size_label_snds.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.size_label_snds.Location = new System.Drawing.Point(316, 188);
-            this.size_label_snds.Name = "size_label_snds";
-            this.size_label_snds.Size = new System.Drawing.Size(24, 19);
-            this.size_label_snds.TabIndex = 66;
-            this.size_label_snds.Text = "00";
+            this.w_size_time.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.w_size_time.CustomFormat = "HH:mm:ss";
+            this.w_size_time.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.w_size_time.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.w_size_time.Location = new System.Drawing.Point(225, 181);
+            this.w_size_time.Name = "w_size_time";
+            this.w_size_time.ShowUpDown = true;
+            this.w_size_time.Size = new System.Drawing.Size(98, 29);
+            this.w_size_time.TabIndex = 71;
+            this.w_size_time.Value = new System.DateTime(2019, 3, 21, 12, 1, 0, 0);
             // 
             // TimeWindow
             // 
@@ -404,7 +193,6 @@
             this.Name = "TimeWindow";
             this.Text = "TimeWindow";
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -422,21 +210,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label skip1_label_snds;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label size1_label_hs;
-        private System.Windows.Forms.Label size1_label_mins;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label size1_label_snds;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label skip1_label_hs;
-        private System.Windows.Forms.Label skip1_label_mins;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox skip_label_hs;
-        private System.Windows.Forms.TextBox skip_label_mins;
-        private System.Windows.Forms.TextBox skip_label_snds;
-        private System.Windows.Forms.TextBox size_label_hs;
-        private System.Windows.Forms.TextBox size_label_mins;
-        private System.Windows.Forms.TextBox size_label_snds;
+        private System.Windows.Forms.DateTimePicker skip_time;
+        private System.Windows.Forms.DateTimePicker w_size_time;
     }
 }

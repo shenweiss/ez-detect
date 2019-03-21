@@ -42,7 +42,7 @@ namespace HFO_ENGINE
             snds++;
             int hs = snds / 3600;
             hours_label.Text = hs.ToString("D2");
-            int min = (snds - hs * 60) / 60;
+            int min = (snds - hs * 3600) / 60;
             minutes_label.Text = min.ToString("D2");
             seconds_label.Text = (snds - hs * 3600 - min * 60).ToString("D2"); 
 

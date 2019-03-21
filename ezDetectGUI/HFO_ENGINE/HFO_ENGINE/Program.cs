@@ -17,7 +17,7 @@ namespace HFO_ENGINE
         public static string BpMontage { get; set; } = "Ref.";
 
         public static int StartTime { get; set; } = 1;
-        public static int StopTime { get; set; } = 0;
+        public static int StopTime { get; set; } = 1;
         public static int CycleTime { get; set; } = -1;
 
         public static string LocalUsername { get; set; } = Environment.UserName;
