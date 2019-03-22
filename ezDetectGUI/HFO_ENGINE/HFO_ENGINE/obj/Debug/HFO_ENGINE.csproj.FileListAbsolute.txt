@@ -76,3 +76,5 @@ C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\bin\Debug\CommandLine.xml
 C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.csproj.CopyComplete
 C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.exe
 C:\Users\tpastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.pdb
+C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.csprojAssemblyReference.cache
+C:\Users\Tomas Pastore\source\repos\HFO_ENGINE\HFO_ENGINE\obj\Debug\HFO_ENGINE.Fastwave_conversor.resources

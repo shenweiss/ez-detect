@@ -163,7 +163,7 @@
             this.edf_import_label.Name = "edf_import_label";
             this.edf_import_label.Size = new System.Drawing.Size(208, 26);
             this.edf_import_label.TabIndex = 29;
-            this.edf_import_label.Text = "Browse TRC file to convert";
+            this.edf_import_label.Text = "Browse edf file to convert";
             // 
             // conversor_save_btn
             // 

@@ -305,10 +305,10 @@
             this.CommandFile_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.CommandFile_txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.CommandFile_txt.ForeColor = System.Drawing.SystemColors.Window;
-            this.CommandFile_txt.Location = new System.Drawing.Point(149, 151);
+            this.CommandFile_txt.Location = new System.Drawing.Point(131, 151);
             this.CommandFile_txt.Name = "CommandFile_txt";
             this.CommandFile_txt.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.CommandFile_txt.Size = new System.Drawing.Size(211, 17);
+            this.CommandFile_txt.Size = new System.Drawing.Size(229, 17);
             this.CommandFile_txt.TabIndex = 37;
             // 
             // label4
