@@ -5,6 +5,7 @@ import trcio
 import numpy as np
 import json
 import sys
+import os
 
 def edf_to_trc(edf_fname, trc_fname):
 
@@ -27,8 +28,8 @@ def edf_to_trc(edf_fname, trc_fname):
 def mapShortChanNames(raw_edf):
     
     LEN_WARNING = "TRC channel names must be 5 char length at most."
-    
-    with open("short_channel_names.json", 'r') as fid_r:
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    with open(dir_path+"/short_channel_names.json", 'r') as fid_r:
         short_name = json.load(fid_r)   
 
     update_needed = False

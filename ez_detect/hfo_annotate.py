@@ -9,9 +9,8 @@ Example with defaults: python3 hfo_annotate.py --trc_path=449.TRC
 import time
 start = time. time()
 
-import config
-from config import matlab_session as MATLAB
-
+from . import config
+MATLAB = config.matlab_session
 import sys
 from os.path import basename, splitext, expanduser, abspath
 
@@ -20,8 +19,8 @@ from trcio import read_raw_trc
 from evtio import load_events_from_matfiles, EventFile, write_evt
 #sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
 #from profiling import profile_time, profile_memory
-from montage import build_montage_from_trc, build_montage_mat_from_trc
-from preprocessing import ez_lfbad
+from .montage import build_montage_from_trc, build_montage_mat_from_trc
+from .preprocessing import ez_lfbad
 
 import numpy as np
 import threading
@@ -66,6 +65,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     raw_trc = read_raw_trc(paths['trc_fname'], include=None)
     stop_time = stop_time if stop_time != config.STOP_TIME_DEFAULT else None
     raw_trc.crop(start_time, stop_time).load_data()  
+    config.PROGRESS = 10
 
     logger.info("Converting data from volts to microvolts...")
     raw_trc._data *= 1e06
@@ -91,9 +91,11 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
         'block_size' : sampling_rate * cycle_time,
         'srate' : sampling_rate
     }
+    config.PROGRESS = 12
 
     _processParallelBlocks_threads(raw_trc, metadata, paths)
     
+    config.PROGRESS = 90
     rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
     
@@ -101,7 +103,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
 
     evt_file = EventFile(paths['xml_output_path'], rec_start_time, events=events, username='USERNAME') #TODO bring username from execution
     write_evt(evt_file)
-
+    config.PROGRESS = 98
 
 ############  Private Funtions  #########
 
@@ -304,7 +306,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    paths = config.resolvePaths(args.trc_path, args.xml_output_path,  
+    paths = config.getAllPaths(args.trc_path, args.xml_output_path,  
                                args.project_dir_path, args.swap_array_file_path)
 
     config.clean_previous_execution()

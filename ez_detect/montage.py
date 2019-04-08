@@ -1,7 +1,7 @@
 
 #temporary while translating from matlab to python, the final one is build_montage_from_trc
 def build_montage_mat_from_trc(montages, ch_names, sug_montage_name, bp_montage_name):
-    import config #temporal due translation
+    from . import config #temporal due translation
     import numpy as np #temp for the temp function
     sug_lines = montages[sug_montage_name]['lines']
     bp_lines = montages[bp_montage_name]['lines']

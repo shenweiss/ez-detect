@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 import platform
 
+IS_RUNNING = False
+PROGRESS = 0
 START_TIME_DEFAULT = 0
 STOP_TIME_DEFAULT = 0  #If not given by user, this value is corrected once read the eeg.
 CYCLE_TIME_DEFAULT = 600 #600 seconds = 10 minutes
@@ -27,6 +29,7 @@ BP_ANNOTATIONS_FLAG = 1
 #Working paths
 
 paths = {}
+paths['trc_fname']= "NOT_GIVEN"
 paths['project_root'] = str( Path(Path.home(), 'Documents/ez-detect'))
 paths['disk_dumps'] = str( Path(paths['project_root'], 'disk_dumps')) + '/'
 
@@ -41,16 +44,17 @@ paths['ez_pac_out'] = str( Path(paths['disk_dumps'], 'ez_pac_output')) + '/'
 
 paths['research'] = str( Path(paths['disk_dumps'], 'research_matfiles')) + '/'
 
-paths['cudaica_dir'] = str( Path(paths['project_root'], 'ez_detect/src/matlab_code/cudaica')) + '/'
+paths['cudaica_dir'] = str( Path(paths['project_root'], 'ez_detect/matlab_code/cudaica')) + '/'
 paths['binica_sc'] = str( Path(paths['cudaica_dir'], 'binica.sc'))
 paths['cudaica_bin'] = str( Path(paths['cudaica_dir'], 'cudaica'))
-paths['misc_code'] = str( Path(paths['project_root'], 'ez_detect/src/matlab_code/misc_code')) + '/'
+paths['misc_code'] = str( Path(paths['project_root'], 'ez_detect/matlab_code/misc_code')) + '/'
 paths['temp_pythonToMatlab_dsp'] = str(Path(paths['disk_dumps'], 'temp_pythonToMatlab_dsp')) + '/'
 
 def resolvePath(path_str):
     return str(Path(path_str).expanduser().resolve())
 
-def resolvePaths(trc_fname, xml_output_path, project_dir_path, swap_array_path):
+def getAllPaths(trc_fname, xml_output_path, project_dir_path=paths['project_root'], 
+                                             swap_array_path=paths['swap_array_file']):
     paths['trc_fname']= resolvePath(trc_fname)
     paths['project_root']= resolvePath(project_dir_path)
     paths['xml_output_path']= str(Path(xml_output_path).expanduser().absolute())

@@ -5,8 +5,9 @@ from scipy.stats import zscore
 from mne.filter import resample
 #from spectrum import pmtm
 
-from config import matlab_session as MATLAB
-from config import TEMPORARY_DUE_TRANSLATION
+from . import config
+MATLAB = config.matlab_session
+TEMPORARY_DUE_TRANSLATION = config.TEMPORARY_DUE_TRANSLATION
 import scipy.io
 #import hdf5storage
 
