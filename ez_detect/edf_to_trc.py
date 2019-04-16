@@ -15,17 +15,19 @@ def edf_to_trc(edf_fname, trc_fname):
     # in the info dict in the unit_mul entry as -6. If it is volt, then it is stored as 1.
     #info['chs'][0]['unit'] info['chs'][0]['unit_mul']
     #to_rename = {x: x.split(' ')[1].split('-')[0] for x in raw_edf.ch_names}
-    old_names = raw_edf.ch_names
-    raw_edf = mapShortChanNames(raw_edf)
+    raw_edf._data *= 1e-06 #From microvolts to volts
+    
+    original_ch_names = raw_edf.ch_names
+
+    raw_edf = map_short_ch_names(raw_edf)
     new_names = raw_edf.ch_names
 
-    confirmTranslations(old_names, new_names)
-    raw_edf._data *= 1e-06 #From microvolts to volts
+    confirmTranslations(original_ch_names, new_names)
     trcio.write_raw_trc(raw_edf, trc_fname)
 
     #assertConversionIsOk(raw_edf, trc_fname)
 
-def mapShortChanNames(raw_edf):
+def map_short_ch_names(raw_edf):
     
     LEN_WARNING = "TRC channel names must be 5 char length at most."
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -58,10 +60,10 @@ def mapShortChanNames(raw_edf):
     raw_edf.rename_channels(to_rename)
     return raw_edf
 
-def confirmTranslations(old_names, new_names):
+def confirmTranslations(original_ch_names, new_names):
     print('Channel name mapping: ')
-    for i in range(len(old_names)):
-        print('    ' + old_names[i] + ' --> ' + new_names[i])
+    for i in range(len(original_ch_names)):
+        print('    ' + original_ch_names[i] + ' --> ' + new_names[i])
 
     modify_translation = '_' 
     while modify_translation != 'Y' and modify_translation != 'N':  #ToDo improve and implement

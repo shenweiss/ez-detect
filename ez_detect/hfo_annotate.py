@@ -59,13 +59,13 @@ Output: xml_output gets saved in the default directory or the one given as argum
 #@profile_time
 #TODO modify plugin to take start_time from 0 instead of 1
 #TODO stop add 1 to stop_time
-def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_montage):
+def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_montage, progress_notifier=None):
     logger.info('Running Ez Detect')
 
     raw_trc = read_raw_trc(paths['trc_fname'], include=None)
     stop_time = stop_time if stop_time != config.STOP_TIME_DEFAULT else None
     raw_trc.crop(start_time, stop_time).load_data()  
-    config.PROGRESS = 10
+    _notify_progress(progress_notifier, 10)
 
     logger.info("Converting data from volts to microvolts...")
     raw_trc._data *= 1e06
@@ -91,11 +91,11 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
         'block_size' : sampling_rate * cycle_time,
         'srate' : sampling_rate
     }
-    config.PROGRESS = 12
-
-    _processParallelBlocks_threads(raw_trc, metadata, paths)
+    _notify_progress(progress_notifier, 12)
     
-    config.PROGRESS = 90
+    _processParallelBlocks_threads(raw_trc, metadata, paths)
+    _notify_progress(progress_notifier, 95)
+    
     rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
     
@@ -103,9 +103,13 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
 
     evt_file = EventFile(paths['xml_output_path'], rec_start_time, events=events, username='USERNAME') #TODO bring username from execution
     write_evt(evt_file)
-    config.PROGRESS = 98
+    _notify_progress(progress_notifier, 100)
 
 ############  Private Funtions  #########
+
+def _notify_progress(notifier, val):
+    if notifier is not None:
+        notifier.update(val)
 
 #Unused for now
 def _updateChanlist(ch_names, swap_array_file):
@@ -182,6 +186,7 @@ def _processParallelBlocks_processes(blocks, eeg_data, ch_names, metadata, monta
 def _processParallelBlock(eeg_data, ch_names, metadata, paths):    
     data, metadata = ez_lfbad(eeg_data, ch_names, metadata)
     data['bp_channels'], metadata, hfo_ai, fr_ai = _monopolarAnnotations(data, metadata, paths)
+    _notify_progress(progress_notifier, 70)
     _bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths)
 
 def _monopolarAnnotations(data, metadata, paths):
@@ -191,6 +196,7 @@ def _monopolarAnnotations(data, metadata, paths):
         logger.info('Monopolar block. Converting data from python to matlab (takes long).')
         dsp_monopolar_out = MATLAB.ez_detect_dsp_monopolar(data['mp_channels'], data['bp_channels'], metadata, paths)
         logger.info('Finished dsp monopolar block')
+        _notify_progress(progress_notifier, 60)
 
         #TODO once ez top gets translated we can avoid using the disk for saving.
         logger.info('Annotating Monopolar block')
@@ -231,7 +237,7 @@ def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths):
         logger.info('Bipolar Block. Converting data from python to matlab (takes long).')
         dsp_bipolar_out = MATLAB.ez_detect_dsp_bipolar(bp_data, metadata, hfo_ai, fr_ai, paths)
         logger.info('Finished bipolar dsp block')
-
+        _notify_progress(progress_notifier, 90)
         logger.info('Annotating bipolar block')
         output_fname = MATLAB.eztop_putou_e1(dsp_bipolar_out['path_to_data'], 
                                              config.BP_ANNOTATIONS_FLAG, 
