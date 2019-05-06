@@ -80,3 +80,19 @@ os.chdir(paths['misc_code']) #to find tryAddPaths
 matlab_session = matlab.engine.start_matlab() 
 matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
 os.chdir(cwd)
+
+class ProgressNotifier(object):
+    def __init__(self):
+        self.progress = Value('i', 0)
+
+    def get(self):
+        with self.progress.get_lock():
+            return self.progress.value
+   
+    def delete(self):
+        with self.progress.get_lock():
+            del self
+
+    def update(self, val):
+        with self.progress.get_lock():
+            self.progress.value = val
