@@ -24,10 +24,37 @@ from .preprocessing import ez_lfbad
 
 import numpy as np
 import threading
-#import multiprocessing
+from multiprocessing import Process, Value
 #import time
 from datetime import datetime
 
+class AtomicCounter(object):
+    def __init__(self, init_value=0, min_value=0,  max_value=10):
+        self.counter = Value('i', init_value)
+        self.min_value = min_value
+        self.max_value = max_value
+
+ 	def get(self):
+        with self.counter.get_lock():
+            return self.counter.value
+    def delete(self):
+        with self.counter.get_lock():
+            del self.counter
+
+    def increment(self):
+        with self.counter.get_lock():
+            assert(self.counter.value < self.max_value)
+            self.counter.value += 1
+
+    def decrement(self):
+        with self.counter.get_lock():
+            assert(self.counter.value > self.min_value)
+            self.counter.value -= 1
+
+    def update(self, val):
+        with self.counter.get_lock():
+            assert(self.min_value <= val and val <= self.max_value)
+            self.counter.value = val
 '''
 Input:
     - paths: a Struct containing strings for every path is used in the project. 
