@@ -9,7 +9,7 @@ Example with defaults: python3 hfo_annotate.py --trc_path=449.TRC
 import time
 start = time. time()
 
-from . import config
+from ez_detect import config
 MATLAB = config.matlab_session
 import sys
 from os.path import basename, splitext, expanduser, abspath
@@ -19,8 +19,8 @@ from trcio import read_raw_trc
 from evtio import load_events_from_matfiles, EventFile, write_evt
 #sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
 #from profiling import profile_time, profile_memory
-from .montage import build_montage_from_trc, build_montage_mat_from_trc
-from .preprocessing import ez_lfbad
+from ez_detect.montage import build_montage_from_trc, build_montage_mat_from_trc
+from ez_detect.preprocessing import ez_lfbad
 
 import numpy as np
 import threading
