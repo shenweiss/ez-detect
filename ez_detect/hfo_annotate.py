@@ -34,7 +34,7 @@ class AtomicCounter(object):
         self.min_value = min_value
         self.max_value = max_value
 
- 	def get(self):
+    def get(self):
         with self.counter.get_lock():
             return self.counter.value
     def delete(self):
