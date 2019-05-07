@@ -10,7 +10,6 @@ import time
 start = time. time()
 
 from ez_detect import config
-MATLAB = config.matlab_session
 from ez_detect.config import ProgressNotifier
 import sys
 from os.path import basename, splitext, expanduser, abspath
@@ -25,7 +24,6 @@ from ez_detect.preprocessing import ez_lfbad
 
 import numpy as np
 import threading
-from multiprocessing import Value
 #import time
 from datetime import datetime
 
@@ -112,10 +110,10 @@ def _update_progress(notifier, val):
         notifier.update(val)
 
 #Unused for now
-def _updateChanlist(ch_names, swap_array_file):
+def _updateChanlist(ch_names, swap_array_file, matlab_session):
     ch_names = np.array(ch_names ,dtype=object) #for matlab engine
     if swap_array_file != 'NOT_GIVEN':
-        swap_array = MATLAB.load(swap_array_file)
+        swap_array = matlab_session.load(swap_array_file)
         ch_names = [ch_names[i-1] for i in swap_array] 
     return ch_names
 
@@ -130,13 +128,13 @@ def _calculateBlockAmount(n_samples, sampling_rate, cycle_time):
 
 #Unused for now
 def _saveResearchData(contest_path, metadata, eeg_data, ch_names):
-    MATLAB.workspace['ch_names'] = ch_names
+    matlab_session.workspace['ch_names'] = ch_names
     for i in range(len(metadata)):
-        MATLAB.workspace['eeg_data_i'] = eeg_data[i]
-        MATLAB.workspace['metadata_i'] = metadata[i]
+        matlab_session.workspace['eeg_data_i'] = eeg_data[i]
+        matlab_session.workspace['metadata_i'] = metadata[i]
         trc_fname = metadata.file_id
         full_path = contest_path+trc_fname+'_'+str(i)+'.mat' 
-        MATLAB.save(full_path, 'metadata_i', 'eeg_data_i', 'ch_names')
+        matlab_session.save(full_path, 'metadata_i', 'eeg_data_i', 'ch_names')
         #ask if it is worthy to save the blocks or not
 
 
@@ -184,31 +182,35 @@ def _processParallelBlocks_processes(blocks, eeg_data, ch_names, metadata, monta
     pool.join()
 '''
 def _processParallelBlock(eeg_data, ch_names, metadata, paths, progress_notifier):    
-    data, metadata = ez_lfbad(eeg_data, ch_names, metadata)
-    data['bp_channels'], metadata, hfo_ai, fr_ai = _monopolarAnnotations(data, metadata, paths, progress_notifier)
-    _update_progress(progress_notifier, 70)
-    _bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths, progress_notifier)
+    matlab_session = config.get_matlab_session()
+    
+    data, metadata = ez_lfbad(eeg_data, ch_names, metadata, matlab_session)
+    _update_progress(progress_notifier, 15)
 
-def _monopolarAnnotations(data, metadata, paths, progress_notifier):
+    data['bp_channels'], metadata, hfo_ai, fr_ai = _monopolarAnnotations(data, metadata, paths, progress_notifier, matlab_session)
+    _update_progress(progress_notifier, 70)
+    _bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths, progress_notifier, matlab_session)
+
+def _monopolarAnnotations(data, metadata, paths, progress_notifier, matlab_session):
     
     if data['mp_channels']: #not empty
 
         logger.info('Monopolar block. Converting data from python to matlab (takes long).')
-        dsp_monopolar_out = MATLAB.ez_detect_dsp_monopolar(data['mp_channels'], data['bp_channels'], metadata, paths)
+        dsp_monopolar_out = matlab_session.ez_detect_dsp_monopolar(data['mp_channels'], data['bp_channels'], metadata, paths)
         logger.info('Finished dsp monopolar block')
         _update_progress(progress_notifier, 60)
 
         #TODO once ez top gets translated we can avoid using the disk for saving.
         logger.info('Annotating Monopolar block')
         if dsp_monopolar_out['error_flag'] == 0: 
-            output_fname = MATLAB.eztop_putou_e1(dsp_monopolar_out['path_to_data'], 
+            output_fname = matlab_session.eztop_putou_e1(dsp_monopolar_out['path_to_data'], 
                                                  config.MP_ANNOTATIONS_FLAG,
                                                  paths) 
-            MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
+            matlab_session.removeEvents_1_5_cycles(output_fname, nargout=0)
 
             #This doesn't annotate anything in the evts. comment for now.
             '''
-            MATLAB.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
+            matlab_session.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
                                     dsp_monopolar_out['ez_fr_mp'], 
                                     dsp_monopolar_out['ez_hfo_mp'], 
                                     output_fname,
@@ -231,22 +233,22 @@ def _monopolarAnnotations(data, metadata, paths, progress_notifier):
 
     return data['bp_channels'], metadata, hfo_ai, fr_ai 
 
-def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths, progress_notifier):
+def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths, progress_notifier, matlab_session):
 
     if bp_data:
         logger.info('Bipolar Block. Converting data from python to matlab (takes long).')
-        dsp_bipolar_out = MATLAB.ez_detect_dsp_bipolar(bp_data, metadata, hfo_ai, fr_ai, paths)
+        dsp_bipolar_out = matlab_session.ez_detect_dsp_bipolar(bp_data, metadata, hfo_ai, fr_ai, paths)
         logger.info('Finished bipolar dsp block')
         _update_progress(progress_notifier, 90)
         logger.info('Annotating bipolar block')
-        output_fname = MATLAB.eztop_putou_e1(dsp_bipolar_out['path_to_data'], 
+        output_fname = matlab_session.eztop_putou_e1(dsp_bipolar_out['path_to_data'], 
                                              config.BP_ANNOTATIONS_FLAG, 
                                              paths)
         
-        MATLAB.removeEvents_1_5_cycles(output_fname, nargout=0)
+        matlab_session.removeEvents_1_5_cycles(output_fname, nargout=0)
         
         '''
-        MATLAB.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
+        matlab_session.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
                                 dsp_bipolar_out['ez_fr_bp'], 
                                 dsp_bipolar_out['ez_hfo_bp'], 
                                 output_fname, 

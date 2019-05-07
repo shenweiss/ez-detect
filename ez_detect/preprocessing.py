@@ -6,7 +6,7 @@ from scipy.stats import zscore
 import scipy.io
 #import hdf5storage
 #from spectrum import pmtm
-from ez_detect.config import TEMPORARY_DUE_TRANSLATION, matlab_session as MATLAB
+from ez_detect.config import TEMPORARY_DUE_TRANSLATION
 
 def _impedance_check(eeg_data):
     logger.info('Performing impedance check.')
@@ -29,7 +29,7 @@ def _impedance_check(eeg_data):
     imp_2 = np.where(zsixty_cycle>0.3)[0]
     return set(list(np.intersect1d(imp_1, imp_2)))
 
-def ez_lfbad(eeg_data, ch_names, metadata):
+def ez_lfbad(eeg_data, ch_names, metadata, matlab_session):
 
     logger.info('Entering ez_lfbad')
 
@@ -46,7 +46,7 @@ def ez_lfbad(eeg_data, ch_names, metadata):
     #import pdb; pdb.set_trace()
     data['bp_channels'] = eeg_data[ ch_ids ] - eeg_data [ pairs ]
     metadata['ch_names_bp'] = [montage.name(ch_id) for ch_id in ch_ids]
-
+    
     #The list below, includes all the channels that support bipolar montage
     #and that are not filtered by impedance function 
     #(User may have suggested as ref but provided a pair for the case 
@@ -58,7 +58,10 @@ def ez_lfbad(eeg_data, ch_names, metadata):
     del metadata['montage'] 
     args_fname = TEMPORARY_DUE_TRANSLATION +metadata['file_block']+'.mat' 
     scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
-    data, metadata = MATLAB.ez_bad_channel_temp(args_fname, nargout=2)
+    logger.info('about to enter matlab')
+    data, metadata = matlab_session.ez_bad_channel_temp(args_fname, nargout=2)
+    logger.info('out of matlab')
+    
     #data, metadata = _bad_channels_nn(data, metadatam ch_names, support_bipolar)
     #metadata['montage'] = montage
     return data, metadata

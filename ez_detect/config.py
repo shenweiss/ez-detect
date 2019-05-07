@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #import pdb ;pdb.set_trace() 
-
+from multiprocessing import Value
 import matlab.engine
 import os
 from pathlib import Path
@@ -63,23 +63,25 @@ def getAllPaths(trc_fname, xml_output_path, project_dir_path=paths['project_root
 
     return paths
 
-
 #Cleans previous execution outputs
 #TODO use a function to avoid executing this in each import
-cwd = os.getcwd()
 def clean_previous_execution():
-	os.chdir(paths['disk_dumps']) 
-	running_os = platform.system()
-	if running_os == 'Windows':
-	    os.system('clean') 
-	elif running_os == 'Linux':
-	    os.system('./clean.sh') 
+    cwd = os.getcwd()
+    os.chdir(paths['disk_dumps']) 
+    running_os = platform.system()
+    if running_os == 'Windows':
+        os.system('clean') 
+    elif running_os == 'Linux':
+        os.system('./clean.sh') 
+    os.chdir(cwd)
 
-#Starts matlab session in current dir
-os.chdir(paths['misc_code']) #to find tryAddPaths
-matlab_session = matlab.engine.start_matlab() 
-matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
-os.chdir(cwd)
+def get_matlab_session():
+    cwd = os.getcwd()
+    os.chdir(paths['misc_code']) #to find tryAddPaths
+    matlab_session = matlab.engine.start_matlab() 
+    matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
+    os.chdir(cwd)
+    return matlab_session
 
 class ProgressNotifier(object):
     def __init__(self):

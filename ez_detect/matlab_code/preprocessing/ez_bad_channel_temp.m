@@ -1,5 +1,7 @@
 function [data, metadata] = ez_bad_channel_temp(input_args_fname)
 
+  fprintf("entering ez_bad_channel_temp() \n");
+
   load(input_args_fname); % loads variables: data, support_bipolar, metadata, chanlist
   eeg_bp.eeg_data = support_bipolar;
   eeg_bps.eeg_data = data.bp_channels;
