@@ -1,15 +1,12 @@
 from mne.utils import verbose, logger
+from mne.filter import resample
 import numpy as np
 import numpy.fft as fft_pack
 from scipy.stats import zscore
-from mne.filter import resample
-#from spectrum import pmtm
-
-from . import config
-MATLAB = config.matlab_session
-TEMPORARY_DUE_TRANSLATION = config.TEMPORARY_DUE_TRANSLATION
 import scipy.io
 #import hdf5storage
+#from spectrum import pmtm
+from ez_detect.config import TEMPORARY_DUE_TRANSLATION, matlab_session as MATLAB
 
 def _impedance_check(eeg_data):
     logger.info('Performing impedance check.')

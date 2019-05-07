@@ -9,8 +9,9 @@ Example with defaults: python3 hfo_annotate.py --trc_path=449.TRC
 import time
 start = time. time()
 
-from . import config
+from ez_detect import config
 MATLAB = config.matlab_session
+from ez_detect.config import ProgressNotifier
 import sys
 from os.path import basename, splitext, expanduser, abspath
 
@@ -19,42 +20,15 @@ from trcio import read_raw_trc
 from evtio import load_events_from_matfiles, EventFile, write_evt
 #sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
 #from profiling import profile_time, profile_memory
-from .montage import build_montage_from_trc, build_montage_mat_from_trc
-from .preprocessing import ez_lfbad
+from ez_detect.montage import build_montage_from_trc, build_montage_mat_from_trc
+from ez_detect.preprocessing import ez_lfbad
 
 import numpy as np
 import threading
-from multiprocessing import Process, Value
+from multiprocessing import Value
 #import time
 from datetime import datetime
 
-class AtomicCounter(object):
-    def __init__(self, init_value=0, min_value=0,  max_value=10):
-        self.counter = Value('i', init_value)
-        self.min_value = min_value
-        self.max_value = max_value
-
-    def get(self):
-        with self.counter.get_lock():
-            return self.counter.value
-    def delete(self):
-        with self.counter.get_lock():
-            del self.counter
-
-    def increment(self):
-        with self.counter.get_lock():
-            assert(self.counter.value < self.max_value)
-            self.counter.value += 1
-
-    def decrement(self):
-        with self.counter.get_lock():
-            assert(self.counter.value > self.min_value)
-            self.counter.value -= 1
-
-    def update(self, val):
-        with self.counter.get_lock():
-            assert(self.min_value <= val and val <= self.max_value)
-            self.counter.value = val
 '''
 Input:
     - paths: a Struct containing strings for every path is used in the project. 
@@ -92,7 +66,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     raw_trc = read_raw_trc(paths['trc_fname'], include=None)
     stop_time = stop_time if stop_time != config.STOP_TIME_DEFAULT else None
     raw_trc.crop(start_time, stop_time).load_data()  
-    _notify_progress(progress_notifier, 10)
+    _update_progress(progress_notifier, 10)
 
     logger.info("Converting data from volts to microvolts...")
     raw_trc._data *= 1e06
@@ -118,10 +92,10 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
         'block_size' : sampling_rate * cycle_time,
         'srate' : sampling_rate
     }
-    _notify_progress(progress_notifier, 12)
+    _update_progress(progress_notifier, 12)
     
-    _processParallelBlocks_threads(raw_trc, metadata, paths)
-    _notify_progress(progress_notifier, 95)
+    _processParallelBlocks_threads(raw_trc, metadata, paths, progress_notifier)
+    _update_progress(progress_notifier, 95)
     
     rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
@@ -130,11 +104,10 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
 
     evt_file = EventFile(paths['xml_output_path'], rec_start_time, events=events, username='USERNAME') #TODO bring username from execution
     write_evt(evt_file)
-    _notify_progress(progress_notifier, 100)
+    _update_progress(progress_notifier, 100)
 
 ############  Private Funtions  #########
-
-def _notify_progress(notifier, val):
+def _update_progress(notifier, val):
     if notifier is not None:
         notifier.update(val)
 
@@ -167,7 +140,7 @@ def _saveResearchData(contest_path, metadata, eeg_data, ch_names):
         #ask if it is worthy to save the blocks or not
 
 
-def _processParallelBlocks_threads(raw_trc, metadata, paths):
+def _processParallelBlocks_threads(raw_trc, metadata, paths, progress_notifier):
      
     threads = []
     n_samples = len(raw_trc._data[0])
@@ -183,7 +156,7 @@ def _processParallelBlocks_threads(raw_trc, metadata, paths):
         metadata['file_block'] = str(i+1)
         thread = threading.Thread(target= _processParallelBlock, 
                                   name='DSP_block_{}'.format(i+1),
-                                  args=(_get_block_data(i), ch_names, metadata, paths))
+                                  args=(_get_block_data(i), ch_names, metadata, paths, progress_notifier))
         threads.append(thread)
 
     #For the last block we will use current thread.
@@ -193,7 +166,7 @@ def _processParallelBlocks_threads(raw_trc, metadata, paths):
     for t in threads:
         t.start() 
 
-    _processParallelBlock(block_data, ch_names, metadata, paths) #process last block 
+    _processParallelBlock(block_data, ch_names, metadata, paths, progress_notifier) #process last block 
 
     for t in threads:
         t.join()
@@ -210,20 +183,20 @@ def _processParallelBlocks_processes(blocks, eeg_data, ch_names, metadata, monta
     pool.close()
     pool.join()
 '''
-def _processParallelBlock(eeg_data, ch_names, metadata, paths):    
+def _processParallelBlock(eeg_data, ch_names, metadata, paths, progress_notifier):    
     data, metadata = ez_lfbad(eeg_data, ch_names, metadata)
-    data['bp_channels'], metadata, hfo_ai, fr_ai = _monopolarAnnotations(data, metadata, paths)
-    _notify_progress(progress_notifier, 70)
-    _bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths)
+    data['bp_channels'], metadata, hfo_ai, fr_ai = _monopolarAnnotations(data, metadata, paths, progress_notifier)
+    _update_progress(progress_notifier, 70)
+    _bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths, progress_notifier)
 
-def _monopolarAnnotations(data, metadata, paths):
+def _monopolarAnnotations(data, metadata, paths, progress_notifier):
     
     if data['mp_channels']: #not empty
 
         logger.info('Monopolar block. Converting data from python to matlab (takes long).')
         dsp_monopolar_out = MATLAB.ez_detect_dsp_monopolar(data['mp_channels'], data['bp_channels'], metadata, paths)
         logger.info('Finished dsp monopolar block')
-        _notify_progress(progress_notifier, 60)
+        _update_progress(progress_notifier, 60)
 
         #TODO once ez top gets translated we can avoid using the disk for saving.
         logger.info('Annotating Monopolar block')
@@ -258,13 +231,13 @@ def _monopolarAnnotations(data, metadata, paths):
 
     return data['bp_channels'], metadata, hfo_ai, fr_ai 
 
-def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths):
+def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths, progress_notifier):
 
     if bp_data:
         logger.info('Bipolar Block. Converting data from python to matlab (takes long).')
         dsp_bipolar_out = MATLAB.ez_detect_dsp_bipolar(bp_data, metadata, hfo_ai, fr_ai, paths)
         logger.info('Finished bipolar dsp block')
-        _notify_progress(progress_notifier, 90)
+        _update_progress(progress_notifier, 90)
         logger.info('Annotating bipolar block')
         output_fname = MATLAB.eztop_putou_e1(dsp_bipolar_out['path_to_data'], 
                                              config.BP_ANNOTATIONS_FLAG, 
