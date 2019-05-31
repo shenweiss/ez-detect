@@ -17,7 +17,7 @@ Project directory:
 
 Requirements 
 
-  1) Python 3.5 (matlab engines neeed that version). Will be replaced to 3.6 as soon as the translation gets fully completed.
+  1) Python 3.5.2 (matlab engines requirement). Will be replaced to 3.6 as soon as the translation gets fully completed.
   2) Matlab 2017a or later. 
   3) Cudaica binary for the current running device.
   4) trcio module: http://gitlab.liaa.dc.uba.ar/tju-uba/io_trc.git
