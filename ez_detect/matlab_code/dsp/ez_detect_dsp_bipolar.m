@@ -213,7 +213,7 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr
         error_status = 1;
         error_msg = 'all noisy bp electrodes';
     end
-
+    ez_bp = eeg_bp; %added to fix bug ez_bp undefined, i know this doesn't make sense, TODO review
     eeg_bp = ez_bp;
     if ~isempty(eeg_bp)
         % % Bug fix for empty cells
