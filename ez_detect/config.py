@@ -30,7 +30,7 @@ BP_ANNOTATIONS_FLAG = 1
 
 paths = {}
 paths['trc_fname']= "NOT_GIVEN"
-paths['project_root'] = str( Path(Path.home(), 'Code/ez-detect'))
+paths['project_root'] = str( Path(Path.home(), 'ez-detect'))
 paths['disk_dumps'] = str( Path(paths['project_root'], 'disk_dumps')) + '/'
 
 TEMPORARY_DUE_TRANSLATION = str( Path(paths['disk_dumps'], 'temp_pythonToMatlab_dsp/bad_chans_args_'))

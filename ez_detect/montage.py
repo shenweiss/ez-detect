@@ -43,7 +43,7 @@ def build_montage_mat_from_trc(montages, ch_names, sug_montage_name, bp_montage_
 
         chan_montage_info = tuple([ch_name, suggestion, bp_ref, exclude])
         montage.append(chan_montage_info)
-
+    
     return np.array(montage, dtype=object)
 
 #Returns an object of EzMontage class
@@ -86,7 +86,7 @@ def build_montage_from_trc(montages, ch_names, sug_montage_name, bp_montage_name
 
         else:
             raise ValueError('Incorrect definition in suggested montage.')
-
+        
     return EzMontage(ch_names, sug_as_ref, sug_as_bp, sug_as_excluded, pair_references)
 
 class EzMontage(): 
