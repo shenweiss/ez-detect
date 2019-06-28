@@ -8,6 +8,7 @@ Usage && INPUT arguments: type 'python3 hfo_annotate.py --help' in the shell
 Example with defaults: python3 hfo_annotate.py --trc_path=449.TRC
 
 '''
+#448 sleep 600 1 thread --> 48 minutes in grito
 
 if __name__ == "__main__":
     
