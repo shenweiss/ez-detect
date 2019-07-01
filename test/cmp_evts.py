@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
  
-#Usage: type 'python3 eventFiles_test.py --help' in the shell
+#Usage: type 'python3 cmp_evts.py --help' in the shell
 
 import unittest
 import sys
@@ -44,8 +44,7 @@ if __name__ == "__main__":
                         "versions, it is used to extract the channel list.",
                         required=False, default='NOT_GIVEN')
 
-
-    parser.add_argument("-d", "--delta", 
+    parser.add_argument("-d", "--delta",
                         help="The two set of events will be tested to be equal "+
                         "with a delta tolerance, meaning that at most 100*delta percent of "+
                         "the events in one set may not match with an "+

@@ -7,11 +7,14 @@ import os
 from pathlib import Path
 import platform
 
+
+#ROOT_DIR = (os.path.abspath(__file__))
+
 IS_RUNNING = False
 PROGRESS = 0
 START_TIME_DEFAULT = 0
-STOP_TIME_DEFAULT = 0  #If not given by user, this value is corrected once read the eeg.
-CYCLE_TIME_DEFAULT = 600 #600 seconds = 10 minutes
+STOP_TIME_DEFAULT = 0  #If not given by user, this value is corrected to get the eeg length once read the eeg.
+CYCLE_TIME_DEFAULT = 600 #600 seconds = 10 minutes, less breaks cudaica good detection
 
 DESIRED_FREC_HZ = 2000
 BLOCK_MIN_DUR = 100 #In seconds
@@ -30,12 +33,12 @@ BP_ANNOTATIONS_FLAG = 1
 
 paths = {}
 paths['trc_fname']= "NOT_GIVEN"
-paths['project_root'] = str( Path(Path.home(), 'ez-detect'))
+paths['project_root'] = str( Path(Path.home(), 'Code/ez-detect'))
 paths['disk_dumps'] = str( Path(paths['project_root'], 'disk_dumps')) + '/'
 
 TEMPORARY_DUE_TRANSLATION = str( Path(paths['disk_dumps'], 'temp_pythonToMatlab_dsp/bad_chans_args_'))
 
-paths['xml_output_path'] = str( Path(paths['disk_dumps'], 'xml_output/xml_out.evt'))
+paths['xml_output_path'] = str( Path(paths['disk_dumps'], 'evt_output/evt_out.evt'))
 paths['swap_array_file'] = "NOT_GIVEN"
 
 paths['ez_top_in'] = str( Path(paths['disk_dumps'], 'ez_top/input')) + '/'

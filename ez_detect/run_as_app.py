@@ -15,7 +15,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     parser.add_argument("-in", "--trc_path", 
-                        help="The directory path to the file with the data to analize.", 
+                        help="The directory path to the file with the data to analyze.",
                         required=True)
     
     parser.add_argument("-out", "--xml_output_path", 
@@ -29,12 +29,12 @@ if __name__ == "__main__":
 
     parser.add_argument("-str_t", "--start_time", 
                         help="An integer in seconds indicating from when, "+ 
-                        "relative to the file duration, do you want to analize the eeg.",
-                        required=False, default= config.START_TIME_DEFAULT, type=int) #TODO add restriction >0 
+                        "relative to the file duration, do you want to analyze the eeg.",
+                        required=False, default= config.START_TIME_DEFAULT, type=int)
     
     parser.add_argument("-stp_t", "--stop_time", 
                         help="An integer number in seconds indicating up to when, relative"+
-                        "to the file duration, do you want to analize the eeg.",
+                        "to the file duration, do you want to analyze the eeg.",
                         required=False, default= config.STOP_TIME_DEFAULT, type=int) 
 
     parser.add_argument("-c", "--cycle_time", 

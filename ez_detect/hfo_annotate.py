@@ -5,25 +5,19 @@ Example with defaults: python3 hfo_annotate.py --trc_path=449.TRC
 
 '''
 import time
-start = time. time()
-
-from ez_detect import config
-from ez_detect.config import ProgressNotifier
-import sys
-from os.path import basename, splitext, expanduser, abspath
-
-from mne.utils import verbose, logger
-from trcio import read_raw_trc
-from evtio import load_events_from_matfiles, EventFile, write_evt
-#sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
-#from profiling import profile_time, profile_memory
-from ez_detect.montage import build_montage_from_trc, build_montage_mat_from_trc
-from ez_detect.preprocessing import ez_lfbad
+import threading
+from datetime import datetime
+from os.path import basename, splitext
 
 import numpy as np
-import threading
-#import time
-from datetime import datetime
+from evtio import load_events_from_matfiles, EventFile, write_evt
+from ez_detect import config
+# sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
+# from profiling import profile_time, profile_memory
+from ez_detect.montage import build_montage_from_trc, build_montage_mat_from_trc
+from ez_detect.preprocessing import ez_lfbad
+from mne.utils import logger
+from trcio import read_raw_trc
 
 '''
 Input:
@@ -75,7 +69,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
     logger.info('Resampling data to: {} Hz'.format(str(config.DESIRED_FREC_HZ)) )
     raw_trc.resample(config.DESIRED_FREC_HZ, npad = 'auto') 
  
-    n_samples = len(raw_trc._data[0])
+    n_samples = len(raw_trc._data[0]) - 1
     sampling_rate = int(raw_trc.info['sfreq'])
     montages = raw_trc._raw_extras[0]['montages']
     metadata = { 
@@ -84,7 +78,7 @@ def hfo_annotate(paths, start_time, stop_time, cycle_time, sug_montage, bp_monta
                                            sug_montage, bp_montage), #temporary
         'old_montage': build_montage_mat_from_trc(montages, raw_trc.info['ch_names'],
                                            sug_montage, bp_montage),
-        'n_blocks' : _calculateBlockAmount(n_samples, sampling_rate, cycle_time),
+        'n_blocks' : _calculateBlockAmount(sampling_rate, cycle_time, n_samples),
         'block_size' : sampling_rate * cycle_time,
         'srate' : sampling_rate
     }
@@ -115,8 +109,10 @@ def _updateChanlist(ch_names, swap_array_file, matlab_session):
         ch_names = [ch_names[i-1] for i in swap_array] 
     return ch_names
 
-def _calculateBlockAmount(n_samples, sampling_rate, cycle_time):
-    block_size = sampling_rate * cycle_time
+#Given n_samples returns how many blocks are formed by a given sampling_rate,
+#separating in time blocks of size block_size_snds
+def _calculateBlockAmount(sampling_rate, block_size_snds, n_samples):
+    block_size = sampling_rate * block_size_snds
     full_blocks = int(n_samples / block_size)
     images_remaining = n_samples % block_size
     seconds_remaining = images_remaining / sampling_rate
@@ -125,7 +121,7 @@ def _calculateBlockAmount(n_samples, sampling_rate, cycle_time):
     return n_blocks
 
 #Unused for now
-def _saveResearchData(contest_path, metadata, eeg_data, ch_names):
+def _saveResearchData(contest_path, metadata, eeg_data, ch_names, matlab_session):
     matlab_session.workspace['ch_names'] = ch_names
     for i in range(len(metadata)):
         matlab_session.workspace['eeg_data_i'] = eeg_data[i]
@@ -139,7 +135,7 @@ def _saveResearchData(contest_path, metadata, eeg_data, ch_names):
 def _processParallelBlocks_threads(raw_trc, metadata, paths, progress_notifier):
      
     threads = []
-    n_samples = len(raw_trc._data[0])
+    n_samples = len(raw_trc._data[0]) - 1
     ch_names = np.array(raw_trc.info['ch_names'], dtype=object), #we need the np array for matlab engine for now
 
     def _get_block_data(i):
