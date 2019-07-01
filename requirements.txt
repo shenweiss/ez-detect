@@ -1,0 +1,41 @@
+atomicwrites==1.3.0
+attrs==19.1.0
+bson==0.5.8
+certifi==2019.3.9
+chardet==3.0.4
+Click==7.0
+coverage==4.5.3
+-e git+http://gitlab.liaa.dc.uba.ar/tju-uba/io_evt.git@3d0d809c99273d9d2d48d659517bd8b4bac100a4#egg=evtio
+-e git+http://gitlab.liaa.dc.uba.ar/tju-uba/ez-detect.git@2e52b6c43b24133816dfbb5783158c4991f4ea8b#egg=ez_detect
+Flask==1.0.3
+Flask-API==1.1
+Flask-PyMongo==2.3.0
+-e git+http://gitlab.liaa.dc.uba.ar/tju-uba/hfo_engine.git@8e8b896039cf9d351310a3989df89b0b901e2b3f#egg=hfo_engine_web&subdirectory=web_server
+idna==2.8
+importlib-metadata==0.17
+itsdangerous==1.1.0
+Jinja2==2.10.1
+lxml==4.3.3
+MarkupSafe==1.1.1
+matlabengineforpython===R2017a
+mne==0.18.1
+more-itertools==7.0.0
+numpy==1.16.4
+pathlib==1.0.1
+pathlib2==2.3.3
+pip-tools==3.8.0
+pluggy==0.12.0
+py==1.8.0
+pymongo==3.8.0
+pytest==4.5.0
+python-dateutil==2.8.0
+requests==2.22.0
+scipy==1.3.0
+six==1.12.0
+tabulate==0.8.3
+-e git+http://gitlab.liaa.dc.uba.ar/tju-uba/io_trc.git@f63fb48ad8663f2d635ba27282e454cc5d2fadac#egg=trcio
+urllib3==1.25.3
+waitress==1.3.0
+wcwidth==0.1.7
+Werkzeug==0.15.4
+zipp==0.5.1
