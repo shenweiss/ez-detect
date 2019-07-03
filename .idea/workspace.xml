@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="84b00f3a-7942-4bea-b523-656a4a6e664c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/test/evts/sprint_4.99.evt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/tpastore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/tpastore.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/hfo_annotate.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/hfo_annotate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/cudaica/ez_cudaica.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/cudaica/ez_cudaica.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/dsp_toolbox/MonopolarDspToolbox.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/dsp_toolbox/MonopolarDspToolbox.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_bipolar.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_bipolar.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_monopolar.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_monopolar.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/ez_pac/ezpac_putou70_e1.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/ez_pac/ezpac_putou70_e1.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/ez_top/eztop_putou_e1.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/ez_top/eztop_putou_e1.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/montage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/montage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/preprocessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ez_detect/run_as_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/run_as_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_as_app.sh" beforeDir="false" afterPath="$PROJECT_DIR$/run_as_app.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/hfo_annotate_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/hfo_annotate_test.py" afterDir="false" />
-    </list>
+    <list default="true" id="84b00f3a-7942-4bea-b523-656a4a6e664c" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,10 +11,13 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ez_detect/run_as_app.py">
+        <entry file="file://$PROJECT_DIR$/ez_detect/hfo_annotate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
+            <state relative-caret-position="288">
+              <caret line="70" column="6" lean-forward="true" selection-start-line="70" selection-start-column="6" selection-end-line="70" selection-end-column="6" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -93,12 +79,6 @@
               <item name="ez-detect" type="b2602c69:ProjectViewProjectNode" />
               <item name="ez-detect" type="462c0819:PsiDirectoryNode" />
               <item name="ez_detect" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ez-detect" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ez-detect" type="462c0819:PsiDirectoryNode" />
-              <item name="ez_detect" type="462c0819:PsiDirectoryNode" />
-              <item name="matlab_code" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ez-detect" type="b2602c69:ProjectViewProjectNode" />
@@ -248,10 +228,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/run_as_app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ez_detect/config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="546">
-          <caret line="85" column="8" lean-forward="true" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="8" />
+          <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
           <folding>
             <element signature="e#77#110#0" expanded="true" />
           </folding>
@@ -260,18 +247,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ez_detect/hfo_annotate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="121" lean-forward="true" selection-start-line="121" selection-end-line="121" />
+        <state relative-caret-position="288">
+          <caret line="70" column="6" lean-forward="true" selection-start-line="70" selection-start-column="6" selection-end-line="70" selection-end-column="6" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ez_detect/run_as_app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
         </state>
       </provider>
     </entry>
