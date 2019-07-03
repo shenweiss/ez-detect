@@ -1,12 +1,11 @@
 from mne.utils import verbose, logger
-from mne.filter import resample
+#from mne.filter import resample
 import numpy as np
 import numpy.fft as fft_pack
 from scipy.stats import zscore
 import scipy.io
 #import hdf5storage
 #from spectrum import pmtm
-from ez_detect.config import TEMPORARY_DUE_TRANSLATION
 
 def _impedance_check(eeg_data):
     logger.info('Performing impedance check.')
@@ -29,7 +28,7 @@ def _impedance_check(eeg_data):
     imp_2 = np.where(zsixty_cycle>0.3)[0]
     return set(list(np.intersect1d(imp_1, imp_2)))
 
-def ez_lfbad(eeg_data, ch_names, metadata, matlab_session):
+def ez_lfbad(eeg_data, ch_names, metadata, matlab_session, temp_saving_dir):
 
     logger.info('Entering ez_lfbad')
 
@@ -56,9 +55,9 @@ def ez_lfbad(eeg_data, ch_names, metadata, matlab_session):
     support_bipolar = eeg_data[ ch_ids ] - eeg_data [ pairs ]
 
     del metadata['montage'] 
-    args_fname = TEMPORARY_DUE_TRANSLATION +metadata['file_block']+'.mat' 
+    args_fname = temp_saving_dir + metadata['file_block']+'.mat'
     scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
-    logger.info('about to enter matlab')
+    logger.info('Entering Matlab')
     data, metadata = matlab_session.ez_bad_channel_temp(args_fname, nargout=2)
     logger.info('out of matlab')
     

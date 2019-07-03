@@ -1,4 +1,4 @@
-function [output_fname] = eztop_putou_e1(pathToData, montage, paths);
+function [output_fname] = eztop_putou_e1(pathToData, montage, ez_top_out_dir);
 
 disp("Entering eztop")
 load(pathToData) %, 'DSP_data_m' or 'DSP_data_bp'
@@ -20,7 +20,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
     if sum(fileData.total_fripple) < 15000 % exit function if memory overload
         
         %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        clearvars -except -regexp paths fileData vname_var output_fname metadata
+        clearvars -except -regexp ez_top_out_dir fileData vname_var output_fname metadata
         tic
         % Load Clips
         eegSetR = fileData.ripple_clip;
@@ -232,7 +232,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % OUTPUT STRUCTURE ASSEMBLY
-        clearvars -except -regexp paths N ResultsR ResultsfR SpikesR SpikesfR catR catfR cetR cetRsh cetfR cetfRsh ctimeR ctimefR eegListR eegListfR eegSet* fileData indR indfR output_fname metadata
+        clearvars -except -regexp ez_top_out_dir N ResultsR ResultsfR SpikesR SpikesfR catR catfR cetR cetRsh cetfR cetfRsh ctimeR ctimefR eegListR eegListfR eegSet* fileData indR indfR output_fname metadata
         
         % Output Structures: Ripple Detections
         
@@ -522,7 +522,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         %     %%% IF ALL LISTS ARE EMPTY CREATE EMPTY STRUCTURES
         
         disp('File Complete: Ripples and Fast Ripples Processed');
-        output_fname=[paths.ez_top_out output_fname];
+        output_fname=strcat(ez_top_out_dir, '/', output_fname);
                   %NEW for correcting channel id of referential montage
         monopolar_chanlist = fileData.metadata.m_chanlist;
         bipolar_chanlist = fileData.metadata.bp_chanlist;
@@ -575,7 +575,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         Total_RonO=[];
         Total_TRonS=[];
         disp('File Complete: Ripples and Fast Ripples Processed');
-        output_fname=[paths.ez_top_out output_fname];
+        output_fname=strcat(ez_top_out_dir,'/', output_fname);
           %NEW for correcting channel id of referential montage
         monopolar_chanlist = fileData.metadata.m_chanlist;
         bipolar_chanlist = fileData.metadata.bp_chanlist;
@@ -628,7 +628,7 @@ else
     Total_RonO=[];
     Total_TRonS=[];
     disp('File Complete: Ripples and Fast Ripples Processed');
-    output_fname=[paths.ez_top_out output_fname];
+    output_fname=strcat(ez_top_out_dir, '/',output_fname);
      %NEW for correcting channel id of referential montage
     monopolar_chanlist = fileData.metadata.m_chanlist;
     bipolar_chanlist = fileData.metadata.bp_chanlist;

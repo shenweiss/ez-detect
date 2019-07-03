@@ -15,7 +15,7 @@
 
 % Main DSP Algorithm for HFO research and calibration
 
-function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr_ai, paths);
+function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr_ai, ez_top_in_dir);
 % hf_bad uses the HFO band pass filtered EEG mutual information
 % adjacency matrix during episodes of artifact to define dissimar
 % electrodes. The bipolar montage is calculated for the bad electrodes
@@ -243,7 +243,7 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr
         DSP_data_bp.total_fripple=fripple_data.total_count;
         
         filename1=['dsp_' file_id '_bp_' file_block '.mat'];
-        filename1=strcat(paths.ez_top_in,filename1);
+        filename1=strcat(ez_top_in_dir,'/',filename1);
         save(filename1,'DSP_data_bp','-v7.3');
     else
         DSP_data_bp=[];

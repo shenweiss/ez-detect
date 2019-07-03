@@ -64,7 +64,7 @@ function dsp_monopolar_output = cudaica_failure_handle_(eeg_mp, eeg_bp, metadata
     cudaica_failure_ai = zeros(numel(eeg_bp(1,:)),1);
     DSP_data_m = [];
     filename1 = ['dsp_' metadata.file_id '_m_' metadata.file_block '.mat'];
-    filename1 = strcat(ez_top_in_dir, filename1);
+    filename1 = strcat(ez_top_in_dir, '/',filename1);
     save(filename1,'DSP_data_m', '-v7.3'); %in this case you are saving just an empty array? 
 
         %'DSP_data_m', DSP_data_m, ...

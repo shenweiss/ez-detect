@@ -15,6 +15,6 @@ export PYENV_VERSION=3.5.3/envs/shennan
 PY='python'
 APP='/home/tpastore/Code/ez-detect/ez_detect/run_as_app.py'
 
-$PY $APP -in=$TRC_DIR/EEG_2080.TRC -stp_t=600 -sug=Suggested -bp=Bipolar
+$PY $APP -in=$TRC_DIR/EEG_2080.TRC -stp_t=600 -bp=Bipolar -sug=Suggested
 
 unset PYENV_VERSION

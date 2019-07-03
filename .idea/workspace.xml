@@ -2,7 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84b00f3a-7942-4bea-b523-656a4a6e664c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/test/evts/sprint_4.99.evt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/tpastore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/tpastore.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/hfo_annotate.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/hfo_annotate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/cudaica/ez_cudaica.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/cudaica/ez_cudaica.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/dsp_toolbox/MonopolarDspToolbox.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/dsp_toolbox/MonopolarDspToolbox.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_bipolar.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_bipolar.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_monopolar.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/dsp/ez_detect_dsp_monopolar.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/ez_pac/ezpac_putou70_e1.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/ez_pac/ezpac_putou70_e1.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/matlab_code/ez_top/eztop_putou_e1.m" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/matlab_code/ez_top/eztop_putou_e1.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/montage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/montage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/preprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ez_detect/run_as_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/ez_detect/run_as_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_as_app.sh" beforeDir="false" afterPath="$PROJECT_DIR$/run_as_app.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/hfo_annotate_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/hfo_annotate_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,10 +28,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ez_detect/config.py">
+        <entry file="file://$PROJECT_DIR$/ez_detect/run_as_app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="47" column="63" selection-start-line="47" selection-start-column="63" selection-end-line="47" selection-end-column="63" />
+            <state relative-caret-position="366">
+              <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -26,6 +41,14 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>matlab</find>
+      <find>temp_pythonToMatlab_dsp</find>
+      <find>misc_code</find>
+      <find>paths</find>
+      <find>cudaica_dir</find>
+      <find>ez_top_in</find>
+      <find>ez_bad_nn_in</find>
+      <find>temp_saving_dir</find>
+      <find>ez_lf</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -37,10 +60,13 @@
         <option value="$PROJECT_DIR$/ez_detect/cmd_line_call.py" />
         <option value="$PROJECT_DIR$/run_as_app.sh" />
         <option value="$PROJECT_DIR$/test/mainLoop_test.py" />
-        <option value="$PROJECT_DIR$/ez_detect/hfo_annotate.py" />
         <option value="$PROJECT_DIR$/test/cmp_evts_test.py" />
         <option value="$PROJECT_DIR$/test/hfo_annotate_test.py" />
+        <option value="$PROJECT_DIR$/ez_detect/montage.py" />
+        <option value="$PROJECT_DIR$/ez_detect/preprocessing.py" />
         <option value="$PROJECT_DIR$/ez_detect/config.py" />
+        <option value="$PROJECT_DIR$/ez_detect/hfo_annotate.py" />
+        <option value="$PROJECT_DIR$/ez_detect/run_as_app.py" />
       </list>
     </option>
   </component>
@@ -71,7 +97,12 @@
             <path>
               <item name="ez-detect" type="b2602c69:ProjectViewProjectNode" />
               <item name="ez-detect" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="ez_detect" type="462c0819:PsiDirectoryNode" />
+              <item name="matlab_code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ez-detect" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -82,6 +113,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -110,8 +142,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="32" width="1853" height="1048" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18739726" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18739726" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -124,37 +157,24 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32911393" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32911393" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="10" visible="true" weight="0.32911393" />
+      <window_info anchor="bottom" id="Python Console" order="10" visible="true" weight="0.32911393" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ez_detect/cmd_line_call.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="60" column="36" selection-start-line="60" selection-start-column="36" selection-end-line="60" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_as_app.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="19" column="7" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ez_detect/hfo_annotate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="137" column="40" selection-start-line="137" selection-start-column="40" selection-end-line="137" selection-end-column="40" />
-          <folding>
-            <element signature="e#153#164#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/cmd_line_call.py" />
     <entry file="file://$PROJECT_DIR$/test/cmp_evts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -165,13 +185,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/manyMatFiles_test.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test/manyMatFiles_test.sh" />
     <entry file="file://$PROJECT_DIR$/test/cmp_mat_files.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="474">
@@ -186,6 +200,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/matlab_code/ez_top/eztop_putou_e1.m">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="684">
+          <caret line="38" column="20" lean-forward="true" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_as_app.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="19" column="7" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/matlab_code/cudaica/ez_cudaica_ripple.m">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test/hfo_annotate_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -196,10 +231,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/montage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1650">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="30" column="74" selection-start-line="30" selection-start-column="59" selection-end-line="30" selection-end-column="74" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ez_detect/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="47" column="63" selection-start-line="47" selection-start-column="63" selection-end-line="47" selection-end-column="63" />
+        <state relative-caret-position="546">
+          <caret line="85" column="8" lean-forward="true" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="8" />
+          <folding>
+            <element signature="e#77#110#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/hfo_annotate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="121" lean-forward="true" selection-start-line="121" selection-end-line="121" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ez_detect/run_as_app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
         </state>
       </provider>
     </entry>

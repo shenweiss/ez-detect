@@ -5,19 +5,24 @@
       <w>chans</w>
       <w>cudaica</w>
       <w>documentos</w>
+      <w>dont</w>
       <w>fname</w>
       <w>intraop</w>
       <w>matfiles</w>
       <w>matlab</w>
       <w>microvolts</w>
+      <w>monopolar</w>
       <w>nchan</w>
       <w>parallelized</w>
+      <w>parrallel</w>
       <w>pdir</w>
       <w>resampling</w>
       <w>sfreq</w>
       <w>snds</w>
       <w>srate</w>
+      <w>struct</w>
       <w>tpastore</w>
+      <w>trcio</w>
     </words>
   </dictionary>
 </component>

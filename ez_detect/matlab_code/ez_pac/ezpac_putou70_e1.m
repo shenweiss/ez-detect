@@ -1,4 +1,4 @@
-function ezpac_putou_e1(eeg_data, fr, hfo, output_fname, metadata, montage, paths)
+function ezpac_putou_e1(eeg_data, fr, hfo, output_fname, metadata, montage, ez_pac_out_dir)
 % Written by Dr. Shennan Aibel Weiss and Dr. Inkyung Song TJU 2016-2017, Portions
 % of this code were written by Dr. Shennan Aibel Weiss at UCLA 2014-2016. 
 
@@ -25,7 +25,7 @@ else
 end;
 file_id = metadata.file_id;
 
-new_output_fname = [paths.ez_pac_out file_id fname_var metadata.file_block '.mat'];
+new_output_fname = strcat(ez_pac_out_dir, '/', file_id, fname_var, metadata.file_block, '.mat');
 
 hfo_amp=[];
 for i=1:numel(hfo(:,1))
