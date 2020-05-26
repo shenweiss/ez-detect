@@ -244,16 +244,16 @@ def _referential_annotations(data, metadata, paths, progress_notifier, matlab_se
             matlab_session.removeEvents_1_5_cycles(output_fname, nargout=0)
 
             # This doesn't annotate anything in the evts. comment for now.
-            '''
+            #3' comment function if doesnt work
             matlab_session.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
                                     dsp_monopolar_out['ez_fr_mp'], 
                                     dsp_monopolar_out['ez_hfo_mp'], 
                                     output_fname,
                                     dsp_monopolar_out['metadata'],
-                                    config.MP_ANNOTATIONS_FLAG,
+                                    MP_ANNOTATIONS_FLAG,
                                     paths['ez_pac_out'], 
                                     nargout=0)
-            '''
+            #3'
         else:
             logger.info('Error in process_dsp_output, error_flag != 0')
 
@@ -283,15 +283,15 @@ def _bipolar_annotations(bp_data, metadata, hfo_ai, fr_ai, paths, progress_notif
 
         matlab_session.removeEvents_1_5_cycles(output_fname, nargout=0)
 
-        '''
+        #3' uncomment if doesnt work
         matlab_session.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
                                 dsp_bipolar_out['ez_fr_bp'], 
                                 dsp_bipolar_out['ez_hfo_bp'], 
                                 output_fname, 
                                 dsp_bipolar_out['metadata'], 
-                                config.BP_ANNOTATIONS_FLAG, 
+                                BP_ANNOTATIONS_FLAG, 
                                 paths['ez_pac_out'], 
                                 nargout=0)
-        '''
+        #3'
     else:
         logger.info("Didn't enter dsp bipolar, bp_data was empty.")

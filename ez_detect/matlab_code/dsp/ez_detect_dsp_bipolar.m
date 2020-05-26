@@ -251,7 +251,8 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr
         ez_hfo_bp=[];
         ez_fr_bp=[];
     end % if eeg_bp exists
-
+    %ADDED LINE BELOW to fix analysis on IO08
+    ez_hfo_bp = hfo; 
     %to be improved later, add error_flag
         %'DSP_data_bp', DSP_data_bp, ...
     dsp_bipolar_output = struct( ...

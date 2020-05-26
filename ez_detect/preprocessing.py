@@ -53,8 +53,8 @@ def ez_lfbad(eeg_data, ch_names, metadata, matlab_session, temp_saving_dir):
     ch_ids = np.array( list( set(montage.pair_references.keys()) - imp), dtype=int )
     pairs = np.array( [ montage.pair_references[ch_id] for ch_id in ch_ids ], dtype=int )
     support_bipolar = eeg_data[ ch_ids ] - eeg_data [ pairs ]
-
-    del metadata['montage'] 
+    if "montage" in metadata.keys(): ##remove this if if parallel doesnt work to get serial processing ok
+        del metadata['montage'] 
     args_fname = temp_saving_dir + metadata['file_block']+'.mat'
     scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
     logger.info('Entering Matlab')
