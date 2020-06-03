@@ -23,7 +23,7 @@ def _impedance_check(eeg_data):
             end_index=max(indexes)
         sixty_cycle.append( sum(np.real(powerSpectrum[start_index:end_index+1])) )
     sixty_cycle = np.array(sixty_cycle)
-    zsixty_cycle = zscore(sixty_cycle)
+    zsixty_cycle = zscore(sixty_cycle, ddof=1) #added the ddof param seems to fix an issue
     imp_1 = np.where(sixty_cycle>1e9)[0]
     imp_2 = np.where(zsixty_cycle>0.3)[0]
     return set(list(np.intersect1d(imp_1, imp_2)))
