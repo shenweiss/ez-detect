@@ -429,7 +429,7 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
             DSP_data_m.total_fripple=fripple_data.total_count;
             
             filename1 = ['dsp_' metadata.file_id '_m_' metadata.file_block '.mat'];
-            filename1 = strcat(paths.ez_top_in, '/' ,filename1);
+            filename1 = strcat('/data/downstate/ez-detect/disk_dumps/ez_top/input', '/' ,filename1);
             save(filename1,'DSP_data_m', '-v7.3');
             dsp_monopolar_output = struct( ...
                 'ez_mp', eeg_mp, ...      
@@ -444,11 +444,11 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
             );
 
         else % error_flag 1 i.e. CUDAICA exploded ICA #3
-            dsp_monopolar_output = mp_toolbox.cudaica_failure_handle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
+            dsp_monopolar_output = mp_toolbox.cudaica_failure_handle(eeg_mp, eeg_bp, metadata, '/data/downstate/ez-detect/disk_dumps/ez_top/input');
         end    
         
     else % error_flag 1 i.e. CUDAICA exploded ICA #1
-        dsp_monopolar_output = mp_toolbox.cudaica_failure_handle(eeg_mp, eeg_bp, metadata, paths.ez_top_in);
+        dsp_monopolar_output = mp_toolbox.cudaica_failure_handle(eeg_mp, eeg_bp, metadata, '/data/downstate/ez-detect/disk_dumps/ez_top/input');
     end %end of enormous if else
 
     % OR MATLAB ENGINE only

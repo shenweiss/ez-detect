@@ -87,9 +87,9 @@ function [wts, sph, tmpint, error_flag] = ez_cudaica(data, paths, var3,var4,var5
 
 disp('ENTERING CUDAICA.M')
 
-disk_dumps = strcat(paths.disk_dumps,'/');
-binica_sc = paths.binica_sc;
-cudaica_bin = paths.cudaica_bin;
+disk_dumps = strcat('/data/downstate/ez-detect/disk_dumps','/');
+binica_sc = '/data/downstate/ez-detect/ez_detect/matlab_code/cudaica/binica.sc'
+cudaica_bin = '/data/downstate/ez-detect/ez_detect/matlab_code/cudaica/cudaica';
 
 if ~isdeployed
     addpath(disk_dumps);

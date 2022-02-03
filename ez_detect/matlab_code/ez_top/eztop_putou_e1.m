@@ -1,6 +1,6 @@
 function [output_fname] = eztop_putou_e1(pathToData, montage, ez_top_out_dir);
 
-disp("Entering eztop")
+disp("Entering eztop ez-detect directory")
 load(pathToData) %, 'DSP_data_m' or 'DSP_data_bp'
 
 if montage == 0
@@ -20,7 +20,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
     if sum(fileData.total_fripple) < 15000 % exit function if memory overload
         
         %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        clearvars -except -regexp ez_top_out_dir fileData vname_var output_fname metadata
+        clearvars -except -regexp ez_top_out_dir fileData vname_var output_fname metadata output_fname
         tic
         % Load Clips
         eegSetR = fileData.ripple_clip;
@@ -522,10 +522,13 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
         %     %%% IF ALL LISTS ARE EMPTY CREATE EMPTY STRUCTURES
         
         disp('File Complete: Ripples and Fast Ripples Processed');
+        fprintf(output_fname)
         output_fname=strcat(ez_top_out_dir, '/', output_fname);
                   %NEW for correcting channel id of referential montage
         monopolar_chanlist = fileData.metadata.m_chanlist;
         bipolar_chanlist = fileData.metadata.bp_chanlist;
+        metadata=fileData.metadata;
+        disp('saving metadata')
         save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist');
         toc
         
@@ -579,6 +582,7 @@ if sum(fileData.total_ripple) < 40000  % exit function if memory overload
           %NEW for correcting channel id of referential montage
         monopolar_chanlist = fileData.metadata.m_chanlist;
         bipolar_chanlist = fileData.metadata.bp_chanlist;
+        metadata=fileData.metadata;
         save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist');
     end;
     
@@ -632,7 +636,8 @@ else
      %NEW for correcting channel id of referential montage
     monopolar_chanlist = fileData.metadata.m_chanlist;
     bipolar_chanlist = fileData.metadata.bp_chanlist;
-    save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist');
+    metadata=fileData.metadata;
+    save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist', 'metadata');
 
 disp("exiting eztop")
 

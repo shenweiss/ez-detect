@@ -21,6 +21,14 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr
 % electrodes. The bipolar montage is calculated for the bad electrodes
 % and the HFOs are identified in ez_detect_dps_bi.
 
+    if iscell(hfo_ai)
+            fprintf('running in bipolar only mode!')
+            hfo_ai=cell2mat(hfo_ai);
+            fr_ai=hfo_ai;
+            DSP_data_bp.m_chanlist={''};
+            metadata.m_chanlist={''};
+    end;
+
     dims = metadata.montage_shape;
     metadata.montage = reshape(metadata.montage, dims(1), dims(2));
 
@@ -87,7 +95,7 @@ function dsp_bipolar_output = ez_detect_dsp_bipolar(eeg_bp, metadata, hfo_ai, fr
             'trd_val', 1 ...  
         );
         config.fripple_run = false;
-
+               
         ripple_data = bp_toolbox.rippleDetection(eeg_data, score_amp_ripple, zscore_amp_ripple, hfo, hfo_ai, config);
 
         num_of_data_rows = numel(eeg_data(:,1));

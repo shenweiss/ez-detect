@@ -17,8 +17,7 @@ itsdangerous==1.1.0
 Jinja2==2.10.1
 lxml==4.3.3
 MarkupSafe==1.1.1
-matlabengineforpython===R2017a
-mne==0.18.1
+mne==0.23.4
 more-itertools==7.0.0
 numpy==1.16.4
 pathlib==1.0.1

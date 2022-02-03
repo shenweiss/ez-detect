@@ -64,7 +64,6 @@ def hfo_annotate(trc_fname, bipolar_montage, suggested_montage = 'Ref.',
 
     paths = config.get_working_paths(trc_fname, evt_fname, saf_fname)
     raw_trc = read_raw_trc(paths['trc_fname'], include=None)
-
     montage_namelist = _montage_names(raw_trc)
     if bipolar_montage not in montage_namelist :
         raise ValueError('The provided bipolar montage is not an option of this trc file.')
@@ -78,12 +77,11 @@ def hfo_annotate(trc_fname, bipolar_montage, suggested_montage = 'Ref.',
         raise ValueError('Stop time must be greater than start time and can not exceed file duration.')
 
     #Todo validate cycle time with min block size for valid cudaica analysis
-
+   
     #End of validations
     logger.info("Cropping data...")
     raw_trc.crop(start_time, stop_time).load_data()
-    _update_progress(progress_notifier, 10)
-
+    
     logger.info("Converting data from volts to microvolts...")
     #This is probably needed because of bad edfs lead to a bad trc format,
     #because data is in microvolts and mne uses volts
@@ -94,8 +92,7 @@ def hfo_annotate(trc_fname, bipolar_montage, suggested_montage = 'Ref.',
     logger.info("XML will be written to {0}".format(paths['evt_fname']))
     logger.info("Number of channels {}".format(raw_trc.info['nchan']))
     logger.info("First data in microvolts: {}".format( raw_trc._data[0][0]) )
-    logger.info('Sampling rate: {value}{unit}'.format( value= int(raw_trc.info['sfreq']) ,
-                                                       unit='Hz'))
+    logger.info('Sampling rate: {value}{unit}'.format( value= int(raw_trc.info['sfreq']),   unit='Hz'))
     #Resampling data
     logger.info('Resampling data to: {} Hz'.format(2000))
     raw_trc.resample(2000, npad='auto')
