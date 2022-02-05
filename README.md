@@ -1,4 +1,4 @@
-Installation Instructions for HFO-Engine and EZ-Detect version 0.0.1 (2014-2022)
+Installation Instructions for HFO-Engine and EZ-Detect version 1.0.1 (2014-2022)
 
 Software Authors: Shennan Weiss M.D. Ph.D., Tomas Pastore M.S., Zachary Waldman M.S., Inkyung Song Ph.D., Matthias Gatti M.S., Federico Raimondo Ph.D., Diego Slezak Ph.D. 
 
