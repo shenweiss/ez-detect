@@ -135,7 +135,7 @@ example
 
 g) You need to manually enter your project paths
 -  in ~/hfo_engine/src/ez-detect/ez_detect/config.py line paths['project_root'] = str( Path('/home/sweiss/ez-detect'))
--  hfo_annotate.py lines (100, 206, 215, 236, 242, 252)
+-  hfo_annotate.py lines (107, 181, 190, 211, 217, 227)
 -  in ~/ez-detect/ez_detect/matlab_code/cudaica/ez_cudaica.m lines 90-92
 -  in ~/ez-detect/ez_detect/matlab_code/dsp/ez_detect_dsp_monopolar lines 432, 447, 451
 
