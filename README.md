@@ -135,7 +135,7 @@ example
 - then ctrl-c and run $./start_server.sh --production
 - Be careful in the start_server script how the IP address is assigned, also a specific port can be assigned in the waitress command. Port 8080 is the default.
 
-Trouble Shooting (ignore if you encountered no errors)
+Troubleshooting (ignore if you encountered no errors)
 - You may also need to install llvmlite $ conda install --channel=numba llvmlite
 - You may also need to downgrade markdown $ pip3 install Markdown==3.3.4
 
