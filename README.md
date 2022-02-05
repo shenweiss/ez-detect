@@ -32,7 +32,8 @@ Dedication: I would like to thank my daughter Sabine Weiss who missed me while I
 Recommended Literature (please read and cite the papers appended below if you utilize this software in your research):
 -----------
 
-1) HFO Detector and independent component analysis:
+1) HFO Detector and independent component analysis:\
+
 CUDAICA: GPU optimization of Infomax-ICA EEG analysis.  Raimondo F, Kamienkowski JE, Sigman M, Fernandez Slezak D. Comput Intell Neurosci. 2012;2012:206972. doi: 10.1155/2012/206972. 
 
 Utilization of independent component analysis for accurate pathological ripple detection in intracranial EEG recordings recorded extra- and intra-operatively. Shimamoto S, Waldman ZJ, Orosz I, Song I, Bragin A, Fried I, Engel J Jr, Staba R, Sharan A, Wu C, Sperling MR, Weiss SA. Clin Neurophysiol. 2018 Jan;129(1):296-307. doi: 10.1016/j.clinph.2017.08.036. 
@@ -40,6 +41,7 @@ Utilization of independent component analysis for accurate pathological ripple d
 Visually validated semi-automatic high-frequency oscillation detection aides the delineation of epileptogenic regions during intra-operative electrocorticography.  Weiss SA, Berry B, Chervoneva I, Waldman Z, Guba J, Bower M, Kucewicz M, Brinkmann B, Kremen V, Khadjevand F, Varatharajah Y, Guragain H, Sharan A, Wu C, Staba R, Engel J Jr, Sperling M, Worrell G. Clin Neurophysiol. 2018 Oct;129(10):2089-2098. doi: 10.1016/j.clinph.2018.06.030. 
 
 2) Topographical Method of HFO categorization and quantification:
+
 A method for the topographical identification and quantification of high frequency oscillations in intracranial electroencephalography recordings.  Waldman ZJ, Shimamoto S, Song I, Orosz I, Bragin A, Fried I, Engel J Jr, Staba R, Sperling MR, Weiss SA. Clin Neurophysiol. 2018 Jan;129(1):308-318. doi: 10.1016/j.clinph.2017.10.004. 
 
 3) HFO Phase-amplitude coupling (phasor method):
