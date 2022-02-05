@@ -100,7 +100,6 @@ c) installing ez-detect
 - note any errors in the pip dependency resolver
 - download python3 setuptools
 - in the ez-detect directory run python3 setup.py develop
-- edit config.py in the ~/ez-detect/ez_detect/ folder and change paths
 - copy the cudaica binary executable to the ~/ez-detect/ez_detect/matlabcode/cudaica/ folder overwriting the existing cudaica file there 
 - In your matlab directory go to matlab_path/extern/engines/python/ and run: $python3 setup.py install
 
