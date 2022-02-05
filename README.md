@@ -154,7 +154,7 @@ i) connecting the Windows HFO Engine client to the HFO Engine webserver
 - Click on Advanced Settings
 - Enter the hostname (ip address) and port (8080) of the webserver then click on Save then click on Test Server Connection.
 
-* Trouble shooting:
+* troubleshooting:
 1) In case you did not create a new virtual environment specifically for this project, this project has many dependencies and some of the dependencies may need to be upgraded or downgraded depending on the current version to execute the project. Please look carefully at error messages when installing each package or installing the dependencies. Instructions for upgrading and downgrading each dependency can be found online using Google searches.
 2) If a connection cannot be established between the HFO_engine.exe client on Windows and the web_server on Linux it may be due to a firewall on either system. Be sure the port (8080) is open to incoming and outgoing traffic on both systems. To check that the webserver is operational on the host try
 
