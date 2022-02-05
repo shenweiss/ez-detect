@@ -3,6 +3,10 @@
 Software Authors: Shennan Weiss M.D. Ph.D., Tomas Pastore M.S., Zachary Waldman M.S., Inkyung Song Ph.D., Matthias Gatti M.S., Federico Raimondo Ph.D., Diego Slezak Ph.D. 
 
 Document Author: Shennan Weiss M.D. Ph.D. shennanweiss@gmail.com
+Assistant Professor Neurology and Physiology/Pharmacology
+State University of New York Downstate
+Brooklyn, NY
+
 Listserv for users: send email to hfoengine-request@freelists.org with 'subscribe' in the Subject field (no quotes) 
 
 Date: 2/2022	
@@ -49,8 +53,7 @@ Ripples Have Distinct Spectral Properties and Phase-Amplitude Coupling With Slow
 
 ---------
 
-
-System Requirements: A Windows 7 or above system running Brain Quick version 1. This plug-in has not yet been tested with the yet to be released Brain Quick version 2. A second system running Linux (tested on Ubuntu 20), with an NVIDIA GPU, that performs the data processing. On the Linux system, at least 64 GB of RAM is required, although over 100 GB of RAM is recommended. A swapdisk for vistual memory of at least 10GB is recommended. Linux software requirements include Matlab 2017a or later, Python 3.5.2 and Anaconda 3 4.2 or above. Other dependencies are stated below in the instructions or will be installed automatically. Note that it may be possible to use the MCR instead of purchasing Matlab, but MCR has a different architecture for running Matlab within Python and the code will need to be modififed. 
+System Requirements: A Windows 7 or above system running Brain Quick version 1. This plug-in has not yet been tested with the yet to be released Brain Quick version 2. A second system running Linux (tested on Ubuntu 20), with an NVIDIA GPU, that performs the data processing. On the Linux system, at least 64 GB of RAM is required, although over 100 GB of RAM is recommended. A swapdisk for vistual memory of at least 10GB is recommended. Linux software requirements include Matlab 2017a or later, Python 3.5.2 and Anaconda 3 4.2 or above. Other dependencies are stated below in the instructions or will be installed automatically. Note that it may be possible to use the MCR instead of purchasing Matlab, but MCR has a different architecture for running Matlab within Python and the HFO-Engine/EZ-detect code will need to be modififed. 
 
 ** A note about Anaconda ***
 Anaconda is needed mainly for virtual environments. Errors were encountered in building the software using the latest version of Conda 4.11 which uses Python 3.9. The software was successfully built using Conda 4.10.3 and Python 3.8.
@@ -102,9 +105,8 @@ b) installing cudaica
 c) installing ez-detect
 - in the ez-detect directory run: $pip3 install -r requirements.txt
 - note any errors in the pip dependency resolver
-- download python3 setuptools
 - in the ez-detect directory run python3 setup.py develop
-- copy the cudaica binary executable to the ~/ez-detect/ez_detect/matlabcode/cudaica/ folder overwriting the existing cudaica file there 
+- copy the compiled cudaica binary executable to the ~/ez-detect/ez_detect/matlabcode/cudaica/ folder overwriting the existing cudaica file there 
 - In your matlab directory go to matlab_path/extern/engines/python/ and run: $python3 setup.py install
 
 d) installing io_trc code
@@ -130,6 +132,8 @@ example
 - try starting the server $./start_server.sh --production --init
 - then ctrl-c and run $./start_server.sh --production
 - Be careful in the start_server script how the IP address is assigned, also a specific port can be assigned in the waitress command. Port 8080 is the default.
+
+Trouble Shooting (ignore if you encountered no errors)
 - You may also need to install llvmlite $ conda install --channel=numba llvmlite
 - You may also need to downgrade markdown $ pip3 install Markdown==3.3.4
 
@@ -149,7 +153,7 @@ i) connecting the Windows HFO Engine client to the HFO Engine webserver
 - Enter the hostname (ip address) and port (8080) of the webserver then click on Save then click on Test Server Connection.
 
 * Trouble shooting:
-1) This project has many dependencies, some of the dependencies may need to be upgraded or downgraded depending on the current version to execute the project. Please look carefully at error messages when installing each package or installing the dependencies. Instructions for upgrading and downgrading each dependency can be found online using Google searches.
+1) In case you did not create a new virtual environment specifically for this project, this project has many dependencies and some of the dependencies may need to be upgraded or downgraded depending on the current version to execute the project. Please look carefully at error messages when installing each package or installing the dependencies. Instructions for upgrading and downgrading each dependency can be found online using Google searches.
 2) If a connection cannot be established between the HFO_engine.exe client on Windows and the web_server on Linux it may be due to a firewall on either system. Be sure the port (8080) is open to incoming and outgoing traffic on both systems. To check that the webserver is operational on the host try
 
 $ python3
@@ -169,11 +173,7 @@ you should see the Fastwave welcome message
 
 Note: This package was intended for the server to run in the cloud. Other configuration options are possible including setting up a Windows guest VM on a Linux host. In this case, a bridged network configuration is recommended for the Windows VM. It may also be possible to install HFO-Engine/EZ-Detect on Windows
 
-3. make sure permissions are set to allow your user to read, write, execute
-
 v1.0.0 can be downloaded from http://gitlab.liaa.dc.uba.ar/tju-uba (currently down)
-
-v1.0.1 Modifications Notes: While some of these modifications were make to make the software more user friendly (i.e. case sensitivity, etc), others detracted from the original design. In python 3.8.11 the path/paths defined in the program were not operating correctly within Python or Matlab. This required manually entering the paths in to the code. If an advanced Python programmer would like address this issue please let me know. For now in version v0.0.1 the paths must be entered in the appropriate sections of the Matlab and Python code. 
 
 v1.0.1 Modifications include:
 ------------------------
@@ -189,7 +189,7 @@ v1.0.1 Modifications include:
 - in hfo_annotate hardcoded cycletime to 600 seconds.
 - in removeEvents_1_5_cycles.m converted RonS and fRonS that did not meet duration criteria to FronS. 
 - in ez_detect_dsp_bipolar.m added lines 24-28 for bipolar only detection mode
-- in hfo_annotate.py made a number of changes to eliminate threading due to Matlab bug related to saving data on each thread, the original version including threads is saved as hfo_annotate_threads.py
+- in hfo_annotate.py made a number of changes to eliminate threading due to Matlab bug related to saving data on each thread, the original version can be downloaded in v1.0.0
 - in hfo_annotate.py and ez_bad_channel_temp.m and preprocessing.py made several changes relating to building correct montages in Matlab related to translation of a Python object structure.
 - in eztop_putou_e1.m added metadata to the saved data to correct for error in writing annotations of multiple blocks
 - in evtio/io.py added code to allow for correct annotations of multiple blocks of data
@@ -199,7 +199,7 @@ v1.0.1 Beta Testing
 - Nihon Kohden amplifier EDF data
 - Natus Quantum amplifier EDF data
 - Micromed Native TRC data
-- New installation from shenweiss github repositories onto Google Cloud instance, tested installation twice. Note for Cloud deployment most services have http tranfer limit of 35 MB, thus to deploy the software to the cloud using a commercial platform you will need to make modifications at the client and server side to overcome the limitation in file size. 
+- New installation from shenweiss github repositories onto Google Cloud instances, tested installation three times. Note for Cloud deployment most services have http tranfer limit of 35 MB, thus to deploy the software to the cloud using a commercial platform you will need to make modifications at the client and server side to overcome the limitation in file size. 
 
 Benchmarks
 -------------------
