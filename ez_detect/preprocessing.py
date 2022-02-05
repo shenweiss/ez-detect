@@ -1,11 +1,12 @@
 from mne.utils import verbose, logger
-#from mne.filter import resample
+from mne.filter import resample
 import numpy as np
 import numpy.fft as fft_pack
 from scipy.stats import zscore
 import scipy.io
 #import hdf5storage
 #from spectrum import pmtm
+from ez_detect.config import TEMPORARY_DUE_TRANSLATION
 
 def _impedance_check(eeg_data):
     logger.info('Performing impedance check.')
@@ -23,12 +24,12 @@ def _impedance_check(eeg_data):
             end_index=max(indexes)
         sixty_cycle.append( sum(np.real(powerSpectrum[start_index:end_index+1])) )
     sixty_cycle = np.array(sixty_cycle)
-    zsixty_cycle = zscore(sixty_cycle, ddof=1) #added the ddof param seems to fix an issue
+    zsixty_cycle = zscore(sixty_cycle)
     imp_1 = np.where(sixty_cycle>1e9)[0]
     imp_2 = np.where(zsixty_cycle>0.3)[0]
     return set(list(np.intersect1d(imp_1, imp_2)))
 
-def ez_lfbad(eeg_data, ch_names, metadata, matlab_session, temp_saving_dir):
+def ez_lfbad(eeg_data, ch_names, metadata, matlab_session):
 
     logger.info('Entering ez_lfbad')
 
@@ -53,11 +54,11 @@ def ez_lfbad(eeg_data, ch_names, metadata, matlab_session, temp_saving_dir):
     ch_ids = np.array( list( set(montage.pair_references.keys()) - imp), dtype=int )
     pairs = np.array( [ montage.pair_references[ch_id] for ch_id in ch_ids ], dtype=int )
     support_bipolar = eeg_data[ ch_ids ] - eeg_data [ pairs ]
-    if "montage" in metadata.keys(): ##remove this if if parallel doesnt work to get serial processing ok
-        del metadata['montage'] 
-    args_fname = temp_saving_dir + metadata['file_block']+'.mat'
-    scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
-    logger.info('Entering Matlab')
+    
+    args_fname = TEMPORARY_DUE_TRANSLATION +metadata['file_block']+'.mat' 
+    scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, file_id=metadata['file_id'], n_blocks=metadata['n_blocks'], block_size=metadata['block_size'], srate=metadata['srate'], file_block=metadata['file_block'], ch_names_bp=metadata['ch_names_bp'], ch_names_mp=metadata['ch_names_mp'], chanlist= ch_names, ez_montage=metadata['old_montage']))
+    #scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
+    logger.info('about to enter matlab')
     data, metadata = matlab_session.ez_bad_channel_temp(args_fname, nargout=2)
     logger.info('out of matlab')
     

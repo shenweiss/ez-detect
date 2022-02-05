@@ -7,81 +7,67 @@ import os
 from pathlib import Path
 import platform
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+IS_RUNNING = False
+PROGRESS = 0
+START_TIME_DEFAULT = 0
+STOP_TIME_DEFAULT = 0  #If not given by user, this value is corrected once read the eeg.
+CYCLE_TIME_DEFAULT = 600 #600 seconds = 10 minutes
 
-#CUDAICA constraint, detection needs a the parallel blocks to be bigger than a constraint
-#TODO find this constraint experimentally
-MIN_BLOCK_SNDS = 100 #The minimum acceptable size in seconds for a parallel block
+DESIRED_FREC_HZ = 2000
+BLOCK_MIN_DUR = 10 #In seconds
 
+#MONTAGE CONSTANTS
+REFERENTIAL = 1
+BIPOLAR = 0
+NO_BP_REF = 0
+EXCLUDE_CH = 1
+DONT_EXCLUDE_CH = 0
 
+MP_ANNOTATIONS_FLAG = 0 
+BP_ANNOTATIONS_FLAG = 1
+        
 #Working paths
 
-TRC_EXTENSION = 'TRC'
-EVT_EXTENSION = 'evt'
-EDF_EXTENSION = 'edf'
+paths = {}
+paths['trc_fname']= "NOT_GIVEN"
+paths['project_root'] = str( Path('/data/sweiss/downstate/ez-detect'))
+paths['disk_dumps'] = str( Path(paths['project_root'], 'disk_dumps')) + '/'
 
-def file_extension(filename):
-    try:
-        return filename.rsplit('.', 1)[1]
-    except IndexError:
-        raise ValueError('There is no extension in filename ' + filename)
+TEMPORARY_DUE_TRANSLATION = str( Path(paths['disk_dumps'], 'temp_pythonToMatlab_dsp/bad_chans_args_'))
 
+paths['xml_output_path'] = str( Path(paths['disk_dumps'], 'xml_output/xml_out.evt'))
+paths['swap_array_file'] = "NOT_GIVEN"
 
-#TODO remove endings + /
-def get_working_paths(trc_fname, evt_fname, saf_fname):
-    paths = {}
-    project_root = PROJECT_ROOT
-    disk_dumps = Path(project_root, 'disk_dumps')
+paths['ez_top_in'] = str( Path(paths['disk_dumps'], 'ez_top/input')) + '/'
+paths['ez_top_out'] = str( Path(paths['disk_dumps'], 'ez_top/output')) + '/'
+paths['ez_pac_out'] = str( Path(paths['disk_dumps'], 'ez_pac_output')) + '/'
 
-    #Fix trc_fname
-    try:
-        trc_path = Path(trc_fname).expanduser().resolve()
-        assert(file_extension( str(trc_path) ) == TRC_EXTENSION)
-    except Exception:
-        raise ValueError('The provided trc file is not valid')
+paths['research'] = str( Path(paths['disk_dumps'], 'research_matfiles')) + '/'
 
+paths['cudaica_dir'] = str( Path(paths['project_root'], 'ez_detect/matlab_code/cudaica')) + '/'
+paths['binica_sc'] = str( Path(paths['cudaica_dir'], 'binica.sc'))
+paths['cudaica_bin'] = str( Path(paths['cudaica_dir'], 'cudaica'))
+paths['misc_code'] = str( Path(paths['project_root'], 'ez_detect/matlab_code/misc_code')) + '/'
+paths['temp_pythonToMatlab_dsp'] = str(Path(paths['disk_dumps'], 'temp_pythonToMatlab_dsp')) + '/'
 
-    #Fix evt_fname
-    default_evt_fname = "{fname}.{ext}".format(fname=trc_path.stem, ext=EVT_EXTENSION)
-    if evt_fname is None :
-        evt_path = Path(disk_dumps, 'evt_output', default_evt_fname)
-    else:
-        evt_path = Path(evt_fname).expanduser().absolute()
+def resolvePath(path_str):
+    return str(Path(path_str).expanduser().resolve())
 
-    try:
-        assert(file_extension(str(evt_path)) == EVT_EXTENSION)
-        assert(evt_path.parent.is_dir())
-    except Exception:
-        raise ValueError('The provided evt saving path is not valid.')
-
-    #Fix saf_fname
-    saf_path = 'NOT_GIVEN' if saf_fname is None else Path(saf_fname).expanduser().resolve()
-
-    #Build needed path dict
-    paths['disk_dumps'] = str(disk_dumps)
-    paths['trc_fname'] = str(trc_path)
-    paths['evt_fname'] = str(evt_path)
-    paths['saf_fname'] = str(saf_path)
-
-    cudaica_dir = Path(project_root, 'ez_detect/matlab_code/cudaica')
-    paths['cudaica_bin'] = str(Path(cudaica_dir, 'cudaica'))
-    paths['binica_sc'] = str(Path(cudaica_dir, 'binica.sc'))
-
-    paths['ez_top_in'] = str( Path(disk_dumps, 'ez_top/input'))
-    paths['ez_top_out'] = str( Path(disk_dumps, 'ez_top/output'))
-    paths['ez_pac_out'] = str( Path(disk_dumps, 'ez_pac_output'))
-    paths['ez_bad_nn_in'] = str(Path(paths['disk_dumps'], 'temp_pythonToMatlab_dsp/bad_chans_args_'))
-
-    paths['research'] = str( Path(disk_dumps, 'research_matfiles'))
+def getAllPaths(trc_fname, xml_output_path, project_dir_path=paths['project_root'], 
+                                             swap_array_path=paths['swap_array_file']):
+    paths['trc_fname']= resolvePath(trc_fname)
+    paths['project_root']= resolvePath(project_dir_path)
+    paths['xml_output_path']= str(Path(xml_output_path).expanduser().absolute())
+    if paths['swap_array_file'] != "NOT_GIVEN":
+        paths['swap_array_file'] = resolvePath(swap_array_path)
 
     return paths
 
-
 #Cleans previous execution outputs
+#TODO use a function to avoid executing this in each import
 def clean_previous_execution():
     cwd = os.getcwd()
-    disk_dumps = str(Path(PROJECT_ROOT, 'disk_dumps'))
-    os.chdir(disk_dumps)
+    os.chdir(paths['disk_dumps']) 
     running_os = platform.system()
     if running_os == 'Windows':
         os.system('clean') 
@@ -91,18 +77,11 @@ def clean_previous_execution():
 
 def get_matlab_session():
     cwd = os.getcwd()
-    misc_code_path = Path(PROJECT_ROOT, 'ez_detect/matlab_code/misc_code')
-    os.chdir(str(misc_code_path)) #to find tryAddPaths
+    os.chdir(paths['misc_code']) #to find tryAddPaths
     matlab_session = matlab.engine.start_matlab() 
-    matlab_session.tryAddPaths(str(PROJECT_ROOT), nargout=0) #for program method lookups
+    matlab_session.tryAddPaths(paths['project_root'], nargout=0) #for program method lookups
     os.chdir(cwd)
     return matlab_session
-
-
-#UI progress notifier
-
-IS_RUNNING = False
-PROGRESS = 0
 
 class ProgressNotifier(object):
     def __init__(self):

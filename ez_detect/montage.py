@@ -1,10 +1,3 @@
-from mne.utils import logger
-#MONTAGE CONSTANTS
-REFERENTIAL = 1
-BIPOLAR = 0
-NO_BP_REF = 0
-EXCLUDE_CH = 1
-DONT_EXCLUDE_CH = 0
 
 #temporary while translating from matlab to python, the final one is build_montage_from_trc
 def build_montage_mat_from_trc(montages, ch_names, sug_montage_name, bp_montage_name):
@@ -27,30 +20,30 @@ def build_montage_mat_from_trc(montages, ch_names, sug_montage_name, bp_montage_
     montage = []
     for ch_name in ch_names: #First col of montage.mat
         sug_idx = def_ch_names_sug.index(ch_name)
-        suggestion = REFERENTIAL if sug_defs[sug_idx][0] == 'AVG' else BIPOLAR #Second col of montage.mat
+        suggestion = config.REFERENTIAL if sug_defs[sug_idx][0] == 'AVG' else config.BIPOLAR #Second col of montage.mat  
 
-        if suggestion == BIPOLAR: #Third col of montage .mat
+        if suggestion == config.BIPOLAR: #Third col of montage .mat
             if sug_defs[sug_idx][0] == ch_name: #For now we mean exclusion in this way
-                bp_ref = NO_BP_REF
-                exclude = EXCLUDE_CH
+                bp_ref = config.NO_BP_REF
+                exclude = config.EXCLUDE_CH
             else: 
                 #Note that we know by the previous conditions that the index exists.
                 #That string is defined inside BQ and its value is 'AVG' or another
                 #ch_name that we have asserted that is in ch_names.
                 bp_ref = ch_names.index(sug_defs[sug_idx][0]) + 1 
-                exclude = DONT_EXCLUDE_CH
+                exclude = config.DONT_EXCLUDE_CH
 
-        else: #suggestion == REFERENTIAL
+        else: #suggestion == config.REFERENTIAL
             exclude = 0
             try: 
                 bp_idx = def_ch_names_bp.index(ch_name)
                 bp_ref = ch_names.index(bp_defs[bp_idx][0]) + 1
             except ValueError: #user didn't defined a bp pair for this channel
-                bp_ref = NO_BP_REF
+                bp_ref = config.NO_BP_REF
 
         chan_montage_info = tuple([ch_name, suggestion, bp_ref, exclude])
         montage.append(chan_montage_info)
-    
+
     return np.array(montage, dtype=object)
 
 #Returns an object of EzMontage class
@@ -70,7 +63,7 @@ def build_montage_from_trc(montages, ch_names, sug_montage_name, bp_montage_name
 
     try:
         assert(set(ch_names) == set(def_ch_names_sug))
-
+    
     except AssertionError:
         raise ValueError('The Suggested montage is badly formed, you must provide a definition' +
                          ' for each channel name that appears in the Ref. montage.')
@@ -79,7 +72,7 @@ def build_montage_from_trc(montages, ch_names, sug_montage_name, bp_montage_name
     for i in range( sug_lines ):
         ch_name = sug_defs[i][1]
 
-        if sug_defs[i][0] == ch_name:
+        if sug_defs[i][0] == ch_name or sug_defs[i][1] == 'MKR1+' or sug_defs[i][1] == 'AH+' or sug_defs[i][1]== 'ECG+' or sug_defs[i][1] == 'orb+' or sug_defs[i][1]== 'EMG+':
             sug_as_excluded.add( ch_names.index(ch_name) )
 
         elif sug_defs[i][0] == 'AVG' or sug_defs[i][0] == 'G2':
@@ -93,7 +86,7 @@ def build_montage_from_trc(montages, ch_names, sug_montage_name, bp_montage_name
 
         else:
             raise ValueError('Incorrect definition in suggested montage.')
-        
+
     return EzMontage(ch_names, sug_as_ref, sug_as_bp, sug_as_excluded, pair_references)
 
 class EzMontage(): 
@@ -114,9 +107,6 @@ class EzMontage():
             assert( list( range(len(ch_names)) ) == list(sug_as_ref.union(sug_as_bp).union(sug_as_excluded)) )
             #Definitions of pair_references are for ref or bp channels, not excluded. 
             #It is user responsibility to define well the pairs for these keys.
-            for k in pair_references.keys(): 
-                assert(k in sug_as_ref.union(sug_as_bp))
-
             self.ch_names = ch_names
             self.sug_as_ref = sug_as_ref
             self.sug_as_bp = sug_as_bp
