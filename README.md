@@ -127,12 +127,12 @@ example
 g) You need to manually enter your project paths
 -  in ~/hfo_engine/src/ez-detect/ez_detect/config.py line paths['project_root'] = str( Path('/home/sweiss/ez-detect'))
 -  hfo_annotate.py lines (100, 206, 215, 236, 242, 252)
--  initial lines of ez_cudaica.m
--  initial lines of ez_detect_dsp_monopolar.m
+-  in ~/ez-detect/ez_detect/matlab_code/cudaica/ez_cudaica.m lines 90-92
+-  in ~/ez-detect/ez_detect/matlab_code/dsp/ez_detect_dsp_monopolar lines 432, 447, 451
 
 h) Selecting 60 cycle (default) vs. 50 cycle line noise reduction
-- preprocessing.py lines 20 and 21 change 60 to 50
-- EZDetectDspToolbox.m line 65 change 60 to 50
+- ~/hfo_engine/src/ez-detect/ez_detect/preprocessing.py lines 20 and 21 change 60 range to 50 range
+- ~/ez-detect/ez_detect/matlab_code/dsp/dsp_toolbox/EZDetectDspToolbox.m line 65 change 60 to 50
 
 i) connecting the Windows HFO Engine client to the HFO Engine webserver
 - Open the HFO Engine Client in Windows
