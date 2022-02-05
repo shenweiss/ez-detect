@@ -49,7 +49,7 @@ Ripples Have Distinct Spectral Properties and Phase-Amplitude Coupling With Slow
 System Requirements: A Windows 7 or above system running Brain Quick version 1. This plug-in has not yet been tested with the yet to be released Brain Quick version 2. A second system running Linux (tested on Ubuntu 20), with an NVIDIA GPU, that performs the data processing. On the Linux system, at least 64 GB of RAM is required, although over 100 GB of RAM is recommended. A swapdisk for vistual memory of at least 10GB is recommended. Linux software requirements include Matlab 2017a or later, Python 3.5.2 and Anaconda 3 4.2 or above. Other dependencies are stated below in the instructions or will be installed automatically. Note that it may be possible to use the MCR instead of purchasing Matlab, but MCR has a different architecture for running Matlab within Python and the code will need to be modififed. 
 
 ** A note about Anaconda ***
-Errors were encountered in building the software using the latest version of Conda 4.11 which uses Python 3.9. The software was successfully built using Conda 4.10.3 and Python 3.8.   
+Errors were encountered in building the software using the latest version of Conda 4.11 which uses Python 3.9. The software was successfully built using Conda 4.10.3 and Python 3.8. In your virtual environment for the project you do not need to import Anaconda. 
 
 ** A note about Anaconda virtual environments **
 Before installing your software it is recommended to create a new environment or copy your existing environment to the project directory. If you are using opt/conda as the virtual environment the project will not operate correctly. You need to use conda activate venv to activate your environment.
