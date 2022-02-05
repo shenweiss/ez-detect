@@ -76,7 +76,7 @@ Windows installation instructions:
 - unrar the files in the hfo_engine folder to the ~/Plugins/hfo_engine directory
 - copy the CommandLine.dll file in the ~/Plugins/hfo_engine directory to the ~/Plugins directory
 
-* Trouble shooting:
+* Troubleshooting:
 1) make sure all the files in the plugins directory and subdirectory are unblocked in Windows by clicking on file properties. If the files are marked as blocked it will result in a .NET framework error within Brain Quick.
 2) make sure your user has access to the windows98 directory on your local drive and all subdirectories including temp.
 
