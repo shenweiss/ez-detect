@@ -194,6 +194,11 @@ v1.0.1 Modifications include:
 - in eztop_putou_e1.m added metadata to the saved data to correct for error in writing annotations of multiple blocks
 - in evtio/io.py added code to allow for correct annotations of multiple blocks of data
 
+Benchmarks
+-------------------
+- A 10 minute block of data will require between 25-120 minutes, if analyzed in referential mode. The actual time depends on the number of channels and the number of HFOs detected.
+- A 10 minute block of data will require between 15-90 minutes, if analyzed in bipolar mode. The actual time depends on the number of channels and the number of HFOs detected.
+
 v1.0.1 Beta Testing
 ----------------------
 - Nihon Kohden amplifier EDF data
@@ -201,7 +206,9 @@ v1.0.1 Beta Testing
 - Micromed Native TRC data
 - New installation from shenweiss github repositories onto Google Cloud instances, tested installation three times. Note for Cloud deployment most services have http tranfer limit of 35 MB, thus to deploy the software to the cloud using a commercial platform you will need to make modifications at the client and server side to overcome the limitation in file size. 
 
-Benchmarks
--------------------
-- A 10 minute block of data will require between 25-120 minutes, if analyzed in referential mode. The actual time depends on the number of channels and the number of HFOs detected.
-- A 10 minute block of data will require between 15-90 minutes, if analyzed in bipolar mode. The actual time depends on the number of channels and the number of HFOs detected.
+Concluding Remarks
+----------------------
+I hope you enjoy this software and it benefits your research. Please read the user's manual for further details. If you encounter problems during these laborious steps of installation, or if I failed to denote a step, please do not e-mail me directly but use the listserv for users instead so others can benefit. [send email to hfoengine-request@freelists.org with 'subscribe' in the Subject field (no quotes) to join]
+
+
+
