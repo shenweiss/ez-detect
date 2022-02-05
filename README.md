@@ -2,7 +2,7 @@
 
 Software Authors: Shennan Weiss M.D. Ph.D., Tomas Pastore M.S., Zachary Waldman M.S., Inkyung Song Ph.D., Matthias Gatti M.S., Federico Raimondo Ph.D., Diego Slezak Ph.D. 
 
-Document Author: Shennan Weiss M.D. Ph.D. shennanweiss@gmail.com
+Document and Corresponding Author: Shennan Weiss M.D. Ph.D. shennanweiss@gmail.com
 Assistant Professor Neurology and Physiology/Pharmacology
 State University of New York Downstate
 Brooklyn, NY
