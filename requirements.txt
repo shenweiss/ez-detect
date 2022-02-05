@@ -35,4 +35,4 @@ zipp==0.5.1
 -e git+http://github.com/shenweiss/io_evt.git#egg=evtio
 -e git+http://github.com/shenweiss/ez-detect.git#egg=ez_detect
 -e git+http://github.com/shenweiss/hfo_engine.git#egg=hfo_engine_web&subdirectory=web_server
--e git+http://github.com/shenweiss/io_trc.git@#egg=trcio
+-e git+http://github.com/shenweiss/io_trc.git#egg=trcio
