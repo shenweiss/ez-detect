@@ -1,4 +1,4 @@
-Installation Instructions for HFO-Engine and EZ-Detect version 1.0.1 (2014-2022)
+*Installation Instructions for HFO-Engine and EZ-Detect version 1.0.1 (2014-2022)
 
 Software Authors: Shennan Weiss M.D. Ph.D., Tomas Pastore M.S., Zachary Waldman M.S., Inkyung Song Ph.D., Matthias Gatti M.S., Federico Raimondo Ph.D., Diego Slezak Ph.D. 
 
@@ -124,8 +124,8 @@ example
 - You may also need to install llvmlite $ conda install --channel=numba llvmlite
 - You may also need to downgrade markdown $ pip3 install Markdown==3.3.4
 
-g) Add your paths of the project directory to the HFO-Engine/EZ-detect code:
-Lines that need manual path entry
+g) You need to manually enter your project paths
+-  in ~/hfo_engine/src/ez-detect/ez_detect/config.py line paths['project_root'] = str( Path('/home/sweiss/ez-detect'))
 -  hfo_annotate.py lines (100, 206, 215, 236, 242, 252)
 -  initial lines of ez_cudaica.m
 -  initial lines of ez_detect_dsp_monopolar.m
@@ -162,13 +162,12 @@ Note: This package was intended for the server to run in the cloud. Other config
 
 3. make sure permissions are set to allow your user to read, write, execute
 
-v0.0.0 can be downloaded from http://gitlab.liaa.dc.uba.ar/tju-uba (currently down)
+v1.0.0 can be downloaded from http://gitlab.liaa.dc.uba.ar/tju-uba (currently down)
 
-v0.0.1 Modifications Notes: While some of these modifications were make to make the software more user friendly (i.e. case sensitivity, etc), others detracted from the original design. In python 3.8.11 the path/paths defined in the program were not operating correctly within Python or Matlab. This required manually entering the paths in to the code. If an advanced Python programmer would like address this issue please let me know. For now in version v0.0.1 the paths must be entered in the appropriate sections of the Matlab and Python code. 
+v1.0.1 Modifications Notes: While some of these modifications were make to make the software more user friendly (i.e. case sensitivity, etc), others detracted from the original design. In python 3.8.11 the path/paths defined in the program were not operating correctly within Python or Matlab. This required manually entering the paths in to the code. If an advanced Python programmer would like address this issue please let me know. For now in version v0.0.1 the paths must be entered in the appropriate sections of the Matlab and Python code. 
 
-v0.0.1 Modifications include:
+v1.0.1 Modifications include:
 ------------------------
-HFO-Engine/EZ-Detect v0.0.1 Modifications
 - in HFO-Engine requirements updated Werkzeug to 0.15.5
 - in EZ-Detect requirements updated mne to 0.23.4
 - in engine.py added line 53 to accept lower case EDF
@@ -186,12 +185,12 @@ HFO-Engine/EZ-Detect v0.0.1 Modifications
 - in eztop_putou_e1.m added metadata to the saved data to correct for error in writing annotations of multiple blocks
 - in evtio/io.py added code to allow for correct annotations of multiple blocks of data
 
-v0.0.1 Beta Testing
+v1.0.1 Beta Testing
 ----------------------
 - Nihon Kohden amplifier EDF data
 - Natus Quantum amplifier EDF data
 - Micromed Native TRC data
-- New installation from shenweiss github repositories onto Amazon EC2 instance, tested installation
+- New installation from shenweiss github repositories onto Google Cloud instance, tested installation twice. Note for Cloud deployment most services have http tranfer limit of 35 MB, thus to deploy the software to the cloud using a commercial platform you will need to make modifications at the client and server side to overcome the limitation in file size. 
 
 Benchmarks
 -------------------
