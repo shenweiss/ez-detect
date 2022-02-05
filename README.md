@@ -21,11 +21,12 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Notes: Some code may refer to an entity named Fastwave LLC. Fastwave LLC has been dissolved and maintains no ownership over any property. 
+Notes: Some code may refer to an entity named Fastwave LLC. Fastwave LLC has been dissolved and maintains no ownership over any copyrights or intellectual property. 
 
-Dedication: I would like to thank my daughter Sabine Weiss who missed me while I was working on this software. I would also like to thank the other software authors who worked with me in sickness and in health. Special thanks goes to Zac Waldman for his work on EZ-top, Federico Raimondo for his work on CUDAICA and TRC import and export, and Diego Slezak for overseeing the design and execution of HFO-Engine.  
+Dedication: I would like to thank my daughter Sabine Weiss who missed me while I was working on this software. I would also like to thank the other authors who worked with me in sickness and in health. Special thanks goes to Zac Waldman for his work on EZ-top, Federico Raimondo for his work on CUDAICA and TRC import and export, and Diego Slezak for overseeing the design and execution of HFO-Engine.  
 
 Recommended Literature (please read and cite the papers appended below if you utilize this software in your research):
+-----------
 
 1) HFO Detector and independent component analysis:
 CUDAICA: GPU optimization of Infomax-ICA EEG analysis.  Raimondo F, Kamienkowski JE, Sigman M, Fernandez Slezak D. Comput Intell Neurosci. 2012;2012:206972. doi: 10.1155/2012/206972. 
@@ -46,13 +47,16 @@ Song I, Orosz I, Chervoneva I, Waldman ZJ, Fried I, Wu C, Sharan A, Salamon N, G
 
 Ripples Have Distinct Spectral Properties and Phase-Amplitude Coupling With Slow Waves, but Indistinct Unit Firing, in Human Epileptogenic Hippocampus. Weiss SA, Song I, Leng M, Pastore T, Slezak D, Waldman Z, Orosz I, Gorniak R, Donmez M, Sharan A, Wu C, Fried I, Sperling MR, Bragin A, Engel J Jr, Nir Y, Staba R. Front Neurol. 2020 Mar 24;11:174. doi: 10.3389/fneur.2020.00174. eCollection 2020. PMID: 32292384 
 
+---------
+
+
 System Requirements: A Windows 7 or above system running Brain Quick version 1. This plug-in has not yet been tested with the yet to be released Brain Quick version 2. A second system running Linux (tested on Ubuntu 20), with an NVIDIA GPU, that performs the data processing. On the Linux system, at least 64 GB of RAM is required, although over 100 GB of RAM is recommended. A swapdisk for vistual memory of at least 10GB is recommended. Linux software requirements include Matlab 2017a or later, Python 3.5.2 and Anaconda 3 4.2 or above. Other dependencies are stated below in the instructions or will be installed automatically. Note that it may be possible to use the MCR instead of purchasing Matlab, but MCR has a different architecture for running Matlab within Python and the code will need to be modififed. 
 
 ** A note about Anaconda ***
-Errors were encountered in building the software using the latest version of Conda 4.11 which uses Python 3.9. The software was successfully built using Conda 4.10.3 and Python 3.8. In your virtual environment for the project you do not need to import Anaconda. 
+Anaconda is needed mainly for virtual environments. Errors were encountered in building the software using the latest version of Conda 4.11 which uses Python 3.9. The software was successfully built using Conda 4.10.3 and Python 3.8.
 
 ** A note about Anaconda virtual environments **
-Before installing your software it is recommended to create a new environment or copy your existing environment to the project directory. If you are using opt/conda as the virtual environment the project will not operate correctly. You need to use conda activate venv to activate your environment.
+A new virtual environment should be initiated for this project and it does not need to import all of Anaconda.(ex. conda create --prefix /home/sweiss/hfoenv python=3.7.12)
 
 Test system: Hardware: Total Intel Xeon Cores/ 2.1GHz Base Frequency 40 Total Cores with Hyperthreading Enabled 1x 6230 CPU, 128GB of High Performance DDR, 2933 MHz ECC Memory, 4x32GB Memory Modules,6 Gbps, 1 x RTX 4000 GPU / 2034 CUDA Cores / 8 GB Memory. Host operating system: Ubuntu 20.04.3 LTS. Guest VM operating system: Windows 10.  Software on host Python 3.8.11, Conda version 4.10.3. Co
 
