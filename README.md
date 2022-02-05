@@ -125,7 +125,7 @@ f) installing the hfo_engine webserver
 - go to the ~/hfo_engine/web_server directory
 - run $python3 setup.py develop
 - to find the directory of your virtual environment run conda env list 
-- edit line 5 of the start_server.sh file to reflect your virtual environment (remember to add bin activate)
+- edit line 5 of the start_server.sh file to reflect your virtual environment (remember to add bin/activate) [Note in early versions of Conda line 5 is not neccessary]
 example
 	# conda environments:
 	# base                  *  /home/sweiss/anaconda3
