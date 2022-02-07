@@ -195,6 +195,7 @@ v1.0.1 Modifications include:
 - in hfo_annotate.py and ez_bad_channel_temp.m and preprocessing.py made several changes relating to building correct montages in Matlab related to translation of a Python object structure.
 - in eztop_putou_e1.m added metadata to the saved data to correct for error in writing annotations of multiple blocks
 - in evtio/io.py added code to allow for correct annotations of multiple blocks of data
+- in evtop/io.py added code to permit annotations of channels recorded in bipolar montage except for channels moved to bipolar montage 
 
 Benchmarks
 -------------------
