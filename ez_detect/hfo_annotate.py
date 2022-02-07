@@ -97,14 +97,14 @@ def hfo_annotate(trc_fname, start_time, stop_time, cycle_time, sug_montage, bp_m
         'srate' : sampling_rate
     }
     _update_progress(progress_notifier, 12)
-    _mainDSPloop(raw_trc, metadata, paths, montages, sug_montage, bp_montage, progress_notifier)
+    #_mainDSPloop(raw_trc, metadata, paths, montages, sug_montage, bp_montage, progress_notifier)
     _update_progress(progress_notifier, 95)
     #rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     #rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
     local_timezone = tzlocal.get_localzone()
     rec_start_time = raw_trc.info['meas_date']
     rec_start_time = rec_start_time.replace(tzinfo=pytz.utc).astimezone(local_timezone)
-    events = load_events_from_matfiles('/data/downstate/ez-detect/disk_dumps/ez_top/output/', raw_trc.info['ch_names'], rec_start_time)
+    events = load_events_from_matfiles('/data/downstate/ez-detect/disk_dumps/ez_top/output/', raw_trc.info['ch_names'], metadata['montage'].pair_references, rec_start_time)
     evt_file = EventFile(evt_fname, rec_start_time, events=events, username='USERNAME') #TODO bring username from execution
     write_evt(evt_file)
     _update_progress(progress_notifier, 100)
