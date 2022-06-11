@@ -97,7 +97,7 @@ def hfo_annotate(trc_fname, start_time, stop_time, cycle_time, sug_montage, bp_m
         'srate' : sampling_rate
     }
     _update_progress(progress_notifier, 12)
-    #_mainDSPloop(raw_trc, metadata, paths, montages, sug_montage, bp_montage, progress_notifier)
+    _mainDSPloop(raw_trc, metadata, paths, montages, sug_montage, bp_montage, progress_notifier)
     _update_progress(progress_notifier, 95)
     #rec_start_struct = time.localtime(raw_trc.info['meas_date'][0]) #time.localtime(raw_trc.info['meas_date'][0]) #gets a struct from a timestamp
     #rec_start_time = datetime(*rec_start_struct[:6]) #translates struct to datetime
