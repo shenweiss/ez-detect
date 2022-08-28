@@ -1,3 +1,5 @@
+rm -f ./ez_top/input/*
+rm -f ./ez_top/output/*
 rm -f ./research_matfiles/*
 rm -f ./temp_pythonToMatlab_dsp/*
 rm -f ./evt_output/*

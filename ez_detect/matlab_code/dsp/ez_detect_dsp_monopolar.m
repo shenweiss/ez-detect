@@ -253,7 +253,9 @@ function dsp_monopolar_output = ez_detect_dsp_monopolar(eeg_mp, eeg_bp, metadata
                     error_flag = dsp_monopolar_output.error_flag;
 
                 end
-            end % bad electrode detected loop
+            else
+            metadata.hf_bad_m2=[];
+            end;% bad electrode detected loop
         else % if number of bad electrodes are not the vast majority
             error_status=1;
             error_msg='mostly noisy mp electrodes';

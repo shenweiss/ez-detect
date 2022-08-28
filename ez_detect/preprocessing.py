@@ -4,16 +4,19 @@ import numpy as np
 import numpy.fft as fft_pack
 from scipy.stats import zscore
 import scipy.io
+import pyfftw
 #import hdf5storage
 #from spectrum import pmtm
+import matlab
 from ez_detect.config import TEMPORARY_DUE_TRANSLATION
 
 def _impedance_check(eeg_data):
     logger.info('Performing impedance check.')
     sixty_cycle=[]
     for j in range(len(eeg_data)):
+        logger.info(j)
         channel = eeg_data[j]
-        transformedSignal = fft_pack.fft(channel) #Fast Fourier transform 
+        transformedSignal = pyfftw.interfaces.numpy_fft.fft(channel) #Fast Fourier transform 
         frequencyVector = 2000/2 * np.linspace(0, 1, int(len(channel)/2) + 1 )
         powerSpectrum = transformedSignal * np.conj(transformedSignal) / len(channel)
         if j == 0 :
@@ -33,17 +36,18 @@ def ez_lfbad(eeg_data, ch_names, metadata, matlab_session):
 
     logger.info('Entering ez_lfbad')
 
-    imp = _impedance_check(eeg_data)
     montage = metadata['montage']
-
     data = dict()
-    ch_ids = np.array( list(montage.sug_as_ref - imp), dtype=int)
+    ch_ids = np.array( list(montage.sug_as_ref), dtype=int)
+    imp = _impedance_check(eeg_data[ ch_ids ])
+    if len(imp) > 0:
+        imp = list(imp)
+        ch_ids = np.delete(ch_ids,imp)
     data['mp_channels'] = eeg_data[ ch_ids ] 
     metadata['ch_names_mp'] = [montage.name(ch_id) for ch_id in ch_ids]
 
-    ch_ids = np.array( list(montage.sug_as_bp - imp), dtype=int)
+    ch_ids = np.array( list(montage.sug_as_bp), dtype=int)
     pairs = np.array( [ montage.pair_references[ch_id] for ch_id in ch_ids ], dtype=int)
-    #import pdb; pdb.set_trace()
     data['bp_channels'] = eeg_data[ ch_ids ] - eeg_data [ pairs ]
     metadata['ch_names_bp'] = [montage.name(ch_id) for ch_id in ch_ids]
     
@@ -51,12 +55,13 @@ def ez_lfbad(eeg_data, ch_names, metadata, matlab_session):
     #and that are not filtered by impedance function 
     #(User may have suggested as ref but provided a pair for the case 
     #ez-detect needs to move it to bipolar montage)
-    ch_ids = np.array( list( set(montage.pair_references.keys()) - imp), dtype=int )
+    ch_ids = np.array( list( set(montage.pair_references.keys())), dtype=int )
     pairs = np.array( [ montage.pair_references[ch_id] for ch_id in ch_ids ], dtype=int )
     support_bipolar = eeg_data[ ch_ids ] - eeg_data [ pairs ]
     
     args_fname = TEMPORARY_DUE_TRANSLATION +metadata['file_block']+'.mat' 
     scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, file_id=metadata['file_id'], n_blocks=metadata['n_blocks'], block_size=metadata['block_size'], srate=metadata['srate'], file_block=metadata['file_block'], ch_names_bp=metadata['ch_names_bp'], ch_names_mp=metadata['ch_names_mp'], chanlist= ch_names, ez_montage=metadata['old_montage']))
+    print("data written")
     #scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
     logger.info('about to enter matlab')
     data, metadata = matlab_session.ez_bad_channel_temp(args_fname, nargout=2)
@@ -66,6 +71,43 @@ def ez_lfbad(eeg_data, ch_names, metadata, matlab_session):
     #metadata['montage'] = montage
     return data, metadata
 
+def ez_lfbad_lfp(eeg_data, ch_names, metadata, matlab_session):
+
+    logger.info('Entering ez_lfbad')
+
+#   imp = _impedance_check(eeg_data)
+    montage = metadata['montage']
+
+    data = dict()
+    ch_ids = np.array( list(montage.sug_as_ref), dtype=int)
+    data['mp_channels'] = eeg_data[ ch_ids ] 
+    metadata['ch_names_mp'] = [montage.name(ch_id) for ch_id in ch_ids]
+
+    ch_ids = np.array( list(montage.sug_as_bp), dtype=int)
+    pairs = np.array( [ montage.pair_references[ch_id] for ch_id in ch_ids ], dtype=int)
+    #import pdb; pdb.set_trace()
+    data['bp_channels'] = eeg_data[ ch_ids ] - eeg_data [ pairs ]
+    metadata['ch_names_bp'] = [montage.name(ch_id) for ch_id in ch_ids]
+    
+    #The list below, includes all the channels that support bipolar montage
+    #and that are not filtered by impedance function 
+    #(User may have suggested as ref but provided a pair for the case 
+    #ez-detect needs to move it to bipolar montage)
+    ch_ids = np.array( list( set(montage.pair_references.keys())), dtype=int )
+    pairs = np.array( [ montage.pair_references[ch_id] for ch_id in ch_ids ], dtype=int )
+    support_bipolar = eeg_data[ ch_ids ] - eeg_data [ pairs ]
+    
+    args_fname = TEMPORARY_DUE_TRANSLATION +metadata['file_block']+'.mat' 
+    scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, file_id=metadata['file_id'], n_blocks=metadata['n_blocks'], block_size=metadata['block_size'], srate=metadata['srate'], file_block=metadata['file_block'], ch_names_bp=metadata['ch_names_bp'], ch_names_mp=metadata['ch_names_mp'], chanlist= ch_names, ez_montage=metadata['old_montage']))
+    print("data written")
+    #scipy.io.savemat(args_fname, dict(data=data, support_bipolar= support_bipolar, metadata=metadata, chanlist= ch_names, ez_montage=metadata['old_montage']))
+    logger.info('about to enter matlab')
+    data, metadata = matlab_session.ez_bad_channel_temp_lfp(args_fname, nargout=2)
+    logger.info('out of matlab')
+    
+    #data, metadata = _bad_channels_nn(data, metadatam ch_names, support_bipolar)
+    #metadata['montage'] = montage
+    return data, metadata
 
 def _clustering_coef_wd(W):
     A = W != 0                                      #adjacency matrix

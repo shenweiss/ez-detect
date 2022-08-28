@@ -16,8 +16,8 @@ metadata = fileData.metadata
 file_id = metadata.file_id;
 output_fname = ['ezTop_' file_id fname_var metadata.file_block '.mat'];
 
-if sum(fileData.total_ripple) < 50000  % exit function if memory overload
-    if sum(fileData.total_fripple) < 25000 % exit function if memory overload
+if sum(fileData.total_ripple) < 35000  % exit function if memory overload
+    if sum(fileData.total_fripple) < 35000 % exit function if memory overload
         
         %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         clearvars -except -regexp ez_top_out_dir fileData vname_var output_fname metadata output_fname
@@ -584,6 +584,9 @@ if sum(fileData.total_ripple) < 50000  % exit function if memory overload
         monopolar_chanlist = fileData.metadata.m_chanlist;
         bipolar_chanlist = fileData.metadata.bp_chanlist;
         metadata=fileData.metadata;
+        metadata.hf_bad_bp=[];
+        metadata.hf_bad_m=[];
+        metadata.lf_bad=[];
         save(output_fname,'ftRonO','ftTRonS','RonO','TRonS','FRonS','ftFRonS','Total_FRonS','Total_ftFRonS','Total_ftRonO','Total_ftTRonS','Total_RonO','Total_TRonS','metadata','monopolar_chanlist', 'bipolar_chanlist');
     end;
     

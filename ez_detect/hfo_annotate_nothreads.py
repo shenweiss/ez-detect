@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
  
+# HFO detection for Behnke-Fried microelectrodes see Matlab files for more details
 '''
 Usage && INPUT arguments: type 'python3 hfo_annotate.py --help' in the shell
 Example with defaults: python3 hfo_annotate.py --trc_path=449.TRC
@@ -19,7 +20,7 @@ from evtio import load_events_from_matfiles, EventFile, write_evt
 #sys.path.insert(0, config.paths['project_root']+'/tools/profiling')
 #from profiling import profile_time, profile_memory
 from ez_detect.montage import build_montage_from_trc, build_montage_mat_from_trc
-from ez_detect.preprocessing import ez_lfbad
+from ez_detect.preprocessing import ez_lfbad_lfp
 
 import numpy as np
 import threading
@@ -59,7 +60,7 @@ Output: xml_output gets saved in the default directory or the one given as argum
 #@profile_time
 #TODO modify plugin to take start_time from 0 instead of 1
 #TODO stop add 1 to stop_time
-def hfo_annotate(trc_fname, start_time, stop_time, cycle_time, sug_montage, bp_montage, evt_fname, paths, progress_notifier=None):
+def hfo_annotate_nothreads(trc_fname, start_time, stop_time, cycle_time, sug_montage, bp_montage, evt_fname, paths, progress_notifier=None):
     logger.info('Running Ez Detect')
     raw_trc = read_raw_trc(trc_fname, include=None)     #raw_trc = read_raw_trc(paths['trc_fname'], include=None)
     if len(raw_trc.ch_names) > 128 : # required due to montage size limit deletes channels > 128
@@ -157,38 +158,38 @@ def _DSPloop(eeg_data, ch_names, ch_names_python, metadata, paths, montages, sug
     
     metadata['montage'] = build_montage_from_trc(montages, ch_names_python, sug_montage, bp_montage)
 
-    data, metadata = ez_lfbad(eeg_data, ch_names, metadata, matsession)
+    data, metadata = ez_lfbad_lfp(eeg_data, ch_names, metadata, matsession)
     _update_progress(progress_notifier, 15)
 
     data['bp_channels'], metadata, hfo_ai, fr_ai = _monopolarAnnotations(data, metadata, paths, progress_notifier, matsession)
     _update_progress(progress_notifier, 70)
-    _bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths, progress_notifier, matsession)
+    #_bipolarAnnotations(data['bp_channels'], metadata, hfo_ai, fr_ai, paths, progress_notifier, matsession)
 
 def _monopolarAnnotations(data, metadata, paths, progress_notifier, matsession):
     
     if data['mp_channels']: #not empty
 
         logger.info('Monopolar block. Converting data from python to matlab (takes long).')
-        dsp_monopolar_out = matsession.ez_detect_dsp_monopolar(data['mp_channels'], data['bp_channels'], metadata, paths)
+        dsp_monopolar_out = matsession.ez_detect_dsp_monopolar_lfp(data['mp_channels'], data['bp_channels'], metadata, paths)
         logger.info('Finished dsp monopolar block')
         _update_progress(progress_notifier, 60)
 
         #TODO once ez top gets translated we can avoid using the disk for saving.
         logger.info('Annotating Monopolar block')
         if dsp_monopolar_out['error_flag'] == 0: 
-            output_fname = matsession.eztop_putou_e1(dsp_monopolar_out['path_to_data'], 
+            output_fname = matsession.eztop_putou_e1_lfp(dsp_monopolar_out['path_to_data'], 
                                                  config.MP_ANNOTATIONS_FLAG,
                                                  '/data/downstate/ez-detect/disk_dumps/ez_top/output') 
             matsession.removeEvents_1_5_cycles(output_fname, nargout=0)
                        
-            matsession.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
-                                    dsp_monopolar_out['ez_fr_mp'], 
-                                    dsp_monopolar_out['ez_hfo_mp'], 
-                                    output_fname,
-                                    dsp_monopolar_out['metadata'],
-                                    config.MP_ANNOTATIONS_FLAG,
-                                    '/data/downstate/ez-detect/disk_dumps/ez_pac_output', 
-                                    nargout=0)
+            #matsession.ezpac_putou70_e1(dsp_monopolar_out['ez_mp'], 
+            #                        dsp_monopolar_out['ez_fr_mp'], 
+            #                        dsp_monopolar_out['ez_hfo_mp'], 
+            #                        output_fname,
+            #                        dsp_monopolar_out['metadata'],
+            #                        config.MP_ANNOTATIONS_FLAG,
+            #                        '/data/downstate/ez-detect/disk_dumps/ez_pac_output', 
+            #                        nargout=0)
             
         else:
             logger.info('Error in process_dsp_output, error_flag != 0')
@@ -199,34 +200,8 @@ def _monopolarAnnotations(data, metadata, paths, progress_notifier, matsession):
         fr_ai = dsp_monopolar_out['fr_ai']
  
     else:  #data['mp_channels'] is empty
+
         hfo_ai = np.zeros(len(data['bp_channels'][0])).tolist()
         fr_ai = hfo_ai
 
     return data['bp_channels'], metadata, hfo_ai, fr_ai 
-
-def _bipolarAnnotations(bp_data, metadata, hfo_ai, fr_ai, paths, progress_notifier, matsession):
-
-    if bp_data:
-        logger.info('Bipolar Block. Converting data from python to matlab (takes long).')
-        dsp_bipolar_out = matsession.ez_detect_dsp_bipolar(bp_data, metadata, hfo_ai, fr_ai, '/data/downstate/ez-detect/disk_dumps/ez_top/input')
-        logger.info('Finished bipolar dsp block')
-        _update_progress(progress_notifier, 90)
-        logger.info('Annotating bipolar block')
-        output_fname = matsession.eztop_putou_e1(dsp_bipolar_out['path_to_data'], 
-                                             config.BP_ANNOTATIONS_FLAG, 
-                                             '/data/downstate/ez-detect/disk_dumps/ez_top/output')
-        
-        matsession.removeEvents_1_5_cycles(output_fname, nargout=0)
-                
-        matsession.ezpac_putou70_e1(dsp_bipolar_out['ez_bp'], 
-                                dsp_bipolar_out['ez_fr_bp'], 
-                                dsp_bipolar_out['ez_hfo_bp'], 
-                                output_fname, 
-                                dsp_bipolar_out['metadata'], 
-                                config.BP_ANNOTATIONS_FLAG, 
-                                '/data/downstate/ez-detect/disk_dumps/ez_pac_output', nargout=0)
-        
-    else:
-        logger.info("Didn't enter dsp bipolar, bp_data was empty.")
-
-
