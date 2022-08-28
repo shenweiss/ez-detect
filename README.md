@@ -1,4 +1,4 @@
-*Installation Instructions for HFO-Engine and EZ-Detect version 1.0.1 (2014-2022)
+*Installation Instructions for HFO-Engine and EZ-Detect version 1.0.2 (2014-2022)
 
 Software Authors: Shennan Weiss M.D. Ph.D., Tomas Pastore M.S., Zachary Waldman M.S., Inkyung Song Ph.D., Matthias Gatti M.S., Federico Raimondo Ph.D., Diego Slezak Ph.D. 
 
@@ -9,9 +9,9 @@ Brooklyn, NY
 
 Listserv for users: send email to hfoengine-request@freelists.org with 'subscribe' in the Subject field (no quotes) 
 
-Date: 2/2022	
+Date: 8/2022	
 
-Purpose of software: To reduce/differentiate artifact and then detect, categorize, and quantify HFOs and epileptiform spikes in intracranial EEG recordings, and annotate these detections in the commercial EEG viewer Brain Quick™ produced by Micromed™ and save the detailed HFO and spike data as a Matlab Mathworks file. 
+Purpose of software: To reduce/differentiate artifact and then detect0, categorize, and quantify HFOs and epileptiform spikes in intracranial EEG recordings, and annotate these detections in the commercial EEG viewer Brain Quick™ produced by Micromed™ and save the detailed HFO and spike data as a Matlab Mathworks file. 
 
 Support: This work was fully supported by NIH/NINDS K23 NS094633 (SAW), and a Junior Investigator Award from the American Epilepsy Society (SAW).
 
@@ -57,14 +57,14 @@ Ripples Have Distinct Spectral Properties and Phase-Amplitude Coupling With Slow
 
 System Requirements: A Windows 7 or above system running Brain Quick version 1. This plug-in has not yet been tested with the yet to be released Brain Quick version 2. A second system running Linux (tested on Ubuntu 20), with an NVIDIA GPU, that performs the data processing. On the Linux system, at least 64 GB of RAM is required, although over 100 GB of RAM is recommended. A swapdisk for vistual memory of at least 10GB is recommended. Linux software requirements include Matlab 2017a or later, Python 3.5.2 and Anaconda 3 4.2 or above. Other dependencies are stated below in the instructions or will be installed automatically. Note that it may be possible to use the MCR instead of purchasing Matlab, but MCR has a different architecture for running Matlab within Python and the HFO-Engine/EZ-detect code will need to be modififed. 
 
-** A note about Matlab engine for Python **
-Matlab Engine for Python from versions R2022a and above are not operational as of now. R2022 adds webserver functionality that is not compatible with Flask functions. Until this is resolved in a future release Matlab Engine for Python requirements are R2021b or earlier. 
-
 ** A note about Anaconda ***
 Anaconda is needed mainly for virtual environments. Errors were encountered in building the software using the latest version of Conda 4.11 which uses Python 3.9. The software was successfully built using Conda 4.10.3 and Python 3.8.
 
 ** A note about Anaconda virtual environments **
 A new virtual environment should be initiated for this project and it does not need to import all of Anaconda.(ex. conda create --prefix /home/sweiss/hfoenv python=3.7.12)
+
+** A note about Matlab engine for Python **
+Matlab Engine for Python from versions R2022a and above are not operational as of now. R2022 adds webserver functionality that is not compatible with Flask functions. Until this is resolved in a future release Matlab Engine for Python requirements are R2021b or earlier. 
 
 Test system: Hardware: Total Intel Xeon Cores/ 2.1GHz Base Frequency 40 Total Cores with Hyperthreading Enabled 1x 6230 CPU, 128GB of High Performance DDR, 2933 MHz ECC Memory, 4x32GB Memory Modules,6 Gbps, 1 x RTX 4000 GPU / 2034 CUDA Cores / 8 GB Memory. Host operating system: Ubuntu 20.04.3 LTS. Guest VM operating system: Windows 10.  Software on host Python 3.8.11, Conda version 4.10.3. Co
 
@@ -200,6 +200,12 @@ v1.0.1 Modifications include:
 - in evtio/io.py added code to allow for correct annotations of multiple blocks of data
 - in evtop/io.py added code to permit annotations of channels recorded in bipolar montage except for channels moved to bipolar montage 
 
+v1.0.2 Modifications include:
+-------------------------
+- New DSP pipeline optimized for detecting HFOs and spikes in LFP data recorded from microelectrode data. Please replace line 121 with line 123 of the analyzer.py. To import microelectrode data, and optimize this data using ICA, please see the new preLFP respository. Note the LFP recordings should be analyzed only in referential mode
+- The preprocessing function was improved to better deal with mixed referential and bipolar data and improve processing time. 
+- improved processing time of function to delete short duration < 3 cycle events
+
 Benchmarks
 -------------------
 - A 10 minute block of data will require between 25-120 minutes, if analyzed in referential mode. The actual time depends on the number of channels and the number of HFOs detected.
@@ -215,6 +221,8 @@ v1.0.1 Beta Testing
 Concluding Remarks
 ----------------------
 I hope you enjoy this software and it benefits your research. Please read the user's manual for further details. If you encounter problems during these laborious steps of installation, or if I failed to denote a step, please do not e-mail me directly but use the listserv for users instead so others can benefit. [send email to hfoengine-request@freelists.org with 'subscribe' in the Subject field (no quotes) to join]
+
+
 
 
 
