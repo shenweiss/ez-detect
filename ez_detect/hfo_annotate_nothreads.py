@@ -72,7 +72,7 @@ def hfo_annotate_nothreads(trc_fname, start_time, stop_time, cycle_time, sug_mon
     _update_progress(progress_notifier, 10)
 
     logger.info("Converting data from volts to microvolts...")
-    raw_trc._data *= 1e06
+    raw_trc._data *= -1e06 #polarity reversed to correct
     #Debug info
     logger.info("TRC file: "+ trc_fname) #logger.info("TRC file: "+ paths['trc_fname'])
     logger.info("XML will be written to "+ evt_fname)  #logger.info("XML will be written to "+ paths['xml_output_path'])

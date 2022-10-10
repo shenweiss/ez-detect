@@ -1,4 +1,4 @@
-function ezpac_putou_e1(eeg_data, fr, hfo, output_fname, metadata, montage, ez_pac_out_dir)
+function ezpac_putou70_e1u(eeg_data, fr, hfo, output_fname, metadata, montage, ez_pac_out_dir)
 % Written by Dr. Shennan Aibel Weiss and Dr. Inkyung Song TJU 2016-2017, Portions
 % of this code were written by Dr. Shennan Aibel Weiss at UCLA 2014-2016. 
 
@@ -59,7 +59,7 @@ end;
 eeg_data=eeg_data_ds;
 eeg_data_ds=[];
 
-[output_bpFIR, delays] = filterEEG_ezpac70(eeg_data, 500);
+[output_bpFIR, delays] = filterEEG_ezpac70u(eeg_data, 500);
 [output_hilbert] = zhilbert_ezpac(eeg_data, output_bpFIR, 500);
 fprintf('hilbert done \r');
 numchan=numel(eeg_data(:,1));
@@ -89,7 +89,7 @@ for i=1:numel(RonO.channel(:,1))
     [a,b]=find(RonO.finish_t(i)<hfo_time_index & (RonO.finish_t(i)+0.01)>hfo_time_index);
     event_finish=b(1);
     event_finish=event_finish+1;
-    event_finish_pdelay=event_finish+125+1
+    event_finish_pdelay=event_finish+125+1;
     if event_start_pdelay<1
         event_start_pdelay=1;
     end;
@@ -170,9 +170,126 @@ for i=1:numel(RonO.channel(:,1))
         RonO.spindle_angle(i)=NaN;
     end;
     end;
+
 end;
 end;
 
+spwfilt=gather(output_bpFIR.eeg.bpSharp);
+spw=[];
+disp('making sharp wave RonO clips')
+if ~isempty(RonO.start_t)
+for i=1:numel(RonO.channel(:,1))
+    [a,b]=find(RonO.start_t(i)<hfo_time_index & RonO.finish_t(i)>hfo_time_index);
+    if ~isempty(b)
+    event_start=b(1);
+    event_start=event_start-1;
+    event_start_pdelay=event_start+125-1;
+    [a,b]=find(RonO.finish_t(i)<hfo_time_index & (RonO.finish_t(i)+0.01)>hfo_time_index);
+    event_finish=b(1);
+    event_finish=event_finish+1;
+    event_finish_pdelay=event_finish+125+1;
+    if event_start_pdelay<1
+        event_start_pdelay=1;
+    end;
+    if event_finish_pdelay>numel(hfo_amp(1,:))
+        event_finish_pdelay=numel(hfo_amp(1,:));
+    end;
+    if event_start_pdelay-(0.75*500)<0
+        spw(i,:)=zeros(750,1)';
+    else
+        if event_start_pdelay+(0.75*500)>max(hfo_time_index)*500
+           spw(i,:)=zeros(750,1)';
+        else
+           spw(i,:)=spwfilt(RonO.channel(i,1),(((event_start_pdelay)-(0.75*500)):((event_start_pdelay)+(0.75*500)-1)));
+        end;
+    end;
+    end;
+end;
+end;
+
+spw_width=[];
+spw_trough=[];
+spw_amplitude=[];
+disp('defining RonO sharp-wave properties');
+for i=1:numel(spw(:,1))
+    foundspw=0;
+    idxsearch=0;
+    tempder=diff(spw(i,:));
+    idx=[];
+    for j=2:numel(tempder)
+        if tempder(j)*tempder(j-1) < 0 
+            idx=[idx j];
+        end;
+    end;
+    if sum(spw(i,:))~=0
+    if numel(idx)>=2
+        [~,idxpos]=find(idx<375);
+        if ~isempty(idxpos)
+        [minback,minbackidx]=min(375-idx(idxpos));
+        i
+        if spw(i,minback+1)<0 % spw trough
+            while idxsearch==0
+                [minforward,minforwardidx]=min(idx-375);
+                if minforward>0
+                if spw(i,minforward+1)<0  % trough confirmed peak to peak
+                    idxsearch=1;
+                    foundspw=1;
+                    spw_trough_t=1;
+                else
+                idx(minforwardidx)=[];
+                end;
+                else
+                idx(minforwardidx)=[];
+                end;
+                if isempty(idx)
+                    idxsearch=1;
+                end;
+            end;
+        else %spw peak
+            while idxsearch==0
+                [minforward,minforwardidx]=min(idx-375);
+                if minforward>0
+                if spw(i,minforward+1)>0 %peak confirmed trough to trough
+                    idxsearch=1;
+                    foundspw=1;
+                    spw_trough_t=0;
+                else
+                idx(minforwardidx)=[];
+                end;
+                else
+                idx(minforwardidx)=[];
+                end;
+                if isempty(idx)
+                    idxsearch=1;
+                end;
+            end;
+        end;
+      if foundspw==1
+          RonO.spw_width(i)=(minback+minforward)/500;
+          RonO.spw_trough(i)=spw_trough_t;
+          RonO.spw_amplitude(i)=(abs(spw(i,375)-spw(i,minforward))+abs(spw(i,375)-spw(i,minback)))/2;
+      else
+          RonO.spw_width(i)=0;
+          RonO.spw_trough(i)=2;
+          RonO.spw_amplitude(i)=0;
+      end;
+    else
+     RonO.spw_width(i)=0;
+     RonO.spw_trough(i)=2;
+     RonO.spw_amplitude(i)=0;
+    end;
+    else
+     RonO.spw_width(i)=0;
+     RonO.spw_trough(i)=2;
+     RonO.spw_amplitude(i)=0;
+    end;     
+    else
+     RonO.spw_width(i)=0;
+     RonO.spw_trough(i)=2;
+     RonO.spw_amplitude(i)=0;
+    end;
+end;
+   
 % For ftRonO
 if ~isempty(ftRonO.start_t)
 for i=1:numel(ftRonO.channel(:,1))

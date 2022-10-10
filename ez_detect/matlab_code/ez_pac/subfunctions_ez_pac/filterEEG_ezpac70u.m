@@ -5,6 +5,7 @@ function [output_bpFIR, delays] = filterEEG_ezpacu(eeg, samplingrate);
 
 % freqnecy range determined for each oscillation
 spike = [4 30];
+sharp = [3 50];
 spindle = [12 16];
 theta = [9 12];
 delta = [2 4];
@@ -38,10 +39,12 @@ end;
     delays(4)=delay;
     [eeg.bpSpike, com_slow, b_slow, delay] = pop_eegfiltnew_gpu(EEG, spike(1), spike(2));
     delays(5)=delay;
+    [eeg.bpSharp, com_slow, b_slow, delay] = pop_eegfiltnew_gpu(EEG, sharp(1), sharp(2));
+    delays(5)=delay;
     % output the stored discrete HFOs
 output_bpFIR.eeg.bpSpindle=tall(eeg.bpSpindle.data);
 output_bpFIR.eeg.bpTheta=tall(eeg.bpTheta.data);
 output_bpFIR.eeg.bpDelta=tall(eeg.bpDelta.data);
 output_bpFIR.eeg.bpSlow=tall(eeg.bpSlow.data);
 output_bpFIR.eeg.bpSpike=tall(eeg.bpSpike.data);
-
+output_bpFIR.eeg.bpSharp=tall(eeg.bpSharp.data);
