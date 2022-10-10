@@ -206,10 +206,9 @@ v1.0.2 Modifications include:
 - The preprocessing function was improved to better deal with mixed referential and bipolar data and improve processing time. 
 - improved processing time of function to delete short duration < 3 cycle events
 
-v1.0.2 Bug fix
+v1.0.2 Patch - 10/22
 -------------------------
-In the EDF2TRC conversion the polarity of the signal was reversed. This is now corrected in the IOTRC functions. We apologize for this error.
-
+In the trcread and trcwrite conversion the polarity of the signal was reversed (twice). If you installed and analyzed iEEG or LFP with this software prior to the v1.0.2 your analysis is not erroneous. The problem was the iEEG/LFP being displayed in Brain Quick with reverse polarity. This latest patch corrects this error. Please be mindful of using the trcread and trcwrite functions in other applications with respect to polarity. The trcwrite function has been modified, but the trcread that is build on MNE has not and rather the polarity is corrected in the HFO detector Python script. 
 Benchmarks
 -------------------
 - A 10 minute block of data will require between 25-120 minutes, if analyzed in referential mode. The actual time depends on the number of channels and the number of HFOs detected.
