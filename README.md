@@ -11,7 +11,7 @@ Listserv for users: send email to hfoengine-request@freelists.org with 'subscrib
 
 Date: 8/2022	
 
-Purpose of software: To reduce/differentiate artifact and then detect0, categorize, and quantify HFOs and epileptiform spikes in intracranial EEG recordings, and annotate these detections in the commercial EEG viewer Brain Quick™ produced by Micromed™ and save the detailed HFO and spike data as a Matlab Mathworks file. 
+Purpose of software: To reduce/differentiate artifact and then detect, categorize, and quantify HFOs and epileptiform spikes in intracranial EEG recordings, and annotate these detections in the commercial EEG viewer Brain Quick™ produced by Micromed™ and save the detailed HFO and spike data as a Matlab Mathworks file. 
 
 Support: This work was fully supported by NIH/NINDS K23 NS094633 (SAW), and a Junior Investigator Award from the American Epilepsy Society (SAW).
 
